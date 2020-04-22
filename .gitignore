@@ -1,0 +1,38 @@
+# Products
+/*.pdf
+arxiv.zip
+
+# Editors temporary files
+*~
+.DS_Store
+
+# Latex build files
+*.aux
+*.fls  # list of files
+*.toc
+*.out
+*.lot
+*.log  # latex logs
+*.lof
+*.blg  # biber logs
+*.bbl  # biblatex auxiliary file
+*.aux
+*.dvi
+*.synctex.gz  # forward / backward search between editor and PDF viewer
+*.fdb_latexmk  # latexmk, the "make" for latex
+*.bcf  # biblatex
+*.nav
+*.run.xml  # biber
+*.snm
+*.cfg
+*.glo
+*.idx
+*.ilg
+*.ind
+*.gls
+*.cut
+*.hd
+*.thm
+*.rpi
+*.pdfpc  # PDF slides presenter
+*.xdv  # xelatex intermediate file (eXtended DVI)
