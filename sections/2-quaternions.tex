@@ -1,0 +1,59 @@
+\section{Unit Quaternions and the Geodesic Distance}
+\label{sec:quaternions}
+
+As mentioned, our objective is to recover unknown 3D orientations by embedding their estimated relative distances on the $\SOThree$ space. As we shall explain in the next sections, this embedding requires the efficient computation of the relative distance between two rotations $\mathbf{R}_1, \mathbf{R}_2 \in\SOThree$, which corresponds to the rotation $\mathbf{R}_*\in\SOThree$ such that $\mathbf{R}_1=\mathbf{R}_*\mathbf{R}_2$.
+
+It is standard in SPA to work with Euler angles to describe the orientation of a 3D object in the electron microscope. More precisely, one relies on the parametrization $\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$, with $\Omega_\bth=[0;2\pi)\times [0;\pi] \times [0;2\pi)$, to encode the 3D rotation that relates the object coordinate system to the projection coordinate system. 
+
+Unfortunately, the relative distance between two rotations $\mathbf{R}(\bth_1)$, $\mathbf{R}(\bth_2)$, parametrized by Euler angles cannot be directly computed from $\bth_1$, $\bth_2$. It requires the computation of the rotation matrices, which is computationally inefficient\footnote{Another technical challenge with Euler angles is that they suffer from the so-called gimbal lock problem, which arises when $\theta_2=0$ and restricts the number of rotational degrees of freedom to one even though $\theta_1$ and $\theta_3$ have not yet been fixed~\cite{koks2006explorations}.}. Hence, we resort to a more convenient representation of 3D rotations that relies on unit quaternions.
+
+The algebra of quaternions was introduced in the mid-nineteenth century by Hamilton~\cite{rosenfeld_history_1988}. A quaternion $q\in\mathbb{H}$ takes the form
+%---
+\begin{equation}
+    \label{eq:quaternion-definition}
+    q =  a\boldsymbol{1} + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}, 
+    \end{equation}
+%---    
+where $(a,b,c,d)\in\mathbb{R}^4$, and $\boldsymbol{1}$, $\boldsymbol{i}$, $\boldsymbol{j}$, and $\boldsymbol{k}$ are the fundamental quaternion units
+%---
+\begin{equation}
+    \label{eq:quaternion-units}
+    \boldsymbol{1} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \quad  
+    \boldsymbol{i} = \begin{pmatrix} i & 0 \\ 0 & -i \end{pmatrix}, \quad 
+    \boldsymbol{j} = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}, \quad 
+    \boldsymbol{k} = \begin{pmatrix} 0 & i \\ i & 0 \end{pmatrix},
+\end{equation}
+%---  
+with $i$ the imaginary unit. Any quaternion $q$ can thus be represented by its set of coefficients $(a,b,c,d)\in\mathbb{R}^4$. The algebra $\mathbb{H}$ is similar to the algebra of complex numbers $\mathbb{C}$, with the exception of the multiplication operation being noncommutative. 
+
+In this work, we restrict our interest to unit quaternions $q\in\mathbb{U}$, with  $\mathbb{U}=\big\{q\in\mathbb{H} \; \, | \; \,\lvert q \rvert =1\big\}$, which identify the $\mathbb{S}^3$ hypersphere in  $\mathbb{R}^4$. Unit quaternions concisely and elegantly represent the elements of the $\SOThree$ group. More precisely, a unit quaternion $q\in\mathbb{U}$ parametrizes a rotation $\mathbf{R}\in\SOThree$ through
+% ---
+\begin{equation}
+    \mathbf{R}(q) =\begin{pmatrix} 
+    a^2+b^2-c^2-d^2 & 2bc-ad & 2bd+2ac  \\
+    2bc+2ad & a^2-b^2+c^2d^2 & 2cd-2ab \\
+    2bd-2ac & 2cd+2ab & a^2-b^2-c^2+d^2
+    \end{pmatrix}.
+    \label{eq:quaternion-rotation-matrix}
+\end{equation}
+% ---
+
+The geodesic distance $d_q:\mathbb{U}\times\mathbb{U}\rightarrow [0,\pi]$ between two unit quaternions $q_i, q_j\in\mathbb{H}$ is then defined as
+% ---
+\begin{equation}
+    \label{eq:geodesic distance}
+    d_q(q_i,q_j)=2\arccos\big(|\langle q_i, q_j \rangle|\big),
+\end{equation}
+% ---
+with the inner product between quaternions given by
+% ---
+\begin{equation}
+    \label{eq:inner-product-quaternions}
+    \langle q_i, q_j \rangle = a_ia_j+b_ib_j+c_ic_j+d_id_j.
+\end{equation}
+% ---
+The distance~\eqref{eq:geodesic distance} is the shortest distance between $q_i$ and $q_j$ on the surface of $\mathbb{S}^3$. 
+
+As $\mathbb{S}^3$ is isomorphic to the universal cover of $\SOThree$, the geodesic distance corresponds to the magnitude of the relative orientation $\mathbf{R}_*$ between $\mathbf{R}(q_i)$ and $\mathbf{R}(q_j)$ in $\SOThree$~\cite{huynh2009metrics}. In other words, the relative distance between two rotations encoded by unit quaternions can be efficiently computed from the unit quaternions themselves through~\eqref{eq:geodesic distance}, which is of key practical importance for this work.  
+
+For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
