@@ -28,6 +28,14 @@
 % ====================================
 % COMMANDS
 % ====================================
+
+\newcommand{\figref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\tabref}[1]{Table~\ref{tab:#1}}
+%\newcommand{\secref}[1]{Section~\ref{sec:#1}}
+\newcommand{\secref}[1]{\S\ref{sec:#1}}
+%\newcommand{\eqnref}[1]{(\ref{eqn:#1})}
+\newcommand{\eqnref}[1]{\eqref{eqn:#1}}
+
 % argmin
 \newcommand\argmin[1]{
 \underset{#1}{\arg\;\min}

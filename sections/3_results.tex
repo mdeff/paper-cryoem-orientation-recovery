@@ -11,7 +11,7 @@ From these ground truths, we generate $5,000$ synthetic projections of size $(11
 
 \subsubsection{Baseline}
 
-As a baseline, we first evaluate the suitability of the Euclidean distance as a projection distance $d_b$ to predict $d_q$. For the two aforementioned datasets, we randomly select $1,000$ pairs of projections. For each pair, we compute the Euclidean distance between the projections $d_b(\mathbf{b}^i,\mathbf{b}^j)=\lVert\mathbf{b}^i-\mathbf{b}^j\rVert_2$ and their relative orientation $d_p(q_i,q_j)$ through~\eqref{eq:geodesic distance}. We then report the $(d_q,d_b)$ relationship for all pairs in Figure~\ref{fig:euclidean-not-robust}, for both the asymmetric protein (left) and the symmetric one (right).
+As a baseline, we first evaluate the suitability of the Euclidean distance as a projection distance $d_b$ to predict $d_q$. For the two aforementioned datasets, we randomly select $1,000$ pairs of projections. For each pair, we compute the Euclidean distance between the projections $d_b(\mathbf{b}^i,\mathbf{b}^j)=\lVert\mathbf{b}^i-\mathbf{b}^j\rVert_2$ and their relative orientation $d_p(q_i,q_j)$ through~\eqref{eq:geodesic distance}. We then report the $(d_q,d_b)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the asymmetric protein (left) and the symmetric one (right).
 
 Two principal observations can be made from this experiment. First, as suspected, the Euclidean distance between projections fails to be a consistent predictor of their relative orientation distance, even in the simple imaging conditions considered here (no noise and no effect of the PSF). In particular, the larger the relative distance $d_q$, the poorer the predictive ability of the Euclidean distance as $d_b$. The other interesting observation is that the intrinsic symmetry of the $\beta$-galactosidase protein (5a1a) appears in its $(d_q,d_b)$ plot.
 
@@ -56,13 +56,14 @@ Note that an interesting aspect of SiameseNNs for the present application is tha
 
 We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d}_b$ that correctly approximates the orientation distance $d_q$.
 
-SiameseNNs come with a variety of more or less powerful architectures. At the current stage of development, we work with a simple one. Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights. Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$ in Figure~\ref{fig:siamese-schematic}. The detailed architecture of this SiameseNN is given in Figure~\ref{fig:app-SiameseNN-architecture} in Appendix X.
+SiameseNNs come with a variety of more or less powerful architectures. At the current stage of development, we work with a simple one. Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights. Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$ in \figref{schematic-siamese}.
+\todo{The detailed architecture of the SiameseNN is given in \figref{app-SiameseNN-architecture}.}
 
-For each protein, we train the SiameseNN on its training dataset for 250 epochs ($\sim$10 hours) using an Adam optimizer~\cite{kingma2014adam}, a learning rate of $10^{-3}$, and a batch size of 256 projections. The evolution of the training and validation losses are presented in Figure~\ref{fig:losses-siamese-assym} for the asymmetric protein (5j0n), and in Figure~\ref{fig:losses-siamese-sym} for the symmetric one (5a1a). The results demonstrate that the SiameseNN succeeds at learning a proxy distance for the asymmetric protein dataset, as convergence is reached in about 50 epochs ($\sim$ 2 hours).
+For each protein, we train the SiameseNN on its training dataset for 250 epochs ($\sim$10 hours) using an Adam optimizer~\cite{kingma2014adam}, a learning rate of $10^{-3}$, and a batch size of 256 projections. The evolution of the training and validation losses are presented in \figref{losses-siamese-assym} for the asymmetric protein (5j0n), and in \figref{losses-siamese-sym} for the symmetric one (5a1a). The results demonstrate that the SiameseNN succeeds at learning a proxy distance for the asymmetric protein dataset, as convergence is reached in about 50 epochs ($\sim$ 2 hours).
 
 However, the current SiameseNN architecture fails at learning the distance for the dataset 5a1a, which is very likely due to the symmetry of the $\beta$-galactosidase protein. Indeed, its synthetic dataset contains pairs of projections that share the same $d_b$, yet differ in their $d_q$. This simply advocates for the restriction to non-overlapping areas on $\SOThree$ when sampling the orientations used to generate the SiameseNN training dataset. The latter would then only contain projection pairs with a linear $(d_q,d_b)$ relationship, which should ensure a successful training of the network. For the rest of the experiments, we use the asymmetric protein (5j0n) dataset.
 
-We then feed to the trained SiameseNN $1,000$ pairs of projections randomly selected from the 5j0n testing dataset, and report the $(d_q,\widehat{d}_b)$ relationship of each pair in Figure~\ref{fig:learned-distance-siamese}. These results confirm that, for this protein at least, the SiameseNN is able to predict the orientation distance $d_q$ using only the projections as inputs. Moreover, it clearly outperforms the Euclidean distance at doing so. These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use.
+We then feed to the trained SiameseNN $1,000$ pairs of projections randomly selected from the 5j0n testing dataset, and report the $(d_q,\widehat{d}_b)$ relationship of each pair in \figref{learned-distance-siamese}. These results confirm that, for this protein at least, the SiameseNN is able to predict the orientation distance $d_q$ using only the projections as inputs. Moreover, it clearly outperforms the Euclidean distance at doing so. These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use.
 
 \subsection{Orientation recovery}
 
@@ -73,14 +74,14 @@ Our first investigation is to verify that it is at all possible to recover the o
 
 We use the $5,000$ projections from the asymmetric protein (5j0n) dataset. Out of the possible 25 mio possible pairs, we randomly select only $5,000$ of them and compute their geodesic distance through~\eqref{eq:geodesic distance}. We then minimize~\eqref{eq:global-min-problem} using the SGD Adam optimizer~\cite{kingma2014adam} for $30K$ steps ($\sim$1 hour) with a learning rate of $0.1$.
 
-The results are given in Figure~\ref{fig:minim-loss-perfect-distances}. They confirm that it is possible to recover the orientations from their true relative distances, even though the embedding space is non-Euclidean. As previously discussed, this is not a straightforward result. The results also demonstrate that a large subsampling of the projection pairs does not affect the convergence of~\eqref{eq:global-min-problem}, which is in straight line with the observations made by numerous Euclidean-based dimensionality reduction works~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap}.
+The results are given in \figref{minim-loss-perfect-distances}. They confirm that it is possible to recover the orientations from their true relative distances, even though the embedding space is non-Euclidean. As previously discussed, this is not a straightforward result. The results also demonstrate that a large subsampling of the projection pairs does not affect the convergence of~\eqref{eq:global-min-problem}, which is in straight line with the observations made by numerous Euclidean-based dimensionality reduction works~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap}.
 
 \subsubsection{Robustness of Recovery to Additive Errors on the Relative Distances}
 \label{subsec:5-6-4-robustness-to-errors}
 
 We now go one step further and evaluate the behaviour of~\eqref{eq:global-min-problem} when the true relative distances are corrupted by  additive Gaussian noise.
 
-The experimental conditions are the same than in the previous section, except that we add an error with increasing variance on the relative distances prior to the minimization. The results are presented in Figure~\ref{fig:recovery-noise-distances} (red curve).
+The experimental conditions are the same than in the previous section, except that we add an error with increasing variance on the relative distances prior to the minimization. The results are presented in \figref{recovery-noise-distances} (red curve).
 
 \begin{figure}
     \centering
@@ -96,8 +97,8 @@ Before discussing the results, we remark that one cannot really quantify the per
     \widehat{\mathbf{T}}=\argmin{\mathbf{T}\in\mathbb{R}^4}\sum_{i,j} \big|d_q\big(q_i,q_j\big)- d_q\big(\mathbf{T}\widehat{q}_i,\mathbf{T}\widehat{q}_j\big)\big|^2.
 \end{equation}
 
-For all variances, the distance after alignment is reported in Figure~\ref{fig:recovery-noise-distances} (blue curve).
+For all variances, the distance after alignment is reported in \figref{recovery-noise-distances} (blue curve).
 
-These results demonstrate that the performance of the minimization scheme~\eqref{eq:global-min-problem} linearly depends on the quality of the relative distances, which advocates for a proper and extensive training of the SiameseNN in the next stages of development. Another interesting output of Figure~\ref{fig:recovery-noise-distances} is that it indicates that the error of the orientation recovery behaves as a monotonic function of its loss. Hence, it suggests that the loss can be used as a good indicator of its performance, which has obvious practical implications for our future works on real data.
+These results demonstrate that the performance of the minimization scheme~\eqref{eq:global-min-problem} linearly depends on the quality of the relative distances, which advocates for a proper and extensive training of the SiameseNN in the next stages of development. Another interesting output of \figref{recovery-noise-distances} is that it indicates that the error of the orientation recovery behaves as a monotonic function of its loss. Hence, it suggests that the loss can be used as a good indicator of its performance, which has obvious practical implications for our future works on real data.
 
 \subsection{Final/All}

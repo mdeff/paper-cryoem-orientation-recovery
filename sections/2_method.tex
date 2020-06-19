@@ -4,13 +4,13 @@ Our approach relies on the well-known observation that the greater the similarit
 
 Taking this line of thought further, we train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. To make such training possible, we capitalize on our ability to model the cryo-EM imaging procedure to generate a large, representative synthetic dataset using publicly available 3D atomic models.
 
-Using this trained distance function, we can estimate the relative orientations between pairs of projections in any real dataset. Our postulate is that we can then recover, from these estimated relative orientations, the orientations themselves through an appropriate minimization scheme. This two-steps pipeline is illustrated in Figure~\ref{fig:overview-pipeline}.
+Using this trained distance function, we can estimate the relative orientations between pairs of projections in any real dataset. Our postulate is that we can then recover, from these estimated relative orientations, the orientations themselves through an appropriate minimization scheme. This two-steps pipeline is illustrated in \figref{schematic-overview}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{pipeline-overview}
+    \includegraphics[width=\textwidth]{schematic_overview}
     \caption{Overview of the proposed two-steps method: 1) estimate the relative orientations between projection pairs through a learned distance $\widehat{d}_b$, and 2) recover the orientations from the estimated relative orientations. We denote a $p$th projection by $\mathbf{b}^p$ and its orientation by $q_p$. The geodesic distance between two orientations is denoted by $d_q$.}
-    \label{fig:overview-pipeline}
+    \label{fig:schematic-overview}
 \end{figure}
 
 The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
@@ -25,7 +25,7 @@ This example, if rather simple, nevertheless underlines well the key ingredients
 
 There is no simple way to ``handcraft'' a proxy distance that would robustly predict the similarity between two projections. Hence, we resort to \textit{learning} this distance function by parametrizing it as a neural network and capitalizing on 1) the public availability of large datasets of 3D atomic models\footnote{\texttt{https://www.ebi.ac.uk/pdbe/emdb}}, and 2) our ability to model the cryo-EM imaging process. This is the topic of Section~\ref{sec:estimating-relative-orientations}.
 
-Equipped with this learned distance, the idea is then to apply the aforementioned two-steps method (see Figure~\ref{fig:overview-pipeline}) for any projection dataset. As we just mentioned, we cannot rely on the theoretical framework of EDMs since our embedding space is non-Euclidean. Despite this lack of theoretical guarantees, we are able to appropriately minimize our objective function using a gradient-based algorithm, as we experimentally demonstrate in Section~\ref{sec:orientation-recovery}.
+Equipped with this learned distance, the idea is then to apply the aforementioned two-steps method (see \figref{schematic-overview}) for any projection dataset. As we just mentioned, we cannot rely on the theoretical framework of EDMs since our embedding space is non-Euclidean. Despite this lack of theoretical guarantees, we are able to appropriately minimize our objective function using a gradient-based algorithm, as we experimentally demonstrate in Section~\ref{sec:orientation-recovery}.
 
 As a preamble, we discuss the need for a representation of orientations in $\SOThree$ that relies on unit quaternions.
 
@@ -94,15 +94,15 @@ As previously discussed, we make the choice to \textit{learn} a good approximati
     \label{eq:metric-learning-siamese}
     \widehat{d}_b=\argmin{d_b}\sum_{i,j} \big|d_b\big(\mathbf{b}^{*i},\mathbf{b}^{*j}\big) - d_q\big(q^*_i,q^*_j\big) \big|^2,
 \end{equation}
-with $d_q$ defined in~\eqref{eq:geodesic distance}, and where $N_t$ indicates the number of projection-orientation pairs in the training dataset. More precisely, we parametrize the distance function $d_b$ in~\eqref{eq:metric-learning-siamese} as a Siamese neural network (SiameseNN)~\cite{chopra2005learning}, and resort to learning its weights $w$, as illustrated in Figure~\ref{fig:siamese-schematic}.
+with $d_q$ defined in~\eqref{eq:geodesic distance}, and where $N_t$ indicates the number of projection-orientation pairs in the training dataset. More precisely, we parametrize the distance function $d_b$ in~\eqref{eq:metric-learning-siamese} as a Siamese neural network (SiameseNN)~\cite{chopra2005learning}, and resort to learning its weights $w$, as illustrated in \figref{schematic-siamese}.
 
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}. They are usually constituted of two sister neural networks that work in tandem and share the exact same architecture and weights.  Their role (once trained) is to extract the projection features that are the most relevant to predict the relative orientation between two projections. The weights $w$ of the two sister networks are progressively learned by 1) comparing the difference of their projection feature vectors to the magnitude of the corresponding relative orientations, and 2) back-propagating this error (via the derivative chain rule) to the weights.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{siameseNN-schematic}
+    \includegraphics[width=\textwidth]{schematic_siamese}
     \caption{Training a Siamese neural network (SiameseNN) to become a faithful predictor of the relative orientation between two input projections. In other words, we train the SiameseNN to serve as a projection distance $\widehat{d}_b$ that correctly approximates the orientation distance $d_q$. The training is performed with a synthetic dataset that contains thousands of projections with their associated orientation.}
-    \label{fig:siamese-schematic}
+    \label{fig:schematic-siamese}
 \end{figure}
 
 \subsection{Orientation Recovery}
@@ -118,7 +118,7 @@ We propose to start this process by computing of a great number of pairwise proj
     \label{eq:global-min-problem}
     \big\{\widehat{q}_p\big\}_{p=1}^P=\argmin{q_i\in\mathbb{U}}\sum_{i,j} \big|\widehat{d}_b\big(\mathbf{b}^i,\mathbf{b}^j\big) - d_q\big(q_i,q_j\big) \big|^2,
 \end{equation}
-as is illustrated in Figure~\ref{fig:overview-pipeline}.
+as is illustrated in \figref{schematic-overview}.
 
 In practice, one cannot possibly evaluate~\eqref{eq:global-min-problem} for every pair of orientations $\big\{q_i,q_j\big\}_{i,j=1}^P$ given the extremely large size of SPA datasets, with $P$ typically in the order of dozens of thousands. Hence, we need to partially sample the projection dataset. We experimentally demonstrate in Section~\ref{subsec:5-6-3-sanity-check} that this does not affect the performance of our recovery scheme.
 
