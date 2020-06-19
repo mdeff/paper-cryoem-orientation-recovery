@@ -23,7 +23,7 @@ Two principal observations can be made from this experiment. First, as suspected
 %-----
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\textwidth]{images/EuclideanDistance_NonRobust.pdf}
+    \includegraphics[width=\textwidth]{EuclideanDistance_NonRobust.pdf}
     \caption{Plotting the Euclidean distance between two projections versus their actual relative orientation (measured by the geodesic distance) for \textbf{(left)} the asymmetric protein (5j0n) dataset, and \textbf{(right)} the symmetric protein (5a1a) dataset. }
     \label{fig:euclidean-not-robust}
 \end{figure}
@@ -46,7 +46,7 @@ SiameseNNs, also termed ``twin networks'', are commonly used in the field of dee
 %---
 \begin{figure}[t!]
     \centering
-   \includegraphics[width=\textwidth]{images/siameseNN-schematic.pdf}
+   \includegraphics[width=\textwidth]{siameseNN-schematic.pdf}
     \caption{Training a Siamese neural network (SiameseNN) to become a faithful predictor of the relative orientation between two input projections. In other words, we train the SiameseNN to serve as a projection distance $\widehat{d}_b$ that correctly approximates the orientation distance $d_q$. The training is performed with a synthetic dataset that contains thousands of projections with their associated orientation.}
     \label{fig:siamese-schematic}
 \end{figure}
@@ -67,20 +67,20 @@ Note that an interesting aspect of SiameseNNs for the present application is tha
 \begin{figure}[t!]
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{images/TrainingSiamese_LossAssymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossAssymetric.pdf}
         \caption{Training losses of the SiameseNN on the asymmetric protein (5j0n) training and validation datasets.} 
         \label{fig:losses-siamese-assym}
     \end{subfigure} \quad \quad
     %
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{images/TrainingSiamese_LossSymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossSymetric.pdf}
         \caption{Training losses of the SiameseNN on the symmetric protein (5a1a) training and validation datasets.} 
         \label{fig:losses-siamese-sym}
     \end{subfigure} \vspace{0.45cm}
     
     %
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{images/TrainingSiamese_PlotAssymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_PlotAssymetric.pdf}
         \caption{Relative orientations predicted by the trained SiameseNN from projections in the asymmetric protein (5j0n) testing dataset. } 
         \label{fig:learned-distance-siamese}
     \end{subfigure} \vspace{0.35cm}
