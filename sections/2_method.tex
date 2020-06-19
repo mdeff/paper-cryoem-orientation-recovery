@@ -13,34 +13,8 @@ Using this trained distance function, we can estimate the relative orientations 
     \label{fig:overview-pipeline}
 \end{figure}
 
-The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean} . In that respect, the short example given by Dokmanic \textit{et al.} in~\cite{dokmanic2015euclidean} efficiently illustrates the philosophy behind such methods (see the ``An Analogy'' box).
-
-\setlength{\fboxsep}{1em}\noindent\fbox{\parbox{0.95\textwidth}{%
-\textbf{An Analogy: Mapping the Position of Swiss Cities with a Train Timetable~\cite{dokmanic2015euclidean}} \\
-
-\begin{wrapfigure}{r}{0.45\textwidth}
-  \begin{center}
-    \includegraphics[width=0.4\textwidth]{swissEDM}
-  \end{center}
-  \caption{\footnotesize Image adapted from~\cite{dokmanic2015euclidean}. The red signs indicate the correct city locations. The black dots denote the recovered city locations.}
-\end{wrapfigure}
-
-\small
-In this toy problem, the authors aim at estimating the position of five cities on the Swiss map based not on the spatial distances between them, but on the time it takes to travel by train between them. Those time data (in minutes) are collected in the following timetable: \vspace{0.25cm}
-
-{\footnotesize\begin{blockarray}{cccccc}
-& \text{L} & \text{G} & \text{Z} & \text{N} & \text{B} \\
-\begin{block}{l(ccccc)}
-  \text{Lausanne}  & 0   & 33  & 128 & 40 & 66 \\
-  \text{Geneva}    & 33  & 0   & 158 & 64 & 101 \\
-  \text{Zürich}    & 128 & 158 & 0   & 88 & 56 \\
-  \text{Neuchâtel} & 40  & 64  & 88  & 0  & 34 \\
-  \text{Bern}     & 66  & 101 & 56  & 34 & 0 \\
-\end{block}\end{blockarray}.} \\
-
-Remarkably, even though these time data only roughly correlate with the physical distances between the cities, one can still obtain a remarkably good estimate of their positions on the Swiss map (up to some symmetries of the embedding space) using a multidimensional scaling algorithm.
-}}\normalsize \\
-
+The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
+In that respect, the short example given by Dokmanic \textit{et al.} in~\cite{dokmanic2015euclidean} efficiently illustrates the philosophy behind such methods (see the ``An Analogy'' box).
 This example, if rather simple, nevertheless underlines well the key ingredients of methods that aim at retrieving points from distances that may not be directly measurable:
 
 \begin{enumerate}
