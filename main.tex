@@ -5,8 +5,6 @@
 \renewcommand{\undertitle}{Technical Report}
 %\renewcommand{\undertitle}{}
 
-\title{Recovery of Orientations in SPA: Learning from Projections}
-
 \author{
     Jelena Banjac, Laurène Donati, \href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid}\hspace{1mm}}Michaël Defferrard \\
     EPFL, Switzerland \\
@@ -15,9 +13,27 @@
 
 %\date{}
 
+\title{\todo{Learning to recover orientations for protein reconstruction from Cryo-EM projections}}
+%\title{Recovery of Orientations in SPA: Learning from Projections}
+%\title{Learning to recover orientations from projections}
+%\title{3D Poses Recovery in Single-Particle Cryo-EM from Learned Pairwise Projection Distances}
+% keywords: learning, protein imaging/reconstruction (why/goal), (single-particle) Cryo-EM, SPA
+
 \begin{document}
 
 \maketitle
+
+\begin{abstract}
+    We present a method for the recovery of orientations from \todo{Cryo-EM/single-particle projections/imaging, towards the goal of protein reconstruction}. \mdeff{@Laurène: write the standard bio formulation of this problem.}
+    Our method is made of two steps: (i) estimate distances between projections, and (ii) estimate orientations from these distances.
+    % absolute orientations vs relative distances?
+    The pairwise distance estimator is a Siamese Neural Network trained on synthetic projections of known protein \todo{reconstructions/structures/conformations}.
+    Orientations are estimated by minimizing an objective function.
+    Experimental results show that the quality of the estimated orientations strongly depends on the quality of the estimated distances.
+    While not yet up to state-of-the art protein reconstruction, distance estimation is robust to \todo{noisy projections}.
+    Overall, estimated orientations from \todo{(noisy?)} projections are within \todo{10\degree} of true orientations.
+    Our code is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
+\end{abstract}
 
 \input{sections/1_introduction}
 \input{sections/2_method}

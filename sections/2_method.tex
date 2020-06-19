@@ -82,6 +82,7 @@ For the sake of conciseness, we shall use the term ``with orientation~$q$'' to r
 
 \subsection{Estimating Relative Orientations from Projections}
 %\subsection{Relative orientation estimation}
+%\subsection{Relative orientation estimation from projections}
 \label{sec:estimating-relative-orientations}
 
 Equipped with the geodesic distance $d_q$, our goal is now to find a ``projection distance'' $d_b$ that is a good predictor of $d_q$. Before discussing the different options, we briefly describe the synthetic datasets used in this work.
@@ -105,6 +106,7 @@ SiameseNNs, also termed ``twin networks'', are commonly used in the field of dee
 \end{figure}
 
 \subsection{Orientation Recovery}
+%\subsection{Orientation recovery from relative orientations}
 \label{sec:orientation-recovery}
 
 Equipped with an appropriately learned $\widehat{d}_b$, the objective is then to recover the unknown unit quaternions $\big\{q_p\big\}_{p=1}^P$ associated to the projections $\big\{\mathbf{b}^p\big\}_{p=1}^P$ in any given dataset.
