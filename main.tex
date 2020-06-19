@@ -1,16 +1,23 @@
-\documentclass[onecolumn]{article}
+\documentclass{article}
 \include{preamble}
+
+\renewcommand{\headeright}{Technical Report}
+\renewcommand{\undertitle}{Technical Report}
+%\renewcommand{\undertitle}{}
 
 \title{Recovery of Orientations in SPA: Learning from Projections}
 
-\author{\{jelena.banjac, laurene.donati, michael.defferrard\}@epfl.ch}
+\author{
+    Jelena Banjac, Laurène Donati, \href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid}\hspace{1mm}}Michaël Defferrard \\
+    EPFL, Switzerland \\
+    \texttt{\{jelena.banjac,laurene.donati,michael.defferrard\}@epfl.ch}
+}
+
 %\date{}
 
 \begin{document}
 
 \maketitle
-
-% ====================================================
 
 \input{sections/1_introduction}
 \input{sections/2_method}
@@ -19,7 +26,5 @@
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
-
-% ====================================================
 
 \end{document}
