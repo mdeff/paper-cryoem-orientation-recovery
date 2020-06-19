@@ -8,9 +8,9 @@ Taking this line of thought further, we train a function---parametrized as a neu
 
 Using this trained distance function, we can estimate the relative orientations between pairs of projections in any real dataset. Our postulate is that we can then recover, from these estimated relative orientations, the orientations themselves through an appropriate minimization scheme. This two-steps pipeline is illustrated in Figure~\ref{fig:overview-pipeline}.
 
-\begin{figure}[h!]
-    \center
-    \fbox{\includegraphics[width=\textwidth]{pipeline-overview.pdf}}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{pipeline-overview}
     \caption{Overview of the proposed two-steps method: 1) estimate the relative orientations between projection pairs through a learned distance $\widehat{d}_b$, and 2) recover the orientations from the estimated relative orientations. We denote a $p$th projection by $\mathbf{b}^p$ and its orientation by $q_p$. The geodesic distance between two orientations is denoted by $d_q$.}
     \label{fig:overview-pipeline}
 \end{figure}
@@ -22,7 +22,7 @@ The task of recovering points based on their relative distances has been extensi
 
 \begin{wrapfigure}{r}{0.45\textwidth}
   \begin{center}
-    \includegraphics[width=0.4\textwidth]{swissEDM.pdf}
+    \includegraphics[width=0.4\textwidth]{swissEDM}
   \end{center}
   \caption{\footnotesize Image adapted from~\cite{dokmanic2015euclidean}. The red signs indicate the correct city locations. The black dots denote the recovered city locations.}
 \end{wrapfigure}
@@ -125,9 +125,9 @@ As a baseline, we first evaluate the suitability of the Euclidean distance as a 
 
 Two principal observations can be made from this experiment. First, as suspected, the Euclidean distance between projections fails to be a consistent predictor of their relative orientation distance, even in the simple imaging conditions considered here (no noise and no effect of the PSF). In particular, the larger the relative distance $d_q$, the poorer the predictive ability of the Euclidean distance as $d_b$. The other interesting observation is that the intrinsic symmetry of the $\beta$-galactosidase protein (5a1a) appears in its $(d_q,d_b)$ plot.
 
-\begin{figure}[t]
+\begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{EuclideanDistance_NonRobust.pdf}
+    \includegraphics[width=\textwidth]{EuclideanDistance_NonRobust}
     \caption{Plotting the Euclidean distance between two projections versus their actual relative orientation (measured by the geodesic distance) for \textbf{(left)} the asymmetric protein (5j0n) dataset, and \textbf{(right)} the symmetric protein (5a1a) dataset. }
     \label{fig:euclidean-not-robust}
 \end{figure}
@@ -143,9 +143,9 @@ with $d_q$ defined in~\eqref{eq:geodesic distance}, and where $N_t$ indicates th
 
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}. They are usually constituted of two sister neural networks that work in tandem and share the exact same architecture and weights.  Their role (once trained) is to extract the projection features that are the most relevant to predict the relative orientation between two projections. The weights $w$ of the two sister networks are progressively learned by 1) comparing the difference of their projection feature vectors to the magnitude of the corresponding relative orientations, and 2) back-propagating this error (via the derivative chain rule) to the weights.
 
-\begin{figure}[t!]
+\begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{siameseNN-schematic.pdf}
+    \includegraphics[width=\textwidth]{siameseNN-schematic}
     \caption{Training a Siamese neural network (SiameseNN) to become a faithful predictor of the relative orientation between two input projections. In other words, we train the SiameseNN to serve as a projection distance $\widehat{d}_b$ that correctly approximates the orientation distance $d_q$. The training is performed with a synthetic dataset that contains thousands of projections with their associated orientation.}
     \label{fig:siamese-schematic}
 \end{figure}
@@ -159,20 +159,20 @@ We shall create such comprehensive training dataset by capitalizing on two favor
 
 Note that an interesting aspect of SiameseNNs for the present application is that they intrinsically predict the \textit{relationship} between objects. Hence, a well-trained SiameseNN could be relatively robust to the change of volumes. In the same line of thought, our SiameseNN will likely benefit from the profound structural similarity shared by proteins---after all, they all derived from just the same 21 amino acids.
 
-\begin{figure}[t!]
+\begin{figure}
     \centering
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossAssymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossAssymetric}
         \caption{Training losses of the SiameseNN on the asymmetric protein (5j0n) training and validation datasets.}
         \label{fig:losses-siamese-assym}
     \end{subfigure} \quad \quad
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossSymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_LossSymetric}
         \caption{Training losses of the SiameseNN on the symmetric protein (5a1a) training and validation datasets.}
         \label{fig:losses-siamese-sym}
     \end{subfigure} \vspace{0.45cm}
     \begin{subfigure}[t]{0.4\textwidth}
-        \includegraphics[width=0.98\textwidth]{TrainingSiamese_PlotAssymetric.pdf}
+        \includegraphics[width=0.98\textwidth]{TrainingSiamese_PlotAssymetric}
         \caption{Relative orientations predicted by the trained SiameseNN from projections in the asymmetric protein (5j0n) testing dataset. }
         \label{fig:learned-distance-siamese}
     \end{subfigure} \vspace{0.35cm}
@@ -210,15 +210,15 @@ In practice, one cannot possibly evaluate~\eqref{eq:global-min-problem} for ever
 
 As previously discussed, we are not yet aware of any guarantee of convergence for~\eqref{eq:global-min-problem}. Similarly, we do not know of any theoretical characterization of the behaviour of~\eqref{eq:global-min-problem} in ill-posed conditions, such as when pairwise distances are misestimated, for instance. Hence, we rely for now on experimental demonstrations to 1) ensure feasibility, and 2) indicate where efforts need to be invested.
 
-\begin{figure}[t]
+\begin{figure}
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\textwidth]{fig_perfectdistances_loss-symmetric.png}
+        \includegraphics[width=\textwidth]{fig_perfectdistances_loss-symmetric}
         \caption{}
     \end{subfigure} \quad
     \begin{subfigure}[b]{0.48\textwidth}
     \centering
-        \includegraphics[width=0.8\textwidth]{fig-perfectdistances-coverage-symmetric.png}
+        \includegraphics[width=0.8\textwidth]{fig-perfectdistances-coverage-symmetric}
         \caption{}
     \end{subfigure}
     \caption{Results of the orientation recovery scheme when using the perfect orientation distances for the asymmetric protein (5j0n). \textbf{(a)} Evolution of the loss of~\eqref{eq:global-min-problem} during minimization. \textbf{(b)} Coverage of $\SOThree$ after the orientation recovery from the perfect relative distances. }
@@ -243,7 +243,7 @@ The experimental conditions are the same than in the previous section, except th
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{fig-robustness-asymmetric.png}
+    \includegraphics[width=0.75\textwidth]{fig-robustness-asymmetric}
     \caption{Results of the recovery scheme (red curve) and the alignment procedure (blue curve) when an increasing amount of errors is added to the true relative distances.}
     \label{fig:recovery-noise-distances}
 \end{figure}
