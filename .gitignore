@@ -8,21 +8,21 @@ arxiv.zip
 
 # Latex build files
 *.aux
-*.fls  # list of files
+*.fls
 *.toc
 *.out
 *.lot
-*.log  # latex logs
+*.log
 *.lof
-*.blg  # biber logs
-*.bbl  # biblatex auxiliary file
+*.blg
+*.bbl
 *.aux
 *.dvi
-*.synctex.gz  # forward / backward search between editor and PDF viewer
-*.fdb_latexmk  # latexmk, the "make" for latex
-*.bcf  # biblatex
+*.synctex.gz
+*.fdb_latexmk
+*.bcf
 *.nav
-*.run.xml  # biber
+*.run.xml
 *.snm
 *.cfg
 *.glo
@@ -34,5 +34,5 @@ arxiv.zip
 *.hd
 *.thm
 *.rpi
-*.pdfpc  # PDF slides presenter
-*.xdv  # xelatex intermediate file (eXtended DVI)
+*.pdfpc
+*.xdv
