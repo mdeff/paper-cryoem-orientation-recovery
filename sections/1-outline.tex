@@ -5,7 +5,7 @@ Our approach relies on the well-known observation that the greater the similarit
 
 Taking this line of thought further, we train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. To make such training possible, we capitalize on our ability to model the cryo-EM imaging procedure to generate a large, representative synthetic dataset using publicly available 3D atomic models.
 
-Using this trained distance function, we can estimate the relative orientations between pairs of projections in any real dataset. Our postulate is that we can then recover, from these estimated relative orientations, the orientations themselves through an appropriate minimization scheme. This two-steps pipeline is illustrated in Figure~\ref{fig:overview-pipeline}. \\ 
+Using this trained distance function, we can estimate the relative orientations between pairs of projections in any real dataset. Our postulate is that we can then recover, from these estimated relative orientations, the orientations themselves through an appropriate minimization scheme. This two-steps pipeline is illustrated in Figure~\ref{fig:overview-pipeline}. \\
 
 % ---
 \begin{figure}[h!]
@@ -30,7 +30,7 @@ The task of recovering points based on their relative distances has been extensi
   \caption{\footnotesize Image adapted from~\cite{dokmanic2015euclidean}. The red signs indicate the correct city locations. The black dots denote the recovered city locations.}
 \end{wrapfigure}
 % ---
-\small  
+\small
 In this toy problem, the authors aim at estimating the position of five cities on the Swiss map based not on the spatial distances between them, but on the time it takes to travel by train between them. Those time data (in minutes) are collected in the following timetable: \vspace{0.25cm}
 
 %---
@@ -45,7 +45,7 @@ In this toy problem, the authors aim at estimating the position of five cities o
 \end{block}\end{blockarray}.} \\
 
 %---
-Remarkably, even though these time data only roughly correlate with the physical distances between the cities, one can still obtain a remarkably good estimate of their positions on the Swiss map (up to some symmetries of the embedding space) using a multidimensional scaling algorithm.   
+Remarkably, even though these time data only roughly correlate with the physical distances between the cities, one can still obtain a remarkably good estimate of their positions on the Swiss map (up to some symmetries of the embedding space) using a multidimensional scaling algorithm.
 }}\normalsize \\
 % ---------------------------------------------------
 
@@ -54,14 +54,14 @@ This example, if rather simple, nevertheless underlines well the key ingredients
 \begin{enumerate}
     \item \textit{An appropriate proxy for the ``real'' distance}. In the above example, the proxy for the spatial distance between two cities is the time taken to travel by train between them. In our case, we shall consider the similarity between two projections to be a good proxy for their relative orientation.
     %
-    \item \textit{A sufficiently rich collection of proxy distance data}. In this example, these data are provided by the (complete) train timetable. In our approach, we shall estimate the relative orientations between numerous pairs of projections based on the aforementioned proxy distance.  
+    \item \textit{A sufficiently rich collection of proxy distance data}. In this example, these data are provided by the (complete) train timetable. In our approach, we shall estimate the relative orientations between numerous pairs of projections based on the aforementioned proxy distance.
     %
     \item \textit{An efficient recovery scheme}. In~\cite{dokmanic2015euclidean}, the embedding space being Euclidean, the theoretical framework of the Euclidean distance matrices (EDMs) guarantees that one can retrieve the desired points from the collected distances. In our case, as we shall shortly explain, we aim to embed the estimated relative orientations on $\SOThree$, the space of 3D rotations. Unfortunately, the extension of the EDM theory to such manifold is all but straightforward.
 \end{enumerate}
 %---
 
-There is no simple way to ``handcraft'' a proxy distance that would robustly predict the similarity between two projections. Hence, we resort to \textit{learning} this distance function by parametrizing it as a neural network and capitalizing on 1) the public availability of large datasets of 3D atomic models\footnote{\texttt{https://www.ebi.ac.uk/pdbe/emdb}}, and 2) our ability to model the cryo-EM imaging process. This is the topic of Section~\ref{sec:estimating-relative-orientations}. 
+There is no simple way to ``handcraft'' a proxy distance that would robustly predict the similarity between two projections. Hence, we resort to \textit{learning} this distance function by parametrizing it as a neural network and capitalizing on 1) the public availability of large datasets of 3D atomic models\footnote{\texttt{https://www.ebi.ac.uk/pdbe/emdb}}, and 2) our ability to model the cryo-EM imaging process. This is the topic of Section~\ref{sec:estimating-relative-orientations}.
 
 Equipped with this learned distance, the idea is then to apply the aforementioned two-steps method (see Figure~\ref{fig:overview-pipeline}) for any projection dataset. As we just mentioned, we cannot rely on the theoretical framework of EDMs since our embedding space is non-Euclidean. Despite this lack of theoretical guarantees, we are able to appropriately minimize our objective function using a gradient-based algorithm, as we experimentally demonstrate in Section~\ref{sec:orientation-recovery}.
 
-As a preamble, we discuss the need for a representation of orientations in $\SOThree$ that relies on unit quaternions. 
+As a preamble, we discuss the need for a representation of orientations in $\SOThree$ that relies on unit quaternions.
