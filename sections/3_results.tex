@@ -212,6 +212,10 @@ These results confirm that, for this protein at least, the SiameseNN is able to 
 Moreover, it clearly outperforms the Euclidean distance at doing so.
 These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use.
 
+\subsubsection{Influence of network architecture and feature distance}
+
+\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
+
 \subsubsection{Sensitivity to perturbed projections}\label{sec:results:distance-estimation:sensitivity}
 
 \mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
