@@ -1,9 +1,10 @@
 \documentclass{article}
 \include{preamble}
 
-\renewcommand{\headeright}{Technical Report}
-\renewcommand{\undertitle}{Technical Report}
-%\renewcommand{\undertitle}{}
+%\renewcommand{\headeright}{Technical Report}
+%\renewcommand{\undertitle}{Technical Report}
+\renewcommand{\headeright}{}
+\renewcommand{\undertitle}{}
 
 \author{
     Jelena Banjac, Laurène Donati, \href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid}\hspace{1mm}}Michaël Defferrard \\
@@ -13,7 +14,8 @@
 
 %\date{}
 
-\title{\todo{Learning to recover orientations for protein reconstruction from Cryo-EM projections}}
+\title{Learning to recover the orientation of cryo-EM projections}
+%\title{Recovering the orientation of cryo-EM projections from learned distance estimation}
 %\title{Recovery of Orientations in SPA: Learning from Projections}
 %\title{Learning to recover orientations from projections}
 %\title{3D Poses Recovery in Single-Particle Cryo-EM from Learned Pairwise Projection Distances}
@@ -24,16 +26,34 @@
 \maketitle
 
 \begin{abstract}
-    We present a method for the recovery of orientations from \todo{Cryo-EM/single-particle projections/imaging, towards the goal of protein reconstruction}. \mdeff{@Laurène: write the standard bio formulation of this problem.}
-    Our method is made of two steps: (i) estimate distances between projections, and (ii) estimate orientations from these distances.
+    We present a method for the recovery of orientations from \todo{cryo-EM/single-particle projections/imaging, towards the goal of protein reconstruction}. \mdeff{@Laurène: write the standard bioimaging formulation of this problem.}
+    \todo{method builds on / intuition}
+    Our method is made of two steps: (i) estimate distances between projections, and (ii) recover orientations from these distances.
     % absolute orientations vs relative distances?
     The pairwise distance estimator is a Siamese Neural Network trained on synthetic projections of known protein \todo{reconstructions/structures/conformations}.
-    Orientations are estimated by minimizing an objective function.
-    Experimental results show that the quality of the estimated orientations strongly depends on the quality of the estimated distances.
-    While not yet up to state-of-the art protein reconstruction, distance estimation is robust to \todo{noisy projections}.
-    Overall, estimated orientations from \todo{(noisy?)} projections are within \todo{10\degree} of true orientations.
+    Orientations are recovered by minimizing an objective function.
+    Experimental results show that the quality of the recovered orientations strongly depends on the quality of the estimated distances.
+    While not yet up to state-of-the art protein reconstruction, distance estimation is robust to perturbations.
+    Overall, recovered orientations from \todo{(noisy?)} projections are within \todo{10\degree} of true orientations.
     Our code is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
 \end{abstract}
+
+\todo{\paragraph{Overall TODOs.}\begin{itemize}
+    \item projection: $\mathbf{p}$ or $\mathbf{b}$? \mdeff{I'd prefer $\mathbf{p}$ if there's no conflict anymore. Please choose and update everywhere.}
+    \item orientations: $o$? \mdeff{$q$ stands for quaternion, but that's an implementation detail. The semantic meaning is an orientation. Similarly, we shouldn't use $R$ for rotation.}
+    \item \mdeff{Can we index all objects, projections and orientations, with either subscripts or superscripts? I don't really care which (but prefer subscripts) as long as it's consistent. Please choose and update everywhere.}
+    \item distance functions: orientations SO(3) geodesic $d_o$, projections Euclidean $d_{pe}$, projections learned $d_{pl}$
+        \mdeff{Alternative: $d$ for true distance, $\widehat{d}$ for estimations. But how to differentiate the two kinds of estimations?}
+    \item report all results in radians or degrees? \mdeff{I guess we should use what the cryo-EM / SPA community uses.}
+    \item phrases to keep all along: distance estimation (verb: estimate distances), distance learning (verb: learn distance), orientation recovery (verb: recover orientations)
+    \item Title or sentence case? \mdeff{I prefer sentence case because it's more natural. No need for title case to seem serious. But I'm ok either way. Most important is consistency.}
+    \item Typography: \mdeff{footnotes after periods, em dashes, Oxford comma, commas after i.e.\ and e.g., (i) and (ii). Again no strong feeling, most important is consistency.}
+    \item Settle on American or British English. \mdeff{I have a tendency for American.}
+    \item Give meaningful and consistent names to figures. To avoid confusion, label = figure name.
+    \item Consistency: loss or objective (in text and figures).
+    \item Consistency: convergence curves must all have the same x-axis (time, step, or epoch). \mdeff{I think epoch would be good.}
+    \item Acronyms: be sure to introduce them then use consistently.
+\end{itemize}}
 
 \input{sections/1_introduction}
 \input{sections/2_method}

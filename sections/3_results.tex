@@ -4,6 +4,7 @@
 
 \mdeff{All stuff about data here. Ideally same data for all experiments.}
 \todo{Merge and shorten.}
+\todo{$P$ training projections.}
 
 We consider two proteins as ground truths: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein. Their deposited PDB atomic models are 5a5a ~\cite{bartesaghi2015betagal} and 5j0n~\cite{laxmikanthan2016structure}, respectively. For each atomic model, we generate the ground truth by fitting a 5\AA\ density map in Chimera~\cite{pettersen2004ucsf}. We thus obtain a volume of size $(117\times 117\times 117)$ for the $\beta$-galactosidase, and a volume of size $(275\times 275\times 275)$ for the HJI.
 
@@ -109,7 +110,7 @@ These results demonstrate that the performance of the minimization scheme~\eqnre
 
 \mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case). Note the difference between symmetric and asymmetric proteins.}
 
-As a baseline, we first evaluate the suitability of the Euclidean distance as a projection distance $d_b$ to predict $d_q$. For the two aforementioned datasets, we randomly select $1,000$ pairs of projections. For each pair, we compute the Euclidean distance between the projections $d_b(\mathbf{b}^i,\mathbf{b}^j)=\lVert\mathbf{b}^i-\mathbf{b}^j\rVert_2$ and their relative orientation $d_p(q_i,q_j)$ through~\eqnref{orientation-distance}. We then report the $(d_q,d_b)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the asymmetric protein (left) and the symmetric one (right).
+As a baseline, we first evaluate the suitability of the Euclidean distance as a projection distance $d_b$ to predict $d_q$. For the two aforementioned datasets, we randomly select $1,000$ pairs of projections. For each pair, we compute the Euclidean distance between the projections $d_b(\mathbf{b}^i,\mathbf{b}^j)=\lVert\mathbf{b}^i-\mathbf{b}^j\rVert_2$ and their relative orientation $d_p(q_i,q_j)$ through~\eqnref{distance:orientations}. We then report the $(d_q,d_b)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the asymmetric protein (left) and the symmetric one (right).
 
 \begin{figure}
     \centering
@@ -151,8 +152,9 @@ Two principal observations can be made from this experiment. First, as suspected
 
 We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d}_b$ that correctly approximates the orientation distance $d_q$.
 
-SiameseNNs come with a variety of more or less powerful architectures. At the current stage of development, we work with a simple one. Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights. Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$ in \figref{schematic-siamese}.
+SiameseNNs come with a variety of more or less powerful architectures. At the current stage of development, we work with a simple one. Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights. Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$ in \figref{schematic:distance-learning}.
 \todo{The detailed architecture of the SiameseNN is given in figref.}
+\todo{$d_f$ could be parametrized as an MLP, a general function approximator.}
 
 For each protein, we train the SiameseNN on its training dataset for 250 epochs ($\sim$10 hours) using an Adam optimizer~\cite{kingma2014adam}, a learning rate of $10^{-3}$, and a batch size of 256 projections. The evolution of the training and validation losses are presented in \figref{losses-siamese-assym} for the asymmetric protein (5j0n), and in \figref{losses-siamese-sym} for the symmetric one (5a1a). The results demonstrate that the SiameseNN succeeds at learning a proxy distance for the asymmetric protein dataset, as convergence is reached in about 50 epochs ($\sim$ 2 hours).
 
