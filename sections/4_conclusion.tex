@@ -1,9 +1,16 @@
 \section{Conclusion}
 
-The results obtained so far provide some key insights on the viability of the proposed method. They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme. Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d}_b$; this is very clearly the next line of research.
+The results obtained so far provide some key insights on the viability of the proposed method.
+They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme.
+Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d}_b$; this is very clearly the next line of research.
 
-The obtained results underline the importance of learning an accurate proxy distance $\widehat{d}_b$. In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs. We could also parametrize the function $F$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
+The obtained results underline the importance of learning an accurate proxy distance $\widehat{d}_b$.
+In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs.
+We could also parametrize the function $F$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 
-Once these improvements are made, we shall enhance the training dataset for the SiameseNN and test its predictive ability in more challenging situations. To achieve this, we shall rely on our powerful, expressive forward model of the cryo-EM procedure to generate realistic projections from thousands of atomic models in the PDB database. This will also allow us to test different options for the challenging handling of proteins with multiple conformational states.
+Once these improvements are made, we shall enhance the training dataset for the SiameseNN and test its predictive ability in more challenging situations.
+To achieve this, we shall rely on our powerful, expressive forward model of the cryo-EM procedure to generate realistic projections from thousands of atomic models in the PDB database.
+This will also allow us to test different options for the challenging handling of proteins with multiple conformational states.
 
-%Finally, an interesting line of development for the distant future would be to try to recover the \textit{direction} of the relative orientations, in addition to their magnitude. Working with oriented distances could permit the recovery of the handedness of chiral molecules, which is a nontrivial feat in SPA.
+%Finally, an interesting line of development for the distant future would be to try to recover the \textit{direction} of the relative orientations, in addition to their magnitude.
+Working with oriented distances could permit the recovery of the handedness of chiral molecules, which is a nontrivial feat in SPA.
