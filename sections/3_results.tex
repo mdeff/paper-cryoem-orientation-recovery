@@ -38,6 +38,7 @@ In the same line of thought, our SiameseNN will likely benefit from the profound
 As orientations are up to a global rotation/mirror on $\SO(3) / \mathbb{S}^3$, best align recovered and true orientations before computing the mean recovery error.}
 
 \todo{Introduce the mean recovery error as a good and intuitive performance metric.}
+\todo{Figure that shows a typical convergence and mean orientation recovery error before and after alignment. We'll subsequently only report $E$ (the error after alignment).}
 
 Before discussing the results, we remark that one cannot really quantify the performance of~\eqnref{orientation-recovery} through its loss.
 Unfortunately, it is also not appropriate to directly compute the error between the recovered orientations $\big\{\widehat{q}_p\big\}_{p=1}^P$ and the true ones $\big\{q_p\big\}_{p=1}^P$.
