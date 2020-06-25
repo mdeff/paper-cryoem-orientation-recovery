@@ -1,4 +1,3 @@
-\section{Conclusion}
 
 The results obtained so far provide some key insights on the viability of the proposed method.
 They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme.
@@ -14,3 +13,17 @@ This will also allow us to test different options for the challenging handling o
 
 %Finally, an interesting line of development for the distant future would be to try to recover the \textit{direction} of the relative orientations, in addition to their magnitude.
 Working with oriented distances could permit the recovery of the handedness of chiral molecules, which is a nontrivial feat in SPA.
+
+
+% ABOUT SIAMESE_NN 
+
+The success of the SiameseNN as a faithful predictor of relative orientations eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
+The objective is for the SiameseNN to be able to handle projections acquired in all sorts of imaging conditions and originating from 3D volumes it has never been trained on.
+
+We shall create such comprehensive training dataset by capitalizing on two favorable conditions.
+First, there exists a large publicly-available database of deposited atomic models of proteins, which gives us access to thousands of different 3D ground truths.
+Then, we shall take advantage of our ability to model the cryo-EM imaging procedure to generate, from these ground truths, a synthetic dataset that contains a massive amount of realistic projections whose orientations are, by definition, all known.
+
+Note that an interesting aspect of SiameseNNs for the present application is that they intrinsically predict the \textit{relationship} between objects.
+Hence, a well-trained SiameseNN could be relatively robust to the change of volumes.
+In the same line of thought, our SiameseNN will likely benefit from the profound structural similarity shared by proteins---after all, they all derived from just the same 21 amino acids.

@@ -5,12 +5,33 @@
 \todo{Figure about the geometry of the 3D imaging model.}
 \mdeff{Maybe better with \secref{method:orientation-representation} to show how orientations are rotations.}
 
-In single-particle analysis (SPA), the 3D particles adopt a random orientation in the ice layer before being imaged with parallel electron beams.
-Hence, the projection geometry associated to each 2D projection is unknown.
-Yet, this knowledge is essential for tomographic reconstruction.
-To handle this, a popular approach used by most SPA software packages is to alternatively refine the 3D structure and the orientation estimation~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian}.
+In single-particle cryo-electron microscopy (cryo-EM), every 3D particle adopt a random (and thus unknown) orientation in the ice layer before being imaged with parallel electron beams.
+Hence, the projection geometry associated to each acquired 2D projection is unknown. Yet this knowledge is essential for tomographic reconstruction.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Related works in cryo-EM}
+
+To handle this, a popular approach used by most software packages in single-particle cryo-EM is to alternatively refine the 3D structure and the orientation estimation~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian}.
 Iterative refinement procedures are extremely powerful and have permitted the determination of numerous biological structures up to near-atomic resolution~\cite{kuhlbrandt2014resolution}.
 Unfortunately, the outcome of these methods is predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
-Several methods have been designed to produce a first rough structure~\cite{singer2010detecting,wang2013orientation,greenberg2017common,punjani2017cryosparc,pragier2019common}, but this remains a notoriously arduous challenge in SPA.
+Several methods have been designed to produce a first rough structure~\cite{singer2010detecting,wang2013orientation,greenberg2017common,punjani2017cryosparc,pragier2019common}, but this remains a notoriously arduous challenge in single-particle cryo-EM.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Related works in Euclidean setting}
+
+\lau{I will shorten as needed.} Methods are standard for dimensionality reduction and data visualization, whose goal is to transform high-dimensional data to a low-dimensional space while preserving distances / metric / structure.
+(i) build graph, (ii) realize / embed it in some ambient space
+Laplacian eigenmaps, multi-dimensional scaling (MDS), Isomap, LLE, t-SNE, UMAP are well-known examples.
+The embedding of distance matrices is well-studied for Euclidean embedding spaces, where the embedding is given by the eigenvectors of the distance matrix.
+The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
+In~\cite{dokmanic2015euclidean}, the embedding space being Euclidean, the theoretical framework of the Euclidean distance matrices (EDMs) guarantees that one can retrieve the desired points from the collected distances.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Contributions}
+
+\lau{Here, short recap of our contributions. If needs be, shortly describe the structure of the paper.}
 
 In this work, we present a method that learns to estimate the unknown orientation associated to each projection in a SPA dataset without relying on any intermediate reconstruction procedure.

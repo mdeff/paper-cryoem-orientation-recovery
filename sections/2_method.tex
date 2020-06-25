@@ -5,34 +5,27 @@
     \includegraphics[width=\textwidth]{schematic_overview}
     \caption{
         Method overview.
-        We denote the $p$th projection by $\mathbf{b}^p$ and its orientation by $q_p$.
-        $d_q$ denotes the distance between two orientations and $\widehat{d}_b$ the estimated distance between two projections, implemented as a SiameseNN.
-        Our method is made of two steps: (i) estimate distances between pairs of projections, and (ii) recover orientations from the estimated distances.
+        We denote the $i$th projection by $\mathbf{p}_i$ and its orientation by $q_i$. The distance between two orientations is denoted by $d_q$, and the estimated distance between two projections by $\widehat{d}_p$; the latter is implemented as a SiameseNN.
+        Our method consists of two steps: (i) estimate distances between pairs of projections, and (ii) recover orientations from the estimated distances.
         % Our method effectively (i) estimates a metric space, then (ii) embed it in the space of 3D orientations, $\SO(3)$.
         \todo{Update sections in figure.}
         \todo{Update titles: Step 1: estimate distances. Step 2: recover orientations.}
-        \mdeff{It would be amazing to have a visual of the embedding made in step 2: finding points in SO(3) such that the geodesic distances between them are the estimated distances. As we can't see SO(3) / $S^3$, we could try with $S^2$, which is a subset/projection.}
+        \mdeff{It would be amazing to have a visual of the embedding made in step 2: finding points in SO(3) such that the geodesic distances between them are the estimated distances. As we can't see SO(3) / $S^3$, we could try with $S^2$, which is a subset/projection.} \lau{I'll change the notations in the figure once we have settle on the final ones.}
     }
     \label{fig:schematic:overview}
 \end{figure}
 
-The more similar two projections are, the more likely they originate from two 3D particles that adopted close orientations.\footnote{Up to protein symmetries, which we discuss later.}
-From this observation, which guides a number of applications in SPA like~\cite{penczek1994ribosome} \mdeff{(would be better to have a review ref with multiple applications)}, we propose to (i) estimate a metric space from projections, then (ii) realize it in the space of 3D orientations.
+The more similar two 2D projections, the more likely they originate from two 3D particles that adopted close orientations in the ice layer prior to imaging.\footnote{Up to protein symmetries, which we discuss later.}
+From this well-know observation, which guides a number of applications in SPA~\cite{frank2006three}, we propose to (i) estimate a metric space from projections, then (ii) realize it in the space of 3D orientations.
 %to embed it on the space of 3D orientations, $\SO(3)$.
 % In practice, our method consists of: (i) estimate the distance between pairs of projections, and (ii) recover
 % \mdeff{maybe too repetitive with figure caption}
 Our method is illustrated in \figref{schematic:overview}.
 
 \todo{Zoom on orientation recovery. Merge and shorten.}
-\mdeff{Story: recovery is the minimization of an objective function. Convex in the Euclidean case, unknown for $\SO(3)$ but hopeful because locally Euclidean and empirically works with SGD.}
-Methods are standard for dimensionality reduction and data visualization, whose goal is to transform high-dimensional data to a low-dimensional space while preserving distances / metric / structure.
-(i) build graph, (ii) realize / embed it in some ambient space
-Laplacian eigenmaps, multi-dimensional scaling (MDS), Isomap, LLE, t-SNE, UMAP are well-known examples.
-The embedding of distance matrices is well-studied for Euclidean embedding spaces, where the embedding is given by the eigenvectors of the distance matrix.
-The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
-In~\cite{dokmanic2015euclidean}, the embedding space being Euclidean, the theoretical framework of the Euclidean distance matrices (EDMs) guarantees that one can retrieve the desired points from the collected distances.
+\mdeff{Story: recovery is the minimization of an objective function. Convex in the Euclidean case, unknown for $\SO(3)$ but hopeful because locally Euclidean and empirically works with SGD.} \lau{Make here the transition with what's presented in the introduction.}
+
 In our case, as we shall shortly explain, we aim to embed the estimated relative orientations on $\SO(3)$, the space of 3D rotations.
-the space of 3D orientations.
 Despite this lack of theoretical guarantees, we are able to appropriately minimize our objective function using a gradient-based algorithm, as we experimentally demonstrate in \secref{results:orientation-recovery:exact}.
 Similarly, we do not know of any theoretical characterization of the behaviour of~\eqnref{orientation-recovery} in ill-posed conditions, such as when pairwise distances are misestimated, for instance.
 \todo{hopeful because $\SO(3)$ is locally similar to 3D Euclidean space. Empirically good, see xx}
@@ -60,7 +53,7 @@ SiameseNNs, also termed ``twin networks'', are commonly used in the field of dee
 \subsection{Orientation representation}\label{sec:method:orientation-representation}
 
 \todo{Rephrase and shorten.}
-\mdeff{The important equations are \eqnref{distance-learning} and \eqnref{orientation-recovery}, then \eqnref{orientation-recovery-error}, \eqnref{distance:orientations}, and \eqnref{distance:projections}. The others must be less prominent for them to shine. Equations are like text: the less the better.}
+\mdeff{The important equations are \eqnref{distance-learning} and \eqnref{orientation-recovery}, then \eqnref{orientation-recovery-error}, \eqnref{distance:orientations}, and \eqnref{distance:projections}. The others must be less prominent for them to shine. Equations are like text: the less the better.} \lau{That will come shortly. I'm wondering: do you want to keep it as a whole section?}
 
 Orientations $q_p \in \SO(3)$.
 \todo{possibilities: 3D rotation matrices, Euler angles, angle-axis, unit quaternions.} \mdeff{@Laurène: could you take a short discussion from your thesis?}
@@ -129,16 +122,15 @@ For the sake of conciseness, we shall use the term ``with orientation~$q$'' to r
 \end{figure}
 
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
-\mdeff{Not a fan of this $*$ notation for the training data. I would just remove the $*$. Any problem with that? Other ideas?}
-From a training dataset $\big\{ \mathbf{b}^{*p}, q^*_p \big\}_{p=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \U$, we learn the \textit{projection distance}
+From a training dataset $\{ \mathbf{p}_{i}, q_i\}_{i=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \U$, we learn the \textit{projection distance}
 \begin{equation}
-    \widehat{d}_b = \argmin_{d_b} \sum_{i,j} \left| d_b\big(\mathbf{b}^{*i},\mathbf{b}^{*j}\big) - d_q\big(q^*_i,q^*_j\big) \right|^2,
+    \widehat{d}_p = \argmin_{d_p} \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2,
     \label{eqn:distance-learning}
 \end{equation}
 with $d_q$ defined in~\eqnref{distance:orientations}.
-$d_b$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning} 
+$d_p$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning} 
 \begin{equation}
-    d_p(\p^i, \p^j) = d_f(\G_w(\p^i), \G_w(\p^j)),
+    d_p(\p_i, \p_j) = d_f(\G_w(\p_i), \G_w(\p_j)),
     \label{eqn:distance:projections}
 \end{equation}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
@@ -153,12 +145,12 @@ In practice, \eqnref{distance-learning} is minimized by stochastic gradient desc
 \subsection{Orientation recovery}\label{sec:method:orientation-recovery}
 %\subsection{Orientation recovery from relative orientations}
 
-With a trained estimator $\widehat{d}_b$, orientations are recovered from a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ as
+With a trained estimator $\widehat{d}_p$, orientations are recovered from a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ as
 \begin{equation}
-    \big\{ \widehat{q}_k \big\}_{k=1}^P = \argmin_{q_i, q_j \in \U} \sum_{i,j} \left| \widehat{d}_b \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
+    \big\{ \widehat{q}_k \big\}_{k=1}^P = \argmin_{q_i, q_j \in \U} \sum_{i,j} \left| \widehat{d}_p \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
     \label{eqn:orientation-recovery}
 \end{equation}
-Remark that the sole difference with~\eqnref{distance-learning} is that the minimization is over the projections $q_i$ rather than the distance $d_b$.
+Remark that the sole difference with~\eqnref{distance-learning} is that the minimization is over the projections $q_i$ rather than the distance $d_p$.
 
 The sum in \eqnref{orientation-recovery} is again sampled for computational reasons.
 A strategy, commonly employed by \todo{those classic algos}, that amounts to build and embed a sparse distance graph.
