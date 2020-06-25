@@ -50,19 +50,18 @@ The input are two images and the output is their quaternion distance calculated 
 For neural network training, dataset is split into a distinct training, validation, and testing set, see Table \ref{table:dataset}, to ensure that the results can generalize to unseen projections.
 
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{||c | c c c||} 
- \hline
- Dataset & Number of images (\%) & Maximum number of projection pairs & Number of projection pairs used\\ [0.5ex] 
- \hline\hline
-Train set & 2512 (50\%) & 6,312,656 & 63,126 (1\%)\\ 
-Validation set & 1650 (33\%) & 2,722,500 & 27,225 (1\%)\\ 
-Test set & 837 (17\%) & 701,406 & randomly sampled per batch \\ [1ex] 
- \hline
-\end{tabular}
-\caption{Training, validation, and test dataset sizes}
-\label{table:dataset}
+\begin{table}
+    \centering
+    \begin{tabular}{c c c c}
+        \toprule
+        Dataset & Number of images (\%) & Maximum number of projection pairs & Number of projection pairs used \\ [0.5ex]
+        \midrule
+        Train set & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
+        Validation set & 1650 (33\%) & 2,722,500 & 27,225 (1\%) \\
+        Test set & 837 (17\%) & 701,406 & randomly sampled per batch \\ [1ex]
+        \bottomrule
+    \end{tabular}
+    \caption{Training, validation, and test datasets.}\label{table:dataset}
 \end{table}
 
 
