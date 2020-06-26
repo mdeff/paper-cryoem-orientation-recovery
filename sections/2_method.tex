@@ -16,7 +16,7 @@
 \end{figure}
 
 The more similar two 2D projections, the more likely they originate from two 3D particles that adopted close orientations in the ice layer prior to imaging.\footnote{Up to protein symmetries, which we discuss later.}
-From this well-know observation, which guides a number of applications in SPA~\cite{frank2006three}, we propose to (i) estimate a metric space from projections, then (ii) realize it in the space of 3D orientations.
+From this well-know observation, which guides a number of applications in single-particle cryo-EM~\cite{frank2006three}, we propose to (i) estimate a metric space from projections, then (ii) realize it in the space of 3D orientations.
 %to embed it on the space of 3D orientations, $\SO(3)$.
 % In practice, our method consists of: (i) estimate the distance between pairs of projections, and (ii) recover
 % \mdeff{maybe too repetitive with figure caption}
@@ -24,6 +24,7 @@ Our method is illustrated in \figref{schematic:overview}.
 
 \todo{Zoom on orientation recovery. Merge and shorten.}
 \mdeff{Story: recovery is the minimization of an objective function. Convex in the Euclidean case, unknown for $\SO(3)$ but hopeful because locally Euclidean and empirically works with SGD.} \lau{Make here the transition with what's presented in the introduction.}
+\mdeff{Simpler: move back what's in the intro here. ;)}
 
 In our case, as we shall shortly explain, we aim to embed the estimated relative orientations on $\SO(3)$, the space of 3D rotations.
 Despite this lack of theoretical guarantees, we are able to appropriately minimize our objective function using a gradient-based algorithm, as we experimentally demonstrate in \secref{results:orientation-recovery:exact}.
@@ -54,13 +55,14 @@ SiameseNNs, also termed ``twin networks'', are commonly used in the field of dee
 
 \todo{Rephrase and shorten.}
 \mdeff{The important equations are \eqnref{distance-learning} and \eqnref{orientation-recovery}, then \eqnref{orientation-recovery-error}, \eqnref{distance:orientations}, and \eqnref{distance:projections}. The others must be less prominent for them to shine. Equations are like text: the less the better.} \lau{That will come shortly. I'm wondering: do you want to keep it as a whole section?}
+\mdeff{I would as it is an important topic. The section title should stand out in the flow. The length of the text is not important. Could be 4 lines as \secref{method:orientation-recovery}, thought this one will surely be longer.}
 
 Orientations $q_p \in \SO(3)$.
 \todo{possibilities: 3D rotation matrices, Euler angles, angle-axis, unit quaternions.} \mdeff{@Laurène: could you take a short discussion from your thesis?}
 
 Our method requires the computation of the geodesic distance between two orientations $\mathbf{R}_1, \mathbf{R}_2 \in \SO(3)$, which corresponds to the rotation $\mathbf{R}_* \in \SO(3)$ such that $\mathbf{R}_1 = \mathbf{R}_* \mathbf{R}_2$.
 
-It is standard in SPA to work with Euler angles to describe the orientation of a 3D object in the electron microscope.
+It is standard in single-particle cryo-EM to work with Euler angles to describe the orientation of a 3D object in the electron microscope.
 More precisely, one relies on the parametrization $\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$, with $\Omega_\bth=[0;2\pi)\times [0;\pi] \times [0;2\pi)$, to encode the 3D rotation that relates the object coordinate system to the projection coordinate system.
 
 Unfortunately, the relative distance between two rotations $\mathbf{R}(\bth_1)$, $\mathbf{R}(\bth_2)$, parametrized by Euler angles cannot be directly computed from $\bth_1$, $\bth_2$.
@@ -128,7 +130,7 @@ From a training dataset $\{ \mathbf{p}_{i}, q_i\}_{i=1}^{P}$ made of $P$ project
     \label{eqn:distance-learning}
 \end{equation}
 with $d_q$ defined in~\eqnref{distance:orientations}.
-$d_p$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning} 
+$d_p$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning}
 \begin{equation}
     d_p(\p_i, \p_j) = d_f(\G_w(\p_i), \G_w(\p_j)),
     \label{eqn:distance:projections}
@@ -138,7 +140,7 @@ $d_f$ is a distance in the feature space, which is often taken to be the Euclide
 To facilitate the learning of a distance that respects the elliptic geometry of $\U$, we prefer $d_f = d_q$.
 
 Evaluating the sum in \eqnref{distance-learning} requires $P^2$ distance evaluations.
-As this is computationally infeasible for typical SPA datasets with $P \approx 10^4$ projections, we sample a subset of pairs.
+As this is computationally infeasible for typical cryo-EM datasets with $P \approx 10^4$ projections, we sample a subset of pairs.
 In practice, \eqnref{distance-learning} is minimized by stochastic gradient descent (SGD) over small batches of pairs, with weight updates computed by back-propagation of the error.
 % error / objective value
 

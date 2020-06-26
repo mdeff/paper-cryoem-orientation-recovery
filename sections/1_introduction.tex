@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on SPA/Cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
+\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
 
 \todo{Figure about the geometry of the 3D imaging model.}
 \mdeff{Maybe better with \secref{method:orientation-representation} to show how orientations are rotations.}
@@ -21,7 +21,10 @@ Several methods have been designed to produce a first rough structure~\cite{sing
 
 \subsection{Related works in Euclidean setting}
 
-\lau{I will shorten as needed.} Methods are standard for dimensionality reduction and data visualization, whose goal is to transform high-dimensional data to a low-dimensional space while preserving distances / metric / structure.
+\mdeff{I think related work should be used to support our story. The cryo-EM related work supports (motivates) the problem and should go in the intro. The Euclidean setting related work supports (justifies) our method and should go in method.}
+
+\lau{I will shorten as needed.}
+Methods are standard for dimensionality reduction and data visualization, whose goal is to transform high-dimensional data to a low-dimensional space while preserving distances / metric / structure.
 (i) build graph, (ii) realize / embed it in some ambient space
 Laplacian eigenmaps, multi-dimensional scaling (MDS), Isomap, LLE, t-SNE, UMAP are well-known examples.
 The embedding of distance matrices is well-studied for Euclidean embedding spaces, where the embedding is given by the eigenvectors of the distance matrix.
@@ -30,8 +33,8 @@ In~\cite{dokmanic2015euclidean}, the embedding space being Euclidean, the theore
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Contributions}
+\paragraph{Contributions}
+In this work, we present a method that learns to estimate the unknown orientation associated to each projection in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
 
-\lau{Here, short recap of our contributions. If needs be, shortly describe the structure of the paper.}
-
-In this work, we present a method that learns to estimate the unknown orientation associated to each projection in a SPA dataset without relying on any intermediate reconstruction procedure.
+\lau{If needs be, shortly describe the structure of the paper.}
+\mdeff{I don't like structure descriptions. They are boring and don't add anything. The structure is standard or can be inferred from section titles.}
