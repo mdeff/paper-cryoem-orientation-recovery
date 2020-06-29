@@ -40,7 +40,7 @@ Formally, the recovery is achieved by minimizing an appropriate loss function; w
 In the Euclidean setting, the embedding of distance matrices (given by their eigenvectors) is especially well-described.
 In particular, the framework of the Euclidean distance matrices (EDMs)~\cite{dokmanic2015euclidean} provides theoretical guarantees on the retrieval of points from collected distances.
 
-In our case, as we shall shortly explain, we aim to perform the embedding on $\SO(3)$, the non-Euclidean space of 3D rotations. Hence, the loss function to minimize (\secref{sec:method:orientation-recovery}) is non-convex. Furthermore, we are not aware of any theoretical characterization of its behaviour when input distances are lacking or corrupted by perturbations. That being said, the locally-Euclidean behavior of the $\SO(3)$ space offers some hope on the feasibility of this minimization. 
+In our case, as we shall shortly explain, we aim to perform the embedding on $\SO(3)$, the non-Euclidean space of 3D rotations. Hence, the loss function to minimize (\secref{method:orientation-recovery}) is non-convex. Furthermore, we are not aware of any theoretical characterization of its behaviour when input distances are lacking or corrupted by perturbations. That being said, the locally-Euclidean behavior of the $\SO(3)$ space offers some hope on the feasibility of this minimization. 
 Indeed, despite the lack of theoretical guarantees, we are able to appropriately minimize our loss function using a gradient-based algorithm, as we experimentally demonstrate in \secref{results:orientation-recovery:exact}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
