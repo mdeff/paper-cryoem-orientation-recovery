@@ -51,7 +51,7 @@ We consider that a cryo-EM measurement (i.e. projection) $\mathbf{p}_i \in \math
 \label{eq:linear-forward-model}
 \mathbf{p}_i={\mathbf {C}_{\boldsymbol\varphi}}\mathbf S_{\mathbf{t}}\mathbf P_{\theta_i}\mathbf x+\mathbf n,
 \end{equation}
-where $\mathbf x \in \mathbb{R}^{V}$ is the unknown 3D density map\cite{dimaio_creating_2007} (Coulomb potential). The operator $\mathbf P_{\theta_i}: \mathbb R^V \to \mathbb R^M$ is the projection along the 3D pose $\theta_i$ (i.e., the x-ray transform). The operator $\mathbf S_\mathbf{t}: \mathbb R^M \to \mathbb R^M$ is a shift of the projection by $\mathbf{t}=(t_1, t_2)$. The convolution operator $\mathbf {C}_{\boldsymbol\varphi}: \mathbb R^M \to \mathbb R^M$ models the microscope contrast transfer function (CTF) with parameters $\boldsymbol\varphi=(d_1, d_2, \alpha_{\rm ast})$, that are, respectively, the defocus-major, the defocus-minor and the angle of astigmatism. Finally, $\mathbf n \in \mathbb{R}^{M}$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf y_i$. 
+where $\mathbf x \in \mathbb{R}^{V}$ is the unknown 3D density map\cite{dimaio_creating_2007} (Coulomb potential). The operator $\mathbf P_{\theta_i}: \mathbb R^V \to \mathbb R^M$ is the projection along the 3D pose $\theta_i$ (i.e., the x-ray transform). The operator $\mathbf S_\mathbf{t}: \mathbb R^M \to \mathbb R^M$ is a shift of the projection by $\mathbf{t}=(t_1, t_2)$. The convolution operator $\mathbf {C}_{\boldsymbol\varphi}: \mathbb R^M \to \mathbb R^M$ models the microscope contrast transfer function (CTF) with parameters $\boldsymbol\varphi=(d_1, d_2, \alpha_{\rm ast})$, that are, respectively, the defocus-major, the defocus-minor and the angle of astigmatism. Finally, $\mathbf n \in \mathbb{R}^{M}$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf y_i$.
 
 \begin{table}[ht!]
     \centering
@@ -116,7 +116,7 @@ where $m = \det(\T)$ determines whether $\T$ is a proper rotation, $\mathbf{R}_{
 %\todo{Takes too much space for its relevance.}
 %\todo{Make sure $\mathbf{R}$ is introduced like this before.}
 
-Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment). 
+Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment).
 %Figure that shows a typical convergence and mean orientation recovery error before and after alignment can be seen in the next section, Figure \ref{fig:aa-loss-perfect-distances}.
 
 
@@ -168,7 +168,7 @@ Empirically we find that the mean orientation recovery error \eqnref{orientation
 %         \caption{After the alignment}
 %     \end{subfigure}
 %     \caption{Example of perfect alignment: mean orientation error of true distances for asymmetric protein (\texttt{5j0n}) before and after the alignment.
-        
+
 %     }
 %     \label{fig:angle-alignment-perfect}
 % \end{figure}
@@ -241,7 +241,7 @@ Hence, it suggests that the loss can be used as a good indicator of its performa
 %SiameseNN better than l2, but still plateaus.
 %Robust to projection noise.}
 
-The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections. 
+The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
 
 %\mdeff{Could we quickly try translations? Should be no problem for Siamese.}
 
@@ -324,7 +324,7 @@ Besides the Euclidean distance, this distance metric $F$ can be defined as geode
 \end{figure}
 
 
-For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 projections. 
+For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 projections.
 Depending on the available resources on the Google Colab, the training can last from 2.6 hours to 9.3 hours on one of its GPUs.
 The evolution of the training and validation losses are presented in \figref{losses-siamese-assym} for the asymmetric protein (\texttt{5j0n}), and in \figref{losses-siamese-sym} for the symmetric one (\texttt{5a1a}).
 The results demonstrate that the SiameseNN succeeds at learning a proxy distance for the asymmetric protein dataset, as convergence is reached in about 50 epochs ($\sim$ 50 minutes in the best resource availability setting).
@@ -344,8 +344,8 @@ These preliminary results are encouraging, as much has yet to be gained from imp
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 
-To further improve our network, we experiment with different feature distance metrics $F(\mathbf{x},\mathbf{y})$. 
-In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$. 
+To further improve our network, we experiment with different feature distance metrics $F(\mathbf{x},\mathbf{y})$.
+In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$.
 
 In this experiment, we test the performance with a geodesic distance, \textit{i.e.}
 \begin{equation}
@@ -372,18 +372,18 @@ The experimental conditions are the same as in the previous section with the Euc
 %Thanks again to good model of cryo-EM imaging.}
 %\mdeff{Better word? (perturbations, quality, non-ideal)}
 
-In this experiment we want to explore how does the perturbation of the projections affect the distance estimation (additive noise, translation, PSF). 
+In this experiment we want to explore how does the perturbation of the projections affect the distance estimation (additive noise, translation, PSF).
 
-The experimental conditions for the experiment are the same as before, except that we add noise with increasing variance on the projection prior to training. 
-The results are presented in \figref{distance-estimation-vary-projection-noise}. 
+The experimental conditions for the experiment are the same as before, except that we add noise with increasing variance on the projection prior to training.
+The results are presented in \figref{distance-estimation-vary-projection-noise}.
 
-We observe that the training and validation losses are increasing and network starts to overfit w.r.t. amount of noise in the projections. 
-With the noiseless projections (projection noise variance 0), the mean orientation recovery error $E = 0.1594$ rad. 
-Whereas, the noisy projections with noise levels 15 are the closest to the realistic protein projections and the error $E=4189$ rad. 
+We observe that the training and validation losses are increasing and network starts to overfit w.r.t. amount of noise in the projections.
+With the noiseless projections (projection noise variance 0), the mean orientation recovery error $E = 0.1594$ rad.
+Whereas, the noisy projections with noise levels 15 are the closest to the realistic protein projections and the error $E=4189$ rad.
 
-Besides testing the performance of the pipeline with the noisy projections, we explore the performance with different projection translation levels. 
-To translate the projection, we use a triangular distribution from $-t$ to $t$ px translation with the peak in the center of the projection. 
-The performance of different translation magnitudes can be seen in \figref{distance-estimation-vary-projection-translation}. 
+Besides testing the performance of the pipeline with the noisy projections, we explore the performance with different projection translation levels.
+To translate the projection, we use a triangular distribution from $-t$ to $t$ px translation with the peak in the center of the projection.
+The performance of different translation magnitudes can be seen in \figref{distance-estimation-vary-projection-translation}.
 We observe that the training of the network is invariant to translations in the projections, which was expected.
 
 We can see that the learned distance is minimally sensible to perturbations because we can train the network to ignore irrelevant information.
@@ -414,13 +414,13 @@ We can see that the learned distance is minimally sensible to perturbations beca
 %\todo{Reconstruct the protein to show the full pipeline: from a set of projections to a reconstructed protein.
 %Emphasize that it's a naive reconstruction algorithm.}
 
-The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections. 
+The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
 We run the pipeline for both, asymmetric (\texttt{5j0n}) and symmetric (\texttt{5a1a}) protein.
 In addition, we run the pipeline for the simulated realistic noise in the asymmetric protein.
-The experimental setting for distance estimation is the similar to the one used to generate the \figref{learned-distance-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we use the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}. 
+The experimental setting for distance estimation is the similar to the one used to generate the \figref{learned-distance-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we use the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}.
 
 Then, we run the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-orientation-recovery-loss-est} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
-With the noiseless projections, the objective function successfully converges to the $0.0510$ and with the noisy projections, the objective function converges to the $0.0683$. 
+With the noiseless projections, the objective function successfully converges to the $0.0510$ and with the noisy projections, the objective function converges to the $0.0683$.
 
 
 \begin{figure}[ht!]
@@ -441,7 +441,7 @@ With the noiseless projections, the objective function successfully converges to
 
 The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection can be seen in \figref{angle-alignment-5j0n-noise0}.
 Experimental setting parameters are: 3 runs per reflection/mirror (this is the $m=\det(\T)=1$ and $m=\det(\T)=-1$, therefore, total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0.
-The smallest error achieved is $0.1594$ rad. 
+The smallest error achieved is $0.1594$ rad.
 
 The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) can be seen in \figref{angle-alignment-5j0n-noise16}. Experimental setting parameters are: 3 runs per reflection (total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0. The smallest error achieved is $0.4184$ rad.
 
@@ -484,7 +484,7 @@ The mean orientation recovery error for asymmetric protein \texttt{5j0n} with no
 
 As a last step of the pipeline, we perform protein reconstruction using the projections and their corresponding estimated orientations.
 For that, we again use the ASTRA toolbox.
-Using this toolbox, we generate orientation vectors based on angles which we later feed into projection 3D geometry in ASTRA. 
+Using this toolbox, we generate orientation vectors based on angles which we later feed into projection 3D geometry in ASTRA.
 Due to GPU memory limit, we are able to reconstruct the protein using maximum of $3,000$ projections.
 It holds for our case, since we perform orientation recovery on the test set which has in total $1,650$ projections (less than the limit of $3,000$).
 
@@ -507,7 +507,7 @@ The reconstruction results for the asymmetric protein (\texttt{5j0n}) with noise
     }\label{fig:5j0n-reconstruction-noise0}
 \end{figure}
 
-The reconstruction results for the asymmetric protein (\texttt{5j0n}) with noisy projections (with noise variance 16) can be seen in \figref{5j0n-reconstruction-noise16}. 
+The reconstruction results for the asymmetric protein (\texttt{5j0n}) with noisy projections (with noise variance 16) can be seen in \figref{5j0n-reconstruction-noise16}.
 Similarly, on the left side we have a reconstruction using the ground-truth orientations, and on the right side we have the reconstruction result using the estimated aligned orientations.
 
 \begin{figure}[ht!]
@@ -531,7 +531,7 @@ Similarly, on the left side we have a reconstruction using the ground-truth orie
 
 %%%%%%%%%%% 5a1a
 
-Similarly, we run the whole reconstruction pipeline on the symmetric protein (\texttt{5a1a}). 
+Similarly, we run the whole reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
 The experimental conditions for the distance estimation are the same as for the asymmetric protein, except that we use the quarter-sphere projections coverage (whereas, in the asymmetric protein we use half-sphere coverage).
 The orientation recovery loss can be seen in \figref{5a1a-orientation-recovery-loss}. It successfully converges to $0.0381$.
 
@@ -581,9 +581,9 @@ Lastly, we perform the protein reconstruction with the same ASTRA toolbox settin
     }\label{fig:5a1a-reconstruction-noise0}
 \end{figure}
 
-We were able to successfully reconstruct the symmetric protein even though the distance estimation was noisier than the one performed on the asymmetric protein. 
+We were able to successfully reconstruct the symmetric protein even though the distance estimation was noisier than the one performed on the asymmetric protein.
 
-We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation. 
-However, the method developed is promising since the learned distance is robust to perturbations. 
+We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
+However, the method developed is promising since the learned distance is robust to perturbations.
 We observe that the orientation recovery and distance estimation are interconnected, \textit{i.e.} if one works the other one will work.
 
