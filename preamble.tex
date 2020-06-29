@@ -30,8 +30,7 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 
-
-
+%% ADDED BY LAURENE - DOUBLE SPACE 
 \usepackage{setspace}
 %\onehalfspacing
 \doublespacing
@@ -70,3 +69,22 @@
 \newcommand{\lau}[1]{{\textcolor{OliveGreen}{#1}}}
 \newcommand{\mdeff}[1]{{\color[rgb]{.8,.3,.2}{#1}}}
 
+
+% TIKZ
+% -----------------------------------------
+\usepackage{tikz,pgfplots,pgfplotstable}   
+\usepgfplotslibrary{groupplots,fillbetween,colorbrewer,statistics}
+\usetikzlibrary{intersections,calc,arrows,matrix,spy,pgfplots.statistics, pgfplots.colorbrewer}
+\usepackage{color}
+\definecolor{darkred}{rgb}{0.7,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkblue}{rgb}{0,0,0.7}
+\definecolor{SkyBlue}{rgb}{0.53, 0.81, 0.92}
+\pgfplotsset{compat=1.5.1, cycle list/Set1-3}
+\usepackage{tikz-3dplot}
+
+% bold signs 
+\newcommand\bth[0]{{\boldsymbol{\theta}}} % projection direction in S^2
+\newcommand\bvth[0]{{\boldsymbol{\upvartheta}}} % 3D orientation in SO(3)
+\newcommand\bsx[0]{{\boldsymbol{x}}} 
+\newcommand\bsy[0]{{\boldsymbol{y}}}

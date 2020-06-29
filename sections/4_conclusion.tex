@@ -1,0 +1,28 @@
+\section{Conclusion}
+
+The results obtained so far provide key insights on the viability of the proposed method.
+They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme. \lau{To update with latest results.}
+%Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d}_p$; this is very clearly the next line of research.
+
+\lau{Ok I keep the following paragraph here, but depending on the results, we could remove it.}
+First, the results underline the importance of learning an accurate proxy distance $\widehat{d}_p$.
+In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs as well as the distance metric between the two CNN outputs. We could parametrize the function $d_f$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well. 
+
+For the metric learning, we should further enhance the training dataset in order to test its predictive ability in more challenging situations, in particular to extend to method to unseen proteins. 
+To achieve this, we shall rely on our powerful, expressive forward model of the cryo-EM procedure to generate realistic projections from thousands of atomic models in the PDB database.
+In this regard, an interesting aspect of SiameseNNs for the present application is that they intrinsically predict the \textit{relationship} between objects.
+Hence, a well-trained SiameseNN could be relatively robust to the change of volumes.
+In the same line of thought, our SiameseNN will likely benefit from the profound structural similarity shared by proteins---after all, they all derived from just the same 21 amino acids.
+Further down the line, an extended training will allow us to test different options for the challenging handling of proteins with multiple conformational states.
+
+% ABOUT SIAMESE_NN
+
+%The success of the SiameseNN as a faithful predictor of relative orientations eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
+%The objective is for the SiameseNN to be able to handle projections acquired in all sorts of imaging conditions and originating from 3D volumes it has never been trained on.
+
+%We shall create such comprehensive training dataset by capitalizing on two favorable conditions.
+%First, there exists a large publicly-available database of deposited atomic models of proteins, which gives us access to thousands of different 3D ground truths.
+%Then, we shall take advantage of our ability to model the cryo-EM imaging procedure to generate, from these ground truths, a synthetic dataset that contains a massive amount of realistic projections whose orientations are, by definition, all known.
+
+% Put somewhere? 
+%The method capitalizes on the powerful learning capabilities of neural networks, yet still fundamentally relies on our ability to faithfully model the cryo-EM imaging process for the generation of the training dataset.

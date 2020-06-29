@@ -1,40 +1,67 @@
 \section{Introduction}
 
-\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
+Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field of structural biology over the last decades~\cite{dubochet1988cryo, frank2006three,chap0-nat2015MethodYear}. The use of electron beams to image ice-embedded samples has permitted the recovery of 3D bio-structures at unprecedented resolution. This advent of atomic-resolution cryo-EM has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
 
-\todo{Figure about the geometry of the 3D imaging model.}
-\mdeff{Maybe better with \secref{method:orientation-representation} to show how orientations are rotations.}
+In single-particle cryo-EM, every 3D particle adopt a random orientation in the ice layer before being imaged with parallel beams of electrons.
+Hence, the projection geometry associated to each acquired 2D projection (Figure~\ref{fig:imaging-geometry}) is unknown. Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
 
-In single-particle cryo-electron microscopy (cryo-EM), every 3D particle adopt a random (and thus unknown) orientation in the ice layer before being imaged with parallel electron beams.
-Hence, the projection geometry associated to each acquired 2D projection is unknown. Yet this knowledge is essential for tomographic reconstruction.
+%----
+\tdplotsetmaincoords{60}{110}
+\pgfmathsetmacro{\rvec}{.8}
+\pgfmathsetmacro{\thetavec}{30}
+\pgfmathsetmacro{\phivec}{60}
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[t]{0.35\textwidth}
+        \includegraphics[width=\textwidth]{images/geomProj3D.jpeg}
+    \end{subfigure} \quad 
+\begin{tikzpicture}[scale=5,tdplot_main_coords]
+    \coordinate (O) at (0,0,0);
+    \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$\bsx_1$};
+    \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$\bsx_2$};
+    \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$\bsx_3$};
+    \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
+    \draw[-stealth,very thick,color=red] (O) -- (P);
+    \draw[dashed, color=red] (O) -- (Pxy);
+    \draw[dashed, color=red] (P) -- (Pxy);
+    \tdplotdrawarc{(O)}{0.2}{0}{\phivec}{anchor=north}{$\theta_1$}
+    \tdplotsetthetaplanecoords{\phivec}
+    \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.5}{0}%
+        {\thetavec}{anchor=south west}{$\theta_2$}
+    \draw[dashed,tdplot_rotated_coords] (\rvec,0,0) arc (0:90:\rvec);
+    \draw[dashed] (\rvec,0,0) arc (0:90:\rvec);
+    \tdplotsetrotatedcoords{\phivec}{\thetavec}{0}
+    \tdplotsetrotatedcoordsorigin{(P)}
+    \draw[dashed,blue,tdplot_rotated_coords,-] (-.4,0,0)
+        -- (.4,0,0) node[anchor=north west]{};
+    \draw[dashed,blue,tdplot_rotated_coords,-] (0,-.4,0)
+        -- (0,.4,0) node[anchor=west]{};
+    \draw[blue,tdplot_rotated_coords,-]  (-.4,.4,0) -- (.4,.4,0)  -- (.4,-.4,0) -- (-.4,-.4,0) -- (-.4,.4,0)   node[anchor=north]{};
+    \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.2}{0}%
+        {30}{anchor=north west,color=black}{$\theta_3$}
+    \tdplotsetrotatedcoords{\phivec}{\thetavec}{30}
+    \draw[thick,tdplot_rotated_coords,->] (0,0,0)
+        -- (.3,0,0) node[anchor=north west]{$\bsy_1$};
+    \draw[thick,tdplot_rotated_coords,->] (0,0,0)
+        -- (0,.3,0) node[anchor=west]{$\bsy_2$};
+    \node[blue] at (0.4,0.45,1.2) {$\Omega_{\mathrm{2D}}$};    
+    \node[red] at (1.5,0.75,1.2) {$\bvth_{\bth}$};  
+    \tdplotsetrotatedthetaplanecoords{45}
+\end{tikzpicture}
+\caption{\lau{Easy solution if not enough time: just adapt this figure with the correct notations}. Geometry of the 3D imaging model. The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the projection direction $\bvth_{\bth}$ to produce the 2D projection $b$ in the coordinate system $(y_1,y_2)$. The Euler angles~$\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ compactly represent the 3D rotation that maps the object coordinate system to the projection coordinate system. The angles $\theta_1$, $\theta_2$, and $\theta_3$, respectively correspond to the rotation, the tilt, and the in-plane rotation in the projection plane. The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.}
+\label{fig:imaging-geometry}
+\end{figure}
+%----
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RELATED WORKS 
+To handle this, a popular approach in single-particle cryo-EM is to alternatively refine the 3D structure and the estimation of the orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}. Unfortunately, the outcome of these iterative-refinement procedures is most often predicated on the quality of the initial \textit{ab initio} reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
 
-\subsection{Related works in cryo-EM}
+Several methods have been designed to produce a first rough \textit{ab initio} structure for the refinement procedure~\cite{singer2020computational}. An early approach~\cite{kam1980reconstruction} proposed to reconstruct an initial structure such that the first few moments of the distribution of its theoretical measurements match the ones of its experimental projections. Since then, \textit{moment-matching} techniques have been refined and extended~\cite{salzman1990method,goncharov1988integral,sharon2019method}, \textit{e.g.}, to accommodate for non-uniform orientation configurations. However, they typically remain sensitive to error in data and can require relatively high computational complexity.  %If needs be for downside: relatively important computational complexity, and remain sensitive to error in data. 
 
-To handle this, a popular approach used by most software packages in single-particle cryo-EM is to alternatively refine the 3D structure and the orientation estimation~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian}.
-Iterative refinement procedures are extremely powerful and have permitted the determination of numerous biological structures up to near-atomic resolution~\cite{kuhlbrandt2014resolution}.
-Unfortunately, the outcome of these methods is predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
-Several methods have been designed to produce a first rough structure~\cite{singer2010detecting,wang2013orientation,greenberg2017common,punjani2017cryosparc,pragier2019common}, but this remains a notoriously arduous challenge in single-particle cryo-EM.
+Another popular line of approach in single-particle cryo-EM  relies on the central-slice theorem, which relates the Fourier transform of a projection to a plane (orthogonal to the projection direction) in the Fourier transform of the 3D object~\cite{Natterer2001mathematics}. Hence, every two projections \textit{de facto} share a common 1D intersection in the 3D Fourier domain, and three projections theoretically suffice to define a coordinate system from which their orientations can be deduced~\cite{van1987angular}. Exploiting this principle, \textit{common-lines} methods aim at uniquely determining the orientations of each projections by identifying the common-lines between triplets of projections~\cite{penczek1994ribosome,mallick2006structure,singer2010detecting,wang2013orientation,greenberg2017common,pragier2019common}---a real technical challenge given the massive amount of noise in cryo-EM data. %If needs be for downside: sensitivity to high-noise levels, small particles, etc. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Alternatively, the  marginalized maximum likelihood (ML) formulation of the reconstruction problem---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descents~\cite{punjani2017cryosparc}. This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability. More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward yet. 
 
-\subsection{Related works in Euclidean setting}
+Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.  
 
-\mdeff{I think related work should be used to support our story. The cryo-EM related work supports (motivates) the problem and should go in the intro. The Euclidean setting related work supports (justifies) our method and should go in method.}
-
-\lau{I will shorten as needed.}
-Methods are standard for dimensionality reduction and data visualization, whose goal is to transform high-dimensional data to a low-dimensional space while preserving distances / metric / structure.
-(i) build graph, (ii) realize / embed it in some ambient space
-Laplacian eigenmaps, multi-dimensional scaling (MDS), Isomap, LLE, t-SNE, UMAP are well-known examples.
-The embedding of distance matrices is well-studied for Euclidean embedding spaces, where the embedding is given by the eigenvectors of the distance matrix.
-The task of recovering points based on their relative distances has been extensively studied in the literature, mostly within the framework of dimensionality reduction and primarily for the case of \textit{Euclidean} embedding spaces\footnote{An ``embedding space'' corresponds to the (often lower-dimensional) space in which data is embedded, \textit{i.e.}, mapped to in such a way that the relative distances between its points are preserved as much as possible.}~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
-In~\cite{dokmanic2015euclidean}, the embedding space being Euclidean, the theoretical framework of the Euclidean distance matrices (EDMs) guarantees that one can retrieve the desired points from the collected distances.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\paragraph{Contributions}
-In this work, we present a method that learns to estimate the unknown orientation associated to each projection in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
-
-\lau{If needs be, shortly describe the structure of the paper.}
-\mdeff{I don't like structure descriptions. They are boring and don't add anything. The structure is standard or can be inferred from section titles.}
+%\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
