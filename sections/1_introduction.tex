@@ -5,16 +5,16 @@ Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field 
 In single-particle cryo-EM, every 3D particle adopt a random orientation in the ice layer before being imaged with parallel beams of electrons.
 Hence, the projection geometry associated to each acquired 2D projection (Figure~\ref{fig:imaging-geometry}) is unknown. Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
 
-%----
 \tdplotsetmaincoords{60}{110}
 \pgfmathsetmacro{\rvec}{.8}
 \pgfmathsetmacro{\thetavec}{30}
 \pgfmathsetmacro{\phivec}{60}
-\begin{figure}[t!]
+\begin{figure}
 \centering
-\begin{subfigure}[t]{0.35\textwidth}
-        \includegraphics[width=\textwidth]{images/geomProj3D.jpeg}
-    \end{subfigure} \quad
+\begin{subfigure}[t]{0.35\linewidth}
+    \includegraphics[width=\linewidth]{figures/imaging_geometry}
+\end{subfigure}
+\quad
 \begin{tikzpicture}[scale=5,tdplot_main_coords]
     \coordinate (O) at (0,0,0);
     \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$\bsx_1$};
@@ -48,10 +48,15 @@ Hence, the projection geometry associated to each acquired 2D projection (Figure
     \node[red] at (1.5,0.75,1.2) {$\bvth_{\bth}$};
     \tdplotsetrotatedthetaplanecoords{45}
 \end{tikzpicture}
-\caption{\lau{Easy solution if not enough time: just adapt this figure with the correct notations}. Geometry of the 3D imaging model. The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the projection direction $\bvth_{\bth}$ to produce the 2D projection $b$ in the coordinate system $(y_1,y_2)$. The Euler angles~$\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ compactly represent the 3D rotation that maps the object coordinate system to the projection coordinate system. The angles $\theta_1$, $\theta_2$, and $\theta_3$, respectively correspond to the rotation, the tilt, and the in-plane rotation in the projection plane. The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.}
-\label{fig:imaging-geometry}
+\caption{%
+    \lau{Easy solution if not enough time: just adapt this figure with the correct notations.}
+    Geometry of the 3D imaging model.
+    The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the projection direction $\bvth_{\bth}$ to produce the 2D projection $b$ in the coordinate system $(y_1,y_2)$.
+    The Euler angles~$\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ compactly represent the 3D rotation that maps the object coordinate system to the projection coordinate system.
+    The angles $\theta_1$, $\theta_2$, and $\theta_3$, respectively correspond to the rotation, the tilt, and the in-plane rotation in the projection plane.
+    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection
+}\label{fig:imaging-geometry}
 \end{figure}
-%----
 
 % RELATED WORKS
 To handle this, a popular approach in single-particle cryo-EM is to alternatively refine the 3D structure and the estimation of the orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}. Unfortunately, the outcome of these iterative-refinement procedures is most often predicated on the quality of the initial \textit{ab initio} reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.

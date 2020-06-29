@@ -4,22 +4,21 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{schematic_overview}
+    \includegraphics[width=\textwidth]{schematic_method_overview}
     \caption{
-        \textbf{Overview of the proposed method.}
+        \textbf{Method overview.}
         We denote the $i$th projection by $\mathbf{p}_i$ and its orientation by $q_i$. The distance between two orientations is denoted by $d_q$, and the estimated distance between two projections by $\widehat{d}_p$; the latter is implemented as a SiameseNN.
         Our method consists of two steps: (i) estimate distances between pairs of projections, and (ii) recover orientations from the estimated distances.
         % Our method effectively (i) estimates a metric space, then (ii) embed it in the space of 3D orientations, $\SO(3)$.
         \todo{Update sections in figure.}
         \todo{Update titles: Step 1: estimate distances. Step 2: recover orientations.}
         \mdeff{It would be amazing to have a visual of the embedding made in step 2: finding points in SO(3) such that the geodesic distances between them are the estimated distances. As we can't see SO(3) / $S^3$, we could try with $S^2$, which is a subset/projection.} \lau{I'll change the notations in the figure once we have settle on the final ones.}
-    }
-    \label{fig:schematic:overview}
+    }\label{fig:schematic:method-overview}
 \end{figure}
 
 We present a method that learns to estimate the unknown orientation associated to each projection in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure. Our approach relies on the well-know observation that the greater the similarity between two 2D projections, the more likely they originated from two 3D particles that adopted close orientations in the ice layer prior to imaging\footnote{Up to protein symmetries, which we discuss later.}; this principle guides a number of applications in the field~\cite{frank2006three}.
 
-Taking this line of thought further, we propose to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. This trained network then allows us to estimate, for any new projection dataset, the relative orientations between pairs of its projections. From these estimated distances, we then retrieve the orientation for each projection through an appropriate minimization scheme. Our two-steps method is illustrated in \figref{schematic:overview}.
+Taking this line of thought further, we propose to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. This trained network then allows us to estimate, for any new projection dataset, the relative orientations between pairs of its projections. From these estimated distances, we then retrieve the orientation for each projection through an appropriate minimization scheme. Our two-steps method is illustrated in \figref{schematic:method-overview}.
 
 %to embed it on the space of 3D orientations, $\SO(3)$.
 % In practice, our method consists of: (i) estimate the distance between pairs of projections, and (ii) recover
@@ -79,13 +78,13 @@ In other words, the relative distance between two rotations encoded by unit quat
 %We capitalize on the powerful function approximation capabilities of neural networks and on our ability to faithfully model the cryo-EM imaging process for the generation of training data.
 
 %To make such training possible, we capitalize on our ability to model the cryo-EM imaging procedure to generate a large, representative synthetic dataset using publicly available 3D atomic models.
-%Once the distance learned, it can be used in the aforementioned two-steps method (see \figref{schematic:overview}) for any projection dataset.
+%Once the distance learned, it can be used in the aforementioned two-steps method (see \figref{schematic:method-overview}) for any projection dataset.
 
 The goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{schematic_siamese}
+    \includegraphics[width=\textwidth]{schematic_distance_learning}
     \caption{
         We are looking for a distance $d_p$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
         We propose to parameterize $d_p$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of $P \approx 10^3$ projections with associated orientation.
