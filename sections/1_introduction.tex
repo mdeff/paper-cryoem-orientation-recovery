@@ -49,13 +49,19 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
     \tdplotsetrotatedthetaplanecoords{45}
 \end{tikzpicture}
 \caption{%
+    % Goals: explain
+    % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
+    % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
     \lau{Easy solution if not enough time: just adapt this figure with the correct notations.}
     \mdeff{We should try to better convey the idea of a plane on the left figure. For example, there was a gray rectangle in the original image.}
+    \todo{Imaging figure: $\Omega_{\mathrm{2D}}$ with 2D not italic. $\p$ in bold.}
+    \todo{Method figure: A real protein in the middle, and some real projections on S². Similarly to the first figure in Jelena's notebook [1]. Curved lines would link the projections' centre, following the curvature of S². The goal is to explain that $d_q$ is the geodesic distance between orientations, and for readers to understand that given those distances, we can find the orientations back (up to a global orientation). The whole problem is then to infer the distances from the projections. (From subfig 1 it'll be apparent that S² is a subset of the space of orientations, missing in-plane rotations $\theta_3$.)}
     Geometry of the 3D imaging model.
-    The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the projection direction $\bvth_{\bth}$ to produce the 2D projection $b$ in the coordinate system $(y_1,y_2)$.
-    The Euler angles~$\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ compactly represent the 3D rotation that maps the object coordinate system to the projection coordinate system.
+    The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the (unknown) projection direction $\bvth_{\bth}$ \mdeff{\textit{orientation} $q$?} to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1,y_2)$.
+    The Euler angles $\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ represent the 3D rotation that maps the object coordinate system to the projection coordinate system.
     The angles $\theta_1$, $\theta_2$, and $\theta_3$, respectively correspond to the rotation, the tilt, and the in-plane rotation in the projection plane.
-    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection
+    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.
+    \mdeff{Is $\Omega_{\mathrm{2D}}$ a set? Not a vector space?}
 }\label{fig:imaging-geometry}
 \end{figure}
 
