@@ -117,7 +117,7 @@ where $m = \det(\T)$ determines whether $\T$ is a proper rotation, $\mathbf{R}_{
 %\todo{Make sure $\mathbf{R}$ is introduced like this before.}
 
 Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment).
-%Figure that shows a typical convergence and mean orientation recovery error before and after alignment can be seen in the next section, Figure \ref{fig:aa-loss-perfect-distances}.
+%Figure that shows a typical convergence and mean orientation recovery error before and after alignment can be seen in the next section, \figref{aa-loss-perfect-distances}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,7 +136,7 @@ With orientation recovery we estimate the projection position in quaternion spac
 To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 From $P_{test}=837$ test set projections taken from one side of the asymmetric protein (\texttt{5j0n}), we randomly sample every step of the optimization with batch size of $256$ out of $P_{test}^2 = \num{701,406}$ pairs and minimize \eqnref{orientation-recovery} with Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
 Orientations are perfectly recovered.
-Figure \ref{fig:5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
+\figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
 \begin{figure}[b]
     \centering
