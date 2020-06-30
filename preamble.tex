@@ -1,6 +1,7 @@
 % ====================================
 % PACKAGES
 % ====================================
+
 \usepackage{arxiv}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -46,29 +47,40 @@
 %\newcommand{\eqnref}[1]{(\ref{eqn:#1})}
 \newcommand{\eqnref}[1]{\eqref{eqn:#1}}
 
-%\newcommand\argmin[1]{\underset{#1}{\arg\;\min}}
-\DeclareMathOperator*{\argmin}{arg\,min}
-% spaces
-\newcommand\R{\mathbb{R}}
-\newcommand\U{\mathbb{U}}
-\newcommand\Or[0]{\mathrm{\mathbf{O}}}
-\newcommand\SO[0]{\mathrm{\mathbf{SO}}}
-\newcommand\SU[0]{\mathrm{\mathbf{SU}}}
-%
-\newcommand\T{\mathbf{T}}
-\newcommand\p{\mathbf{p}}
-\newcommand\f{\mathbf{f}}
-\newcommand\G{\mathcal{G}}
-
-% notes
+% comments
 \newcommand{\todo}[1]{{\color[rgb]{.6,.1,.6}{#1}}}
 \newcommand{\banjac}[1]{{\color[rgb]{.3,.5,.9}{#1}}}
 \newcommand{\lau}[1]{{\textcolor{OliveGreen}{#1}}}
 \newcommand{\mdeff}[1]{{\color[rgb]{.8,.3,.2}{#1}}}
 
+% ====================================
+% MATH
+% ====================================
 
+%\newcommand\argmin[1]{\underset{#1}{\arg\;\min}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand\R{\mathbb{R}}
+\newcommand\U{\mathbb{U}}
+\newcommand\T{\mathbf{T}}
+\newcommand\Or[0]{\mathrm{\mathbf{O}}}
+\newcommand\SO[0]{\mathrm{\mathbf{SO}}}
+\newcommand\SU[0]{\mathrm{\mathbf{SU}}}
+
+\newcommand\p{\mathbf{p}}
+\newcommand\f{\mathbf{f}}
+\newcommand\G{\mathcal{G}}
+
+% bold signs
+\newcommand\bth[0]{{\boldsymbol{\theta}}} % projection direction in S^2
+\newcommand\bvth[0]{{\boldsymbol{\upvartheta}}} % 3D orientation in SO(3)
+\newcommand\bsx[0]{{\boldsymbol{x}}}
+\newcommand\bsy[0]{{\boldsymbol{y}}}
+
+% ====================================
 % TIKZ
-% -----------------------------------------
+% ====================================
+
 \usepackage{tikz,pgfplots,pgfplotstable}
 \usepgfplotslibrary{groupplots,fillbetween,colorbrewer,statistics}
 \usetikzlibrary{intersections,calc,arrows,matrix,spy,pgfplots.statistics, pgfplots.colorbrewer}
@@ -79,9 +91,3 @@
 \definecolor{SkyBlue}{rgb}{0.53, 0.81, 0.92}
 \pgfplotsset{compat=1.5.1, cycle list/Set1-3}
 \usepackage{tikz-3dplot}
-
-% bold signs
-\newcommand\bth[0]{{\boldsymbol{\theta}}} % projection direction in S^2
-\newcommand\bvth[0]{{\boldsymbol{\upvartheta}}} % 3D orientation in SO(3)
-\newcommand\bsx[0]{{\boldsymbol{x}}}
-\newcommand\bsy[0]{{\boldsymbol{y}}}
