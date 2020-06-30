@@ -78,7 +78,7 @@ In other words, the distance between two rotations represented as unit quaternio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Distance learning}%\label{sec:method:distance-learning}
+\subsection{Distance learning}\label{sec:method:distance-learning}
 %\subsection{Metric learning}%\label{sec:method:distance-learning}
 %\subsection{Estimating Relative Orientations from Projections}
 %\subsection{Relative orientation estimation}
@@ -116,8 +116,8 @@ where $\G_w$ is a convolutional neural network with weights $w$ that is trained 
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\U$, we set $d_f = d_q$.
 
-
-Evaluating the sum in \eqnref{distance-learning} requires $P^2$ distance evaluations.
+Evaluating the sum in \eqnref{distance-learning} requires $\mathcal{O}(P^2)$ distance evaluations.
+\mdeff{$(P^2-P)/2$ if true distance functions.}
 As this is computationally intractable for cryo-EM datasets with typically $P \approx 10^5$ projections, we sample only a subset of pairs.
 In practice, \eqnref{distance-learning} is minimized by stochastic gradient descent (SGD) over small batches of pairs, with weight updates computed by back-propagation of the error.
 % error / objective value
