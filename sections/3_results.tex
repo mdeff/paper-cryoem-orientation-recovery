@@ -18,19 +18,19 @@ Due to protein symmetries, orientations are sampled from a half of $\mathbb{S}^2
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[height=4cm]{images/5j0n_noise0.png}
+        \includegraphics[height=4cm]{images/5j0n_noise0}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{images/5j0n_noise16.png}
+        \includegraphics[height=4cm]{images/5j0n_noise16}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{images/5j0n_translated.png}
+        \includegraphics[height=4cm]{images/5j0n_translated}
         \caption{}
     \end{subfigure}
     \caption{%
@@ -52,11 +52,11 @@ We consider that a cryo-EM measurement (i.e., a projection) $\mathbf{p}_i \in \m
 where $\mathbf x \in \mathbb{R}^{V}$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
 The operator $\mathbf{P}_{\theta_i}: \R^V \to \R^M$ is the projection along the 3D pose $\bth_i$ (i.e., the x-ray transform).
 The operator $\mathbf{S}_\mathbf{t}: \R^M \to \R^M$ is a shift of the projection by $\mathbf{t} = (t_1, t_2)$.
-The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^M \to \R^M$ models the microscope contrast transfer function (CTF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
+The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^M \to \R^M$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
 Finally, $\mathbf{n} \in \R^M$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf{y}_i$.
 \todo{Consistency: we previously used $n_p$ instead of $M$.}
-\mdeff{Should we move that (the equation and text below it) to the intro? It goes well with \figref{imaging-geometry} and would help us when we talk about rotations in \secref{method:orientation-representation}.}
-\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.}
+\mdeff{Should we move that (the equation and text below it) to the intro? It goes well with \figref{imaging-geometry} and would help us when we talk about rotations in \secref{method:orientation-representation}.} \lau{I agree.}
+\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either. }
 
 \begin{table}[ht!]
     \centering
@@ -66,13 +66,11 @@ Finally, $\mathbf{n} \in \R^M$ represents an additive noise. Our goal is then to
         \midrule
         Train & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
         Validation & 1650 (33\%) & 2,722,500 & 27,225 (1\%) \\
-        Test & 837 (17\%) & 701,406 & all (sampled per batch) \\
+        Test & 838 (17\%) & 701,406 & all (sampled per batch) \\
         \bottomrule
     \end{tabular}
     \caption{
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
-        \todo{Sums to 4999 projections.}
-        \mdeff{Same for both proteins?}
     }\label{tab:dataset}
 \end{table}
 
@@ -145,26 +143,25 @@ Since mean recovery error is a good and intuitive performance metric, we will on
 
 To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 \mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
-From $P=837$ projections taken from the asymmetric protein \texttt{5j0n}, we randomly sample batches of $256$ pairs (out of $(P^2-P)/2 \approx \num{350e3}$) at every step and minimize \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
+From $P_{test}=838$ projections taken from the asymmetric protein \texttt{5j0n}, we randomly sample batches of $256$ pairs (out of $(P^2-P)/2 \approx \num{350e3}$) at every step and minimize \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
 Orientations are perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
 \begin{figure}
     \centering
     %\begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5.9cm]{images/5j0n_perfect_angle_recovery.png}
+        \includegraphics[height=5.9cm]{figures/5j0n_perfect_angle_recovery}
         %\caption{Asymmetric protein (\texttt{5j0n}).}
     %\end{subfigure}
     %\hfill
     %\begin{subfigure}[b]{0.5\textwidth}
     %\centering
-    %    \includegraphics[height=5.5cm]{images/5a1a_perfect_angle_recovery.png}
+    %    \includegraphics[height=5.5cm]{figures/5a1a_perfect_angle_recovery}
     %    \caption{Symmetric protein (\texttt{5a1a}).}
     %\end{subfigure}
     \caption{
         Example of perfect orientation recovery (for \texttt{5j0n}).
         The loss~\eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-        \todo{Figure y-label: "Orientation recovery loss".}
     }\label{fig:5j0n-orientation-recovery-loss}
 \end{figure}
 
@@ -186,13 +183,13 @@ We can see that the orientation alignment was performed successfully.
     \end{subfigure}
     \\
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5.7cm]{images/5j0n_perfect_angle_ralignment_before}
+        \includegraphics[height=5.7cm]{figures/5j0n_perfect_angle_ralignment_before}
         \caption{Orientation recovery error without alignment.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
     \centering
-        \includegraphics[height=5.7cm]{images/5j0n_perfect_angle_ralignment_after}
+        \includegraphics[height=5.7cm]{figures/5j0n_perfect_angle_ralignment_after}
         \caption{Orientation recovery error with alignment.}
     \end{subfigure}
     \caption{%
@@ -223,20 +220,19 @@ For all variances, the mean orientation recovery error $E$ is reported in \figre
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[height=5.15cm]{images/5j0n_perfect_noisy_ar_aa.png}
+        \includegraphics[height=5.15cm]{figures/5j0n_perfect_noisy_ar_aa}
         \caption{Asymmetric protein (\texttt{5j0n}).}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.50\textwidth}
     \centering
-        \includegraphics[height=5.15cm]{images/5a1a_perfect_noisy_ar_aa.png}
+        \includegraphics[height=5.15cm]{figures/5a1a_perfect_noisy_ar_aa}
         \caption{Symmetric protein (\texttt{5a1a}).}
     \end{subfigure}
     \caption{
         The mean orientation recovery error $E$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error.
         Better distance estimation leads to better orientation recovery.
         Moreover, the recovery loss \eqnref{orientation-recovery} is a good proxy for the recovery error $E$, allowing us to assess recovery performance even without ground-truth orientations.
-        \todo{figure: have $E$ in y-label.}
 }
     \label{fig:perfect-with-noise-ar-aa}
 \end{figure}
@@ -269,11 +265,11 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[height=7.5cm]{images/eucl_notrobust_5j0n}
+        \includegraphics[height=7.5cm]{figures/eucl_notrobust_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}).}
     \end{subfigure} \quad \quad
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[height=7.5cm]{images/eucl_notrobust_5a1a}
+        \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}).}
     \end{subfigure}
     \caption{
@@ -306,32 +302,30 @@ Besides the Euclidean distance, this distance metric $F$ can be defined as geode
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[height=5.5cm]{images/de_5j0n}
+        \includegraphics[height=5.5cm]{figures/de_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}).}
         \label{fig:losses-siamese-assym}
     \end{subfigure} \quad \quad
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[height=5.5cm]{images/de_5a1a}
+        \includegraphics[height=5.5cm]{figures/de_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}).}
         \label{fig:losses-siamese-sym}
     \end{subfigure}
     \caption{
         Distance learning loss \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training.
-        \todo{Figure: same scale on y-axis, like 0 and 0.5. A limit of 0.5 is sufficient and will better show the difference between the two losses (= overfitting).}
-        \todo{Figure y-label: "Distance learning loss".}
     }\label{fig:losses-siamese}
 \end{figure}
 
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=6cm]{images/dPdQ_5j0n.png}
+        \includegraphics[height=6cm]{figures/dPdQ_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}) on test dataset.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.50\textwidth}
     \centering
-        \includegraphics[height=6cm]{images/dPdQ_5a1a.png}
+        \includegraphics[height=6cm]{figures/dPdQ_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}) on test dataset.}
     \end{subfigure}
     \caption{Relationship between orientations' distance $d_q$ and estimated distance $d_p$.}
@@ -383,7 +377,7 @@ The experimental conditions are the same as in the previous section with the Euc
 
 \begin{figure}
     \centering
-    \includegraphics[height=8.5cm]{images/geo_eucl_mlp_distance_metric.pdf}
+    \includegraphics[height=8.5cm]{figures/geo_eucl_mlp_distance_metric.pdf}
     \caption{
         Training and validation losses w.r.t. feature vectors' distance metric and their corresponding distance ratio $(d_q, d_p)$ plots.
         \mdeff{Beautiful figure!!}
@@ -418,20 +412,17 @@ We can see that the learned distance is minimally sensible to perturbations beca
 
 \begin{figure}
     \centering
-        \includegraphics[height=8cm]{images/de_noises_nums}
+        \includegraphics[height=8cm]{figures/de_noises_nums}
         \caption{%
             Variation of train and validation epoch losses w.r.t. noise levels in the projections of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
-            \mdeff{Great figure again!}
-            \todo{y-label: "Distance learning loss"}
         }\label{fig:distance-estimation-vary-projection-noise}
 \end{figure}
 
 \begin{figure}
     \centering
-        \includegraphics[height=8cm]{images/de_translation_nums}
+        \includegraphics[height=8cm]{figures/de_translation_nums}
         \caption{
         Variation of train and validation epoch losses w.r.t.\ projection translation of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
-        \todo{Figure y-label: "Distance learning loss".}
         \mdeff{We should try to have 12 and 13 side-by-side (to gain some space and facilitate comparison on the y-axis) by making them more square.}
     }\label{fig:distance-estimation-vary-projection-translation}
 \end{figure}
@@ -456,28 +447,28 @@ With the noiseless projections, the objective function successfully converges to
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5.5cm]{images/5j0n_noise0_angle_recovery}
+        \includegraphics[height=5.5cm]{figures/5j0n_noise0_angle_recovery}
         \caption{Recovery loss, noiseless projections $\mathbf{Px}$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
     \centering
-        \includegraphics[height=5.5cm]{images/5j0n_noise16_angle_recovery}
+        \includegraphics[height=5.5cm]{figures/5j0n_noise16_angle_recovery}
         \caption{Recovery loss, noisy projections $\mathbf{Px+n}$ (variance 16).}
     \end{subfigure}
     \\
     \begin{subfigure}[b]{0.45\textwidth}
     \centering
-        %\includegraphics[height=5.7cm]{images/5j0n_noise0_angle_alignment_before.png}
-        \includegraphics[height=5.7cm]{images/5j0n_noise0_angle_alignment_after}
+        %\includegraphics[height=5.7cm]{figures/5j0n_noise0_angle_alignment_before}
+        \includegraphics[height=5.7cm]{figures/5j0n_noise0_angle_alignment_after}
         \caption{Recovery error, noiseless projections $\mathbf{Px}$.}
         \label{fig:angle-alignment-5j0n-noise0}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
     \centering
-        %\includegraphics[height=5.7cm]{images/5j0n_noise16_angle_alignment_before.png}
-        \includegraphics[height=5.7cm]{images/5j0n_noise16_angle_alignment_after}
+        %\includegraphics[height=5.7cm]{figures/5j0n_noise16_angle_alignment_before}
+        \includegraphics[height=5.7cm]{figures/5j0n_noise16_angle_alignment_after}
         \caption{Recovery error, noisy projections $\mathbf{Px+n}$ (variance 16).}
         \label{fig:angle-alignment-5j0n-noise16}
     \end{subfigure}
@@ -485,8 +476,6 @@ With the noiseless projections, the objective function successfully converges to
         Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}) with (right) and without (left) noise.
         The first row shows the orientation recovery loss.
         The second row shows the orientation recovery error ($E$ from \eqnref{orientation-recovery-error}).
-        \todo{Figure y-label: "Orientation recovery loss".}
-        \mdeff{I merged three figures to make the comparison easier. I removed the orientation recovery error before alignment as it's meaningless. We can show its importance only once in \figref{5j0n-aa-loss-perfect-distances}.}
     }\label{fig:5j0n-orientation-recovery-loss-est}
 \end{figure}
 
@@ -533,7 +522,6 @@ The reconstruction results for the asymmetric protein (\texttt{5j0n}) with noise
     \caption{
         Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}) with (right) and without (left) noise.
         Reconstruction of the asymmetric protein (\texttt{5j0n}) from noiseless (left) and noisy (right) projections ${\big\{\p_i\big\}}_{i=1}^P$ and true (top) and recovered (bottom) orientations.
-        \mdeff{I again merged figures for easier comparison. I also kept the layout consistent (noiseless on the left).}
         \todo{Figures should have the same aspect ratio to align nicely.}
     }\label{fig:5j0n-reconstruction-noise0}
     \label{fig:5j0n-reconstruction-noise16}
@@ -553,32 +541,30 @@ The mean orientation recovery error for symmetric protein \texttt{5a1a} can be s
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[height=5.5cm]{images/5a1a_noise0_angle_recovery}
+        \includegraphics[height=5.5cm]{figures/5a1a_noise0_angle_recovery}
         \caption{Orientation recovery loss \eqnref{orientation-recovery}.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[height=5.5cm]{images/5a1a_ground_truth.png}
+        \includegraphics[height=5.5cm]{images/5a1a_ground_truth}
         \caption{Reconstruction from true orientations ${\big\{q_p\big\}}_{p=1}^P$.}
     \end{subfigure}
     \\
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        %\includegraphics[height=5.7cm]{images/5a1a_noise0_angle_alignment_before.png}
-        \includegraphics[height=5.5cm]{images/5a1a_noise0_angle_alignment_after.png}
+        %\includegraphics[height=5.7cm]{figures/5a1a_noise0_angle_alignment_before}
+        \includegraphics[height=5.5cm]{figures/5a1a_noise0_angle_alignment_after}
         \caption{Orientation recovery error \eqnref{orientation-recovery-error}.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[height=5.5cm]{images/5a1a_aligned.png}
+        \includegraphics[height=5.5cm]{images/5a1a_aligned}
         \caption{Reconstruction from recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.}
     \end{subfigure}
     \caption{
         Orientation recovery and reconstruction of the symmetric protein (\texttt{5a1a}) from noiseless projections.
-        \mdeff{I merged and removed the error before alignment for the same reasons.}
-        \todo{Figure (a) y-label: "Orientation recovery loss".}
         \todo{Figures should have the same aspect ratio to align nicely.}
     }\label{fig:5a1a-orientation-recovery-loss}
     \label{fig:angle-alignment-5a1a-noise0}

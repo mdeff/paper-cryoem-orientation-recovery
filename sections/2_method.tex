@@ -1,7 +1,7 @@
 \section{Method}
 
 \lau{Lau: As far as I'm concerned, everything below before subsection 2.1 could also go at the end of the Introduction. Beyond the fact that it contains literature review and conceptual information that would go well in the intro, I find the current architecture of Section 2 a bit puzzling. First there is text to explain the methods and detail their intuition/key components, then there are three consecutive subsections that kind of do the same, but from a maths points of view. The aforementioned suggestion of putting the first text in the intro could solve this. Another possibility: put the descriptive texts in their corresponding sub-sections, so that those contain both the motivation and the maths. I'm open to further suggestions and suggestions ;-) }
-\mdeff{Indeed. The "Distance Learning" and "Orientation Recovery" paragraphs might go in their respective sub-sections. But I'd like to keep a high-level motivation of the whole method (the text linked to the second figure to appear alongside \figref{imaging-geometry}.}
+\mdeff{Indeed. The "Distance Learning" and "Orientation Recovery" paragraphs might go in their respective sub-sections. But I'd like to keep a high-level motivation of the whole method (the text linked to the second figure to appear alongside \figref{imaging-geometry}.} \lau{Fine for me.}
 
 \begin{figure}
     \centering
@@ -47,7 +47,7 @@ Indeed, despite the lack of theoretical guarantees, we are able to appropriately
 %\subsection{Unit Quaternions and the Geodesic Distance}
 %\subsection{Parameterization of orientations}
 \subsection{Representation of orientations}\label{sec:method:orientation-representation}
-\mdeff{Laurène: Which word is better: Representation or parameterization? Or something else, but we need consistency.}
+\mdeff{Laurène: Which word is better: Representation or parameterization? Or something else, but we need consistency.} \lau{Both are fine. Personally, I use parametrization in my thesis, but we can settle on the other one.}
 
 Inside the electron microscope, each 3D particle is positioned at a given orientation with respect to the detector plane $\bsy=(y_1,y_2)\in \mathbb{R}^2$, as illustrated in \figref{imaging-geometry} (left). Hence, for each particle, the geometry of the imaging procedure is described by the geometrical transformation that maps its object coordinate system $(x_1,x_2,x_3)$ to the measurement coordinate system $(y_1,y_2)$. This mapping corresponds to a rotation in $\SO(3)$, the group of all 3D rotations about the origin of $\mathbb{R}^3$; in that space, every rotation can be described by a $3\times3$ orthogonal matrix with determinant~$1$.
 \mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
