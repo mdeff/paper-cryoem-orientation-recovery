@@ -9,7 +9,7 @@ For each atomic model, we generate the ground truth by fitting a 5\AA\ density m
 We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and a volume of $69 \times 57 \times 75$ voxels for the HJI.
 
 \paragraph{Projections.}
-From these ground truths, we generate $5000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
+From these ground truths, we generate $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
 Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3)$ uniformly, and (ii) sampling uniformly on $\SO(3)$.
 Due to protein symmetries, orientations are sampled from a half of $\mathbb{S}^2$ for the asymmetric protein \texttt{5j0n} and from a quarter of $\mathbb{S}^2$ for the symmetric protein \texttt{5a1a}.
 \mdeff{We should explain why.}
@@ -18,19 +18,19 @@ Due to protein symmetries, orientations are sampled from a half of $\mathbb{S}^2
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[height=4cm]{images/5j0n_noise0}
+        \includegraphics[height=4cm]{figures/5j0n_noise0}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{images/5j0n_noise16}
+        \includegraphics[height=4cm]{figures/5j0n_noise16}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{images/5j0n_translated}
+        \includegraphics[height=4cm]{figures/5j0n_translated}
         \caption{}
     \end{subfigure}
     \caption{%
@@ -77,8 +77,10 @@ Finally, $\mathbf{n} \in \R^M$ represents an additive noise. Our goal is then to
 \paragraph{Distance learning.}
 We use supervised learning, thus input-output pairs.
 The input are two images and the output is their quaternion distance calculated from the ground truth orientations.
-For neural network training, dataset is split into a distinct training, validation, and testing set, see \tabref{dataset}, to ensure that the results can generalize to unseen projections.
-\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
+For neural network training, dataset is split into a distinct training, validation, and testing set, see \tabref{dataset}.
+The total number of generated projections is $P = 5,000$. Therefore, the number of possible projection pairs is $P^2 = 25e6$. If we split $P^2$ into the training, validation, and testing sets, it would mean that some of the projections that appear in the training dataset projection pairs can appear in pairs of the other dataset. To ensure that the results can generalize to unseen data as well as to understand how the model would perform in a real-world scenario, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets. With these three projections sets we can create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}). In addition to this, we will not use all projection pairs of each dataset, only $1\%$ of the possible pairs (last column in the \tabref{dataset}) due to limitation of available resources for the training.
+%\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
+
 
 \paragraph{Orientation recovery.}
 The orientation recovery is solving \eqnref{orientation-recovery} and it was done in a stochastic setting, where the loss function varies over the batches.
@@ -95,8 +97,7 @@ Orientation recovery is performed on projections unseen during distance learning
 
 Before discussing the results, we remark that one cannot really quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgement of the protein reconstruction.
 Unfortunately, it is also not appropriate to directly compute the error between the recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$ and the true ones ${\big\{q_p\big\}}_{p=1}^P$.
-The reason is that the recovery of orientation through~\eqnref{orientation-recovery} is up to a global rotation, \textit{i.e.}, any global rotation of the set of recovered orientations is as valid as any other.
-\todo{Because $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$.}
+The reason is that the recovery of orientation through~\eqnref{orientation-recovery} is up to a global rotation, \textit{i.e.}, any global rotation of the set of recovered orientations is as valid as any other, which is mathematically written as $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$.
 This is not a problem for the ultimate application of our scheme, but it complicates the quantitative evaluation of its performance in synthetic experiments.
 We circumvent this problem by aligning the true and recovered orientation sets up to a global rotation and mirror on $\SO(3)$ space \textit{i.e.} objective is to minimize the distance difference between these two sets.
 
@@ -109,7 +110,7 @@ The goal of the alignment is to compute the \textit{mean orientation recovery er
 where $\Or(4) = \{\T | \det(\T) = \pm 1\}$ is the group of $4 \times 4$ orthogonal matrices that represent 4D rotations and reflections/mirrors.
 In practice, the sum is again sampled and \eqnref{orientation-recovery-error} is separately minimized using gradient descent method with FTRL optimizer \cite{mcmahan_ad_2013,noauthor_tfkerasoptimizersftrl_nodate} for $\det(\T) = 1$ (proper rotations) and $\det(\T) = -1$ (improper rotations) because $\Or(4)$ is disconnected.
 
-We implement $\T$ as the $\binom{4}{2}=6$ possible 2D rotations in 4D space followed by an optional reflection/mirror:
+We implement $\T$ as the $\binom{4}{2}=6$ possible 2D rotations in 4D space $x_1 x_2 x_3 x_4$ followed by an optional reflection/mirror:
 \begin{equation*}
     \T =
     \begin{bmatrix}
@@ -118,16 +119,16 @@ We implement $\T$ as the $\binom{4}{2}=6$ possible 2D rotations in 4D space foll
         0 & 0 & 1 & 0 \\
         0 & 0 & 0 & 1 \\
     \end{bmatrix}
-    \mathbf{R}_{xy}(\alpha_{xy}) \mathbf{R}_{xz}(\alpha_{xz}) \mathbf{R}_{xw}(\alpha_{xw}) \mathbf{R}_{yz}(\alpha_{yz}) \mathbf{R}_{yw}(\alpha_{yw}) \mathbf{R}_{zw}(\alpha_{zw}),
+    \mathbf{R}_{x_1 x_2}(\alpha_{x_1 x_2}) \mathbf{R}_{x_1 x_3}(\alpha_{x_1 x_3}) \mathbf{R}_{x_1 x_4}(\alpha_{x_1 x_4}) \mathbf{R}_{x_2 x_3}(\alpha_{x_2 x_3}) \mathbf{R}_{x_2 x_4}(\alpha_{x_2 x_4}) \mathbf{R}_{x_3 x_4}(\alpha_{x_3 x_4}),
 \end{equation*}
-where $m = \det(\T)$ determines whether $\T$ is a proper rotation, $\mathbf{R}_{xy} \in \mathbf{SO}(4)$ represents a rotation about the $xy$ plane in 4D space by angle $\alpha_{xy}$, and $(\alpha_{xy},\alpha_{xz},\alpha_{xw},\alpha_{yz},\alpha_{yw},\alpha_{zw})$ are the 6 rotation angles to be optimized.
-\mdeff{Consistency: we previously use $x_1, x_2, x_3$, $y_1, y_2$, and $t_1, t_2$ for axes, not $xyzw$.}
+where $m = \det(\T)$ determines whether $\T$ is a proper rotation, $\mathbf{R}_{xy} \in \mathbf{SO}(4)$ represents a rotation about the $x_1 x_2$ plane in 4D space by angle $\alpha_{x_1 x_2}$, and $(\alpha_{x_1 x_2},\alpha_{x_1 x_3},\alpha_{x_1 x_4},\alpha_{x_2 x_3},\alpha_{x_2 x_4},\alpha_{x_3 x_4})$ are the 6 rotation angles to be optimized.
+
 %\todo{Takes too much space for its relevance.}
 %\todo{Make sure $\mathbf{R}$ is introduced like this before.}
 
-Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment).
-%Figure that shows a typical convergence and mean orientation recovery error before and after alignment can be seen in the next section, \figref{aa-loss-perfect-distances}.
-\mdeff{Why is it good?}
+Figure that shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$ can be seen in the next section, \figref{5j0n-aa-loss-perfect-distances}. Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment).
+%\mdeff{Why is it good?}
+In the following sections, the setting for measuring the mean orientation recovery error are fixed for all the experiments unless written otherwise: 3 runs per reflection/mirror (this is the $m=\det(\T)=1$ and $m=\det(\T)=-1$, therefore, total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,15 +143,15 @@ Since mean recovery error is a good and intuitive performance metric, we will on
 %\mdeff{I made it concise but precise. Let's do that for all!}
 
 To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
+%\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
 From $P_{test}=838$ projections taken from the asymmetric protein \texttt{5j0n}, we randomly sample batches of $256$ pairs (out of $(P^2-P)/2 \approx \num{350e3}$) at every step and minimize \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
 Orientations are perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     %\begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5.9cm]{figures/5j0n_perfect_angle_recovery}
+        \includegraphics[height=7cm]{figures/5j0n_perfect_angle_recovery}
         %\caption{Asymmetric protein (\texttt{5j0n}).}
     %\end{subfigure}
     %\hfill
@@ -169,7 +170,7 @@ Empirically we find that the mean orientation recovery error \eqnref{orientation
 The sphere coverage before and after the orientation alignment can be seen in the \figref{5j0n-aa-loss-perfect-distances}.
 We can see that the orientation alignment was performed successfully.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[height=6cm]{images/coverage_alignment_before}
@@ -183,13 +184,13 @@ We can see that the orientation alignment was performed successfully.
     \end{subfigure}
     \\
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5.7cm]{figures/5j0n_perfect_angle_ralignment_before}
+        \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_before}
         \caption{Orientation recovery error without alignment.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
     \centering
-        \includegraphics[height=5.7cm]{figures/5j0n_perfect_angle_ralignment_after}
+        \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_after}
         \caption{Orientation recovery error with alignment.}
     \end{subfigure}
     \caption{%
@@ -212,21 +213,20 @@ We can see that the orientation alignment was performed successfully.
 
 We now go one step further and evaluate the behaviour of~\eqnref{orientation-recovery} when the true relative distances are corrupted by additive Gaussian noise.
 
-The experimental conditions are the same than in the previous section, except that we add an error with increasing variance on the relative distances prior to the minimization.
-\todo{Precision: $d_p = d_q + n$ with $n$ sampled from a Gaussian distribution with mean 0 and variances in $[0, 0.7]$.}
+The experimental conditions are the same as in the previous section, except that we add an error with increasing variance on the relative distances prior to the minimization. Precisely: $d_p = d_q + n$ with $n$ sampled from a Gaussian distribution with mean 0 and variances in $[0.0, 0.8]$.
 The results are presented in \figref{perfect-with-noise-ar-aa} (red curve).
 For all variances, the mean orientation recovery error $E$ is reported in \figref{perfect-with-noise-ar-aa} (blue curve).
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[height=5.15cm]{figures/5j0n_perfect_noisy_ar_aa}
+        \includegraphics[height=5.5cm]{figures/5j0n_perfect_noisy_ar_aa}
         \caption{Asymmetric protein (\texttt{5j0n}).}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.50\textwidth}
     \centering
-        \includegraphics[height=5.15cm]{figures/5a1a_perfect_noisy_ar_aa}
+        \includegraphics[height=5.5cm]{figures/5a1a_perfect_noisy_ar_aa}
         \caption{Symmetric protein (\texttt{5a1a}).}
     \end{subfigure}
     \caption{
@@ -268,22 +268,22 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}).}
     \end{subfigure} \quad \quad
-    \begin{subfigure}[t]{0.5\textwidth}
+    \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}).}
     \end{subfigure}
     \caption{
         Plotting the Euclidean distance between two projections versus their actual relative orientation (measured by the geodesic distance) for \textbf{(left)} the asymmetric protein (\texttt{5j0n}) dataset, and \textbf{(right)} the symmetric protein (\texttt{5a1a}) dataset.
         The color corresponds to projection pairs that share the first projection \textit{i.e.} distance between one projection with all other projections.
-        \todo{Figure label: ${\{(0, p)\}}_{p=1}^P$?}
+        %\todo{Figure label: ${\{(0, p)\}}_{p=1}^P$?}
     }\label{fig:euclidean-not-robust}
 \end{figure}
 
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no translation, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
-The other interesting observation is that the intrinsic dihedral (D2) symmetry of the $\beta$-galactosidase protein (\texttt{5a1a}) appears in its $(d_q,d_p)$ plot.
-\mdeff{How does it appear?}
+The other interesting observation is that the trend of $(d_q,d_p)$ plot of the $\beta$-galactosidase protein (\texttt{5a1a}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
+%\mdeff{How does it appear?}
 
 \subsubsection{Learned distance}\label{sec:results:distance-estimation:learned}
 
@@ -292,22 +292,22 @@ The other interesting observation is that the intrinsic dihedral (D2) symmetry o
 
 We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d}_p$ that correctly approximates the orientation distance $d_q$.
 
-SiameseNNs come with a variety of more or less powerful architectures.
-At the current stage of development, we work with a simple one.
-Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights.
-Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$ in \figref{schematic:distance-learning}.
-Besides the Euclidean distance, this distance metric $F$ can be defined as geodesic distance, or it could be parametrized as MLP, used for a general function approximation, which we will explore in some of the following experiments.
-\mdeff{Don't repeat what's written in \secref{method:distance-learning}. The general stuff goes there, the specific here.}
+%SiameseNNs come with a variety of more or less powerful architectures.
+%At the current stage of development, we work with a simple one.
+%Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights.
+%Their output features vectors are compared through an Eulidean distance, \textit{i.e.}, $d_f(\mathbf{f}_i,\mathbf{f}_j)=\lVert \mathbf{f}_i-\mathbf{f_j}\rVert_2$ in \figref{schematic:distance-learning}.
+%Besides the Euclidean distance, this distance metric $F$ can be defined as geodesic distance, or it could be parametrized as MLP, used for a general function approximation, which we will explore in some of the following experiments.
+%\mdeff{Don't repeat what's written in \secref{method:distance-learning}. The general stuff goes there, the specific here.}
 
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[height=5.5cm]{figures/de_5j0n}
+        \includegraphics[height=6cm]{figures/de_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}).}
         \label{fig:losses-siamese-assym}
     \end{subfigure} \quad \quad
     \begin{subfigure}[t]{0.5\textwidth}
-        \includegraphics[height=5.5cm]{figures/de_5a1a}
+        \includegraphics[height=6cm]{figures/de_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}).}
         \label{fig:losses-siamese-sym}
     \end{subfigure}
@@ -318,12 +318,12 @@ Besides the Euclidean distance, this distance metric $F$ can be defined as geode
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
         \includegraphics[height=6cm]{figures/dPdQ_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}) on test dataset.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.50\textwidth}
+    \begin{subfigure}[b]{0.45\textwidth}
     \centering
         \includegraphics[height=6cm]{figures/dPdQ_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}) on test dataset.}
@@ -332,21 +332,23 @@ Besides the Euclidean distance, this distance metric $F$ can be defined as geode
     \label{fig:learned-distance-siamese}
 \end{figure}
 
-\mdeff{What is $d_f$ in this particular experiment? Euclidean? Cosine=$d_q$?}
-For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 pairs.
-\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
+%\mdeff{What is $d_f$ in this particular experiment? Euclidean? Cosine=$d_q$?}
+For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 pairs. As a feature distance $d_f$ between the outputs of the two CNNs we use the Geodesic distance \eqnref{geodesic-distance}.
+The pairs for the training are sampled from $1\%$ of maximum number of training pairs $P_{train}^2$ ($63,126$ pairs) and validation is performed on $1\%$ of the maximum number of validation pairs $P_{val}^2$ ($27,225$ pairs). We limit our training and validation dataset due to Google Colab training time limit of 12 hours.
+%\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 Depending on the available resources on the Google Colab, the training can last from 2.6 hours to 9.3 hours on one of its GPUs.
 The evolution of the training and validation losses are presented in \figref{losses-siamese-assym} for the asymmetric protein (\texttt{5j0n}), and in \figref{losses-siamese-sym} for the symmetric one (\texttt{5a1a}).
 The results demonstrate that the SiameseNN succeeds at learning a proxy distance for the asymmetric protein dataset, as convergence is reached in about 50 epochs ($\sim$ 50 minutes in the best resource availability setting).
 
-\todo{Mention the plateau phenomenon, similarly to Euclidean $d_p$.}
+%\todo{Mention the plateau phenomenon, similarly to Euclidean $d_p$.}
+Similarly to Euclidean distance $d_p$, we notice that the larger distances $d_q$ are poorly predicted and the plot again has a slight plateau phenomenon for the distances higher than ~$2.5$ rad.
 
-\mdeff{It's also surprising that both validation losses are around 0.2.}
+It is interesting that both validation losses are around $0.2$.
 However, the current SiameseNN architecture slightly overfits at learning the distance for the dataset \texttt{5a1a}, which is very likely due to the symmetry of the $\beta$-galactosidase protein, even thought the quarter-sphere coverage was used.
-Indeed, its synthetic dataset may contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
+Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
 This simply advocates for the restriction to non-overlapping areas on $\SO(3)$ when sampling the orientations used to generate the SiameseNN training dataset.
 The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.
-\mdeff{I don't get this explanation. Do you mean that \texttt{5a1a} might have other symmetries than D2?}
+%\mdeff{I don't get this explanation. Do you mean that \texttt{5a1a} might have other symmetries than D2?}
 For the rest of the experiments, we use the asymmetric protein (\texttt{5j0n}) dataset.
 Besides using the asymmetric protein, we will perform the full protein reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
 
@@ -359,30 +361,30 @@ These preliminary results are encouraging, as much has yet to be gained from imp
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 
-To further improve our network, we experiment with different feature distance metrics $F(\mathbf{x},\mathbf{y})$.
-In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $F(\mathbf{x},\mathbf{y})=\lVert \mathbf{x}-\mathbf{y}\rVert_2$.
-\mdeff{Consistency: In \secref{method:distance-learning}, I used $d_f$  (for consistency with $d_p$ and $d_q$) and $\mathbf{f}_i$ (for consistency with $\p_i$ and $q_i$).}
+To further improve our network, we experiment with different feature distance metrics $d_f(\mathbf{f}_i,\mathbf{f}_j)$.
+In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $d_f(\mathbf{f}_i,\mathbf{f}_j)=\lVert \mathbf{f}_i-\mathbf{f}_j\rVert_2$.
+%\mdeff{Consistency: In \secref{method:distance-learning}, I used $d_f$  (for consistency with $d_p$ and $d_q$) and $\mathbf{f}_i$ (for consistency with $\p_i$ and $q_i$).}
 
 In this experiment, we test the performance with a geodesic distance, \textit{i.e.}
 \begin{equation*}
-    F(\mathbf{x},\mathbf{y})=2 \arccos \left( \frac{\mathbf{x} \cdot \mathbf{y}}{\lVert \mathbf{x} \rVert \lVert \mathbf{y} \rVert} \right) = 2 \arccos \left( \frac{\sum_{i=1}^n x_i y_i}{\sqrt{\sum_{i=1}^n x_i^2}\sqrt{\sum_{i=1}^n y_i^2 }} \right).
+    d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\mathbf{f}_i \cdot \mathbf{f}_j}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right) = 2 \arccos \left( \frac{\sum_{k=1}^n f_{i,k} f_{j,k}}{\sqrt{\sum_{k=1}^n f_{i,k}^2}\sqrt{\sum_{k=1}^n f_{j,k}^2 }} \right).
     \label{eqn:geodesic-distance}
 \end{equation*}
 
-Additionally, we parametrize $F(\mathbf{x},\mathbf{y})$ as MLP. It consists of six hidden linear layers with \texttt{1024}, \texttt{512}, \texttt{512}, \texttt{256}, \texttt{256}, and \texttt{1} unit respectively. All of them use SeLU as an activation function.
+Additionally, we parametrize $d_f(\mathbf{f}_i,\mathbf{f}_j)$ as MLP. It consists of six hidden linear layers with \texttt{1024}, \texttt{512}, \texttt{512}, \texttt{256}, \texttt{256}, and \texttt{1} unit respectively. All of them use SeLU as an activation function.
 
 The experimental conditions are the same as in the previous section with the Euclidean distance metric as feature distance metric.
 \figref{geo-eucl-mlp} shows the training and validation losses of the geodesic distance are better than Euclidean and MLP feature distance metric. We can also observe the performance on the $(d_q, d_p)$ plots and notice that the projection pairs deviate the least using the geodesic distance.
-\todo{Why? Add and rephrase hypotheses. Cosine distance has the same geometry as $d_q$. Euclidean has not (no periodicity nor curvature). MLP doesn't guarantee it's a distance function (not symmetric, zero between itself, triangle inequality) and might need much more data.}
+%\todo{Why? Add and rephrase hypotheses. Cosine distance has the same geometry as $d_q$. Euclidean has not (no periodicity nor curvature). MLP doesn't guarantee it's a distance function (not symmetric, zero between itself, triangle inequality) and might need much more data.}
+The reason for a geodesic distance to perform the best is that it has the same geometry as quaternion distance $d_q$ in $\mathbf{SO}(3)$ space. Whereas, the Euclidean distance is not desirable on $\mathbf{SO}(3)$ since it does not respect the manifold's non-linearity (it has no periodicity nor curvature) and can lead to unpredictable behaviours. The $\mathbf{SO}(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
+Moreover, MLP does not guarantee that it is a distance function. For MLP to be a distance function, it should have the following properties: (1) support symmetry; (2) output zero with two identical inputs; (3) support triangle inequality. In addition, we might need much more data for the MLP training.
+Hence, it is desirable to have a distance function that respects the structure of $\mathbf{SO}(3)$ space. 
 
 \begin{figure}
     \centering
-    \includegraphics[height=8.5cm]{figures/geo_eucl_mlp_distance_metric.pdf}
+    \includegraphics[height=7cm]{figures/geo_eucl_mlp_distance_metric.pdf}
     \caption{
-        Training and validation losses w.r.t. feature vectors' distance metric and their corresponding distance ratio $(d_q, d_p)$ plots.
-        \mdeff{Beautiful figure!!}
-        \todo{How many runs for the box plots?}
-        \todo{Figure y-label: "Distance learning loss".}
+        Training and validation epoch losses w.r.t. feature vectors' distance metric and their corresponding distance ratio $(d_q, d_p)$ plots.
     }\label{fig:geo-eucl-mlp}
 \end{figure}
 
@@ -400,31 +402,34 @@ The results are presented in \figref{distance-estimation-vary-projection-noise}.
 We observe that the training and validation losses are increasing and network starts to overfit w.r.t.\ the amount of noise in the projections.
 With the noiseless projections (projection noise variance 0), the mean orientation recovery error $E = 0.1594$ rad.
 Whereas, the noisy projections with noise levels 15 are the closest to the realistic protein projections and the error $E=0.4189$ rad.
-\mdeff{The SiameseNN seems to be able to learn the noise, as the training loss stays low. More data should help!}
+The SiameseNN is able to learn the noise as the training loss and corresponding mean orientation recovery error $E$ stays low.
+%\mdeff{The SiameseNN seems to be able to learn the noise, as the training loss stays low. More data should help!}
 
 Besides testing the performance of the pipeline with the noisy projections, we explore the performance with different projection translation levels.
 To translate the projection, we use a triangular distribution from $-t$ to $t$ px translation with the peak in the center of the projection.
 The performance of different translation magnitudes can be seen in \figref{distance-estimation-vary-projection-translation}.
 We observe that the training of the network is invariant to translations in the projections, which was expected.
-\mdeff{Perfect!}
+%\mdeff{Perfect!}
 
 We can see that the learned distance is minimally sensible to perturbations because we can train the network to ignore irrelevant information.
 
-\begin{figure}
+
+\begin{figure}[ht!]
     \centering
-        \includegraphics[height=8cm]{figures/de_noises_nums}
+    \begin{subfigure}[b]{0.47\textwidth}
+        \includegraphics[height=5.5cm,valign=t]{figures/de_noises_nums}
         \caption{%
             Variation of train and validation epoch losses w.r.t. noise levels in the projections of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
         }\label{fig:distance-estimation-vary-projection-noise}
-\end{figure}
-
-\begin{figure}
-    \centering
-        \includegraphics[height=8cm]{figures/de_translation_nums}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \includegraphics[height=5.5cm,valign=t]{figures/de_translation_nums}
         \caption{
         Variation of train and validation epoch losses w.r.t.\ projection translation of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
-        \mdeff{We should try to have 12 and 13 side-by-side (to gain some space and facilitate comparison on the y-axis) by making them more square.}
+        %\mdeff{We should try to have 12 and 13 side-by-side (to gain some space and facilitate comparison on the y-axis) by making them more square.}
     }\label{fig:distance-estimation-vary-projection-translation}
+    \end{subfigure}
 \end{figure}
 
 \subsection{Orientation recovery from estimated distances}
@@ -444,7 +449,7 @@ The experimental setting for distance estimation is the similar to the one used 
 Then, we run the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-orientation-recovery-loss-est} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
 With the noiseless projections, the objective function successfully converges to the $0.0510$ and with the noisy projections, the objective function converges to the $0.0683$.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[height=5.5cm]{figures/5j0n_noise0_angle_recovery}
@@ -480,11 +485,9 @@ With the noiseless projections, the objective function successfully converges to
 \end{figure}
 
 The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection can be seen in \figref{angle-alignment-5j0n-noise0}.
-Experimental setting parameters are: 3 runs per reflection/mirror (this is the $m=\det(\T)=1$ and $m=\det(\T)=-1$, therefore, total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0.
 The smallest error achieved is $0.1594$ rad.
-
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) can be seen in \figref{angle-alignment-5j0n-noise16}. Experimental setting parameters are: 3 runs per reflection (total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0. The smallest error achieved is $0.4184$ rad.
-\mdeff{Those two paragraphs can be merged and made less redundant.}
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) can be seen in \figref{angle-alignment-5j0n-noise16}. 
+The smallest error achieved is $0.4184$ rad.
 
 As a last step of the pipeline, we perform protein reconstruction using the projections and their corresponding estimated orientations.
 For that, we again use the ASTRA toolbox.
@@ -494,35 +497,34 @@ It holds for our case, since we perform orientation recovery on the test set whi
 
 The reconstruction results for the asymmetric protein (\texttt{5j0n}) with noiseless projections can be seen in \figref{5j0n-reconstruction-noise0}. On the left side we have a reconstruction using the ground-truth orientations, and on the right side we have the reconstruction result using the estimated aligned orientations.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.49\linewidth}
         \centering
-        \includegraphics[width=0.90\linewidth]{images/5j0n_reconstruction_GT}
+        \includegraphics[width=0.90\linewidth]{figures/5j0n_reconstruction_GT}
         \caption{Noiseless projections $\mathbf{Px}$, true orientations ${\big\{q_p\big\}}_{p=1}^P$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.49\linewidth}
         \centering
-        \includegraphics[width=0.90\linewidth]{images/5j0n_reconstruction_GT_noise16}
+        \includegraphics[width=0.90\linewidth]{figures/5j0n_reconstruction_GT_noise16}
         \caption{Noisy projections $\mathbf{Px + n}$, true orientations ${\big\{q_p\big\}}_{p=1}^P$.}
     \end{subfigure}
     \\
     \begin{subfigure}[b]{0.49\linewidth}
         \centering
-        \includegraphics[width=0.90\linewidth]{images/5j0n_reconstruction_noise0}
+        \includegraphics[width=0.90\linewidth]{figures/5j0n_reconstruction_noise0}
         \caption{Noiseless projections $\mathbf{Px}$, recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.49\linewidth}
         \centering
-        \includegraphics[width=0.90\linewidth]{images/5j0n_reconstruction_noise16}
+        \includegraphics[width=0.90\linewidth]{figures/5j0n_reconstruction_noise16}
         \caption{Noisy projections $\mathbf{Px + n}$, recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.}
     \end{subfigure}
     \caption{
         Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}) with (right) and without (left) noise.
         Reconstruction of the asymmetric protein (\texttt{5j0n}) from noiseless (left) and noisy (right) projections ${\big\{\p_i\big\}}_{i=1}^P$ and true (top) and recovered (bottom) orientations.
-        \todo{Figures should have the same aspect ratio to align nicely.}
     }\label{fig:5j0n-reconstruction-noise0}
     \label{fig:5j0n-reconstruction-noise16}
 \end{figure}
@@ -533,11 +535,9 @@ Similarly, on the left side we have a reconstruction using the ground-truth orie
 Similarly, we run the whole reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
 The experimental conditions for the distance estimation are the same as for the asymmetric protein, except that we use the quarter-sphere projections coverage (whereas, in the asymmetric protein we use half-sphere coverage).
 The orientation recovery loss can be seen in \figref{5a1a-orientation-recovery-loss}. It successfully converges to $0.0381$.
+The mean orientation recovery error for symmetric protein \texttt{5a1a} can be seen in \figref{angle-alignment-5a1a-noise0}. The smallest error achieved is $0.1871$ rad.
 
-The mean orientation recovery error for symmetric protein \texttt{5a1a} can be seen in \figref{angle-alignment-5a1a-noise0}. Experimental setting parameters are: 3 runs per reflection (total number of runs is 6), 300 steps, batch size 256, FTRL optimizer with learning rate 2.0 and learning rate power -2.0. The smallest error achieved is $0.1871$ rad.
-\mdeff{To avoid repetition, write in \secref{results:evaluation} that all alignments are done with these settings unless written otherwise?}
-
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
@@ -547,7 +547,7 @@ The mean orientation recovery error for symmetric protein \texttt{5a1a} can be s
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[height=5.5cm]{images/5a1a_ground_truth}
+        \includegraphics[height=5.5cm]{figures/5a1a_ground_truth}
         \caption{Reconstruction from true orientations ${\big\{q_p\big\}}_{p=1}^P$.}
     \end{subfigure}
     \\
@@ -560,19 +560,17 @@ The mean orientation recovery error for symmetric protein \texttt{5a1a} can be s
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
-        \includegraphics[height=5.5cm]{images/5a1a_aligned}
+        \includegraphics[height=5.5cm]{figures/5a1a_aligned}
         \caption{Reconstruction from recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.}
     \end{subfigure}
     \caption{
         Orientation recovery and reconstruction of the symmetric protein (\texttt{5a1a}) from noiseless projections.
-        \todo{Figures should have the same aspect ratio to align nicely.}
     }\label{fig:5a1a-orientation-recovery-loss}
     \label{fig:angle-alignment-5a1a-noise0}
     \label{fig:5a1a-reconstruction-noise0}
 \end{figure}
 
 Lastly, we perform the protein reconstruction with the same ASTRA toolbox setting as for the asymmetric protein. The results of the reconstruction can be observed in the \figref{5a1a-reconstruction-noise0}.
-
 We were able to successfully reconstruct the symmetric protein even though the distance estimation was noisier than the one performed on the asymmetric protein.
 
 We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
