@@ -53,7 +53,7 @@ Inside the electron microscope, each 3D particle is positioned at a given orient
 \mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 
 The standard approach in single-particle cryo-EM is to use Euler angles to parametrize the rotation matrix that relates the two coordinate systems~\cite{sorzano2014interchanging}.
-The Euler angles, denoted as $\bth=(\theta_1,\theta_2,\theta_3)\in [0;2\pi)\times [0;\pi] \times [0;2\pi)$, are a set of three angles that describe a sequence of three rotations about three fixed axes (\figref{imaging-geometry} (left)).
+The Euler angles, denoted as $\bth = (\theta_1,\theta_2,\theta_3) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$, are a set of three angles that describe a sequence of three rotations about three fixed axes (\figref{imaging-geometry} (left)).
 Unfortunately, the geodesic distance between two rotations $\mathbf{R}(\bth_1)$, $\mathbf{R}(\bth_2)\in \SO(3)$ parametrized by Euler angles cannot be directly computed from $\bth_1$, $\bth_2$.
 It requires the computation of the rotation matrices, which is computationally inefficient.%
 \footnote{Another technical challenge with Euler angles is that they suffer from the \textit{gimbal lock} problem, which arises when $\theta_2=0$ and restricts the number of rotational degrees of freedom to one even though $\theta_1$ and $\theta_3$ have not yet been fixed~\cite{koks2006explorations}.}
