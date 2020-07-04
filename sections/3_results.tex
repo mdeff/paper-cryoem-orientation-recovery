@@ -183,13 +183,13 @@ We can see that the orientation alignment was performed successfully.
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=6cm]{images/coverage_alignment_before}
+        \includegraphics[height=6cm]{figures/coverage_alignment_before}
         \caption{Orientations before alignment.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.50\textwidth}
     \centering
-        \includegraphics[height=6cm]{images/coverage_alignment_after}
+        \includegraphics[height=6cm]{figures/coverage_alignment_after}
         \caption{Orientations after alignment.}
     \end{subfigure}
     \\
@@ -205,9 +205,8 @@ We can see that the orientation alignment was performed successfully.
     \end{subfigure}
     \caption{%
         Example of perfect alignment after a perfect orientation recovery under the true distance $d_p(\p_i, \p_j) = d_q(q_i, q_j)$ (\texttt{5j0n}).
-        The first row shows the orientation coverage of $\mathbb{S}^2 \subset \SO(3)$ after recovery.
-        Green points are the ground truth orientations ${\{q_p\}}_{p=1}^P$ and red points are the recovered orientations ${\{\widehat{q_p}\}}_{p=1}^P$.
-        \mdeff{Is (b) really exactly aligned? It might be a plotting artifacts that we still see both colors. Either fix either mention.}
+        The first row shows the orientation coverage of $\mathbb{S}^2 \subset \SO(3)$ after the recovery.
+        Green points are the ground truth orientations ${\{q_p\}}_{p=1}^P$ and red points are the recovered orientations ${\{\widehat{q_p}\}}_{p=1}^P$. The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, both colors can still be seen. 
         % orientations projected on S²
         The second row are the histograms of ${\{ d_q (q_p, \T \widehat{q_p}) \}}_{p=1}^P$, with $\T = \mathbf{I}$ on the left (i.e., without alignment) and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
         Alignment is necessary to evaluate the performance of orientation recovery.
