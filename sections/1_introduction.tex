@@ -11,11 +11,7 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
 \pgfmathsetmacro{\phivec}{60}
 \begin{figure}
 \centering
-\begin{subfigure}[t]{0.35\linewidth}
-    \includegraphics[width=\linewidth]{figures/imaging_geometry}
-\end{subfigure}
-\quad
-\begin{tikzpicture}[scale=5,tdplot_main_coords]
+\begin{tikzpicture}[scale=4,tdplot_main_coords]
     \coordinate (O) at (0,0,0);
     \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$\bsx_1$};
     \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$\bsx_2$};
@@ -48,26 +44,58 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
     \node[red] at (1.5,0.75,1.2) {$\bvth_{\bth}$};
     \tdplotsetrotatedthetaplanecoords{45}
 \end{tikzpicture}
+\caption*{\mdeff{Kept as reference for \figref{imaging-geometry} as this tikz figure is beautiful. Will be commented out in the end.}}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[height=7cm]{geomProj3D001}
+        \caption{
+            \banjac{pdf is losing the colors, therefore png export type.} \mdeff{That's unfortunate because this figure is beautiful. Laurène, any idea why?}
+            \todo{Coordinates $(x_1, x_2, x_3)$ and $(y_1, y_2)$ in non-bold face.}
+            \todo{$y_1, y_2, \theta_3, \theta_1$ would be more visible out of the darker part.}
+            \todo{Object (or protein?) $\mathbf{x}$ (not $f$) and projection $\mathbf{p}$. Keep or remove ``domain''?}
+            \todo{Remove $\Omega_{2D}$?} % $\Omega_{\mathrm{2D}}$ with 2D not italic.}
+            \todo{Extend $x_1$ and $x_2$ for elevation ($\theta_2$ dashed gray line) to not look ``squashed''.}
+            \todo{The vertical red line should be parallel to the $x_3$-axis.}
+            \todo{Remove $\bvth_{\bth}$.}
+        }\label{fig:imaging-geometry}
+    \end{subfigure}
+    \qquad
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \includegraphics[height=7cm]{intuition_method}
+        \caption{
+            \todo{$(\p_i, qi)$ with parentheses instead of braces (ordered tuples, not sets).}
+            \todo{Consistent color for $d_q$ (text and arc) with \figref{schematic:method-overview}.}
+            \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
+            \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
+            \todo{The two green arcs seems too much like a single one.}
+            \todo{Show also $d_q(q_j, q_k)$ (there's otherwise not enough constraints and an infinite number of solutions).}
+            \todo{The sphere lines should be finer.}
+        }\label{fig:intuition-method}
+    \end{subfigure}
 \caption{%
     % Goals: explain
     % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
     % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
-    \lau{Easy solution if not enough time: just adapt this figure with the correct notations.}
-    \mdeff{We should try to better convey the idea of a plane on the left figure. For example, there was a gray rectangle in the original image.}
-    \todo{Imaging figure: $\Omega_{\mathrm{2D}}$ with 2D not italic. $\p$ in bold.}
-    \todo{Method figure: A real protein in the middle, and some real projections on S². Similarly to the first figure in Jelena's notebook [1]. Curved lines would link the projections' centre, following the curvature of S². The goal is to explain that $d_q$ is the geodesic distance between orientations, and for readers to understand that given those distances, we can find the orientations back (up to a global orientation). The whole problem is then to infer the distances from the projections. (From subfig 1 it'll be apparent that S² is a subset of the space of orientations, missing in-plane rotations $\theta_3$.)}
-    Geometry of the 3D imaging model.
-    The 3D object in the coordinate system $(x_1,x_2, x_3)$ is imaged along the (unknown) projection direction $\bvth_{\bth}$ \mdeff{\textit{orientation} $q$?} \lau{No, the projection direction is different from the orientation q; in particular, it only depends on $\theta_1$ and $\theta_2$ } to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1,y_2)$.
-    The Euler angles $\bth=(\theta_1,\theta_2,\theta_3)\in\Omega_\bth$ represent the 3D rotation that maps the object coordinate system to the projection coordinate system.
-    The angles $\theta_1$, $\theta_2$, and $\theta_3$, respectively correspond to the rotation, the tilt, and the in-plane rotation in the projection plane.
-    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.
-    \mdeff{Is $\Omega_{\mathrm{2D}}$ a set? Not a vector space?} \lau{It is a set in the way I define it in my thesis, but we can remove the word if you find it confusing here.}
-}\label{fig:imaging-geometry}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[height=8cm]{figures/geomProj3D001.png}
-    \caption{\banjac{pdf is losing the colors, therefore png export type. The .key version is in the figures/ directory}}
+    \textbf{Projections and orientations.}
+    (a) Geometry of the imaging model $\p = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
+    The 3D object \mdeff{(protein or particle for consistency?)} $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the direction $\bvth_{\bth}$ \mdeff{Ok with ``direction $(\theta_1, \theta_2)$''? (I'd prefer to not introduce notation we won't use.)} to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$.
+    The direction $(\theta_1, \theta_2) \in [0,2\pi[ \, \times \, [0,\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) forms the \textit{orientation} $\bth = (\theta_1, \theta_2, \theta_3)$.
+    Alternatively, we represent the orientation $\bth$ as a unit quaternion $q$.
+    %$\bth = (\theta_1, \theta_2, \theta_3)$ are the rotation $\theta_1$, the tilt \todo{or azimuth?} $\theta_2$, and the in-plane rotation $\theta_3$.
+    The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
+    \mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
+%    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.
+%    \mdeff{Is $\Omega_{\mathrm{2D}}$ a set? Not a vector space?} \lau{It is a set in the way I define it in my thesis, but we can remove the word if you find it confusing here.}
+    (b) Single-particle cryo-EM produces $P \approx 10^5$ projections, taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
+    Observing that distances between points constrain their position, we aim to \textit{recover the orientations} $\{q_i\}$ from the distances $\{d_q(q_i, q_j)\}$.
+    Observing that projections taken from close orientations look alike, we aim to \textit{estimate the distances} $\{d_q(q_i, q_j)\}$ from the projections $\{(\p_i, \p_j)\}$.
+    \mdeff{Easy to see that the geodesic distance $d_q$ is the amplitude of a rotation between two orientations.}
+}
 \end{figure}
 
 % RELATED WORKS
