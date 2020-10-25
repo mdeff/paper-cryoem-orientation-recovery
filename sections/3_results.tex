@@ -3,34 +3,55 @@
 \subsection{Datasets}\label{sec:results:data}
 
 %\paragraph{Proteins.}
-We consider two proteins: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein.
+We consider two proteins: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetriy. Both can be seen on \figref{pdb-proteins}.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
 For each atomic model, we generate the ground truth by fitting a 5\AA\ density map in Chimera~\cite{pettersen2004ucsf}.
 We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and a volume of $69 \times 57 \times 75$ voxels for the HJI.
 
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[height=5.5cm]{figures/5a1a_pdb.png}
+        \caption{}
+    \end{subfigure}
+    %\hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+        \includegraphics[height=5.5cm]{figures/5j0n_pdb.png}
+        \caption{}
+    \end{subfigure}
+    
+    \caption{%
+        The two proteins we are working with.
+        \textbf{(a)} $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}.
+        \textbf{(b)} lambda excision HJ intermediate (HJI) (\texttt{5j0n})~\cite{5j0n_pdb}.
+    }\label{fig:pdb-proteins}
+\end{figure}
+
+
 \paragraph{Projections.}
 From these ground truths, we generate $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
 Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3)$ uniformly, and (ii) sampling uniformly on $\SO(3)$.
-Due to protein symmetries, orientations are sampled from a half of $\mathbb{S}^2$ for the asymmetric protein \texttt{5j0n} and from a quarter of $\mathbb{S}^2$ for the symmetric protein \texttt{5a1a}.
-\mdeff{We should explain why.}
+Due to protein symmetries, orientations are sampled differently. For the entire \texttt{5j0n} complex is asymmetric~\cite{doi:10.1002/9780470514160.ch4}, thus it is sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are located symmetric to the center of this sphere. Conversely, the $\beta$-galactosidase has D2 symmetry, i.e. it is composed of four identical sub-units got with two rotations of magnitude 180\degree around the first axis followed by 180\degree rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}. Therefore, for this protein we restrict the sampling to the quarter of $\mathbb{S}^2$ sphere.
+%\mdeff{We should explain why.}
 \figref{different-projections} shows example projections.
 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[height=4cm]{figures/5j0n_noise0}
+        \includegraphics[height=4.8cm]{figures/5j0n_noise0}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{figures/5j0n_noise16}
+        \includegraphics[height=4.8cm]{figures/5j0n_noise16}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\textwidth}
     \centering
-        \includegraphics[height=4cm]{figures/5j0n_translated}
+        \includegraphics[height=4.8cm]{figures/5j0n_translated}
         \caption{}
     \end{subfigure}
     \caption{%
@@ -42,7 +63,6 @@ Due to protein symmetries, orientations are sampled from a half of $\mathbb{S}^2
 \end{figure}
 
 \paragraph{Perturbations.}
-\mdeff{Better word?}
 We consider the following perturbations to control the difficulty of orientation recovery: (i) additive white noise, (ii) translations, (iii) point-spread functions (PSF).
 We consider that a cryo-EM measurement (i.e., a projection) $\mathbf{p}_i \in \mathbb{R}^{M}$ is acquired through
 \begin{equation*}
@@ -100,7 +120,7 @@ Unfortunately, it is also not appropriate to directly compute the error between 
 The reason is that the recovery of orientation through~\eqnref{orientation-recovery} is up to a global rotation, \textit{i.e.}, any global rotation of the set of recovered orientations is as valid as any other, which is mathematically written as $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$.
 This is not a problem for the ultimate application of our scheme, but it complicates the quantitative evaluation of its performance in synthetic experiments.
 We circumvent this problem by aligning the true and recovered orientation sets up to a global rotation and mirror on $\SO(3)$ space \textit{i.e.} objective is to minimize the distance difference between these two sets.
-\mdeff{Note (again?) that $\mathbb{S}^3 \subset \R^4$ is a double cover of $\SO(3)$.}
+%\mdeff{Note (again?) that $\mathbb{S}^3 \subset \R^4$ is a double cover of $\SO(3)$.}
 
 The goal of the alignment is to compute the \textit{mean orientation recovery error}
 \begin{equation}
@@ -138,13 +158,40 @@ We run FTRL with a learning rate of $2.0$, a learning rate power of $-2.0$, and 
 %\todo{Takes too much space for its relevance.}
 %\todo{Make sure $\mathbf{R}$ is introduced like this before.}
 
-Figure that shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$ can be seen in the next section, \figref{5j0n-aa-loss-perfect-distances}. Since mean recovery error is a good and intuitive performance metric, we will only report $E$ (the error after the alignment).
-\mdeff{Why is it good? Intuitive sure. Laurène, can we say something more?}
+\figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$. 
+There many different ways of evaluating the pipeline performance found in the field of pose estimation. Some of the evaluations include the following:
+\begin{itemize}
+\item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (e.g. in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
+\item Translation and rotation error between estimated 3D model and true 3D model with fixed thresholds (e.g. in the paper~\cite{shotton2013scene} they require the translation error to be below 5 cm and rotation error to be below 5\degree)
+\item The average distance of all the points of the model from their transformed version, and if the error is less than the constant multiple of diameter of the 3D model, it is considered correctly evaluated (e.g. evaluation error is used in papers \cite{10.1007/978-3-642-37331-2_42, xiang2018posecnn})
+\item Reprojection error that projects the estimated points onto the image and computes the pairwise distances in the image space, instead of computing distances in the 3D model space (e.g. used in paper~\cite{xiang2018posecnn})
+\item The recovery error measured as Frobenius norm from estimated 3D model and true model, where 3D model is composed of 3D locations of important landmarks (e.g. elbow for human pose estimation)~\cite{wangni2018monocular}
+\item Average Orientation Similarity (AOS) is the difference between the true and estimated model with a cosine similarity term~\cite{RedondoCabrera2016PoseEE}
+\item Mean Angle Error (MAE) and Median Angle Error (MedError) evaluated and compared with other pose estimation error metrics in the paper~\cite{RedondoCabrera2016PoseEE}.
+\end{itemize}
+Since mean orientation error is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. We employ the definition of a correct estimation: the estimation must be within 10\degree~(0.174 rad) of true orientations for noiseless data and within 25\degree~(0.436 rad) for noisy data.
+
+%\mdeff{Why is it good? Intuitive sure. Laurène, can we say something more?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Orientation recovery}\label{sec:results:orientation-recovery}
 
 %\mdeff{Story: good distance estimation = good orientation recovery.}
+% \begin{algorithm}[H]
+% \SetAlgoLined
+% \KwResult{Write here the result }
+%  initialization\;
+%  \For{$steps \gets 1$ \textbf{to} $30000$}{
+%   instructions\;
+%   \eIf{condition}{
+%   instructions1\;
+%   instructions2\;
+%   }{
+%   instructions3\;
+%   }
+%  }
+%  \caption{Orientation recovery algorithm}
+% \end{algorithm}
 
 %\subsubsection{Feasibility Check: Recovery from the Exact Relative Distances}
 \subsubsection{Recovery from exact distances}\label{sec:results:orientation-recovery:exact}
@@ -327,12 +374,12 @@ We present here a preliminary evaluation of the ability of SiameseNNs to learn a
 
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.5\columnwidth}
         \includegraphics[height=6cm]{figures/dPdQ_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}) on test dataset.}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    %\hfill
+    \begin{subfigure}[b]{0.45\columnwidth}
     \centering
         \includegraphics[height=6cm]{figures/dPdQ_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}) on test dataset.}
@@ -344,6 +391,7 @@ We present here a preliminary evaluation of the ability of SiameseNNs to learn a
 %\mdeff{What is $d_f$ in this particular experiment? Euclidean? Cosine=$d_q$?}
 For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 pairs. As a feature distance $d_f$ between the outputs of the two CNNs we use the Geodesic distance \eqnref{geodesic-distance}.
 The pairs for the training are sampled from $1\%$ of maximum number of training pairs $P_{train}^2$ ($63,126$ pairs) and validation is performed on $1\%$ of the maximum number of validation pairs $P_{val}^2$ ($27,225$ pairs). We limit our training and validation dataset due to Google Colab training time limit of 12 hours.
+
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 Depending on the available resources on the Google Colab, the training can last from 2.6 hours to 9.3 hours on one of its GPUs.
 The evolution of the training and validation losses are presented in \figref{losses-siamese-assym} for the asymmetric protein (\texttt{5j0n}), and in \figref{losses-siamese-sym} for the symmetric one (\texttt{5a1a}).

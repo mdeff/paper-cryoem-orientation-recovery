@@ -1,21 +1,28 @@
-\section{Conclusion}
+u\section{Conclusion}
 
-The results obtained so far provide key insights on the viability of the proposed method.
-They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme. \lau{To update with latest results.}
+In this work, we explore the idea of distance learning between two 2D projections of the 3D protein structure for the inference of the angles at which these projections were imaged from. 
+We present two entangled novel methods, distance learning and orientation recovery.
+
+The results obtained so far provide key insights on the viability of the proposed methods.
+They guarantee that each component of this new paradigm can handle the task it is designed for, and they provide some early indications on the robustness of the overall scheme. 
+%\lau{To update with latest results.}
+After running the full machine learning pipeline and evaluating the performance on the synthetic data, we are able to reconstruct the asymmetric protein with the error of $0.1594$ rad and the symmetric protein with the error of $0.1871$ rad. 
+In addition, using these methods we are able to reconstruct the expected biological properties of the structure of these proteins.
 %Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d}_p$; this is very clearly the next line of research.
-\mdeff{Don't start with the results, but the beauty of the method.}
+%\mdeff{Don't start with the results, but the beauty of the method.}
 
-\lau{Ok I keep the following paragraph here, but depending on the results, we could remove it.}
-\mdeff{Distance learning should stay the main source of improvement.}
-First, the results underline the importance of learning an accurate proxy distance $\widehat{d}_p$.
-In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs as well as the distance metric between the two CNN outputs. We could parametrize the function $d_f$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
+% \lau{Ok I keep the following paragraph here, but depending on the results, we could remove it.}
+% \mdeff{Distance learning should stay the main source of improvement.}
+% First, the results underline the importance of learning an accurate proxy distance $\widehat{d}_p$.
+% In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs as well as the distance metric between the two CNN outputs. We could parametrize the function $d_f$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 
-For the metric learning, we should further enhance the training dataset in order to test its predictive ability in more challenging situations, in particular to extend to method to unseen proteins.
+Despite being able to infer the orientation of 2D projections of the 3D protein structure, new cryo-EM measurements of the proteins unseen from the network could enable a more direct validation of the results. 
 To achieve this, we shall rely on our powerful, expressive forward model of the cryo-EM procedure to generate realistic projections from thousands of atomic models in the PDB database.
-In this regard, an interesting aspect of SiameseNNs for the present application is that they intrinsically predict the \textit{relationship} between objects.
-Hence, a well-trained SiameseNN could be relatively robust to the change of volumes.
-In the same line of thought, our SiameseNN will likely benefit from the profound structural similarity shared by proteins---after all, they all derived from just the same 21 amino acids.
+In this regard, an interesting aspect of our methods for the present application is that they intrinsically predict the \textit{relationship} between objects.
+Hence, a well-trained distance learning method could be relatively robust to the change of volumes.
+In the same line of thought, our distance learning method will likely benefit from the profound structural similarity shared by proteins---after all, they all derived from just the same 21 amino acids.
 Further down the line, an extended training will allow us to test different options for the challenging handling of proteins with multiple conformational states.
+These methods have a potential to advance the understanding of the protein structure given only the set of the projections.
 
 % ABOUT SIAMESE_NN
 
