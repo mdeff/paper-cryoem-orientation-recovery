@@ -109,4 +109,18 @@ Alternatively, the  marginalized maximum likelihood (ML) formulation of the reco
 
 Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
 
+We consider that a cryo-EM measurement (i.e., a projection) $\mathbf{p}_i \in \mathbb{R}^{n_p}$ is acquired through
+\begin{equation*}
+    \label{eqn:projection-eqn}
+    \mathbf{p}_i = \mathbf{C}_{\boldsymbol\varphi} \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n},
+\end{equation*}
+where $\mathbf x \in \mathbb{R}^{V}$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
+The operator $\mathbf{P}_{\theta_i}: \R^V \to \R^{n_p}$ is the projection along the 3D pose $\bth_i$ (i.e., the x-ray transform).
+The operator $\mathbf{S}_\mathbf{t}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t} = (t_1, t_2)$.
+The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
+Finally, $\mathbf{n} \in \R^{n_p}$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf{y}_i$.
+%\todo{Consistency: we previously used $n_p$ instead of $M$.}
+%\mdeff{Should we move that (the equation and text below it) to the intro? It goes well with \figref{imaging-geometry} and would help us when we talk about rotations in \secref{method:orientation-representation}.} \lau{I agree.}
+\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either. }
+
 %\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}

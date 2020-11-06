@@ -29,13 +29,15 @@
 
 \begin{abstract}
     A major challenge in single-particle cryo-electron microscopy (cryo-EM) is that the orientations adopted by the 3D particles prior to imaging are unknown; yet, their knowledge is essential for high-resolution reconstruction.
-    We present a method to recover these orientations directly from the acquired set of 2D projections. Our approach consists of two steps: (i) the estimation of the relative distances between numerous pairs of projections, and (ii) the recovery of the absolute orientation of each projection from these distances.
+    We present a method to recover these orientations directly from the acquired set of 2D projections. 
+    Our approach consists of two steps: (i) the estimation of the relative distances between numerous pairs of projections, and (ii) the recovery of the absolute orientation of each projection from these distances.
     % absolute orientations vs relative distances?
     For step (i), the pairwise distance estimator is a Siamese neural network trained on synthetic cryo-EM projections from resolved bio-structures.
-    For step (ii), the orientations are recovered by minimizing an appropriate loss function.
-    Experimental results show that \lau{put here the latest results situation. %the quality of the recovered orientations strongly depends on the quality of the estimated distances.
-    While not yet up to state-of-the art ..., distance estimation is robust to perturbations (adapt).}
-    Overall, the orientations recovered from simulated noisy projections are within \todo{10\degree} of the true orientations.
+    For step (ii), the orientations are recovered by minimizing an appropriate loss function using gradient based optimization.
+    Evaluating our method on the synthetic data indicated high agreement with the ground truth orientations even with a realistic level of perturbations in the projections.
+    %Experimental results show that \lau{put here the latest results situation. %the quality of the recovered orientations strongly depends on the quality of the estimated distances.
+    %While not yet up to state-of-the art ..., distance estimation is robust to perturbations (adapt).}
+    The preliminary results , the orientations recovered from non-perturbed projections are withing $10\degree$, and from perturbed projections are within $24\degree$ of the true orientations.
     Our code is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
 \end{abstract}
 

@@ -63,20 +63,8 @@ Due to protein symmetries, orientations are sampled differently. For the entire 
 \end{figure}
 
 \paragraph{Perturbations.}
-We consider the following perturbations to control the difficulty of orientation recovery: (i) additive white noise, (ii) translations, (iii) point-spread functions (PSF).
-We consider that a cryo-EM measurement (i.e., a projection) $\mathbf{p}_i \in \mathbb{R}^{M}$ is acquired through
-\begin{equation*}
-%    \label{eqn:linear-forward-model}
-    \mathbf{p}_i = \mathbf{C}_{\boldsymbol\varphi} \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n},
-\end{equation*}
-where $\mathbf x \in \mathbb{R}^{V}$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
-The operator $\mathbf{P}_{\theta_i}: \R^V \to \R^M$ is the projection along the 3D pose $\bth_i$ (i.e., the x-ray transform).
-The operator $\mathbf{S}_\mathbf{t}: \R^M \to \R^M$ is a shift of the projection by $\mathbf{t} = (t_1, t_2)$.
-The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^M \to \R^M$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
-Finally, $\mathbf{n} \in \R^M$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf{y}_i$.
-\todo{Consistency: we previously used $n_p$ instead of $M$.}
-\mdeff{Should we move that (the equation and text below it) to the intro? It goes well with \figref{imaging-geometry} and would help us when we talk about rotations in \secref{method:orientation-representation}.} \lau{I agree.}
-\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either. }
+We consider the following perturbations to control the difficulty of orientation recovery: (i) additive white noise, (ii) translations, (iii) point-spread functions (PSF). Mathematical formulation of these three components is shown in the equation \eqnref{projection-eqn}.
+
 
 \begin{table}[ht!]
     \centering
