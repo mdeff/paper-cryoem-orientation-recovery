@@ -115,9 +115,9 @@ The goal of the alignment is to compute the \textit{mean orientation recovery er
     E = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|,
     \label{eqn:orientation-recovery-error}
 \end{equation}
-where $\Or(4) = \{\T \, | \det(\T) = \pm 1\}$ is the group of $4 \times 4$ orthogonal matrices that represent the \todo{symmetries of $\mathbb{S}^3$ / isometries of $\R^4$} of 4D Euclidean space (i.e., rotations and reflections).
+where $\Or(4) = \{\T \, | \det(\T) = \pm 1\}$ is the group of $4 \times 4$ orthogonal matrices that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space (i.e., rotations and reflections).
 
-We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations in 4D space and an optional \todo{reflection/flip/mirror}:
+We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations in 4D space and an optional reflection (also known as flip or mirror):
 \begin{equation*}
     \T =
 %    \begin{bmatrix}

@@ -5,96 +5,89 @@ Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field 
 In single-particle cryo-EM, every 3D particle adopt a random orientation in the ice layer before being imaged with parallel beams of electrons.
 Hence, the projection geometry associated to each acquired 2D projection (\figref{imaging-geometry}) is unknown. Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
 
-\tdplotsetmaincoords{60}{110}
-\pgfmathsetmacro{\rvec}{.8}
-\pgfmathsetmacro{\thetavec}{30}
-\pgfmathsetmacro{\phivec}{60}
-\begin{figure}
-\centering
-\begin{tikzpicture}[scale=4,tdplot_main_coords]
-    \coordinate (O) at (0,0,0);
-    \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$\bsx_1$};
-    \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$\bsx_2$};
-    \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$\bsx_3$};
-    \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-    \draw[-stealth,very thick,color=red] (O) -- (P);
-    \draw[dashed, color=red] (O) -- (Pxy);
-    \draw[dashed, color=red] (P) -- (Pxy);
-    \tdplotdrawarc{(O)}{0.2}{0}{\phivec}{anchor=north}{$\theta_1$}
-    \tdplotsetthetaplanecoords{\phivec}
-    \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.5}{0}%
-        {\thetavec}{anchor=south west}{$\theta_2$}
-    \draw[dashed,tdplot_rotated_coords] (\rvec,0,0) arc (0:90:\rvec);
-    \draw[dashed] (\rvec,0,0) arc (0:90:\rvec);
-    \tdplotsetrotatedcoords{\phivec}{\thetavec}{0}
-    \tdplotsetrotatedcoordsorigin{(P)}
-    \draw[dashed,blue,tdplot_rotated_coords,-] (-.4,0,0)
-        -- (.4,0,0) node[anchor=north west]{};
-    \draw[dashed,blue,tdplot_rotated_coords,-] (0,-.4,0)
-        -- (0,.4,0) node[anchor=west]{};
-    \draw[blue,tdplot_rotated_coords,-]  (-.4,.4,0) -- (.4,.4,0)  -- (.4,-.4,0) -- (-.4,-.4,0) -- (-.4,.4,0)   node[anchor=north]{};
-    \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.2}{0}%
-        {30}{anchor=north west,color=black}{$\theta_3$}
-    \tdplotsetrotatedcoords{\phivec}{\thetavec}{30}
-    \draw[thick,tdplot_rotated_coords,->] (0,0,0)
-        -- (.3,0,0) node[anchor=north west]{$\bsy_1$};
-    \draw[thick,tdplot_rotated_coords,->] (0,0,0)
-        -- (0,.3,0) node[anchor=west]{$\bsy_2$};
-    \node[blue] at (0.4,0.45,1.2) {$\Omega_{\mathrm{2D}}$};
-    \node[red] at (1.5,0.75,1.2) {$\bvth_{\bth}$};
-    \tdplotsetrotatedthetaplanecoords{45}
-\end{tikzpicture}
-\caption*{\mdeff{Kept as reference for \figref{imaging-geometry} as this tikz figure is beautiful. Will be commented out in the end.}}
-\end{figure}
+% \tdplotsetmaincoords{60}{110}
+% \pgfmathsetmacro{\rvec}{.8}
+% \pgfmathsetmacro{\thetavec}{30}
+% \pgfmathsetmacro{\phivec}{60}
+% \begin{figure}
+% \centering
+% \begin{tikzpicture}[scale=4,tdplot_main_coords]
+%     \coordinate (O) at (0,0,0);
+%     \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$\bsx_1$};
+%     \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$\bsx_2$};
+%     \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$\bsx_3$};
+%     \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
+%     \draw[-stealth,very thick,color=red] (O) -- (P);
+%     \draw[dashed, color=red] (O) -- (Pxy);
+%     \draw[dashed, color=red] (P) -- (Pxy);
+%     \tdplotdrawarc{(O)}{0.2}{0}{\phivec}{anchor=north}{$\theta_1$}
+%     \tdplotsetthetaplanecoords{\phivec}
+%     \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.5}{0}%
+%         {\thetavec}{anchor=south west}{$\theta_2$}
+%     \draw[dashed,tdplot_rotated_coords] (\rvec,0,0) arc (0:90:\rvec);
+%     \draw[dashed] (\rvec,0,0) arc (0:90:\rvec);
+%     \tdplotsetrotatedcoords{\phivec}{\thetavec}{0}
+%     \tdplotsetrotatedcoordsorigin{(P)}
+%     \draw[dashed,blue,tdplot_rotated_coords,-] (-.4,0,0)
+%         -- (.4,0,0) node[anchor=north west]{};
+%     \draw[dashed,blue,tdplot_rotated_coords,-] (0,-.4,0)
+%         -- (0,.4,0) node[anchor=west]{};
+%     \draw[blue,tdplot_rotated_coords,-]  (-.4,.4,0) -- (.4,.4,0)  -- (.4,-.4,0) -- (-.4,-.4,0) -- (-.4,.4,0)   node[anchor=north]{};
+%     \tdplotdrawarc[tdplot_rotated_coords]{(0,0,0)}{0.2}{0}%
+%         {30}{anchor=north west,color=black}{$\theta_3$}
+%     \tdplotsetrotatedcoords{\phivec}{\thetavec}{30}
+%     \draw[thick,tdplot_rotated_coords,->] (0,0,0)
+%         -- (.3,0,0) node[anchor=north west]{$\bsy_1$};
+%     \draw[thick,tdplot_rotated_coords,->] (0,0,0)
+%         -- (0,.3,0) node[anchor=west]{$\bsy_2$};
+%     \node[blue] at (0.4,0.45,1.2) {$\Omega_{\mathrm{2D}}$};
+%     \node[red] at (1.5,0.75,1.2) {$\bvth_{\bth}$};
+%     \tdplotsetrotatedthetaplanecoords{45}
+% \end{tikzpicture}
+% \caption*{\mdeff{Kept as reference for \figref{imaging-geometry} as this tikz figure is beautiful. Will be commented out in the end.}}
+% \end{figure}
 
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.45\linewidth}
         \centering
         \includegraphics[height=7.5cm]{geomProj3D}
-        \caption{
-            \banjac{pdf is losing the colors, therefore png export type.} \mdeff{That's unfortunate because this figure is beautiful. Laurène, any idea why?}
-            \todo{Coordinates $(x_1, x_2, x_3)$ and $(y_1, y_2)$ in non-bold face.}
-            \todo{$y_1, y_2, \theta_3, \theta_1$ would be more visible out of the darker part.}
-            \todo{Object (or protein?) $\mathbf{x}$ (not $f$) and projection $\mathbf{p}$. Keep or remove ``domain''?}
-            \todo{Remove $\Omega_{2D}$?} % $\Omega_{\mathrm{2D}}$ with 2D not italic.}
-            \todo{Extend $x_1$ and $x_2$ for elevation ($\theta_2$ dashed gray line) to not look ``squashed''.}
-            \todo{The vertical red line should be parallel to the $x_3$-axis.}
-            \todo{Remove $\bvth_{\bth}$.}
-        }\label{fig:imaging-geometry}
+        \caption{}
+        \label{fig:imaging-geometry}
     \end{subfigure}
     \qquad
     \begin{subfigure}[t]{0.45\linewidth}
         \centering
         \includegraphics[height=7cm]{intuition_method}
-        \caption{
-            \todo{$(\p_i, qi)$ with parentheses instead of braces (ordered tuples, not sets).}
-            \todo{Consistent color for $d_q$ (text and arc) with \figref{schematic:method-overview}.}
-            \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
-            \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
-            \todo{The two green arcs seems too much like a single one.}
-            \todo{Show also $d_q(q_j, q_k)$ (there's otherwise not enough constraints and an infinite number of solutions).}
-            \todo{The sphere lines should be finer.}
-        }\label{fig:intuition-method}
+        \caption{}
+        \label{fig:intuition-method}
     \end{subfigure}
 \caption{%
     % Goals: explain
     % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
     % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
+    % $\p_i = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
     \textbf{Projections and orientations.}
-    (a) Geometry of the imaging model $\p = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
-    The 3D object \mdeff{(protein or particle for consistency?)} $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the direction $\bvth_{\bth}$ \mdeff{Ok with ``direction $(\theta_1, \theta_2)$''? (I'd prefer to not introduce notation we won't use.)} to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$.
+    (a) Geometry of the imaging model $\p$ defined with equation \eqnref{projection-eqn}.
+    The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the direction $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$.
     The direction $(\theta_1, \theta_2) \in [0,2\pi[ \, \times \, [0,\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) forms the \textit{orientation} $\bth = (\theta_1, \theta_2, \theta_3)$.
-    Alternatively, we represent the orientation $\bth$ as a unit quaternion $q$.
+    In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
     %$\bth = (\theta_1, \theta_2, \theta_3)$ are the rotation $\theta_1$, the tilt \todo{or azimuth?} $\theta_2$, and the in-plane rotation $\theta_3$.
-    The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
-    \mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
+    %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
+    %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
 %    The set $\Omega_{\mathrm{2D}}$ denotes the support of the projection.
 %    \mdeff{Is $\Omega_{\mathrm{2D}}$ a set? Not a vector space?} \lau{It is a set in the way I define it in my thesis, but we can remove the word if you find it confusing here.}
     (b) Single-particle cryo-EM produces $P \approx 10^5$ projections, taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
     Observing that distances between points constrain their position, we aim to \textit{recover the orientations} $\{q_i\}$ from the distances $\{d_q(q_i, q_j)\}$.
     Observing that projections taken from close orientations look alike, we aim to \textit{estimate the distances} $\{d_q(q_i, q_j)\}$ from the projections $\{(\p_i, \p_j)\}$.
-    \mdeff{Easy to see that the geodesic distance $d_q$ is the amplitude of a rotation between two orientations.}
+    Moreover, it is easy to see that the geodesic distance $d_q$ is the amplitude of a rotation between two orientations.
+    \todo{$(\p_i, qi)$ with parentheses instead of braces (ordered tuples, not sets).}
+    \todo{Consistent color for $d_q$ (text and arc) with \figref{schematic:method-overview}.}
+    \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
+    \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
+    \todo{The two green arcs seems too much like a single one.}
+    \todo{Show also $d_q(q_j, q_k)$ (there's otherwise not enough constraints and an infinite number of solutions).}
+    \todo{The sphere lines should be finer.}
 }
 \end{figure}
 
@@ -121,6 +114,6 @@ The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}
 Finally, $\mathbf{n} \in \R^{n_p}$ represents an additive noise. Our goal is then to recover the angles $\theta_i$ from every projection $\mathbf{y}_i$.
 %\todo{Consistency: we previously used $n_p$ instead of $M$.}
 %\mdeff{Should we move that (the equation and text below it) to the intro? It goes well with \figref{imaging-geometry} and would help us when we talk about rotations in \secref{method:orientation-representation}.} \lau{I agree.}
-\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either. }
+%\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either. }
 
 %\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
