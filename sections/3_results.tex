@@ -32,7 +32,7 @@ We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-ga
 \paragraph{Projections.}
 From these ground truths, we generate $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
 Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3)$ uniformly, and (ii) sampling uniformly on $\SO(3)$.
-Due to protein symmetries, orientations are sampled differently. For the entire \texttt{5j0n} complex is asymmetric~\cite{doi:10.1002/9780470514160.ch4}, thus it is sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are located symmetric to the center of this sphere. Conversely, the $\beta$-galactosidase has D2 symmetry, i.e. it is composed of four identical sub-units got with two rotations of magnitude 180\degree around the first axis followed by 180\degree rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}. Therefore, for this protein we restrict the sampling to the quarter of $\mathbb{S}^2$ sphere.
+Due to protein symmetries, orientations are sampled differently. For the entire \texttt{5j0n} complex is asymmetric~\cite{doi:10.1002/9780470514160.ch4}, thus it is sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are located symmetric to the center of this sphere. Conversely, the $\beta$-galactosidase has D2 symmetry, i.e. it is composed of four identical sub-units got with two rotations of magnitude $\pi$ rad around the first axis followed by $\pi$ rad rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}. Therefore, for this protein we restrict the sampling to the quarter of $\mathbb{S}^2$ sphere.
 %\mdeff{We should explain why.}
 \figref{different-projections} shows example projections.
 
@@ -117,7 +117,7 @@ The goal of the alignment is to compute the \textit{mean orientation recovery er
 \end{equation}
 where $\Or(4) = \{\T \, | \det(\T) = \pm 1\}$ is the group of $4 \times 4$ orthogonal matrices that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space (i.e., rotations and reflections).
 
-We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations in 4D space and an optional reflection (also known as flip or mirror):
+We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations in 4D space and an optional reflection:
 \begin{equation*}
     \T =
 %    \begin{bmatrix}
@@ -390,7 +390,7 @@ Similarly to Euclidean distance $d_p$, we notice that the larger distances $d_q$
 
 It is interesting that both validation losses are around $0.2$.
 However, the current SiameseNN architecture slightly overfits at learning the distance for the dataset \texttt{5a1a}, which is very likely due to the symmetry of the $\beta$-galactosidase protein, even thought the quarter-sphere coverage was used.
-Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
+%Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
 This simply advocates for the restriction to non-overlapping areas on $\SO(3)$ when sampling the orientations used to generate the SiameseNN training dataset.
 The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.
 %\mdeff{I don't get this explanation. Do you mean that \texttt{5a1a} might have other symmetries than D2?}
@@ -621,3 +621,7 @@ We were able to successfully reconstruct the symmetric protein even though the d
 We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
 However, the method developed is promising since the learned distance is robust to perturbations.
 We observe that the orientation recovery and distance estimation are interconnected, \textit{i.e.} if one works the other one will work.
+
+To check the generalization to unseen proteins, and not only to  unseen projections, we train the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
+The orientation recovery reaches the error of 0.0352. 
+This proves that distance learning is able to abstract the protein and that way generalize the distance metric to the unseen proteins.

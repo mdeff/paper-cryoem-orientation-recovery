@@ -40,29 +40,91 @@ Taking this line of thought further, we propose to train a function---parametriz
 \subsection{Representation of orientations}\label{sec:method:orientation-representation}
 %\mdeff{Laurène: Which word is better: Representation or parameterization? Or something else, but we need consistency.} \lau{Both are fine. Personally, I use parametrization in my thesis, but we can settle on the other one.}
 
-Inside the electron microscope, each 3D particle is positioned at a given orientation with respect to the detector plane $\bsy=(y_1,y_2)\in \mathbb{R}^2$, as illustrated in \figref{imaging-geometry} (left). Hence, for each particle, the geometry of the imaging procedure is described by the geometrical transformation that maps its object coordinate system $(x_1,x_2,x_3)$ to the measurement coordinate system $(y_1,y_2)$. This mapping corresponds to a rotation in $\SO(3)$, the group of all 3D rotations about the origin of $\mathbb{R}^3$; in that space, every rotation can be described by a $3\times3$ orthogonal matrix with determinant~$1$.
-\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
+Inside the electron microscope, each 3D particle is positioned at a given orientation with respect to the detector plane $\bsy=(y_1,y_2)\in \mathbb{R}^2$, as illustrated in \figref{imaging-geometry}.
+Hence, for each particle, the geometry of the imaging procedure is described by the geometrical transformation that maps its object coordinate system $(x_1,x_2,x_3)$ to the measurement coordinate system $(y_1,y_2)$. 
+This mapping corresponds to an integration through the 3D particle according to the orientation.
+As opposed projections are mirrored, we cannot resolve chirality\footnote{A geometric property which says that the mirror transformation of an object is a non-identity operation, i.e. the object and its mirror image cannot be aligned by any translation or rotation.}. 
+Projecting looses global orientation, and integrating looses chirality.
 
-The standard approach in single-particle cryo-EM is to use Euler angles to parametrize the rotation matrix that relates the two coordinate systems~\cite{sorzano2014interchanging}.
-The Euler angles, denoted as $\bth = (\theta_1,\theta_2,\theta_3) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$, are a set of three angles that describe a sequence of three rotations about three fixed axes (\figref{imaging-geometry} (left)).
-Unfortunately, the geodesic distance between two rotations $\mathbf{R}(\bth_1)$, $\mathbf{R}(\bth_2)\in \SO(3)$ parametrized by Euler angles cannot be directly computed from $\bth_1$, $\bth_2$.
-It requires the computation of the rotation matrices, which is computationally inefficient.%
-\footnote{Another technical challenge with Euler angles is that they suffer from the \textit{gimbal lock} problem, which arises when $\theta_2=0$ and restricts the number of rotational degrees of freedom to one even though $\theta_1$ and $\theta_3$ have not yet been fixed~\cite{koks2006explorations}.}
 
-As our method requires the repeated computation of the geodesic distance, we resort to a more convenient representation of 3D rotations that relies on unit quaternions $q \in \U$, with  $\U = \big\{ q \in \mathbb{H} \; \, | \; \, \lvert q \rvert = 1 \big\}$, which identifies the $\mathbb{S}^3$ hypersphere in $\R^4$.
-%and concisely represent the elements of the $\SO(3)$ group.
-\todo{Better transition from quaternions to rotations.}
-Unit quaternions represent rotations as $\mathbb{S}^3$ is a double-cover of $\SO(3)$, i.e., $\mathbf{R}(q) = \mathbf{R}(-q)$ (antipodal points are identified).
+
+There is a variety of representations of orientations used in practice. Bellow we note the advantages and disadvantages for each of them.
+
+\paragraph{Euler angles.} The standard approach in single-particle cryo-EM is to use Euler angles to parametrize the rotation matrix that relates the two coordinate systems~\cite{sorzano2014interchanging}.
+The Euler angles, denoted as $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$, are a set of three angles in angle space that describe a sequence of three rotations about three fixed axes. In cryo-EM the most widely used convention is $Z3-Y2-Z1$. 
+First, we rotate about $Z1$-axis ($\theta_1$ is called a rotation angle). 
+Then. we rotate about $Y2$-axis ($\theta_2$ is called an azimuthal or tilt angle). 
+Lastly, we rotate about $Z3$-axis ($\theta_3$ is called in-plane rotation).
+In general, Euler angles are not unique and they suffer from \textit{gimbal lock} problem\footnote{The gimbal lock problem arises when $\theta_2=0$ and restricts the number of rotational degrees of freedom to one even though $\theta_1$ and $\theta_3$ have not yet been fixed~\cite{koks2006explorations}.}.
+Compared to other representations, they use the least memory (3 scalars). 
+The projection direction is determinded only by two angles, $\theta_1$ and $\theta_2$. However, to compare whether two different projections are close to each other in their projection directions (i.e. their geodesic distance is small), it cannot be directly computed from their two sets of Euler angles. 
+% Euler angles:
+% - Euler angles are not unique
+% - gimbal lock problem
+% - intuition behind changing the basis between two coordinate systems is not so clear
+% - to compare if 2 different projs are close to each other in their projection direcitons, it does not suffice comparing their 2 sets of Euler angle sets
+% - 3 unkown parameters
+% - just used for representation of input and output format of rotation
+
+
+\paragraph{Rotation matrices.} One way to compute the geodesic distance between two projection directions is to represent orientations as rotation matrices. Mathematically, we write $\mathbf{R} = \mathbf{R}_{Z3}(\theta_3) \mathbf{R}_{Y2}(\theta_2) \mathbf{R}_{Z1}(\theta_1)$, where $\mathbf{R},\mathbf{R}_{Z3}(\theta_3),\mathbf{R}_{Y2}(\theta_2), \mathbf{R}_{Z1}(\theta_1) \in \SO(3)$. 
+Hence, the orientation is defined as a rotation in $\SO(3)$ space, the group of all 3D rotations about the origin of $\mathbb{R}^3$ under the operation of composition (i.e. order of rotations matter); in that space, every rotation can be described by a $3\times3$ orthogonal matrix with determinant~$1$.
+The rotation matrices are intuitive in the 3D space transformations. 
+They support versatility of transformations -- besides rotation they support reflections, translations, scaling, etc. 
+Unlike Euler angles, rotation matrices avoid gimbal lock. 
+However, they are computationally more expensive since we are dealing with $3\times3$ matrices (i.e. 9 scalars).
+% Affine transformation
+% - intuitive
+% - unique (and for each rotation matrix there is a unique quaternion with norm 1)
+% -  3x3 matrix, 9 parameters
+% - used when angle alignment was performed due to its transformation versatility (e.g. supports mirrors)
+% simpler to compose
+% avoid problem of gimbal lock
+
+\paragraph{Quaternions.} Unit quaternions $q \in \U$, with  $\U = \big\{ q \in \mathbb{H}: \lvert q \rvert = 1 \big\}$, which identifies the $\mathbb{S}^3$ hypersphere in $\R^4$ are another way of representing the 3D rotations.
+Unit quaternions represent rotations as $\mathbb{S}^3$ is a double-cover of $\SO(3)$, i.e. mapping from unit  quaternion to $\SO(3)$ is 2-to-1, $\mathbf{R}(q) = \mathbf{R}(-q)$ (antipodal points are identified).
 You can find the necessary background on quaternions in Appendix~\ref{sec:quaternions}.
-The geodesic distance, i.e., the shortest distance on the surface of $\SO(3)$, is defined as
-\begin{equation}
-    d_q(q_i, q_j) = 2 \arccos \big(| \langle q_i, q_j \rangle| \big) \in [0,\pi], \; q_i, q_j \in \U,
-    \label{eqn:distance:orientations}
-\end{equation}
-with $\langle q_i, q_j \rangle$ the inner product between two quaternions.
+Quaternions are used in the cryo-em to a lesser extent. 
+Unfortunately, the intuition behind changing the basis between two coordinate systems is not so clear and performing reflections (also known as mirrors, flips) using quaternions we lose any intuition about how two projection directions (mirrored and non-mirrored) are related. 
+However, quaternions are more compact (4D vectors/4 scalars) and numerically stable compared to rotation matrices. 
+The quaternions strike a nice balance of both, Euler angles and rotation matrices, being small and free from gimbal lock.
 
-As $\mathbb{S}^3$ is isomorphic to the universal cover of $\SO(3)$, $d_q$ corresponds to the magnitude of the rotation $\mathbf{R}_* \in \SO(3)$ such that $\mathbf{R}(q_i) = \mathbf{R}_* \mathbf{R}(q_j)$~\cite{huynh2009metrics}.
+As our method requires the repeated computation of the geodesic distance, we resort to a more convenient representation of 3D rotations that relies on unit quaternions.
+The geodesic distance between two orientations, i.e. the length of the geodesic between them on the surface of $\SO(3)$, is defined as
+\begin{equation}
+    \begin{array}{c}
+    d_q: \U \times \U \rightarrow [0,\pi],\\
+    d_q(q_i, q_j) = 2 \arccos \big(| \langle q_i, q_j \rangle| \big),
+    \label{eqn:distance:orientations}
+    \end{array}
+\end{equation}
+with $\langle q_i, q_j \rangle$ the inner product between two quaternions~\cite{huynh2009metrics}. As $\mathbb{S}^3 = \{x \in \R^4: \left\Vert x \right\Vert\ = 1\}$ is isomorphic to the universal cover of $\SO(3)$, $d_q$ corresponds to the magnitude of the rotation $\mathbf{R}_* \in \SO(3)$ such that $\mathbf{R}(q_i) = \mathbf{R}_* \mathbf{R}(q_j)$~\cite{huynh2009metrics}.
 In other words, the distance between two rotations represented as unit quaternions can be efficiently computed from the quaternions themselves.
+% Quaternions:
+% - intuition behind changing the basis between two coordinate systems is not so clear
+% - 4D vector, 4 unknown parameters
+% - much less known in EM community, but they can be used to describe rotation
+% - any time we need to perform rotation on camera position, the quaternion is translated into its corresponding rotation matrix and then it is applied to the coordinates of the central coordinate system
+% - mirroring using quaternions - we lose any intuition about how two projection direcitons (mirrored and non-mirrored) are related
+% more compact and numerically stable
+
+% Axis angles 
+% - used for visualizations
+
+%Note that all of these representations of rotations are used in practice. Euler angles use the least memory; matrices use more memory but don't suffer from Gimbal lock and have nice analytical properties; and quaternions strike a nice balance of both, being lightweight, but free from Gimbal lock.
+%Rotation matrix: Minor disadvantage: Multiplication of matrices is ~2 times slower than quaternions. Minor Advantage: Matrix-vector multiplication is ~2 times faster, and large. Huge disadvantage: Normalization! Ghram-Shmit is asymmetrical, which does not give a higher order accurate answer when doing differential equations. More sophisticated methods are very complex and expensive.
+%Axis (angle = length of axis) Minor advantage: Small. Moderate disadvantage: Multiplication and applying to a vector is slow with trig. Moderate disadvantage: North-pole singularity at length = 2*pi, since all axis directions do nothing. More code (and debugging) to automatically rescale it when it gets near 2pi.
+
+
+%\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
+
+
+%As our method requires the repeated computation of the geodesic distance, we resort to a more convenient representation of 3D rotations that relies on unit quaternions $q \in \U$, with  $\U = \big\{ q \in \mathbb{H} \; \, | \; \, \lvert q \rvert = 1 \big\}$, which identifies the $\mathbb{S}^3$ hypersphere in $\R^4$.
+%and concisely represent the elements of the $\SO(3)$ group.
+%\todo{Better transition from quaternions to rotations.}
+%Unit quaternions represent rotations as $\mathbb{S}^3$ is a double-cover of $\SO(3)$, i.e., $\mathbf{R}(q) = \mathbf{R}(-q)$ (antipodal points are identified).
+%You can find the necessary background on quaternions in Appendix~\ref{sec:quaternions}.
+
 %through~\eqnref{distance:orientations}, which is of key practical importance for this work.
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
@@ -135,7 +197,13 @@ Equipped with a trained estimator $\widehat{d}_p$, we then recover the orientati
     \big\{ \widehat{q}_k \big\}_{k=1}^P = \argmin_{q_i, q_j \in \U} \sum_{i,j} \left| \widehat{d}_p \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
     \label{eqn:orientation-recovery}
 \end{equation}
-Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the projections $q_i$ rather than the distance $d_p$. Here again, the sum in \eqnref{orientation-recovery} is sampled for computational reasons.
-A strategy, commonly employed by \todo{those classic algos}, that amounts to build and embed a sparse distance graph. \lau{@Mdeff: Can you please fill here? Thanks.}
+Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the projections $q_i$ rather than the distance $d_p$. 
+Here again, the sum in \eqnref{orientation-recovery} is sampled for computational reasons.
+
+A strategy, commonly employed by methods for sparse embedding like multidimensional scaling (MDS), Isomap, etc.~\cite{platt2004fast, 5438584,DBLP:journals/corr/abs-1811-10470} that amounts to build and embed a sparse distance graph. 
+More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that well match the inter-vector distances.
+Hence, it is possible to determine the coordinates in a lower dimensional space only by knowing their pair-wise distances (at least in Euclidean space).
+In our work, we are dealing with non-Euclidean space and we show that it is also possible to determine the coordinates in a lower dimensional space (quaternion space) knowing only the learned pair-wise geodesic distances between two projections.
+%\lau{@Mdeff: Can you please fill here? Thanks.}
 In practice, \eqnref{orientation-recovery} is also minimized by mini-batch SGD.
 %We experimentally demonstrate in \secref{results:orientation-recovery:exact} that both approximations don't affect recovery performance.

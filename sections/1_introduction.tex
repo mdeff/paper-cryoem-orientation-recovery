@@ -1,6 +1,6 @@
 \section{Introduction}
 
-Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field of structural biology over the last decades~\cite{dubochet1988cryo, frank2006three,chap0-nat2015MethodYear}. The use of electron beams to image ice-embedded samples has permitted the recovery of 3D bio-structures at unprecedented resolution. This advent of atomic-resolution cryo-EM has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
+Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field of structural biology over the last decades~\cite{dubochet1988cryo, frank2006three,chap0-nat2015MethodYear, 2454550b178143639ce402f1316dfc81}. The use of electron beams to image ice-embedded samples has permitted the recovery of 3D bio-structures at unprecedented resolution. This advent of atomic-resolution cryo-EM has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
 
 In single-particle cryo-EM, every 3D particle adopt a random orientation in the ice layer before being imaged with parallel beams of electrons.
 Hence, the projection geometry associated to each acquired 2D projection (\figref{imaging-geometry}) is unknown. Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
@@ -58,7 +58,7 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
     \qquad
     \begin{subfigure}[t]{0.45\linewidth}
         \centering
-        \includegraphics[height=7cm]{intuition_method}
+        \includegraphics[height=7cm]{intuition-method}
         \caption{}
         \label{fig:intuition-method}
     \end{subfigure}
@@ -70,7 +70,7 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
     \textbf{Projections and orientations.}
     (a) Geometry of the imaging model $\p$ defined with equation \eqnref{projection-eqn}.
     The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the direction $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$.
-    The direction $(\theta_1, \theta_2) \in [0,2\pi[ \, \times \, [0,\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) forms the \textit{orientation} $\bth = (\theta_1, \theta_2, \theta_3)$.
+    The direction $(\theta_2, \theta_1) \in [0,\pi[ \, \times \, [0,2\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) forms the \textit{orientation} $\bth = (\theta_3, \theta_2, \theta_1)$.
     In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
     %$\bth = (\theta_1, \theta_2, \theta_3)$ are the rotation $\theta_1$, the tilt \todo{or azimuth?} $\theta_2$, and the in-plane rotation $\theta_3$.
     %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
@@ -81,13 +81,13 @@ Hence, the projection geometry associated to each acquired 2D projection (\figre
     Observing that distances between points constrain their position, we aim to \textit{recover the orientations} $\{q_i\}$ from the distances $\{d_q(q_i, q_j)\}$.
     Observing that projections taken from close orientations look alike, we aim to \textit{estimate the distances} $\{d_q(q_i, q_j)\}$ from the projections $\{(\p_i, \p_j)\}$.
     Moreover, it is easy to see that the geodesic distance $d_q$ is the amplitude of a rotation between two orientations.
-    \todo{$(\p_i, qi)$ with parentheses instead of braces (ordered tuples, not sets).}
-    \todo{Consistent color for $d_q$ (text and arc) with \figref{schematic:method-overview}.}
-    \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
-    \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
-    \todo{The two green arcs seems too much like a single one.}
-    \todo{Show also $d_q(q_j, q_k)$ (there's otherwise not enough constraints and an infinite number of solutions).}
-    \todo{The sphere lines should be finer.}
+    % \todo{$(\p_i, qi)$ with parentheses instead of braces (ordered tuples, not sets).}
+    % \todo{Consistent color for $d_q$ (text and arc) with \figref{schematic:method-overview}.}
+    % \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
+    % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
+    % \todo{The two green arcs seems too much like a single one.}
+    % \todo{Show also $d_q(q_j, q_k)$ (there's otherwise not enough constraints and an infinite number of solutions).}
+    % \todo{The sphere lines should be finer.}
 }
 \end{figure}
 
