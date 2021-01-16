@@ -1,6 +1,6 @@
 \section{Results}
 
-\subsection{Datasets}\label{sec:results:data}
+\subsection{Data}\label{sec:results:data}
 
 %\paragraph{Proteins.}
 We consider two proteins: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetriy. Both can be seen on \figref{pdb-proteins}.
@@ -114,9 +114,9 @@ The goal of the alignment is to compute the \textit{mean orientation recovery er
     E = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|,
     \label{eqn:orientation-recovery-error}
 \end{equation}
-where $\Or(4) = \{\T \, | \det(\T) = \pm 1\}$ is the group of $4 \times 4$ orthogonal matrices that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space (i.e., rotations and reflections).
+where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space (i.e., rotations and reflections).
 
-We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations in 4D space and an optional reflection:
+We implement $\T$ as the product of $\binom{4}{2}=6$ independent rotations and an optional reflection:
 \begin{equation*}
     \T =
 %    \begin{bmatrix}
@@ -129,12 +129,12 @@ We implement $\T$ as the product of the $\binom{4}{2}=6$ possible 2D rotations i
         m & \mathbf{0} \\
         \mathbf{0} & \mathbf{I} \\
     \end{bmatrix}
-    \prod_{i < j \leq 4} \mathbf{R}_{x_i x_j}(\theta_{x_i x_j}),
+    \prod_{1 \leq i < j \leq 4} \mathbf{T}_{\theta_{ij}},
 %    \prod_{(i,j) \in \{(1,2), (1,3) \dots\}} \mathbf{R}_{x_i x_j}(\alpha_{x_i x_j})
 %    \mathbf{R}_{x_1 x_2}(\alpha_{x_1 x_2}) \mathbf{R}_{x_1 x_3}(\alpha_{x_1 x_3}) \mathbf{R}_{x_1 x_4}(\alpha_{x_1 x_4}) \mathbf{R}_{x_2 x_3}(\alpha_{x_2 x_3}) \mathbf{R}_{x_2 x_4}(\alpha_{x_2 x_4}) \mathbf{R}_{x_3 x_4}(\alpha_{x_3 x_4}),
-    \quad m \in \{-1,1\}, \; \theta_{x_i x_j} \in [0, 2\pi[,
+    \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
 \end{equation*}
-where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{R}_{x_i x_j}(\theta_{x_i x_j}) \in \mathbf{SO}(4)$ is a rotation by angle $\theta_{x_i x_j}$ on the plane spanned by the $x_i$ and $x_j$ axes.
+where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
 
 In practice, we again sample the sum and minimize \eqnref{orientation-recovery-error} by gradient descent with the FTRL optimizer~\cite{mcmahan_ad_2013}.
 %noauthor_tfkerasoptimizersftrl_nodate}.
@@ -188,7 +188,7 @@ Since mean orientation error is used in the pose estimation tasks and it is cons
 
 To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 %\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
-From $P_{test}=838$ projections taken from the asymmetric protein \texttt{5j0n}, we randomly sample batches of $256$ pairs (out of $(P^2-P)/2 \approx \num{350e3}$) at every step and minimize \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
+From $P_{\text{test}}=838$ projections taken from the asymmetric protein \texttt{5j0n}, we randomly sample batches of $256$ pairs (out of $(P^2-P)/2 \approx \num{350e3}$) at every step and minimize \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} for $\num{7000}$ steps ($\sim 1.4$ hour) with a learning rate of $0.5$.
 Orientations are perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
@@ -377,7 +377,7 @@ We present here a preliminary evaluation of the ability of SiameseNNs to learn a
 
 %\mdeff{What is $d_f$ in this particular experiment? Euclidean? Cosine=$d_q$?}
 For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 pairs. As a feature distance $d_f$ between the outputs of the two CNNs we use the Geodesic distance \eqnref{geodesic-distance}.
-The pairs for the training are sampled from $1\%$ of maximum number of training pairs $P_{train}^2$ ($63,126$ pairs) and validation is performed on $1\%$ of the maximum number of validation pairs $P_{val}^2$ ($27,225$ pairs). We limit our training and validation dataset due to Google Colab training time limit of 12 hours.
+The pairs for the training are sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation is performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). We limit our training and validation dataset due to Google Colab training time limit of 12 hours.
 
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 Depending on the available resources on the Google Colab, the training can last from 2.6 hours to 9.3 hours on one of its GPUs.
@@ -420,9 +420,9 @@ Additionally, we parametrize $d_f(\mathbf{f}_i,\mathbf{f}_j)$ as MLP. It consist
 The experimental conditions are the same as in the previous section with the Euclidean distance metric as feature distance metric.
 \figref{geo-eucl-mlp} shows the training and validation losses of the geodesic distance are better than Euclidean and MLP feature distance metric. We can also observe the performance on the $(d_q, d_p)$ plots and notice that the projection pairs deviate the least using the geodesic distance.
 %\todo{Why? Add and rephrase hypotheses. Cosine distance has the same geometry as $d_q$. Euclidean has not (no periodicity nor curvature). MLP doesn't guarantee it's a distance function (not symmetric, zero between itself, triangle inequality) and might need much more data.}
-The reason for a geodesic distance to perform the best is that it has the same geometry as quaternion distance $d_q$ in $\mathbf{SO}(3)$ space. Whereas, the Euclidean distance is not desirable on $\mathbf{SO}(3)$ since it does not respect the manifold's non-linearity (it has no periodicity nor curvature) and can lead to unpredictable behaviours. The $\mathbf{SO}(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
+The reason for a geodesic distance to perform the best is that it has the same geometry as quaternion distance $d_q$ in $\SO(3)$ space. Whereas, the Euclidean distance is not desirable on $\SO(3)$ since it does not respect the manifold's non-linearity (it has no periodicity nor curvature) and can lead to unpredictable behaviours. The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
 Moreover, MLP does not guarantee that it is a distance function. For MLP to be a distance function, it should have the following properties: (1) support symmetry; (2) output zero with two identical inputs; (3) support triangle inequality. In addition, we might need much more data for the MLP training.
-Hence, it is desirable to have a distance function that respects the structure of $\mathbf{SO}(3)$ space. 
+Hence, it is desirable to have a distance function that respects the structure of $\SO(3)$ space. 
 
 \begin{figure}
     \centering

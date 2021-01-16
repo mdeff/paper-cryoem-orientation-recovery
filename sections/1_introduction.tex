@@ -12,13 +12,16 @@ We consider that a cryo-EM measurement (i.e., a projection) $\p_i \in \R^{n_p}$ 
     \label{eqn:imaging-model}
     \p_i = \mathbf{C}_{\boldsymbol\varphi} \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth_i} \x + \mathbf{n},
 \end{equation}
-where $\x \in \R^V$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
-The operator $\mathbf{P}_{\bth_i}: \R^V \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (i.e., the x-ray transform).
+where $\x \in \R^{n_x}$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
+%\mdeff{Alternative notation: $\p_i = \mathbf{C}(\boldsymbol\varphi) \mathbf{S}(\mathbf{t}) \mathbf{P}(\bth_i) \x + \mathbf{n}$ if we want to write $\mathbf{R}(\bth_i) = \mathbf{R}(q_i) = \mathbf{R}(-q_i)$ later.}
+%\mdeff{Alternative notation: $\x: \R^3 \rightarrow \R$ and $\p_i: \R^2 \rightarrow \R$ as functions, so $\x$ can be rotated by $\mathbf{R} \in \mathbf{SO}(3)$ as $\mathbf{R}\x$. But then $\x$ is not a vector for the SiameseNN.}
+The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (i.e., the x-ray transform).
 % consistency: 3D pose = orientation
 The operator $\mathbf{S}_\mathbf{t}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t} = (t_1, t_2)$.
+\mdeff{Doesn't $\mathbf{t}$ depend on the particle, i.e., on $i$?}
 The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
 Finally, $\mathbf{n} \in \R^{n_p}$ represents additive noise.
-The challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ while ignoring their orientation.
+The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ acquired along unknown orientations.
 %\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either.}
 
 % \tdplotsetmaincoords{60}{110}
@@ -83,13 +86,13 @@ The challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P
     % $\p_i = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
     \textbf{Projections and orientations.}
     (a) Geometry of the imaging model defined in \eqnref{imaging-model}.
-    The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the direction $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$.
+    The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the orientation $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$ of the microscope's detector plane.
     The direction $(\theta_2, \theta_1) \in [0,\pi[ \, \times \, [0,2\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) form the \textit{orientation} $\bth = (\theta_3, \theta_2, \theta_1)$.
     In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
     %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
     %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
     (b) Single-particle cryo-EM produces $P \approx 10^5$ projections taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
-    Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where the geodesic distance $d_q(q_i, q_j)$ is the amplitude of the rotation between orientations $q_i$ and $q_j$.
+    Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where the geodesic distance $d_q(q_i, q_j)$ is the angle between orientations $q_i$ and $q_j$.
     Observing that projections taken from close orientations look alike, we aim to \textit{estimate the distance} $d_q(q_i, q_j)$ from the projections $(\p_i, \p_j)$.
     % \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
     % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
@@ -117,6 +120,6 @@ This permits to avoid the need for an initial volume estimate, at the possible c
 More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward yet.
 
 Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
-\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues?}
+\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.}
 
 %\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
