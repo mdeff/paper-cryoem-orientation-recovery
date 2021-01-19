@@ -66,10 +66,9 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
 % \end{figure}
 
 \begin{figure}
-    \centering
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{minipage}[t]{0.48\linewidth}
         \centering
-        \includegraphics[width=0.7\linewidth]{geomProj3D}
+        \includegraphics[height=0.7\linewidth]{geomProj3D}
         \caption{%
             % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
             % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
@@ -81,11 +80,11 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
             %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
             %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
         }\label{fig:imaging-geometry}
-    \end{subfigure}%
+    \end{minipage}
     \hfill
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{minipage}[t]{0.48\linewidth}
         \centering
-        \includegraphics[width=0.7\linewidth]{intuition-method}
+        \includegraphics[height=0.7\linewidth]{intuition-method}
         \caption{%
             Single-particle cryo-EM produces $P$ in the order of $10^5$ projections taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
             Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where $d_q(q_i, q_j)$ is the distance (angle) between orientations $q_i$ and $q_j$.
@@ -94,8 +93,7 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
             % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
             % \todo{The two green arcs seems too much like a single one.}
         }\label{fig:intuition-method}
-    \end{subfigure}
-    \caption{Projections, orientations, and distances.}
+    \end{minipage}
 \end{figure}
 
 % RELATED WORKS
