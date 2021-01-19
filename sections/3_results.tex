@@ -32,7 +32,10 @@ We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-ga
 \paragraph{Projections.}
 From these ground truths, we generate $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
 Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3)$ uniformly, and (ii) sampling uniformly on $\SO(3)$.
-Due to protein symmetries, orientations are sampled differently. For the entire \texttt{5j0n} complex is asymmetric~\cite{doi:10.1002/9780470514160.ch4}, thus it is sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are located symmetric to the center of this sphere. Conversely, the $\beta$-galactosidase has D2 symmetry, i.e. it is composed of four identical sub-units got with two rotations of magnitude $\pi$ rad around the first axis followed by $\pi$ rad rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}. Therefore, for this protein we restrict the sampling to the quarter of $\mathbb{S}^2$ sphere.
+Due to protein symmetries, orientations are sampled differently.
+For the entire \texttt{5j0n} complex is asymmetric~\cite{doi:10.1002/9780470514160.ch4}, thus it is sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are symmetric to the center of this sphere.
+Conversely, the $\beta$-galactosidase has D2 symmetry, i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ rad around the first axis followed by $\pi$ rad rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
+Therefore, we restrict the sampling to the quarter of $\mathbb{S}^2$ sphere for this protein.
 %\mdeff{We should explain why.}
 \figref{different-projections} shows example projections.
 
@@ -82,15 +85,20 @@ We consider the following perturbations to control the difficulty of orientation
 \end{table}
 
 \paragraph{Distance learning.}
-We use supervised learning, thus input-output pairs.
+We use supervised learning, thus training on input-output pairs.
 The input are two images and the output is their quaternion distance calculated from the ground truth orientations.
-For neural network training, dataset is split into a distinct training, validation, and testing set, see \tabref{dataset}.
-The total number of generated projections is $P = 5,000$. Therefore, the number of possible projection pairs is $P^2 = 25e6$. If we split $P^2$ into the training, validation, and testing sets, it would mean that some of the projections that appear in the training dataset projection pairs can appear in pairs of the other dataset. To ensure that the results can generalize to unseen data as well as to understand how the model would perform in a real-world scenario, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets. With these three projections sets we can create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}). In addition to this, we will not use all projection pairs of each dataset, only $1\%$ of the possible pairs (last column in the \tabref{dataset}) due to limitation of available resources for the training.
+For the training, dataset is split into a distinct training, validation, and testing set (see \tabref{dataset}).
+The total number of generated projections is $P = 5,000$.
+Therefore, the number of possible projection pairs is $P^2 = 25e6$.
+Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
+To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
+With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
+In addition to this, we use only $1\%$ of the possible pairs (last column in the \tabref{dataset}) due to limitation of available resources for the training.
 %\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
 
 
 \paragraph{Orientation recovery.}
-The orientation recovery is solving \eqnref{orientation-recovery} and it was done in a stochastic setting, where the loss function varies over the batches.
+Orientations are recovered through \eqnref{orientation-recovery} and it was done in a stochastic setting, where the loss function varies over the batches.
 Hence, the dataset used in this part is test set from \tabref{dataset}.
 Orientation recovery is performed on projections unseen during distance learning.
 
@@ -102,7 +110,7 @@ Orientation recovery is performed on projections unseen during distance learning
 %\todo{Introduce the mean recovery error as a good and intuitive performance metric.}
 %\todo{Figure that shows a typical convergence and mean orientation recovery error before and after alignment. We'll subsequently only report $E$ (the error after alignment).}
 
-Before discussing the results, we remark that one cannot really quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgement of the protein reconstruction.
+Before discussing the results, we remark that one cannot directly quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgment of the protein reconstruction.
 Unfortunately, it is also not appropriate to directly compute the error between the recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$ and the true ones ${\big\{q_p\big\}}_{p=1}^P$.
 The reason is that the recovery of orientation through~\eqnref{orientation-recovery} is up to a global rotation, \textit{i.e.}, any global rotation of the set of recovered orientations is as valid as any other, which is mathematically written as $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$.
 This is not a problem for the ultimate application of our scheme, but it complicates the quantitative evaluation of its performance in synthetic experiments.

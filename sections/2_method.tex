@@ -24,8 +24,7 @@ First, the greater the similarity between two 2D projections, the more likely th
 Second, relative distances constrain the between orientations constrain them.
 
 % Method overview (third figure).
-Observing that, observing that
-See figure .
+Our approach then consists of two steps.
 
 We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
@@ -67,8 +66,8 @@ A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product 
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
-While Euler angles are a concise representation ($3$ numbers for $3$ degrees of freedom) of orientation, they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock} (the loss of one degree of freedom when $\theta_2=0$). %~\cite{koks2006explorations}
-That makes their optimization by gradient descent problematic.
+While Euler angles are a concise representation ($3$ numbers for $3$ degrees of freedom) of orientation, they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
+This makes their optimization by gradient descent problematic.
 The optimization of rotation matrices, which are made of $9$ numbers, would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
 We solve both problems by representing orientations with unit quaternions.
@@ -104,6 +103,7 @@ The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle) of the rotatio
 Global orientation is lost by projecting, and chirality is lost by integrating.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 That's why we train on half coverage.}
+\mdeff{Move where we talk about half coverage. Experimental setup?}
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
 
@@ -147,10 +147,10 @@ That's why we train on half coverage.}
 
 %We capitalize on the powerful function approximation capabilities of neural networks and on our ability to faithfully model the cryo-EM imaging process for the generation of training data.
 
-Our goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
+Our first goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 
-We require a function to estimate the distance between the orientation of two 3D particles from the projections.
-Designing such a function is however intricate if not impossible, partly because the invariants are difficult to specify.
+We require such a function to estimate the distance between the orientation of two 3D particles from the projections.
+Its direct design is intricate---if not impossible---partly because the invariants are difficult to specify.
 As data is plenty
 We instead capitalize on the powerful function approximation capabilities of neural networks and the availability of training data
 supported by
@@ -186,7 +186,7 @@ where $\G_w$ is a convolutional neural network with weights $w$ that is trained 
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.
 
-Evaluating the sum over $\frac{P^2-P}{2}$ pairs in \eqnref{distance-learning} is computationally intractable for cryo-EM datasets with typically $P \approx 10^5$ projections.
+Evaluating the sum over $\frac{P^2-P}{2}$ pairs in \eqnref{distance-learning} is computationally intractable for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
 In practice, we minimize \eqnref{distance-learning} by stochastic gradient descent (SGD) over small batches of pairs and update weights by back-propagation.
 % error / objective value
 
@@ -211,8 +211,8 @@ Equipped with a trained estimator $\widehat{d}_p$, we then recover the orientati
 Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the orientations $q$ rather than the distance $d_p$.
 Here again, the sum in \eqnref{orientation-recovery} is sampled for computational reasons.
 
-A strategy, commonly employed by methods for sparse embedding like multidimensional scaling (MDS), Isomap, etc.~\cite{platt2004fast, 5438584,DBLP:journals/corr/abs-1811-10470} that amounts to build and embed a sparse distance graph.
-More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that well match the inter-vector distances.
+A strategy, commonly employed by methods for sparse embedding like multidimensional scaling (MDS) or Isomap~\cite{platt2004fast, 5438584,DBLP:journals/corr/abs-1811-10470} amounts to build and embed a sparse distance graph.
+More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that accurately match the inter-vector distances.
 Hence, it is possible to determine the coordinates in a lower dimensional space only by knowing their pair-wise distances (at least in Euclidean space).
 In our work, we are dealing with non-Euclidean space and we show that it is also possible to determine the coordinates in a lower dimensional space (quaternion space) knowing only the learned pair-wise geodesic distances between two projections.
 %\lau{@Mdeff: Can you please fill here? Thanks.}
