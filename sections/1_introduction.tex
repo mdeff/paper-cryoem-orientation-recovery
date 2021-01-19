@@ -68,36 +68,35 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
 
 \begin{figure}
     \centering
-    \begin{subfigure}[t]{0.35\linewidth}
+    \begin{subfigure}[b]{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{geomProj3D}
-        \caption{}\label{fig:imaging-geometry}
-    \end{subfigure}
-    \hspace{5em}
-    \begin{subfigure}[t]{0.35\linewidth}
+        \includegraphics[width=0.7\linewidth]{geomProj3D}
+        \caption{%
+            % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
+            % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
+            % $\p_i = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
+            Geometry of the imaging model defined in \eqnref{imaging-model}.
+            The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the orientation $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$ of the microscope's detector plane.
+            The direction $(\theta_2, \theta_1) \in [0,\pi[ \, \times \, [0,2\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) form the \textit{orientation} $\bth = (\theta_3, \theta_2, \theta_1)$.
+            In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
+            %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
+            %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
+        }\label{fig:imaging-geometry}
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[b]{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{intuition-method}
-        \caption{}\label{fig:intuition-method}
+        \includegraphics[width=0.7\linewidth]{intuition-method}
+        \caption{%
+            Single-particle cryo-EM produces $P \approx 10^5$ projections taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
+            Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where $d_q(q_i, q_j)$ is the distance (angle) between orientations $q_i$ and $q_j$.
+            Observing that the similarity between projections depends on their relative orientation, we aim to \textit{estimate the distance} $d_q(q_i, q_j)$ from the projections $(\p_i, \p_j)$.
+            % \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
+            % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
+            % \todo{The two green arcs seems too much like a single one.}
+        }\label{fig:intuition-method}
     \end{subfigure}
-\caption{%
-    % Goals: explain
-    % * (i) what we mean by a projection and an orientation (the two most important objects of our paper), and
-    % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
-    % $\p_i = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
-    \textbf{Projections and orientations.}
-    (a) Geometry of the imaging model defined in \eqnref{imaging-model}.
-    The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the orientation $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$ of the microscope's detector plane.
-    The direction $(\theta_2, \theta_1) \in [0,\pi[ \, \times \, [0,2\pi]$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) form the \textit{orientation} $\bth = (\theta_3, \theta_2, \theta_1)$.
-    In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
-    %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
-    %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
-    (b) Single-particle cryo-EM produces $P \approx 10^5$ projections taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
-    Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where the geodesic distance $d_q(q_i, q_j)$ is the angle between orientations $q_i$ and $q_j$.
-    Observing that projections taken from close orientations look alike, we aim to \textit{estimate the distance} $d_q(q_i, q_j)$ from the projections $(\p_i, \p_j)$.
-    % \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
-    % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
-    % \todo{The two green arcs seems too much like a single one.}
-}
+    \caption{Projections, orientations, and distances.}
 \end{figure}
 
 % RELATED WORKS
@@ -121,5 +120,6 @@ More recently, the recovery of geometrical information from unknown view tomogra
 
 Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
 \mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.}
+We present a method that learns to estimate the unknown orientation $\bth_i$ associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
 
 %\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}

@@ -9,22 +9,35 @@
     \centering
     \includegraphics[width=\linewidth]{schematic_method_overview}
     \caption{%
-        \textbf{Method overview.}
-        We denote the $i$th projection by $\mathbf{p}_i$ and its orientation by $q_i$. The distance between two orientations is denoted by $d_q$, and the estimated distance between two projections by $\widehat{d}_p$; the latter is implemented as a SiameseNN.
-        Our method consists of two steps: (i) estimate distances between pairs of projections, and (ii) recover orientations from the estimated distances.
-        % Our method effectively (i) estimates a metric space, then (ii) embed/realize it in the space of 3D orientations, $\SO(3)$.
+        \textbf{Method:}
+        %Our method consists of two steps:
+        (i) we estimate distances between pairs of projections, and (ii) we recover the orientation of each projection from these distances.
         % \mdeff{It would be amazing to have a visual of the embedding made in step 2: finding points in SO(3) such that the geodesic distances between them are the estimated distances. As we can't see SO(3) / $S^3$, we could try with $S^2$, which is a subset/projection.}
-        \mdeff{Step 2: $q \in \mathbb{S}^3$, not $\mathbb{H}$.}
+        \mdeff{Step 2: $\{q_k \in \mathbb{S}^3 \}$ instead of $q_i, q_j \in \mathbb{H}$ as in \eqnref{orientation-recovery}.}
+        \mdeff{The first "Intermediate representation" shouldn't have the $\widehat{q}$ yet. I would keep the "?" as in "Inputs" or have $\p_i$ alone.}
     }\label{fig:schematic:method-overview}
 \end{figure}
 
-We present a method that learns to estimate the unknown orientation $\bth_i$ associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
-Our approach relies on the observation that the greater the similarity between two 2D projections, the more likely they originated from two 3D particles that adopted close orientations in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this principle guides a number of applications in the field~\cite{frank2006three}.
+% Motivation (second figure).
+Our approach relies on two observations (\figref{intuition-method}).
+First, the greater the similarity between two 2D projections, the more likely they originated from two 3D particles that adopted close orientations in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this principle guides a number of applications in the field~\cite{frank2006three}.
+Second, relative distances constrain the between orientations constrain them.
+
+% Method overview (third figure).
+Observing that, observing that
+See figure .
 
 We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
 From these estimated distances, we then retrieve the orientation of each projection through an appropriate minimization scheme.
-Our two-steps method is illustrated in \figref{schematic:method-overview}.
+Our method is illustrated in \figref{schematic:method-overview}.
+
+% Our method effectively (i) estimates a metric space, then (ii) embed/realize it in the space of 3D orientations, $\SO(3)$.
+
+% From abstract
+    Our approach consists of two steps: (i) the estimation of the relative distances between pairs of projections, and (ii) the recovery of the absolute orientation of each projection from these distances.
+    In step (i), pairwise distances are estimated by a Siamese neural network trained on synthetic cryo-EM projections from resolved bio-structures.
+    In step (ii), orientations are recovered by minimizing the difference between (a) the distances estimated from the projections and (b) the distances induced by the recovered orientations.
 
 %to embed it on the space of 3D orientations, $\SO(3)$.
 % In practice, our method consists of: (i) estimate the distance between pairs of projections, and (ii) recover
@@ -44,6 +57,7 @@ Our two-steps method is illustrated in \figref{schematic:method-overview}.
 %\subsection{Distance between orientations}
 %\mdeff{Laurène: Which word is better: Representation or parameterization? Or something else, but we need consistency.}
 %\lau{Both are fine. Personally, I use parametrization in my thesis, but we can settle on the other one.}
+% representation of orientations, parameterization of rotation matrices
 
 %The projection $\mathbf{P}_{\bth}$ in \eqnref{imaging-model} represents an integration through the 3D particle made by the beam of electrons.
 The orientation of the 3D particle with respect to the microscope's detector plane is a rotation relative to a reference orientation (\figref{imaging-geometry}).
@@ -61,7 +75,8 @@ We solve both problems by representing orientations with unit quaternions.
 
 %\paragraph{Quaternions.}
 Quaternions $q \in \mathbb{H}$ are an extension of complex numbers\footnote{The algebra $\mathbb{H}$ is similar to the algebra of complex numbers $\mathbb{C}$, with the exception of multiplication being non-commutative.} of the form $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$ where $a,b,c,d \in \R$.
-Unit quaternions $q \in \mathbb{S}^3$, where $\mathbb{S}^3 = \big\{ q \in \mathbb{H}: \lvert q \rvert = 1 \big\}$ is the 3-sphere with the additional group structure inherited from quaternion multiplication, concisely and elegantly parameterize rotations as
+Unit quaternions $q \in \mathbb{S}^3$, where $\mathbb{S}^3 = \big\{ q \in \mathbb{H}: \lvert q \rvert = 1 \big\}$ is the 3-sphere with the additional group structure inherited from quaternion multiplication, concisely and elegantly represent a rotation of angle $\theta$ about axis $(x_1, x_2, x_3)$ as $q = \cos(\theta/2) + x_1 \sin(\theta/2) \boldsymbol{i} + x_2 \sin(\theta/2) \boldsymbol{j} + x_3 \sin(\theta/2) \boldsymbol{k}$.
+They parameterize rotation matrices as
 \begin{equation*}
     \mathbf{R}_q =
     \begin{pmatrix}
@@ -132,12 +147,16 @@ That's why we train on half coverage.}
 
 %We capitalize on the powerful function approximation capabilities of neural networks and on our ability to faithfully model the cryo-EM imaging process for the generation of training data.
 
-%To make such training possible, we capitalize on our ability to model the cryo-EM imaging procedure to generate a large, representative synthetic dataset using publicly available 3D atomic models.
-%Once the distance learned, it can be used in the aforementioned two-steps method (see \figref{schematic:method-overview}) for any projection dataset.
+Our goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 
-The resort to a neural network to estimate the relative distances is driven by several reasons. First, and most obviously, this information is not directly accessible from the dataset itself. To circumvent this, we rely on the postulate that the similarity between two projections is a good proxy for their relative orientation, for some appropriate meaning of similarity. The ``handcrafting'' of a metric that would robustly predict these distances is an intricate---if not impossible---task, partly because the invariants are difficult to specify. Hence, we rather opt to \textit{learning} this distance function by parameterizing it as a neural network. For its training, we capitalize on (i) the public availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and (ii) our ability to model the cryo-EM imaging procedure in order to generate realistic cryo-EM projection datasets.
-
-The goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity. \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
+We require a function to estimate the distance between the orientation of two 3D particles from the projections.
+Designing such a function is however intricate if not impossible, partly because the invariants are difficult to specify.
+As data is plenty
+We instead capitalize on the powerful function approximation capabilities of neural networks and the availability of training data
+supported by
+Hence, we rather opt to \textit{learning} this distance function by parameterizing it as a neural network.
+\figref{schematic:distance-learning} illustrates the proposed learning paradigm.
+For its training, we capitalize on (i) the public availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and (ii) our ability to model the cryo-EM imaging procedure in order to generate realistic cryo-EM projection datasets.
 
 \begin{figure}
     \centering
@@ -167,9 +186,8 @@ where $\G_w$ is a convolutional neural network with weights $w$ that is trained 
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.
 
-Evaluating the sum in \eqnref{distance-learning} has complexity of $\mathcal{O}(P^2)$ since we have $\frac{P^2-P}{2}$ distance evaluations.
-As this is computationally intractable for cryo-EM datasets with typically $P \approx 10^5$ projections, we sample only a subset of pairs.
-In practice, \eqnref{distance-learning} is minimized by stochastic gradient descent (SGD) over small batches of pairs, with weight updates computed by back-propagating the error.
+Evaluating the sum over $\frac{P^2-P}{2}$ pairs in \eqnref{distance-learning} is computationally intractable for cryo-EM datasets with typically $P \approx 10^5$ projections.
+In practice, we minimize \eqnref{distance-learning} by stochastic gradient descent (SGD) over small batches of pairs and update weights by back-propagation.
 % error / objective value
 
 \subsection{Orientation recovery}\label{sec:method:orientation-recovery}
