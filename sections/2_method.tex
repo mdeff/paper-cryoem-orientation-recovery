@@ -53,14 +53,14 @@ A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product 
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
 While Euler angles are a concise representation ($3$ numbers for $3$ degrees of freedom) of orientation, they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
-This makes their optimization by gradient descent problematic.
+This makes their optimization by gradient descent (\secref{method:orientation-recovery}) problematic.
 The optimization of rotation matrices, which are made of $9$ numbers, would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
 We solve both problems by representing orientations with unit quaternions.
 
 %\paragraph{Quaternions.}
 Quaternions $q \in \mathbb{H}$ are an extension of complex numbers\footnote{The algebra $\mathbb{H}$ is similar to the algebra of complex numbers $\mathbb{C}$, with the exception of multiplication being non-commutative.} of the form $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$ where $a,b,c,d \in \R$.
-Unit quaternions $q \in \mathbb{S}^3$, where $\mathbb{S}^3 = \big\{ q \in \mathbb{H}: \lvert q \rvert = 1 \big\}$ is the 3-sphere with the additional group structure inherited from quaternion multiplication, concisely and elegantly represent a rotation of angle $\theta$ about axis $(x_1, x_2, x_3)$ as $q = \cos(\theta/2) + x_1 \sin(\theta/2) \boldsymbol{i} + x_2 \sin(\theta/2) \boldsymbol{j} + x_3 \sin(\theta/2) \boldsymbol{k}$.
+Unit quaternions $q \in \mathbb{S}^3$, where $\mathbb{S}^3 = \big\{ q \in \mathbb{H}: \lvert q \rvert = 1 \big\}$ is the 3-sphere (with the additional group structure inherited from quaternion multiplication), concisely and elegantly represent a rotation of angle $\theta$ about axis $(x_1, x_2, x_3)$ as $q = \cos(\theta/2) + x_1 \sin(\theta/2) \boldsymbol{i} + x_2 \sin(\theta/2) \boldsymbol{j} + x_3 \sin(\theta/2) \boldsymbol{k}$.
 They parameterize rotation matrices as
 \begin{equation*}
     \mathbf{R}_q =
@@ -82,7 +82,7 @@ Hence, the distance between two orientations, i.e., the length of the geodesic b
     \label{eqn:distance:orientations}
     \end{aligned}
 \end{equation}
-where $\langle \cdot, \cdot \rangle$ is the inner product between two quaternions and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
+where $\langle \cdot, \cdot \rangle$ is the inner product and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
 The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle) of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
 
 \todo{As opposed projections are mirrored, we cannot resolve chirality.\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.}
@@ -131,18 +131,11 @@ That's why we train on half coverage.}
 %\subsection{Relative orientation estimation}
 %\subsection{Relative orientation estimation from projections}
 
-%We capitalize on the powerful function approximation capabilities of neural networks and on our ability to faithfully model the cryo-EM imaging process for the generation of training data.
+%We aim to learn a function $\widehat{d_p}$---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 
-Our first goal is to train a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
-
-We require such a function to estimate the distance between the orientation of two 3D particles from the projections.
-Its direct design is intricate---if not impossible---partly because the invariants are difficult to specify.
-As data is plenty
-We instead capitalize on the powerful function approximation capabilities of neural networks and the availability of training data
-supported by
-Hence, we rather opt to \textit{learning} this distance function by parameterizing it as a neural network.
-\figref{schematic:distance-learning} illustrates the proposed learning paradigm.
-For its training, we capitalize on (i) the public availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and (ii) our ability to model the cryo-EM imaging procedure in order to generate realistic cryo-EM projection datasets.
+We aim to estimate a function $\widehat{d_p}$ such that $\widehat{d_p}(\p_i, \p_j) \approx d_q(q_i, q_j)$.
+While we could in principle design $\widehat{d_p}$, that would be intricate---if not impossible---partly because the invariants are difficult to specify.
+We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful function approximation capabilities of neural networks, and (ii) the possibility to generate realistic cryo-EM projection datasets supported by the availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and our ability to model the imaging procedure.
 
 \begin{figure}
     \centering
@@ -151,7 +144,6 @@ For its training, we capitalize on (i) the public availability of numerous 3D at
         \textbf{Distance learning.}
         We are looking for a distance $d_p$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
         We propose to parameterize $d_p$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of $P \approx 10^3$ projections with associated orientation.
-        %\todo{Figure: feature distance (not similarity) $d_f$ is \eqnref{distance:projections}. Loss function is \eqnref{distance-learning}. "Same Structure/Weights" $\rightarrow$ "Same NN $\G$ and shared weights $w$".}
         %\mdeff{Why the output "loss" arrow? To me, this system is closed.}
         %\mdeff{"Loss Function" could be called Optimization or Learning or Training.}
 }\label{fig:schematic:distance-learning}
@@ -171,6 +163,7 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$. SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.
+\figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
 Evaluating the sum over $\frac{P^2-P}{2}$ pairs in \eqnref{distance-learning} is computationally intractable for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
 In practice, we minimize \eqnref{distance-learning} by stochastic gradient descent (SGD) over small batches of pairs and update weights by back-propagation.
