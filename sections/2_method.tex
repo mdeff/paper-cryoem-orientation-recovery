@@ -149,7 +149,7 @@ We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful functi
 }\label{fig:schematic:distance-learning}
 \end{figure}
 
-From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \mathbb{S}^3$, we learn the \textit{projection distance}
+From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \mathbb{S}^3$, we learn the projection distance
 \begin{equation}
     \widehat{d_p} = \argmin_{d_p} \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2,
     \label{eqn:distance-learning}
@@ -172,28 +172,26 @@ In practice, we minimize \eqnref{distance-learning} by stochastic gradient desce
 \subsection{Orientation recovery}\label{sec:method:orientation-recovery}
 %\subsection{Orientation recovery from relative orientations}
 
-%\paragraph{Orientation Recovery.}
-The task of recovering points based on their relative distances has been extensively studied in the literature, primarily within the frameworks of dimensionality reduction and data visualization~\cite{belkin2003laplacian,kruskal1978multidimensional, maaten2008visualizing, mcinnes2018umap,dokmanic2015euclidean}.
-These methods aim at mapping high-dimensional data onto a lower-dimensional space in such a way that the structure of the metric space is preserved.
-Formally, the recovery is achieved by minimizing an appropriate loss function; well-known examples include Laplacian eigenmaps~\cite{10.1162/089976603321780317}, multi-dimensional scaling (MDS)~\cite{TaoShen2009}, Isomap~\cite{10.5555/3041838.3041947}, locally linear embedding (LLE)~\cite{Saul00anintroduction}, t-distributed stochastic neighbor embedding (t-SNE)~\cite{7b54165e73a3424b8820136bcf61ca89}, and uniform manifold approximation and projection (UMAP)~\cite{umap}.
-In the Euclidean setting, the embedding of distance matrices (given by their eigenvectors) is especially well-described.
-In particular, the framework of the Euclidean distance matrices (EDMs)~\cite{dokmanic2015euclidean} provides theoretical guarantees on the retrieval of points from collected distances.
+The task of recovering points based on their relative distances has been extensively studied.
+%For dimensionality reduction and data visualization, the distances are often computed from high-dimensional data.
+Many methods aim at mapping high-dimensional data onto a lower-dimensional space while preserving distances, primarily for dimensionality reduction and data visualization.
+%A set of distances is often built as an intermediate step.
+%More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that accurately match the inter-vector distances.
+Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, Isomap~\cite{tenenbaum2000isomap}, locally linear embedding (LLE)~\cite{roweis2000lle}, Laplacian eigenmaps~\cite{belkin2003laplacian}, t-distributed stochastic neighbor embedding (t-SNE)~\cite{maaten2008tsne}, and uniform manifold approximation and projection (UMAP)~\cite{mcinnes2018umap}.
+The embedding of distance matrices in Euclidean space (given by their eigenvectors) is especially well-described.
+In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmanic2015edm} provides theoretical guarantees on the recovery of points from distances.
 
-In our case, as we shall shortly explain, we aim to perform the embedding on $\SO(3)$, the non-Euclidean space of 3D rotations. Hence, the loss function to minimize (\secref{method:orientation-recovery}) is non-convex. Furthermore, we are not aware of any theoretical characterization of its behavior when input distances are lacking or corrupted by perturbations. That being said, the locally-Euclidean behavior of the $\SO(3)$ space offers some hope on the feasibility of this minimization.
-Indeed, despite the lack of theoretical guarantees, we are able to appropriately minimize our loss function using a gradient-based algorithm, as we experimentally demonstrate in Appendix~\ref{apx:results:orientation-recovery:exact}.
+We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting in which we are unaware of any theoretical characterizations (e.g., on the shape of the loss function or its behavior when distances are missing or noisy).
+The fact that $\mathbb{S}^3$ is locally Euclidean however offers some hope. % on the feasibility of this minimization.
+Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in Appendix~\ref{apx:results:orientation-recovery:exact}.
 
-Equipped with a trained estimator $\widehat{d_p}$, we then recover the orientations from a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
+We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
 \begin{equation}
-    \big\{ \widehat{q_k} \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} \sum_{i,j} \left| \widehat{d_p} \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
+    \big\{ \widehat{q_k} \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} \sum_{i,j} \left| \widehat{d_p} \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2,
     \label{eqn:orientation-recovery}
 \end{equation}
+where $\widehat{d_p}$ is the estimator trained in \eqnref{distance-learning}.
 Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the orientations $q$ rather than the distance $d_p$.
-Here again, the sum in \eqnref{orientation-recovery} is sampled for computational reasons.
-
-A strategy, commonly employed by methods for sparse embedding like multidimensional scaling (MDS) or Isomap~\cite{platt2004fast, 5438584,DBLP:journals/corr/abs-1811-10470} amounts to build and embed a sparse distance graph.
-More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that accurately match the inter-vector distances.
-Hence, it is possible to determine the coordinates in a lower dimensional space only by knowing their pair-wise distances (at least in Euclidean space).
-In our work, we are dealing with non-Euclidean space and we show that it is also possible to determine the coordinates in a lower dimensional space (quaternion space) knowing only the learned pair-wise geodesic distances between two projections.
-%\lau{@Mdeff: Can you please fill here? Thanks.}
-In practice, \eqnref{orientation-recovery} is also minimized by mini-batch SGD.
-%We experimentally demonstrate in \secref{results:orientation-recovery:exact} that both approximations don't affect recovery performance.
+Here too, the sum is sampled in practice as \eqnref{orientation-recovery} is minimized by mini-batch SGD.
+Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
+%We experimentally demonstrate in \secref{results:orientation-recovery:exact} that neither approximation affects recovery performance.

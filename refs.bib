@@ -151,10 +151,44 @@ author = "T.S. Baker and R.H. Cheng"
   publisher={Nature Publishing Group}
 }
 
+% ====================================
+% Orientation recovery / dimensionality reduction
+% ====================================
 
-% ====================================
-% OUTLINE
-% ====================================
+@incollection{cox2008mds,
+  title={Multidimensional scaling},
+  author={Cox, Michael AA and Cox, Trevor F},
+  booktitle={Handbook of data visualization},
+  pages={315--347},
+  year={2008},
+  publisher={Springer}
+}
+
+@article {tenenbaum2000isomap,
+	author = {Tenenbaum, Joshua B. and Silva, Vin de and Langford, John C.},
+	title = {A Global Geometric Framework for Nonlinear Dimensionality Reduction},
+	volume = {290},
+	number = {5500},
+	pages = {2319--2323},
+	year = {2000},
+	doi = {10.1126/science.290.5500.2319},
+	publisher = {American Association for the Advancement of Science},
+	issn = {0036-8075},
+	URL = {https://science.sciencemag.org/content/290/5500/2319},
+	eprint = {https://science.sciencemag.org/content/290/5500/2319.full.pdf},
+	journal = {Science}
+}
+
+@article{roweis2000lle,
+  title={Nonlinear dimensionality reduction by locally linear embedding},
+  author={Roweis, Sam T and Saul, Lawrence K},
+  journal={science},
+  volume={290},
+  number={5500},
+  pages={2323--2326},
+  year={2000},
+  publisher={American Association for the Advancement of Science}
+}
 
 @article{belkin2003laplacian,
   title={Laplacian eigenmaps for dimensionality reduction and data representation},
@@ -167,21 +201,12 @@ author = "T.S. Baker and R.H. Cheng"
   publisher={MIT Press}
 }
 
-@book{kruskal1978multidimensional,
-  title={Multidimensional scaling},
-  author={Kruskal, Joseph B},
-  number={11},
-  year={1978},
-  publisher={Sage}
-}
-
-@article{maaten2008visualizing,
+@article{maaten2008tsne,
   title={Visualizing data using t-SNE},
-  author={Maaten, Laurens van der and Hinton, Geoffrey},
+  author={Van der Maaten, Laurens and Hinton, Geoffrey},
   journal={Journal of machine learning research},
   volume={9},
-  number={Nov},
-  pages={2579--2605},
+  number={11},
   year={2008}
 }
 
@@ -192,7 +217,7 @@ author = "T.S. Baker and R.H. Cheng"
   year={2018}
 }
 
-@article{dokmanic2015euclidean,
+@article{dokmanic2015edm,
   title={Euclidean distance matrices: essential theory, algorithms, and applications},
   author={Dokmanic, Ivan and Parhizkar, Reza and Ranieri, Juri and Vetterli, Martin},
   journal={IEEE Signal Processing Magazine},
@@ -574,86 +599,6 @@ year = {2001}
     url="https://doi.org/10.1007/978-1-4614-9521-5_2"
 }
 
-@article{10.1162/089976603321780317,
-author = {Belkin, Mikhail and Niyogi, Partha},
-title = {Laplacian Eigenmaps for Dimensionality Reduction and Data Representation},
-year = {2003},
-issue_date = {June 2003},
-publisher = {MIT Press},
-address = {Cambridge, MA, USA},
-volume = {15},
-number = {6},
-issn = {0899-7667},
-url = {https://doi.org/10.1162/089976603321780317},
-doi = {10.1162/089976603321780317},
-abstract = {One of the central problems in machine learning and pattern recognition is to develop appropriate representations for complex data. We consider the problem of constructing a representation for data lying on a low-dimensional manifold embedded in a high-dimensional space. Drawing on the correspondence between the graph Laplacian, the Laplace Beltrami operator on the manifold, and the connections to the heat equation, we propose a geometrically motivated algorithm for representing the high-dimensional data. The algorithm provides a computationally efficient approach to nonlinear dimensionality reduction that has locality-preserving properties and a natural connection to clustering. Some potential applications and illustrative examples are discussed.},
-journal = {Neural Comput.},
-month = jun,
-pages = {1373–1396},
-numpages = {24}
-}
-
-@Inbook{TaoShen2009,
-author="Tao Shen, Heng",
-editor="LIU, LING
-and {\"O}ZSU, M. TAMER",
-title="Multidimensional Scaling",
-bookTitle="Encyclopedia of Database Systems",
-year="2009",
-publisher="Springer US",
-address="Boston, MA",
-pages="1784--1784",
-isbn="978-0-387-39940-9",
-doi="10.1007/978-0-387-39940-9_548",
-url="https://doi.org/10.1007/978-0-387-39940-9_548"
-}
-
-@inproceedings{10.5555/3041838.3041947,
-author = {Zha, Hongyuan and Zhang, Zhenyue},
-title = {Isometric Embedding and Continuum ISOMAP},
-year = {2003},
-isbn = {1577351894},
-publisher = {AAAI Press},
-abstract = {Recently, the Isomap algorithm has been proposed for learning a nonlinear manifold from a set of unorganized high-dimensional data points. It is based on extending the classical multidimensional scaling method for dimension reduction. In this paper, we present a continuous version of Isomap which we call continuum isomap and show that manifold learning in the continuous framework is reduced to an eigenvalue problem of an integral operator. We also show that the continuum isomap can perfectly recover the underlying natural parametrization if the nonlinear manifold can be isometrically embedded onto an Euclidean space. Several numerical examples are given to illustrate the algorithm.},
-booktitle = {Proceedings of the Twentieth International Conference on International Conference on Machine Learning},
-pages = {864–871},
-numpages = {8},
-location = {Washington, DC, USA},
-series = {ICML'03}
-}
-
-@TECHREPORT{Saul00anintroduction,
-    author = {Lawrence K. Saul and Sam T. Roweis},
-    title = {An Introduction to Locally Linear Embedding},
-    institution = {},
-    year = {2000}
-}
-
-@article{7b54165e73a3424b8820136bcf61ca89,
-title = "Visualizing High-Dimensional Data Using t-SNE",
-author = "{van der Maaten}, L.J.P. and G.E. Hinton",
-note = "Pagination: 27",
-year = "2008",
-language = "English",
-volume = "9",
-pages = "2579--2605",
-journal = "Journal of Machine Learning Research",
-issn = "1532-4435",
-publisher = "Microtome Publishing",
-number = "nov",
-}
-
-@article{umap,
-author = {McInnes, Leland and Healy, John and Saul, Nathaniel and Grossberger, Lukas},
-year = {2018},
-month = {09},
-pages = {861},
-title = {UMAP: Uniform Manifold Approximation and Projection},
-volume = {3},
-journal = {Journal of Open Source Software},
-doi = {10.21105/joss.00861}
-}
-
 @inproceedings{inproceedings_Hinterstoisser,
 author = {Hinterstoisser, Stefan and Lepetit, Vincent and Ilic, Slobodan and Holzer, Stefan and Bradski, Gary and Konolige, Kurt and Navab, Nassir},
 year = {2012},
@@ -900,74 +845,6 @@ journal = "FEBS Journal",
 issn = "1742-464X",
 publisher = "Wiley-Blackwell",
 number = "1",
-}
-
-@Inbook{Sorzano2014,
-author="Sorzano, C. O. S.
-and Marabini, R.
-and Vargas, J.
-and Ot{\'o}n, J.
-and Cuenca-Alba, J.
-and Quintana, A.
-and de la Rosa-Trev{\'i}n, J. M.
-and Carazo, J. M.",
-editor="Herman, Gabor T.
-and Frank, Joachim",
-title="Interchanging Geometry Conventions in 3DEM: Mathematical Context for the Development of Standards",
-bookTitle="Computational Methods for Three-Dimensional Microscopy Reconstruction",
-year="2014",
-publisher="Springer New York",
-address="New York, NY",
-pages="7--42",
-abstract="The specification of the information on the three-dimensional orientation of an image with respect to a given coordinate system is at the heart of our ability to reconstruct a three-dimensional object from sets of its two-dimensional projection images. Transferring this information from one package to another is important to structural biologists wanting to get the best from each software suite. In this chapter, we review in depth the main considerations and implications associated with the unambiguous specification of geometrical specifications, in this way paving the way to the future specifications of standards in the field of three-dimensional electron microscopy. This is the case of EMX in which affine transformations have been adopted as the means to communicate geometrical information.",
-isbn="978-1-4614-9521-5",
-doi="10.1007/978-1-4614-9521-5_2",
-url="https://doi.org/10.1007/978-1-4614-9521-5_2"
-}
-
-@InProceedings{platt2004fast,
-author = {Platt, John},
-title = {Fast Embedding of Sparse Music Similarity Graphs},
-booktitle = {NIPS 2003},
-year = {2004},
-month = {January},
-abstract = {This paper applies fast sparse multidimensional scaling (MDS) to a large graph of music similarity, with 267K vertices that represent artists, albums, and tracks; and 3.22M edges that represent similarity between those entities. Once vertices are assigned locations in a Euclidean space, the locations can be used to browse music and to generate playlists. MDS on very large sparse graphs can be effectively performed by a family of algorithms called Rectangular Dijsktra (RD) MDS algorithms. These RD algorithms operate on a dense rectangular slice of the distance matrix, created by calling Dijsktra a constant number of times. Two RD algorithms are compared: Landmark MDS, which uses the Nyström approximation to perform MDS; and a new algorithm called Fast Sparse Embedding, which uses FastMap. These algorithms compare favorably to Laplacian Eigenmaps, both in terms of speed and embedding quality.},
-url = {https://www.microsoft.com/en-us/research/publication/fast-embedding-of-sparse-music-similarity-graphs/},
-}
-
-
-@INPROCEEDINGS {5438584,
-author = {C. Sommer and E. Verbin and W. Yu},
-booktitle = {IEEE 50th Annual Symposium on Foundations of Computer Science (FOCS 2009)},
-title = {Distance Oracles for Sparse Graphs},
-year = {2009},
-volume = {},
-issn = {0272-5428},
-pages = {},
-keywords = {data structures;computer science;graph theory;tree graphs},
-doi = {10.1109/FOCS.2009.27},
-url = {https://doi.ieeecomputersociety.org/10.1109/FOCS.2009.27},
-publisher = {IEEE Computer Society},
-address = {Los Alamitos, CA, USA},
-month = {oct}
-}
-
-@article{DBLP:journals/corr/abs-1811-10470,
-  author    = {Hannu Reittu and
-               Lasse Leskel{\"{a}} and
-               Tomi R{\"{a}}ty and
-               Marco Fiorucci},
-  title     = {Analysis of large sparse graphs using regular decomposition of graph
-               distance matrices},
-  journal   = {CoRR},
-  volume    = {abs/1811.10470},
-  year      = {2018},
-  url       = {http://arxiv.org/abs/1811.10470},
-  archivePrefix = {arXiv},
-  eprint    = {1811.10470},
-  timestamp = {Sun, 27 Jan 2019 14:08:19 +0100},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1811-10470.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 % ====================================
