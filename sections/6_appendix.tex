@@ -59,7 +59,7 @@ We can see that the orientation alignment was performed successfully.
     \caption{%
         Example of perfect alignment after a perfect orientation recovery under the true distance $d_p(\p_i, \p_j) = d_q(q_i, q_j)$ (\texttt{5j0n}).
         The first row shows the orientation coverage of $\mathbb{S}^2 \subset \SO(3)$ after the recovery.
-        Green points are the ground truth orientations ${\{q_p\}}_{p=1}^P$ and red points are the recovered orientations ${\{\widehat{q_p}\}}_{p=1}^P$. The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, both colors can still be seen. 
+        Green points are the ground truth orientations ${\{q_p\}}_{p=1}^P$ and red points are the recovered orientations ${\{\widehat{q_p}\}}_{p=1}^P$. The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, both colors can still be seen.
         % orientations projected on S²
         The second row are the histograms of ${\{ d_q (q_p, \T \widehat{q_p}) \}}_{p=1}^P$, with $\T = \mathbf{I}$ on the left (i.e., without alignment) and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
         Alignment is necessary to evaluate the performance of orientation recovery.
@@ -131,7 +131,7 @@ The experimental conditions are the same as in the previous section with the Euc
 %\todo{Why? Add and rephrase hypotheses. Cosine distance has the same geometry as $d_q$. Euclidean has not (no periodicity nor curvature). MLP doesn't guarantee it's a distance function (not symmetric, zero between itself, triangle inequality) and might need much more data.}
 The reason for a geodesic distance to perform the best is that it has the same geometry as quaternion distance $d_q$ in $\SO(3)$ space. Whereas, the Euclidean distance is not desirable on $\SO(3)$ since it does not respect the manifold's non-linearity (it has no periodicity nor curvature) and can lead to unpredictable behaviours. The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
 Moreover, MLP does not guarantee that it is a distance function. For MLP to be a distance function, it should have the following properties: (1) support symmetry; (2) output zero with two identical inputs; (3) support triangle inequality. In addition, we might need much more data for the MLP training.
-Hence, it is desirable to have a distance function that respects the structure of $\SO(3)$ space. 
+Hence, it is desirable to have a distance function that respects the structure of $\SO(3)$ space.
 
 \begin{figure}
     \centering

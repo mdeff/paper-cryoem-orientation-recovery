@@ -20,7 +20,7 @@ We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-ga
         \includegraphics[height=5.5cm]{figures/5j0n_pdb.png}
         \caption{}
     \end{subfigure}
-    
+
     \caption{%
         The two proteins we are working with.
         \textbf{(a)} $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}.
@@ -153,7 +153,7 @@ We run FTRL with a learning rate of $2.0$, a learning rate power of $-2.0$, and 
 %\todo{Takes too much space for its relevance.}
 %\todo{Make sure $\mathbf{R}$ is introduced like this before.}
 
-\figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$. 
+\figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$.
 There many different ways of evaluating the pipeline performance found in the field of pose estimation. Some of the evaluations include the following:
 \begin{itemize}
 \item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (e.g. in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
@@ -171,7 +171,7 @@ Since mean orientation error is used in the pose estimation tasks and it is cons
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Results}\label{sec:results:orientation-recovery}
 
-To evaluate our method, we start with the orientation recovery experiments that include tests of feasibility and sensitivity to distance estimation error. Then we learn the distance using a SiameseNN and compare its performance with the baseline. After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections. Finally, we run the whole machine learning pipeline to recover the orientations from estimated distances. 
+To evaluate our method, we start with the orientation recovery experiments that include tests of feasibility and sensitivity to distance estimation error. Then we learn the distance using a SiameseNN and compare its performance with the baseline. After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections. Finally, we run the whole machine learning pipeline to recover the orientations from estimated distances.
 
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 % \begin{algorithm}[H]
@@ -236,7 +236,7 @@ Hence, it suggests that the loss can be used as a good indicator of its performa
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
-We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d}_p$ that correctly approximates the orientation distance $d_q$. To asses the progress and effectiveness of our distance estimation implementation, we used an Euclidean distance as a baseline, see Appendix~\ref{apx:results:distance-estimation}. 
+We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d_p}$ that correctly approximates the orientation distance $d_q$. To asses the progress and effectiveness of our distance estimation implementation, we used an Euclidean distance as a baseline, see Appendix~\ref{apx:results:distance-estimation}.
 
 %SiameseNNs come with a variety of more or less powerful architectures.
 %At the current stage of development, we work with a simple one.
@@ -299,7 +299,7 @@ The latter would then only contain projection pairs with a linear $(d_q,d_p)$ re
 For the rest of the experiments, we use the asymmetric protein (\texttt{5j0n}) dataset.
 Besides using the asymmetric protein, we will perform the full protein reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
 
-We then feed to the trained SiameseNN $1,000$ pairs of projections randomly selected from the \texttt{5j0n} testing dataset, and report the $(d_q,\widehat{d}_p)$ relationship of each pair in \figref{learned-distance-siamese}.
+We then feed to the trained SiameseNN $1,000$ pairs of projections randomly selected from the \texttt{5j0n} testing dataset, and report the $(d_q,\widehat{d_p})$ relationship of each pair in \figref{learned-distance-siamese}.
 These results confirm that, the SiameseNN is able to predict the orientation distance $d_q$ using only the projections as inputs. The prediction performance is slightly better for the asymmetric protein compared to symmetric protein.
 Moreover, it clearly outperforms the Euclidean distance at doing so.
 These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use. The architecture of implemented SiameseNN can be seen in Appendix~\ref{sec:siamese-architecture}. Besides concentrating on the hyperparameter selection and tuning of the neural network layers, we also evaluated the performance of the model depending on the feature distance we used for the SiameseNN, see\figref{geo-eucl-mlp} and Appendix~\ref{apx:de-influence-arch}.
@@ -404,7 +404,7 @@ With the noiseless projections, the objective function successfully converges to
 
 The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection can be seen in \figref{angle-alignment-5j0n-noise0}.
 The smallest error achieved is $0.1594$ rad.
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) can be seen in \figref{angle-alignment-5j0n-noise16}. 
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) can be seen in \figref{angle-alignment-5j0n-noise16}.
 The smallest error achieved is $0.4184$ rad.
 
 As a last step of the pipeline, we perform protein reconstruction using the projections and their corresponding estimated orientations.
@@ -496,5 +496,5 @@ However, the method developed is promising since the learned distance is robust 
 We observe that the orientation recovery and distance estimation are interconnected, \textit{i.e.} if one works the other one will work.
 
 To check the generalization to unseen proteins, and not only to  unseen projections, we train the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
-The orientation recovery reaches the error of 0.0352. 
+The orientation recovery reaches the error of 0.0352.
 This proves that distance learning is able to abstract the protein and that way generalize the distance metric to the unseen proteins.

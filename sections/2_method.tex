@@ -9,45 +9,31 @@
     \centering
     \includegraphics[width=\linewidth]{schematic_method_overview}
     \caption{%
-        \textbf{Method:}
-        %Our method consists of two steps:
-        (i) we estimate distances between pairs of projections, and (ii) we recover the orientation of each projection from these distances.
-        % \mdeff{It would be amazing to have a visual of the embedding made in step 2: finding points in SO(3) such that the geodesic distances between them are the estimated distances. As we can't see SO(3) / $S^3$, we could try with $S^2$, which is a subset/projection.}
-        %\mdeff{Step 2: $\{q_k \in \mathbb{S}^3 \}$ instead of $q_i, q_j \in \mathbb{H}$ as in \eqnref{orientation-recovery}.}
-        %\mdeff{The first "Intermediate representation" shouldn't have the $\widehat{q}$ yet. I would keep the "?" as in "Inputs" or have $\p_i$ alone.}
+        %\textbf{Method:}
+        Our method consists of two steps.
+        First, we estimate distances between pairs of projections.
+        Second, we recover the orientation of each projection from these distances.
     }\label{fig:schematic:method-overview}
 \end{figure}
 
-% Motivation (second figure).
-Our approach relies on two observations (\figref{intuition-method}).
-First, the greater the similarity between two 2D projections, the more likely they originated from two 3D particles that adopted close orientations in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this principle guides a number of applications in the field~\cite{frank2006three}.
-Second, relative distances constrain the between orientations constrain them.
+Our approach relies on two observations (\figref{intuition-method}), yielding two steps (\figref{schematic:method-overview}).
+First, the greater the similarity between two 2D projections $(\p_i, \p_j)$, the more likely they originated from two 3D particles that adopted close orientations $(q_i, q_j)$ in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this observation guides a number of applications in the field~\cite{frank2006three}.
+% TODO: differences in orientation / distances
+Hence, we aim to estimate differences in orientation $d_q(q_i, q_j)$ from the projections themselves as $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:distance-learning}).
+% where $\widehat{d_p}$ is learned from training data
+Second, orientations are constrained by their relative differences.
+Hence, from a set of projections $\{\p_k\}_{k=1}^P$, we aim to recover their orientations $\{\widehat{q_k}\}_{k=1}^P$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
+All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}_{k=1}^P$ are perfectly estimated.
 
-% Method overview (third figure).
-Our approach then consists of two steps.
-
-We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
-This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
-From these estimated distances, we then retrieve the orientation of each projection through an appropriate minimization scheme.
-Our method is illustrated in \figref{schematic:method-overview}.
+%We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
+%This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
 
 % Our method effectively (i) estimates a metric space, then (ii) embed/realize it in the space of 3D orientations, $\SO(3)$.
 
-% From abstract
-    Our approach consists of two steps: (i) the estimation of the relative distances between pairs of projections, and (ii) the recovery of the absolute orientation of each projection from these distances.
-    In step (i), pairwise distances are estimated by a Siamese neural network trained on synthetic cryo-EM projections from resolved bio-structures.
-    In step (ii), orientations are recovered by minimizing the difference between (a) the distances estimated from the projections and (b) the distances induced by the recovered orientations.
-
-%to embed it on the space of 3D orientations, $\SO(3)$.
-% In practice, our method consists of: (i) estimate the distance between pairs of projections, and (ii) recover
-
-% Note; here was Distance Learning. paragraph
-
+%Given sufficiently many and accurate estimations
 %If the distances are exact geodesic distances between orientations, then orientation recovery will find a perfect realization of the metric space, with zero error.
 %In practice, distances estimated from projections will only be a proxy of true distances.
 %Experiment \secref{results:orientation-recovery:sensitivity} shows that a lower distance estimation error translates to a lower orientation recovery error.
-
-% Note; here was Orientation Recovery. paragraph
 
 %\subsection{Unit Quaternions and the Geodesic Distance}
 %\subsection{Parameterization of orientations}
@@ -173,7 +159,7 @@ For its training, we capitalize on (i) the public availability of numerous 3D at
 
 From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \mathbb{S}^3$, we learn the \textit{projection distance}
 \begin{equation}
-    \widehat{d}_p = \argmin_{d_p} \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2,
+    \widehat{d_p} = \argmin_{d_p} \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2,
     \label{eqn:distance-learning}
 \end{equation}
 with $d_q$ defined in~\eqnref{distance:orientations}.
@@ -203,9 +189,9 @@ In particular, the framework of the Euclidean distance matrices (EDMs)~\cite{dok
 In our case, as we shall shortly explain, we aim to perform the embedding on $\SO(3)$, the non-Euclidean space of 3D rotations. Hence, the loss function to minimize (\secref{method:orientation-recovery}) is non-convex. Furthermore, we are not aware of any theoretical characterization of its behavior when input distances are lacking or corrupted by perturbations. That being said, the locally-Euclidean behavior of the $\SO(3)$ space offers some hope on the feasibility of this minimization.
 Indeed, despite the lack of theoretical guarantees, we are able to appropriately minimize our loss function using a gradient-based algorithm, as we experimentally demonstrate in Appendix~\ref{apx:results:orientation-recovery:exact}.
 
-Equipped with a trained estimator $\widehat{d}_p$, we then recover the orientations from a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
+Equipped with a trained estimator $\widehat{d_p}$, we then recover the orientations from a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
 \begin{equation}
-    \big\{ \widehat{q}_k \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} \sum_{i,j} \left| \widehat{d}_p \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
+    \big\{ \widehat{q_k} \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} \sum_{i,j} \left| \widehat{d_p} \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2.
     \label{eqn:orientation-recovery}
 \end{equation}
 Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the orientations $q$ rather than the distance $d_p$.

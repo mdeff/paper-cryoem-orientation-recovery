@@ -8,12 +8,12 @@ They guarantee that each component of this new paradigm can handle the task it i
 %\lau{To update with latest results.}
 After running the full machine learning pipeline and evaluating the performance on the synthetic data, we are able to reconstruct the asymmetric protein with the error of $0.1594$ rad and the symmetric protein with the error of $0.1871$ rad.
 In addition, using these methods we are able to reconstruct the expected biological properties of the structure of these proteins.
-%Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d}_p$; this is very clearly the next line of research.
+%Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d_p}$; this is very clearly the next line of research.
 %\mdeff{Don't start with the results, but the beauty of the method.}
 
 % \lau{Ok I keep the following paragraph here, but depending on the results, we could remove it.}
 % \mdeff{Distance learning should stay the main source of improvement.}
-% First, the results underline the importance of learning an accurate proxy distance $\widehat{d}_p$.
+% First, the results underline the importance of learning an accurate proxy distance $\widehat{d_p}$.
 % In this regard, we could improve the performance of the SiameseNN in several ways, for instance by further tuning the architecture of its twin CNNs as well as the distance metric between the two CNN outputs. We could parametrize the function $d_f$, which compares the similarity of the features outputs (see \figref{schematic:distance-learning}), as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 
 Despite being able to infer the orientation of 2D projections of the 3D protein structure, new cryo-EM measurements of the proteins unseen from the network could enable a more direct validation of the results.
