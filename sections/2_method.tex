@@ -226,7 +226,7 @@ We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an 
 where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
 %While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.
 
-In practice, we again sample the sum and minimize \eqnref{orientation-recovery-error} by gradient descent with the FTRL optimizer~\cite{mcmahan_ad_2013}.
+In practice, we again sample the sum and minimize \eqnref{orientation-recovery-error} by gradient descent with the FTRL optimizer~\cite{mcmahan2013ftrl}.
 Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
 %Unless stated otherwise
 We run FTRL with a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$; and report the lowest of 6 runs (3 per value of $m$) of 300 steps each.

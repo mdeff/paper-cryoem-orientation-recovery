@@ -229,7 +229,7 @@ We present here a preliminary evaluation of the ability of SiameseNNs to learn a
 \end{figure}
 
 %\mdeff{What is $d_f$ in this particular experiment? Euclidean? Cosine=$d_q$?}
-For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{noauthor_tfkerasoptimizersrmsprop_nodate}, a learning rate of $10^{-3}$, and a batch size of 256 pairs. As a feature distance $d_f$ between the outputs of the two CNNs we use the Geodesic distance \eqnref{geodesic-distance}.
+For each protein, we train the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{tieleman2012rmsprop}, a learning rate of $10^{-3}$, and a batch size of 256 pairs. As a feature distance $d_f$ between the outputs of the two CNNs we use the Geodesic distance \eqnref{geodesic-distance}.
 The pairs for the training are sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation is performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). We limit our training and validation dataset due to Google Colab training time limit of 12 hours.
 
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
