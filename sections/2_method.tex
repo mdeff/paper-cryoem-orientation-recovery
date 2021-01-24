@@ -49,6 +49,7 @@ The orientation of the 3D particle with respect to the microscope's detector pla
 The group of all 3D rotations under composition is identified with $\SO(3)$, the group of $3 \times 3$ orthogonal matrices with determinant~1 under matrix multiplication.
 % non-commutative/non-Abelian\footnote{order of rotations matter}
 A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (the most widely used parameterization in cryo-EM)~\cite{sorzano2014interchanging}.
+\mdeff{Is this ref appropriate?}
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
@@ -143,13 +144,13 @@ We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful functi
     \caption{%
         \textbf{Distance learning.}
         We are looking for a distance $d_p$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
-        We propose to parameterize $d_p$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of $P \approx 10^3$ projections with associated orientation.
+        We propose to parameterize $d_p$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of $P \approx 10^3$ \mdeff{not more?} projections with associated orientation.
         %\mdeff{Why the output "loss" arrow? To me, this system is closed.}
         %\mdeff{"Loss Function" could be called Optimization or Learning or Training.}
 }\label{fig:schematic:distance-learning}
 \end{figure}
 
-From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$ made of $P$ projections $\p_i \in \R^{n_p}$ with associated orientation $q_i \in \mathbb{S}^3$, we learn the projection distance
+From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$, we learn the projection distance
 \begin{equation}
     \widehat{d_p} = \argmin_{d_p} \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2,
     \label{eqn:distance-learning}
@@ -165,8 +166,9 @@ The distance in the feature space $d_f$ is often taken to be the Euclidean dista
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
-Evaluating the sum over $\frac{P^2-P}{2}$ pairs in \eqnref{distance-learning} is computationally intractable for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
-In practice, we minimize \eqnref{distance-learning} by stochastic gradient descent (SGD) over small batches of pairs and update weights by back-propagation.
+As evaluating a sum over $\frac{P^2-P}{2}$ pairs is computationally intractable,
+%for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
+we minimize \eqnref{distance-learning} by stochastic gradient descent (SGD) over small batches of pairs and update weights by back-propagation.
 % error / objective value
 
 \subsection{Orientation recovery}\label{sec:method:orientation-recovery}
