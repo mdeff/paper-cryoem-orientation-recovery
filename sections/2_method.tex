@@ -195,3 +195,36 @@ Note that the sole difference with~\eqnref{distance-learning} is that the minimi
 Here too, the sum is sampled in practice as \eqnref{orientation-recovery} is minimized by mini-batch SGD.
 Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
 %We experimentally demonstrate in \secref{results:orientation-recovery:exact} that neither approximation affects recovery performance.
+
+\subsection{Evaluation}\label{sec:method:evaluation}
+
+%\todo{Introduce the mean recovery error as a good and intuitive performance metric.}
+%\todo{Figure that shows a typical convergence and mean orientation recovery error before and after alignment. We'll subsequently only report $E$ (the error after alignment).}
+
+While not a part of the method, we get to evaluate the orientations recovered by~\eqnref{orientation-recovery}.
+% (without reconstructing the protein)
+%Before discussing the results, we remark that one cannot directly quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgment of the protein reconstruction.
+Unfortunately, we cannot directly take the difference between the recovered orientations $\{\widehat{q_k}\}_{k=1}^P$ and the true orientations $\{q_k\}_{k=1}^P$ as orientations are rotations up to an arbitrary reference orientation.
+Any global rotation or reflection of the recovered orientations is as valid as any other, i.e., $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$, where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices. % that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space.
+Hence, we get to best align the sets of orientations and compute the \textit{mean orientation recovery error} as
+\begin{equation}
+    E = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
+    \label{eqn:orientation-recovery-error}
+\end{equation}
+We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection:
+\begin{equation*}
+    \T =
+    \begin{bmatrix}
+        m & \mathbf{0} \\
+        \mathbf{0} & \mathbf{I} \\
+    \end{bmatrix}
+    \prod_{1 \leq i < j \leq 4} \mathbf{T}_{\theta_{ij}},
+    \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
+\end{equation*}
+where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
+%While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.
+
+In practice, we again sample the sum and minimize \eqnref{orientation-recovery-error} by gradient descent with the FTRL optimizer~\cite{mcmahan_ad_2013}.
+Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
+%Unless stated otherwise
+We run FTRL with a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$; and report the lowest of 6 runs (3 per value of $m$) of 300 steps each.
