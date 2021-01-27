@@ -3,7 +3,7 @@
 \subsection{Experimental conditions}\label{sec:results:data}
 
 %\paragraph{Proteins.}
-We consider two proteins: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetriy. Both can be seen on \figref{pdb-proteins}.
+\lau{Put pas tense everywhere.} We consider two proteins: the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetriy. Both can be seen on \figref{pdb-proteins}.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
 For each atomic model, we generate the ground truth by fitting a 5\AA\ density map in Chimera~\cite{pettersen2004ucsf}.
 We thus obtain a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and a volume of $69 \times 57 \times 75$ voxels for the HJI.
@@ -119,9 +119,9 @@ Since mean orientation error is used in the pose estimation tasks and it is cons
 %\mdeff{Why is it good? Intuitive sure. Laurène, can we say something more?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Results}\label{sec:results:orientation-recovery}
+%\subsection{Results}\label{sec:results:orientation-recovery}
 
-To evaluate our method, we start with the orientation recovery experiments that include tests of feasibility and sensitivity to distance estimation error. Then we learn the distance using a SiameseNN and compare its performance with the baseline. After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections. Finally, we run the whole machine learning pipeline to recover the orientations from estimated distances.
+\lau{Move this paragraph somewhere.} To evaluate our method, we start with the orientation recovery experiments that include tests of feasibility and sensitivity to distance estimation error. Then we learn the distance using a SiameseNN and compare its performance with the baseline. After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections. Finally, we run the whole machine learning pipeline to recover the orientations from estimated distances.
 
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 % \begin{algorithm}[H]
@@ -142,7 +142,10 @@ To evaluate our method, we start with the orientation recovery experiments that 
 
 
 %\subsubsection{Robustness of Recovery to Additive Errors on the Relative Distances}
-\subsubsection*{Orientation recovery: Sensitivity to distance estimation error}\label{sec:results:orientation-recovery:sensitivity}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Sensitivity of orientation recovery to errors in distance estimation}\label{sec:results:orientation-recovery:sensitivity}
 
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 
@@ -180,8 +183,7 @@ Hence, it suggests that the loss can be used as a good indicator of its performa
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\subsubsection*{Distance estimation: Learned distance}\label{sec:results:distance-estimation:learned}
+\subsection{Learned function for relative distance estimation }\label{sec:results:distance-estimation:learned}
 
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
@@ -254,9 +256,9 @@ These results confirm that, the SiameseNN is able to predict the orientation dis
 Moreover, it clearly outperforms the Euclidean distance at doing so.
 These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use. The architecture of implemented SiameseNN can be seen in Appendix~\ref{sec:siamese-architecture}. Besides concentrating on the hyperparameter selection and tuning of the neural network layers, we also evaluated the performance of the model depending on the feature distance we used for the SiameseNN, see\figref{geo-eucl-mlp} and Appendix~\ref{apx:de-influence-arch}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\subsubsection*{Distance estimation: Sensitivity to perturbed projections}\label{sec:results:distance-estimation:sensitivity}
+\subsection{Sensitivity of learned distance to perturbations in the projections}\label{sec:results:distance-estimation:sensitivity}
 
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
@@ -300,7 +302,9 @@ We can see that the learned distance is minimally sensible to perturbations beca
     \end{subfigure}
 \end{figure}
 
-\subsection*{Orientation recovery from estimated distances}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Orientation recovery from estimated distances}
 
 %\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
 %Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}

@@ -37,7 +37,7 @@ All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\wideha
 
 %\subsection{Unit Quaternions and the Geodesic Distance}
 %\subsection{Parameterization of orientations}
-\subsection{Representation of orientations}\label{sec:method:orientation-representation}
+\subsection{Representation of orientations with quaternions}\label{sec:method:orientation-representation}
 %\subsection{Orientations and distances}\label{sec:method:orientation-representation}
 %\subsection{Distance between orientations}
 %\mdeff{Laurène: Which word is better: Representation or parameterization? Or something else, but we need consistency.}
@@ -45,17 +45,16 @@ All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\wideha
 % representation of orientations, parameterization of rotation matrices
 
 %The projection $\mathbf{P}_{\bth}$ in \eqnref{imaging-model} represents an integration through the 3D particle made by the beam of electrons.
-The orientation of the 3D particle with respect to the microscope's detector plane is a rotation relative to a reference orientation (\figref{imaging-geometry}).
+The orientation of a 3D particle with respect to the microscope's detector plane is a rotation relative to a reference orientation (\figref{imaging-geometry}).
 The group of all 3D rotations under composition is identified with $\SO(3)$, the group of $3 \times 3$ orthogonal matrices with determinant~1 under matrix multiplication.
 % non-commutative/non-Abelian\footnote{order of rotations matter}
 A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (a commonly-used parameterization in cryo-EM)~\cite{sorzano2014interchanging}.
-\mdeff{Is this ref appropriate?} \lau{yes.}
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
-While Euler angles are a concise representation ($3$ numbers for $3$ degrees of freedom) of orientation, they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
+While Euler angles are a concise representation of orientation ($3$ numbers for $3$ degrees of freedom), they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
 This makes their optimization by gradient descent (\secref{method:orientation-recovery}) problematic.
-The optimization of rotation matrices, which are made of $9$ numbers, would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
+On the other hand, the optimization of rotation matrices---made of $9$ numbers---would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
 We solve both problems by representing orientations with unit quaternions.
 
@@ -72,7 +71,7 @@ They parameterize rotation matrices as
     \end{pmatrix}.
 \end{equation*}
 %Composition of rotations is given by multiplications of quaternions.
-Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation, i.e., antipodal points of $\mathbb{S}^3$ are identified.
+Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation, i.e., antipodal points of $\mathbb{S}^3$ are equivalent.
 %\paragraph{Distances.}
 Unlike Euler angles, $\mathbb{S}^3$ is isomorphic to the universal cover of $\SO(3)$.
 Hence, the distance between two orientations, i.e., the length of the geodesic between them on $\SO(3)$, is given by
@@ -183,8 +182,8 @@ Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, I
 The embedding of distance matrices in Euclidean space (given by their eigenvectors) is especially well-described.
 In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmanic2015edm} provides theoretical guarantees on the recovery of points from distances.
 
-We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting in which we are unaware of any theoretical characterizations (e.g., on the shape of the loss function or its behavior when distances are missing or noisy).
-The fact that $\mathbb{S}^3$ is locally Euclidean however offers some hope. % on the feasibility of this minimization.
+We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting for which we are unaware of any theoretical characterization (e.g., on the shape of the loss function or its behavior when distances are missing or noisy).
+The fact that $\mathbb{S}^3$ is locally Euclidean does however offer some hope. % on the feasibility of this minimization.
 Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in Appendix~\ref{apx:results:orientation-recovery:exact}.
 
 We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
@@ -203,12 +202,12 @@ Sampling the sum amounts to building a sparse (instead of complete) distance gra
 %\todo{Introduce the mean recovery error as a good and intuitive performance metric.}
 %\todo{Figure that shows a typical convergence and mean orientation recovery error before and after alignment. We'll subsequently only report $E$ (the error after alignment).}
 
-While not a part of the method, we get to evaluate the orientations recovered by~\eqnref{orientation-recovery}.
+While not a part of the method \textit{per se}, the evaluation of the orientations recovered by~\eqnref{orientation-recovery} is essential for assessing the quality of the obtained results.
 % (without reconstructing the protein)
 %Before discussing the results, we remark that one cannot directly quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgment of the protein reconstruction.
 Unfortunately, we cannot directly take the difference between the recovered orientations $\{\widehat{q_k}\}_{k=1}^P$ and the true orientations $\{q_k\}_{k=1}^P$ as orientations are rotations up to an arbitrary reference orientation.
 Any global rotation or reflection of the recovered orientations is as valid as any other, i.e., $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$, where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices. % that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space.
-Hence, we get to best align the sets of orientations and compute the \textit{mean orientation recovery error} as
+Hence, we align the sets of orientations and compute the \textit{mean orientation recovery error} as
 \begin{equation}
     E = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
     \label{eqn:orientation-recovery-error}

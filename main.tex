@@ -37,7 +37,7 @@
     In step (i), pairwise distances are estimated by a Siamese neural network trained on synthetic cryo-EM projections from resolved bio-structures.
     In step (ii), orientations are recovered by minimizing the difference between the distances estimated from the projections and the distances induced by the recovered orientations.
 %(through stochastic gradient descent) an objective function by
-    \lau{What about this:} We evaluated the method on synthetic cryo-EM datasets. Current results demonstrate that orientations can be accurately recovered from projections corrupted with a high level of noise. Additional experiments indicate that the quality of this recovery depends on the precision of the estimated distances---and thus by extension, on the accuracy of the SiameseNN training procedure.  
+    We evaluated the method on synthetic cryo-EM datasets. Current results demonstrate that orientations can be accurately recovered from projections corrupted with a high level of noise. Additional experiments indicate that the quality of this recovery depends on the precision of the estimated distances---and thus by extension, on the accuracy of the SiameseNN training procedure.  
     While not yet deployed in a real experimental setup, the proposed method offers a novel take on orientation recovery in SPA and may bring interesting new perspectives in the field. 
     %The preliminary results , the orientations recovered from non-perturbed projections are within $10\degree$, and from perturbed projections are within $24\degree$ of the true orientations.
     The code of the method is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
