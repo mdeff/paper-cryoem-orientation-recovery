@@ -1,5 +1,18 @@
 \clearpage
 
+\section{Different performance metrics}\label{apx:metrics-review}
+There are many different ways of evaluating the pipeline performance found in the field of pose estimation. Some of the evaluations include the following:
+\mdeff{Shall we keep this? Not as a bullet list for sure.} \lau{Maybe in the Appendix, but not in the main text imo.}
+\begin{itemize}
+\item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (e.g. in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
+\item Translation and rotation error between estimated 3D model and true 3D model with fixed thresholds (e.g. in the paper~\cite{shotton2013scene} they require the translation error to be below 5 cm and rotation error to be below 5\degree)
+\item The average distance of all the points of the model from their transformed version, and if the error is less than the constant multiple of diameter of the 3D model, it is considered correctly evaluated (e.g. evaluation error is used in papers \cite{10.1007/978-3-642-37331-2_42, xiang2018posecnn})
+\item Reprojection error that projects the estimated points onto the image and computes the pairwise distances in the image space, instead of computing distances in the 3D model space (e.g. used in paper~\cite{xiang2018posecnn})
+\item The recovery error measured as Frobenius norm from estimated 3D model and true model, where 3D model is composed of 3D locations of important landmarks (e.g. elbow for human pose estimation)~\cite{wangni2018monocular}
+\item Average Orientation Similarity (AOS) is the difference between the true and estimated model with a cosine similarity term~\cite{RedondoCabrera2016PoseEE}
+\item Mean Angle Error (MAE) and Median Angle Error (MedError) evaluated and compared with other pose estimation error metrics in the paper~\cite{RedondoCabrera2016PoseEE}.
+\end{itemize}
+
 \section{Orientation recovery: Recovery from exact distances}\label{apx:results:orientation-recovery:exact}
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
