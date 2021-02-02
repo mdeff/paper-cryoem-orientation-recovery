@@ -18,16 +18,16 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=5cm]{figures/5a1a_pdb.png}
+        \includegraphics[height=5.5cm]{figures/5a1a_pdb.png}
         \caption{}
     \end{subfigure}
     %\hfill
-    %\hspace{0.5em}
-    \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.45\textwidth}
     \centering
-        \includegraphics[height=5cm]{figures/5j0n_pdb.png}
+        \includegraphics[height=5.5cm]{figures/5j0n_pdb.png}
         \caption{}
     \end{subfigure}
+
     \caption{%
         The two ground-truth proteins:
         \textbf{(a)} $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}.
@@ -52,26 +52,29 @@ Therefore, we restricted the sampling to the quarter of $\mathbb{S}^2$ sphere fo
         \includegraphics[height=3cm]{figures/5j0n_noise0}
         \caption{}
     \end{subfigure}
-    %\hfill
-    %\hspace{1.5em}%
+    \hfill
     \begin{subfigure}[b]{0.24\textwidth}
     \centering
         \includegraphics[height=3cm]{figures/5j0n_noise16}
         \caption{}
     \end{subfigure}
-    %\hfill
-    %\hspace{1.5em}%
+    \hfill
     \begin{subfigure}[b]{0.24\textwidth}
     \centering
         \includegraphics[height=3cm]{figures/5j0n_translated}
         \caption{}
     \end{subfigure}
-    
+    \hfill
+    \begin{subfigure}[b]{0.24\textwidth}
+    \centering
+        \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
+        \caption{}
+    \end{subfigure}
     \caption{%
         An example of perturbed projection.
         \textbf{(a)} Unperturbed projection $\mathbf{P}_{\bth_i} \mathbf{x}$.
         \textbf{(b)} Perturbed projection $\mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n}$, with noise $\mathbf{n}$ sampled from a Gaussian distribution of mean 0 and variance 16.
-        \textbf{(c)} Perturbed projection $\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth_i} \mathbf{x}$, with translations $t_1$ and $t_2$ sampled from a triangular distribution with a lower limit of -20 pixels, an upper limit of 20 pixels, and a mode (i.e., peak) of 0.
+        \textbf{(c)} Perturbed projection $\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth_i} \mathbf{x}$, with translations $t_1$ and $t_2$ sampled from a triangular distribution with a lower limit of -20 pixels, an upper limit of 20, and a mode (i.e., peak) of 0.
     }\label{fig:different-projections}
 \end{figure}
 
