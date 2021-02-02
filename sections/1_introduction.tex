@@ -17,7 +17,7 @@ where $\x \in \R^{n_x}$ is the unknown 3D density map~\cite{dimaio_creating_2007
 %\mdeff{Alternative notation: $\x: \R^3 \rightarrow \R$ and $\p_i: \R^2 \rightarrow \R$ as functions, so $\x$ can be rotated by $\mathbf{R} \in \mathbf{SO}(3)$ as $\mathbf{R}\x$. But then $\x$ is not a vector for the SiameseNN.}
 The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (i.e., the x-ray transform).
 % consistency: 3D pose = orientation
-The operator $\mathbf{S}_{\mathbf{t}_i}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t}_i = (t_{i_{1}}, t_{i_{2}})$.
+The operator $\mathbf{S}_{\mathbf{t}_i}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t}_i = (t_{i_1}, t_{i_2})$.
 The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
 Finally, $\mathbf{n} \in \R^{n_p}$ represents additive noise.
 The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ acquired along unknown orientations.

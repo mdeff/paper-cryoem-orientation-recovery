@@ -1,6 +1,8 @@
-\section{Experiments}
+\section{Experiments}\label{sec:experiments}
 
 %\lau{Put pas tense everywhere.}
+
+\mdeff{If you agree, update throughout (also in figures): $OR \rightarrow L_\text{OR}, E \rightarrow E_\text{OR}$ and use $L_\text{DE}$.}
 
 To evaluate our method, we started with the orientation recovery experiments that included tests of feasibility and sensitivity to distance estimation error.
 We then learned the distance using a SiameseNN and compared its performance with the baseline.
@@ -119,7 +121,7 @@ In addition to this, we use only $1\%$ of the possible pairs (last column in the
 Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.
 To ensure unbiased model, the dataset used in this part was test set from \tabref{dataset}.
 Orientation recovery was performed on projections unseen during distance learning.
-Since mean orientation error is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure (see Appendix~\ref{apx:metrics-review}). The average difference between predicted and actual angles is degree (or rad), which makes it an intuitive comparison metric.
+Since mean orientation error is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure (see \apxref{metrics-review}). The average difference between predicted and actual angles is degree (or rad), which makes it an intuitive comparison metric.
 We employ the definition of a correct estimation: the estimation must be within 10\degree~(0.174 rad) of true orientations for noiseless data and within 25\degree~(0.436 rad) for noisy data.
 \mdeff{Do we use this definition?}
 \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$.
@@ -158,7 +160,7 @@ We employ the definition of a correct estimation: the estimation must be within 
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 
 To prove that orientation recovery is feasible, we first evaluate the performance assuming we have ideal distance metric between two projections, i.e., the quaternion distance between their corresponding orientations.
-The method successfully recovers the orientation of every projection, see Appendix~\ref{apx:results:orientation-recovery:exact}.
+The method successfully recovers the orientation of every projection, see \apxref{results:orientation-recovery:exact}.
 
 We now go one step further and evaluate the behaviour of~\eqnref{orientation-recovery} when the true relative distances are corrupted by additive Gaussian noise.
 The experimental conditions are the same as in the previous section, except that we add an error with increasing variance on the relative distances prior to the minimization.
@@ -198,7 +200,7 @@ Hence, it suggests that the loss can be used as a good indicator of its performa
 %Again symmetric vs asymmetric.}
 
 We present here a preliminary evaluation of the ability of SiameseNNs to learn a projection distance $\widehat{d_p}$ that correctly approximates the orientation distance $d_q$.
-To assess the progress and effectiveness of our distance estimation implementation, we used an Euclidean distance as a baseline (see Appendix~\ref{apx:results:distance-estimation}).
+To assess the progress and effectiveness of our distance estimation implementation, we used an Euclidean distance as a baseline (see \apxref{results:distance-estimation}).
 
 %SiameseNNs come with a variety of more or less powerful architectures.
 %At the current stage of development, we work with a simple one.
@@ -242,7 +244,7 @@ To assess the progress and effectiveness of our distance estimation implementati
 
 For each protein, we trained the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{tieleman2012rmsprop}, a learning rate of $10^{-3}$, and a batch size of 256 pairs.
 As a feature distance $d_f$ between the outputs of the two CNNs we used the Geodesic distance \eqnref{geodesic-distance}.
-\mdeff{We wrote in the method that we take $d_f=d_q$. Shall we repeat? I don't think we should if the only experiments where that is untrue is in Appendix~\ref{apx:de-influence-arch}.}
+\mdeff{We wrote in the method that we take $d_f=d_q$. Shall we repeat? I don't think we should if the only experiments where that is untrue is in \apxref{de-influence-arch}.}
 The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs).
 We limited our training and validation dataset due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 
@@ -269,56 +271,69 @@ These results confirm that, the SiameseNN was able to predict the orientation di
 The prediction performance was slightly better for the asymmetric protein compared to symmetric protein.
 Moreover, it clearly outperformed the Euclidean distance at doing so.
 These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use.
-The architecture of implemented SiameseNN can be seen in Appendix~\ref{sec:siamese-architecture}.
-Besides concentrating on the hyperparameter selection and tuning of the neural network layers, we also evaluated the performance of the model depending on the feature distance we used for the SiameseNN, see \figref{geo-eucl-mlp} and Appendix~\ref{apx:de-influence-arch}.
+The architecture of implemented SiameseNN can be seen in \apxref{siamese-architecture}.
+Besides concentrating on the hyperparameter selection and tuning of the neural network layers, we also evaluated the performance of the model depending on the feature distance we used for the SiameseNN, see \figref{geo-eucl-mlp} and \apxref{de-influence-arch}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Sensitivity of learned distance to perturbations in the projections}\label{sec:results:distance-estimation:sensitivity}
+\subsection{Sensitivity of distance learning to perturbations in the projections}\label{sec:results:distance-estimation:sensitivity}
 
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
-%\mdeff{Better word? (perturbations, quality, non-ideal)}
+%\mdeff{Better word? (perturbations, corruptions, quality, non-ideal)}
 
-In this experiment we wanted to explore how does the perturbation of the projections affect the distance estimation (additive noise, translation, PSF).
-The experimental conditions for the experiment were the same as before, except that we added noise with increasing variance on the projection prior to training.
-The results are presented in \figref{distance-estimation-vary-projection-noise}.
+% Intro and shift.
+We desire to estimate distances that are invariant to perturbations in the projections, specified by~\eqnref{imaging-model}.
+As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
+\figref{results:distance-estimation:shift} indeed shows that learning distances (and hence recovering orientations) is insensible to shifts in projections.
 
-We observe that the training and validation losses were increasing and network started to overfit w.r.t.\ the amount of noise in the projections.
-With the noiseless projections (projection noise variance 0), the mean orientation recovery error $E = 0.1594$ rad.
-Whereas, the noisy projections with noise levels 15 were the closest to the realistic protein projections and the error $E=0.4189$ rad.
-The SiameseNN was able to learn the noise as the training loss and corresponding mean orientation recovery error $E$ stayed low.
-%\mdeff{The SiameseNN seems to be able to learn the noise, as the training loss stays low. More data should help!}
+% Noise.
+As we cannot---or do not (yet) know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy datasets and evaluated whether it could learn to ignore noise as being irrelevant information.
+% brute force vs principled engineering
+\figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($5\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($13\degree$) for a more realistic noise variance of $\sigma^2=15$.
+\mdeff{How good is that?}
+While not invariant, the SiameseNN learned to discard noise (while an Euclidean distance would be tremendously sensible to it).
+Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will decrease noise sensitivity.
+\mdeff{Here or future work?}
 
-Besides testing the performance of the pipeline with the noisy projections, we explored the performance with different projection translation levels.
-To translate the projection, we used a triangular distribution from $-t$ to $t$ px translation with the peak in the center of the projection.
-The performance of different translation magnitudes can be seen in \figref{distance-estimation-vary-projection-translation}.
-We observe that the training of the network was invariant to translations in the projections, which was expected.
-We can see that the learned distance was minimally sensible to perturbations because we trained the network to ignore irrelevant information.
-%\mdeff{Perfect!}
+% PSF and conclusion.
+We didn't evaluate sensitivity to the PSF but expect a similar behavior.
+%While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
+%We know how to do it for shifts, not noise or PSF.
 
+Note that we observe again (\secref{results:orientation-recovery:sensitivity}) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$, and that the estimation of more accurate distances (a smaller $L_\text{DE}$) induces the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$).
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.47\textwidth}
-        \includegraphics[height=5.5cm,valign=t]{figures/de_noises_nums}
+    \begin{subfigure}[t]{0.47\linewidth}
+        \includegraphics[width=\linewidth]{figures/de_translation_nums}
         \caption{%
-            Variation of train and validation epoch losses w.r.t. noise levels in the projections of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
-        }\label{fig:distance-estimation-vary-projection-noise}
+            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with translations $t_{i_1}$ and $t_{i_2}$ sampled from a triangular distribution with mean 0 and of increasing limits.
+            Learning is not harder as projections get shifted farther, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$.
+    }\label{fig:results:distance-estimation:shift}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.47\textwidth}
-        \includegraphics[height=5.5cm,valign=t]{figures/de_translation_nums}
-        \caption{
-        Variation of train and validation epoch losses w.r.t.\ projection translation of the asymmetric protein (\texttt{5j0n}). The mean orientation recovery error $E$ is in the red box, and the orientation recovery loss $OR$ is in the blue box.
-        %\mdeff{We should try to have 12 and 13 side-by-side (to gain some space and facilitate comparison on the y-axis) by making them more square.}
-    }\label{fig:distance-estimation-vary-projection-translation}
+    \begin{subfigure}[t]{0.47\linewidth}
+        \includegraphics[width=\linewidth]{figures/de_noises_nums}
+        \caption{%
+            Learning from noisy projections $\{ \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n} \}$, with white noise $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I})$ of increasing variance $\sigma^2$.
+            Learning is harder as projections get noisier, because noise invariance is not built into the architecture of $\mathcal{G}_w$.
+        }\label{fig:results:distance-estimation:noise}
     \end{subfigure}
+    \caption{%
+        Sensitivity of distance learning to perturbations in the projections of \texttt{5j0n}.
+        The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+        Boxes show the orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
+        \mdeff{It's confusing that red and blue are used for both train vs validation and $E$ vs $OR$. I don't think we need colors for $E$ and $OR$. They could both be in the same black box.}
+        \mdeff{Legend consistency: train -> training set, validation -> validation set.}
+    }
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Orientation recovery from estimated distances}
+
+\mdeff{We recovered orientations in the last section too.}
 
 %\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
 %Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
@@ -337,17 +352,17 @@ With the noiseless projections, the objective function successfully converged to
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.45\linewidth}
         \includegraphics[height=5.5cm]{figures/5j0n_noise0_ar_aa}
-        \caption{Recovery loss~\eqnref{orientation-recovery} and error~\eqnref{orientation-recovery-error} with noiseless projections $\mathbf{Px}$.}
+        \caption{Recovery from noiseless projections $\{ \mathbf{P}_{\bth_i} \x \}$.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.5\textwidth}
+    \begin{subfigure}[b]{0.51\linewidth}
     \centering
         \includegraphics[height=5.5cm]{figures/5j0n_noise16_ar_aa}
-        \caption{Recovery loss and recovery error with noisy projections $\mathbf{Px+n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$.}
+        \caption{Recovery from noisy projections $\{ \mathbf{P}_{\bth_i} \x + \mathbf{n} \}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$.}
     \end{subfigure}
-    \\
+    % \\
     % \begin{subfigure}[b]{0.45\textwidth}
     % \centering
     %     %\includegraphics[height=5.7cm]{figures/5j0n_noise0_angle_alignment_before}
@@ -364,9 +379,9 @@ With the noiseless projections, the objective function successfully converged to
     %     \label{fig:angle-alignment-5j0n-noise16}
     % \end{subfigure}
     \caption{%
-        Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}) with (right) and without (left) noise.
-        The first row shows the orientation recovery loss.
-        The second row shows the orientation recovery error ($E$ from \eqnref{orientation-recovery-error}).
+        Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}).
+        The blue curve shows the recovery loss~\eqnref{orientation-recovery}, with the minimum highlighted.
+        The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, with the mean $E$ highlighted.
     }\label{fig:5j0n-orientation-recovery-loss-est}
 \end{figure}
 
@@ -457,7 +472,7 @@ We successfully reconstructed the symmetric protein even though the distance est
 
 We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
 However, the method developed is promising since the learned distance is robust to perturbations.
-We observe that the orientation recovery and distance estimation are interconnected, \textit{i.e.} if one works the other one will work.
+We observe that the orientation recovery and distance estimation are interconnected, i.e., if one works the other one will work.
 
 To check the generalization to unseen proteins, and not only to  unseen projections, we trained the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
 The orientation recovery reached the error of 0.0352.

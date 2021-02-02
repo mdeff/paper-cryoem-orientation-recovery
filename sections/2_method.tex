@@ -149,12 +149,15 @@ From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$, we learn the pr
     \label{eqn:distance-learning}
 \end{equation}
 with $d_q$ defined in~\eqnref{distance:orientations}.
+\todo{In \secref{experiments}, we refer to this value? as the $L_\text{DE}$ loss.}
 The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning}
 \begin{equation*}
     d_p(\p_i, \p_j) = d_f(\G_w(\p_i), \G_w(\p_j)),
     %\label{eqn:distance:projections}
 \end{equation*}
-where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$. SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
+where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
+\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want translation invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections). The architecture used for all experiments (\secref{experiments}) is described in \apxref{siamese-architecture}.}
+SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
@@ -178,7 +181,7 @@ In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmani
 
 We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting for which we are unaware of any theoretical characterization (e.g., on the shape of the loss function or its behavior when distances are missing or noisy).
 The fact that $\mathbb{S}^3$ is locally Euclidean does however offer some hope. % on the feasibility of this minimization.
-Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in Appendix~\ref{apx:results:orientation-recovery:exact}.
+Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in \apxref{results:orientation-recovery:exact}.
 
 We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
 \begin{equation}
@@ -186,6 +189,7 @@ We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_
     \label{eqn:orientation-recovery}
 \end{equation}
 where $\widehat{d_p}$ is the estimator trained in \eqnref{distance-learning}.
+\todo{In \secref{experiments}, we refer to this value? as the $L_\text{OR}$ loss.}
 Note that the sole difference with~\eqnref{distance-learning} is that the minimization is performed over the orientations $q$ rather than the distance $d_p$.
 Here too, the sum is sampled in practice as \eqnref{orientation-recovery} is minimized by mini-batch SGD.
 Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
@@ -203,9 +207,10 @@ Unfortunately, we cannot directly take the difference between the recovered orie
 Any global rotation or reflection of the recovered orientations is as valid as any other, i.e., $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$, where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices. % that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space.
 Hence, we align the sets of orientations and compute the \textit{mean orientation recovery error} as
 \begin{equation}
-    E = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
+    E_\text{OR} = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
     \label{eqn:orientation-recovery-error}
 \end{equation}
+\mdeff{$E_\text{OR}$ for consistency with $L_\text{OR}$? Nice for \secref{experiments}.}
 We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection:
 \begin{equation*}
     \T =

@@ -127,6 +127,8 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the $
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 
+\mdeff{Anything about the architecture of $G_w$?}
+
 To further improve our network, we experiment with different feature distance metrics $d_f(\mathbf{f}_i,\mathbf{f}_j)$.
 In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $d_f(\mathbf{f}_i,\mathbf{f}_j)=\lVert \mathbf{f}_i-\mathbf{f}_j\rVert_2$.
 %\mdeff{Consistency: In \secref{method:distance-learning}, I used $d_f$  (for consistency with $d_p$ and $d_q$) and $\mathbf{f}_i$ (for consistency with $\p_i$ and $q_i$).}
@@ -155,7 +157,7 @@ Hence, it is desirable to have a distance function that respects the structure o
 \end{figure}
 
 \clearpage
-\section{SiameseNN architecture}\label{sec:siamese-architecture}
+\section{SiameseNN architecture}\label{apx:siamese-architecture}
 
 \begin{figure}[h!]
     \centering
