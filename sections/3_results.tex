@@ -71,7 +71,8 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
 
 \paragraph{Projections.}
 From these ground truths, we generated $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
-Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3)$ \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
+Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_3,\theta_2,\theta_1)$ 
+%\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
 Due to protein symmetries, orientations were sampled differently.
 The entire \texttt{5j0n} complex being asymmetric~\cite{doi:10.1002/9780470514160.ch4} makes it sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are symmetric to the center of this sphere.
 Conversely, the $\beta$-galactosidase has D2 symmetry, i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
@@ -348,7 +349,7 @@ Note that we observe again (\secref{results:orientation-recovery:sensitivity}) t
 The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
 We ran the pipeline for both, asymmetric (\texttt{5j0n}) and symmetric (\texttt{5a1a}) protein.
 In addition, we ran the pipeline for the simulated realistic noise in the asymmetric protein.
-The experimental setting for distance estimation was similar to the one used to generate the \figref{learned-distance-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we used the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}.
+The experimental setting for distance estimation was similar to the one used to generate the \figref{losses-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we used the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}.
 
 We then ran the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-orientation-recovery-loss-est} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
 With the noiseless projections, the objective function successfully converged to the $0.0510$ and with the noisy projections, the objective function converged to the $0.0683$.
@@ -388,9 +389,9 @@ With the noiseless projections, the objective function successfully converged to
     }\label{fig:5j0n-orientation-recovery-loss-est}
 \end{figure}
 
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection is shown in \figref{angle-alignment-5j0n-noise0}.
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection is shown in \figref{5j0n-orientation-recovery-loss-est}~\textbf{(a)}.
 The smallest error achieved is $0.1594$ rad.
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) is shown in \figref{angle-alignment-5j0n-noise16}.
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) is shown on histogram in \figref{5j0n-orientation-recovery-loss-est}~\textbf{(b)}.
 The smallest error achieved is $0.4184$ rad.
 
 As a last step of the pipeline, we performed protein reconstruction using the projections and their corresponding estimated orientations.
