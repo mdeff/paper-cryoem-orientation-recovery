@@ -105,23 +105,23 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5j0n}
         \caption{Asymmetric protein (\texttt{5j0n}).}
-    \end{subfigure} \quad \quad
+    \end{subfigure}
+    \hfill
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
         \caption{Symmetric protein (\texttt{5a1a}).}
     \end{subfigure}
     \caption{
-        Plotting the Euclidean distance between two projections versus their actual relative orientation (measured by the geodesic distance) for \textbf{(left)} the asymmetric protein (\texttt{5j0n}) dataset, and \textbf{(right)} the symmetric protein (\texttt{5a1a}) dataset.
-        The color corresponds to projection pairs that share the first projection \textit{i.e.} distance between one projection with all other projections.
-        %\todo{Figure label: ${\{(0, p)\}}_{p=1}^P$?}
+        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ for \textbf{(a)} the asymmetric protein (\texttt{5j0n}) dataset, and \textbf{(b)} the symmetric protein (\texttt{5a1a}) dataset.
+        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
     }\label{fig:euclidean-not-robust}
 \end{figure}
 
 Two principal observations can be made from this experiment.
-First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no translation, no PSF).
+First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
 The other interesting observation is that the trend of $(d_q,d_p)$ plot of the $\beta$-galactosidase protein (\texttt{5a1a}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
-%\mdeff{How does it appear?}
+\mdeff{Check these refs. Other ones are used in main text?}
 
 \section{Distance estimation: Influence of network architecture and feature distance}\label{apx:de-influence-arch}
 
