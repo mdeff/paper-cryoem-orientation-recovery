@@ -20,6 +20,7 @@ The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection alon
 The operator $\mathbf{S}_{\mathbf{t}_i}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t}_i = (t_{i_1}, t_{i_2})$.
 The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
 Finally, $\mathbf{n} \in \R^{n_p}$ represents additive noise.
+\figref{different-projections} illustrates the effect of projection, shift, and noise.
 The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ acquired along unknown orientations.
 %\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either.}
 

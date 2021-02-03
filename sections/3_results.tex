@@ -19,18 +19,18 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}[b]{0.6\linewidth}
+    \begin{minipage}[b]{0.55\linewidth}
         \centering
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
-            \includegraphics[height=5.5cm]{figures/5a1a_pdb.png}
-            \caption{\texttt{5a1a}}
+            \includegraphics[height=5cm]{figures/5a1a_pdb.png}
+            \caption*{\texttt{5a1a}}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.42\linewidth}
             \centering
-            \includegraphics[height=5.5cm]{figures/5j0n_pdb.png}
-            \caption{\texttt{5j0n}}
+            \includegraphics[height=5cm]{figures/5j0n_pdb.png}
+            \caption*{\texttt{5j0n}}
         \end{subfigure}
         \caption{%
             The ground-truth proteins: $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}, and lambda excision HJ intermediate (HJI) (\texttt{5j0n})~\cite{5j0n_pdb}.
@@ -42,29 +42,30 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
         \begin{subfigure}[b]{0.49\textwidth}
             \centering
             \includegraphics[width=0.8\linewidth]{figures/5j0n_noise0}
-            \caption{$\mathbf{P}_{\bth} \mathbf{x}$}
+            \caption*{$\mathbf{P}_{\bth} \mathbf{x}$}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[width=0.8\linewidth]{figures/5j0n_noise16}
-            \caption{$\mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+            \caption*{$\mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
         \end{subfigure}
-        \\
+        \\ \vspace{1em}
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[width=0.8\linewidth]{figures/5j0n_translated}
-            \caption{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
+            \caption*{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[width=0.8\linewidth]{figures/5j0n_noise16_translated}
-            \caption{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+            \caption*{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
         \end{subfigure}
         \caption{%
-            Example projections of \texttt{5j0n}: (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
+            Example projections of \texttt{5j0n}.
+            % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
         }\label{fig:different-projections}
     \end{minipage}
 \end{figure}
