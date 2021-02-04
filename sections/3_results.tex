@@ -2,7 +2,9 @@
 
 %\lau{Put pas tense everywhere.}
 
-\mdeff{If you agree, update throughout (also in figures): $OR \rightarrow L_\text{OR}, E \rightarrow E_\text{OR}$, and use $L_\text{DE}$.}
+\todo{Update throughout (also in figures): $E \rightarrow E_\text{OR}, OR \rightarrow L_\text{OR}$, and use $L_\text{DE}$.}
+
+\mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = plt.figure(figsize=(4, 4))}}.
 
 To evaluate our method, we started with the orientation recovery experiments that included tests of feasibility and sensitivity to distance estimation error.
 We then learned the distance using a SiameseNN and compared its performance with the baseline.
@@ -16,6 +18,8 @@ Finally, we ran the whole machine learning pipeline to recover the orientations 
 We considered two proteins (\figref{pdb-proteins}): the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetry.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
 For each atomic model, we generated the ground truth by fitting a 5\AA\ density map in Chimera~\cite{pettersen2004ucsf}, which gave us a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and a volume of $69 \times 57 \times 75$ voxels for the HJI.
+
+\mdeff{How should we refer to the proteins beyond this point? Symmetric vs asymmetric, $\beta$-galactosidase vs HJI, or \texttt{5a1a} vs \texttt{5j0n}. It should be consistent. I'd vote for \texttt{5a1a} vs \texttt{5j0n}, and refer to the asymmetry if relevant for the experiment, explaining why.}
 
 \begin{figure}[ht!]
     \centering
@@ -33,7 +37,7 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
             \caption*{\texttt{5j0n}}
         \end{subfigure}
         \caption{%
-            The ground-truth proteins: $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}, and lambda excision HJ intermediate (HJI) (\texttt{5j0n})~\cite{5j0n_pdb}.
+            Ground-truth proteins: the $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}, and the lambda excision HJ intermediate (\texttt{5j0n})~\cite{5j0n_pdb}.
         }\label{fig:pdb-proteins}
     \end{minipage}
     \hfill
@@ -288,7 +292,7 @@ Besides concentrating on the hyperparameter selection and tuning of the neural n
 %\mdeff{Better word? (perturbations, corruptions, quality, non-ideal)}
 
 % Intro and shift.
-We desire to estimate distances that are invariant to perturbations in the projections, specified by~\eqnref{imaging-model}.
+We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
 \figref{results:distance-estimation:shift} indeed shows that learning distances (and hence recovering orientations) is insensible to shifts in projections.
 
@@ -297,8 +301,8 @@ As we cannot---or do not (yet) know how to---build noise invariance into the arc
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($5\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($13\degree$) for a more realistic noise variance of $\sigma^2=15$.
 \mdeff{How good is that?}
-While not invariant, the SiameseNN learned to discard noise (while an Euclidean distance would be tremendously sensible to it).
-Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will decrease noise sensitivity.
+While not invariant, the SiameseNN learned to discard noise (while a naive Euclidean distance would be tremendously sensible to it).
+Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will decrease the SiameseNN sensitivity to noise.
 \mdeff{Here or future work?}
 
 % PSF and conclusion.
@@ -331,6 +335,7 @@ Note that we observe again (\secref{results:orientation-recovery:sensitivity}) t
         Boxes show the orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
         \mdeff{It's confusing that red and blue are used for both train vs validation and $E$ vs $OR$. I don't think we need colors for $E$ and $OR$. They could both be in the same black box.}
         \mdeff{Legend consistency: train -> training set, validation -> validation set.}
+        \mdeff{Add $L_\text{DE}$ to the y-axis legend.}
     }
 \end{figure}
 
@@ -338,147 +343,141 @@ Note that we observe again (\secref{results:orientation-recovery:sensitivity}) t
 
 \subsection{Orientation recovery from estimated distances}
 
-\mdeff{We recovered orientations in the last section too.}
+\begin{itemize}
+    \item \mdeff{We recovered orientations in the last section too.}
+    \item \todo{Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth}.}
+    \item \todo{Add $L_\text{OR}=0.?$ and $E_\text{OR}=0.?$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.}
+\end{itemize}
 
 %\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
 %Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
 %\todo{Justify threshold because of plateau (figref).
 %Show recovered orientations w.r.t.\ ground truth after alignment.}
-%\todo{Reconstruct the protein to show the full pipeline: from a set of projections to a reconstructed protein.
-%Emphasize that it's a naive reconstruction algorithm.}
+%\todo{Reconstruct the protein to show the full pipeline: from a set of projections to a reconstructed protein.}
 
 The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
 We ran the pipeline for both, asymmetric (\texttt{5j0n}) and symmetric (\texttt{5a1a}) protein.
 In addition, we ran the pipeline for the simulated realistic noise in the asymmetric protein.
 The experimental setting for distance estimation was similar to the one used to generate the \figref{losses-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we used the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}.
 
-We then ran the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-orientation-recovery-loss-est} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
-With the noiseless projections, the objective function successfully converged to the $0.0510$ and with the noisy projections, the objective function converged to the $0.0683$.
+We then ran the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-noise0-orientation-recovery} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
+With the noiseless projections, the objective function successfully converged to the $L_\text{OR} = 0.0510$ and with the noisy projections, the objective function converged to the $L_\text{OR} = 0.0683$.
 
-\begin{figure}[ht!]
+The blue curve shows the recovery loss~\eqnref{orientation-recovery}, with the minimum highlighted.
+The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, with the mean $E$ highlighted.
+
+\begin{figure}[t]
     \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[height=5.5cm]{figures/5j0n_noise0_ar_aa}
-        \caption{Recovery from noiseless projections $\{ \mathbf{P}_{\bth_i} \x \}$.}
+    \begin{subfigure}[b]{0.42\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,height=8em]{figures/5j0n_noise0_ar_aa}
+        \caption{%
+            Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
+        }\label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.51\linewidth}
-    \centering
-        \includegraphics[height=5.5cm]{figures/5j0n_noise16_ar_aa}
-        \caption{Recovery from noisy projections $\{ \mathbf{P}_{\bth_i} \x + \mathbf{n} \}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$.}
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT}
+        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
     \end{subfigure}
-    % \\
-    % \begin{subfigure}[b]{0.45\textwidth}
-    % \centering
-    %     %\includegraphics[height=5.7cm]{figures/5j0n_noise0_angle_alignment_before}
-    %     \includegraphics[height=5.7cm]{figures/5j0n_noise0_angle_alignment_after}
-    %     \caption{Recovery error, noiseless projections $\mathbf{Px}$.}
-    %     \label{fig:angle-alignment-5j0n-noise0}
-    % \end{subfigure}
-    % \hfill
-    % \begin{subfigure}[b]{0.5\textwidth}
-    % \centering
-    %     %\includegraphics[height=5.7cm]{figures/5j0n_noise16_angle_alignment_before}
-    %     \includegraphics[height=5.7cm]{figures/5j0n_noise16_angle_alignment_after}
-    %     \caption{Recovery error, noisy projections $\mathbf{Px+n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$.}
-    %     \label{fig:angle-alignment-5j0n-noise16}
-    % \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_noise0}
+        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+    \end{subfigure}
     \caption{%
-        Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}).
-        The blue curve shows the recovery loss~\eqnref{orientation-recovery}, with the minimum highlighted.
-        The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, with the mean $E$ highlighted.
-    }\label{fig:5j0n-orientation-recovery-loss-est}
+        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
+        \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?}
+    }\label{fig:5j0n-noise0-reconstruction}
 \end{figure}
 
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection is shown in \figref{5j0n-orientation-recovery-loss-est}~\textbf{(a)}.
-The smallest error achieved is $0.1594$ rad.
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) is shown on histogram in \figref{5j0n-orientation-recovery-loss-est}~\textbf{(b)}.
-The smallest error achieved is $0.4184$ rad.
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[b]{0.42\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,height=8em]{figures/5j0n_noise16_ar_aa}
+        \caption{%
+            Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
+        }\label{fig:5j0n-noise16-orientation-recovery}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT_noise16}
+        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_noise16}
+        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+    \end{subfigure}
+    \caption{%
+        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$ and true (b) or recovered (c) orientations.
+        \mdeff{$E=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
+    }\label{fig:5j0n-noise16-reconstruction}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[b]{0.42\textwidth}
+        \centering
+        \includegraphics[width=\linewidth,height=8em]{figures/5a1a_noise0_ar_aa}
+        \caption{%
+            Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
+        }\label{fig:5a1a-noise0-orientation-recovery}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5a1a_ground_truth}
+        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5a1a_aligned}
+        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+    \end{subfigure}
+    \caption{%
+        Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
+    }\label{fig:5a1a-noise0-reconstruction}
+\end{figure}
+
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection is shown in \figref{5j0n-noise0-orientation-recovery}.
+The smallest error achieved is $E_\text{OR} = 0.1594$ radians.
+The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) is shown on histogram in \figref{5j0n-noise16-orientation-recovery}.
+The smallest error achieved is $E_\text{OR} = 0.4184$ radians.
+
+\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method, and that we did it only to get a crude idea? Or something along those lines. ;)}
 
 As a last step of the pipeline, we performed protein reconstruction using the projections and their corresponding estimated orientations.
 Using the ASTRA toolbox, we generated orientation vectors based on angles which we fed into projection 3D geometry in ASTRA.
-With total of $1,650$ projections in the test dataset, we were able to reconstruct the protein.
-The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noiseless projections} are shown in \figref{5j0n-reconstruction}: \textbf{(a)} using the ground-truth orientations and \textbf{(c)} using the estimated aligned orientations.
-The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noisy projections} are shown in \figref{5j0n-reconstruction}: \textbf{(b)} using the ground-truth orientations and \textbf{(d)} using the estimated aligned orientations.
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.22\linewidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5j0n_reconstruction_GT}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.22\linewidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5j0n_reconstruction_GT_noise16}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.22\linewidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5j0n_reconstruction_noise0}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.22\linewidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5j0n_reconstruction_noise16}
-        \caption{}
-    \end{subfigure}
-    \caption{
-        Performance of orientation recovery of the asymmetric protein (\texttt{5j0n}). \textbf{(a)} Noiseless projections $\mathbf{Px}$, true orientations ${\big\{q_p\big\}}_{p=1}^P$. \textbf{(b)} Noisy projections $\mathbf{Px + n}$, true orientations ${\big\{q_p\big\}}_{p=1}^P$. \textbf{(c)} Noiseless projections $\mathbf{Px}$, recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$. \textbf{(d)} Noisy projections $\mathbf{Px + n}$, recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.
-    }\label{fig:5j0n-reconstruction}
-\end{figure}
+With total of $1,650$ projections in the test dataset \mdeff{\tabref{dataset} says 838 for test, was it validation data?}, we were able to reconstruct the protein.
+The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noiseless projections} are shown in \figref{5j0n-noise0-reconstruction}: \textbf{(a)} using the ground-truth orientations and \textbf{(c)} using the estimated aligned orientations.
+The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noisy projections} are shown in \figref{5j0n-noise16-reconstruction}: \textbf{(b)} using the ground-truth orientations and \textbf{(d)} using the estimated aligned orientations.
+The reconstruction performance is most affected in the presence of noise, due to the degraded estimation of distances in this case.
+We are however confident that these results would substantially improve if a more powerful SiameseNN would be trained on more data.
 
 Similarly, we ran the whole reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
 The experimental conditions for the distance estimation were the same as for the asymmetric protein, except that we used the quarter-sphere projections coverage (whereas, in the asymmetric protein we used half-sphere coverage).
-The orientation recovery loss is shown in \figref{5a1a-orientation-recovery-loss}.
+The orientation recovery loss is shown in \figref{5a1a-noise0-orientation-recovery}.
 It successfully converged to $0.0381$.
-The mean orientation recovery error for symmetric protein \texttt{5a1a} is shown in \figref{angle-alignment-5a1a-noise0}.
+The mean orientation recovery error for symmetric protein \texttt{5a1a} is shown in \figref{5a1a-noise0-orientation-recovery}.
 The smallest error achieved was $0.1871$ rad.
 
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[height=5.5cm]{figures/5a1a_noise0_ar_aa}
-        \caption{Recovery loss \eqnref{orientation-recovery} and recovery error \eqnref{orientation-recovery-error}.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.25\textwidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5a1a_ground_truth}
-        \caption{Reconstruction from true orientations ${\big\{q_p\big\}}_{p=1}^P$.}
-    \end{subfigure}
-    % \\
-    % \begin{subfigure}[b]{0.45\textwidth}
-    %     \centering
-    %     %\includegraphics[height=5.7cm]{figures/5a1a_noise0_angle_alignment_before}
-    %     \includegraphics[height=5.5cm]{figures/5a1a_noise0_angle_alignment_after}
-    %     \caption{Orientation recovery error \eqnref{orientation-recovery-error}.}
-    % \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.25\textwidth}
-        \centering
-        \includegraphics[width=0.99\linewidth]{figures/5a1a_aligned}
-        \caption{Reconstruction from recovered orientations ${\big\{\widehat{q_p}\big\}}_{p=1}^P$.}
-    \end{subfigure}
-    \caption{
-        Orientation recovery and reconstruction of the symmetric protein (\texttt{5a1a}) from noiseless projections.
-    }\label{fig:5a1a-orientation-recovery-loss}
-    \label{fig:angle-alignment-5a1a-noise0}
-    \label{fig:5a1a-reconstruction-noise0}
-\end{figure}
-
 Lastly, we performed the protein reconstruction with the same ASTRA toolbox setting as for the asymmetric protein.
-The results of the reconstruction are shown in \figref{5a1a-reconstruction-noise0}.
+The results of the reconstruction are shown in \figref{5a1a-noise0-reconstruction}.
 We successfully reconstructed the symmetric protein even though the distance estimation was noisier than the one performed on the asymmetric protein.
 
-We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
-However, the method developed is promising since the learned distance is robust to perturbations.
-We observe that the orientation recovery and distance estimation are interconnected, i.e., if one works the other one will work.
+\subsection{Estimating distances on unseen proteins}
 
-To check the generalization to unseen proteins, and not only to  unseen projections, we trained the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
-The orientation recovery reached the error of 0.0352.
-This proves that distance learning was able to abstract the protein and that way generalized the distance metric to the unseen proteins.
+\mdeff{Noiseless for all proteins right?}
+
+To check the generalization to unseen proteins, and not only to  unseen projections, we trained the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
+The orientation recovery reached the error of $L_\text{OR} = 0.0352$ \mdeff{that's the recovery loss, not error right?},
+to be compared with
+Distance learning transfer across proteins Distance can be learned across proteins
+This proves that distance learning is able to abstract the protein and generalize the distance metric to the unseen proteins.

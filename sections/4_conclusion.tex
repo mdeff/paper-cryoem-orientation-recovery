@@ -11,6 +11,10 @@ In addition, using these methods we are able to reconstruct the expected biologi
 %Unfortunately, we have not yet had the time to run an end-to-end pipeline and evaluate the performance of~\eqnref{orientation-recovery} when the trained SiameseNN is used as learned $\widehat{d_p}$; this is very clearly the next line of research.
 %\mdeff{Don't start with the results, but the beauty of the method.}
 
+We observe that the pipeline works, but for the state-of-the-art reconstruction we need a better distance estimation.
+However, the method developed is promising since the learned distance is robust to perturbations.
+We observe that the orientation recovery and distance estimation are interconnected, i.e., if one works the other one will work.
+
 % \lau{Ok I keep the following paragraph here, but depending on the results, we could remove it.}
 % \mdeff{Distance learning should stay the main source of improvement.}
 % First, the results underline the importance of learning an accurate proxy distance $\widehat{d_p}$.
@@ -30,6 +34,7 @@ These methods have a potential to advance the understanding of the protein struc
     \item Sensitivity / invariance to PSF.
     \item Real (not synthetic) data.
     \item Proper reconstruction (beyond our simple ASTRA demo).
+    \item Full pipeline for unseen proteins.
 \end{itemize}
 }
 
