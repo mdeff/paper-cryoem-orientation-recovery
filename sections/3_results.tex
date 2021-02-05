@@ -270,6 +270,8 @@ Besides concentrating on the hyperparameter selection and tuning of the neural n
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Sensitivity of distance learning to perturbations in the projections}\label{sec:results:distance-estimation:sensitivity}
+%\subsection{Generalization of distance learning}
+%\subsection{Generalizability/Abstractability of distance learning}
 
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
@@ -296,6 +298,19 @@ We didn't evaluate sensitivity to the PSF but expect a similar behavior.
 We observe that the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$).
 Moreover, we observe again (\secref{results:orientation-recovery:sensitivity}) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
+%\subsection{Estimating distances on unseen proteins}
+
+As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
+%we also desire our learned distance function to generalize/transfer across density maps $\x$.
+we also desire our learned distance function to generalize to unseen proteins.
+The distance function $\widehat{d_p}$ must abstract the protein (in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections).
+\mdeff{Noiseless for all proteins right?}
+We attempted to recover the orientations of projections from \texttt{5j0n} while we had trained the SiameseNN on four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
+\todo{Same number of projections as in \tabref{dataset}?}
+We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.},
+to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
+While performance is somewhat degraded, we conclude that it is possible to use a learned distance function on unseen proteins.
+
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.47\linewidth}
@@ -316,10 +331,12 @@ Moreover, we observe again (\secref{results:orientation-recovery:sensitivity}) t
     \caption{%
         Sensitivity of distance learning to perturbations in the projections of \texttt{5j0n}.
         The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+        \mdeff{Numbers are per pair or per batch of 256 pairs?}
         Boxes show the orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
-        \mdeff{It's confusing that red and blue are used for both train vs validation and $E$ vs $OR$. I don't think we need colors for $E$ and $OR$. They could both be in the same black box.}
-        \mdeff{Legend consistency: train -> training set, validation -> validation set.}
-        \mdeff{Add $L_\text{DE}$ to the y-axis legend.}
+        \mdeff{It's confusing that red and blue are used for both train vs validation and $E_\text{OR}$ vs $L_\text{OR}$. I don't think we need colors for $E_\text{OR}$ and $L_\text{OR}$. They could both be in the same black box.}
+        \todo{Legend consistency: train -> training set, validation -> validation set.}
+        \todo{Add $L_\text{DE}$ to the y-axis legend.}
+        \todo{Add $\sigma^2$ to the x-axis legend of (b).}
     }
 \end{figure}
 
@@ -427,7 +444,7 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?}
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
-        \mdeff{$E=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
+        \mdeff{$E_\text{OR}=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
         \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}
     }
@@ -452,15 +469,3 @@ We observe that the estimation of more accurate distances not only lead to the r
 We are hence confident that reconstruction would substantially improve if a more powerful SiameseNN would be trained on more data for distance estimation (and a \todo{more serious/advanced/less naive?} method used for reconstruction).
 %\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
 %Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
-
-\subsection{Estimating distances on unseen proteins}
-
-\mdeff{Noiseless for all proteins right?}
-
-Finally
-To check the generalization to unseen proteins, and not only to  unseen projections, we trained the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
-\todo{Same number of projections as in \tabref{dataset}?}
-The orientation recovery reached the error of $L_\text{OR} = 0.0352$ \mdeff{that's the recovery loss, not error right? Could we have the error? It's easier to understand.},
-to be compared with
-Distance learning transfer across proteins Distance can be learned across proteins
-This proves that distance learning is able to abstract the protein and generalize the distance metric to the unseen proteins.
