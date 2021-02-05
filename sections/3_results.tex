@@ -140,6 +140,7 @@ We employ the definition of a correct estimation: the estimation must be within 
 
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs (i.e., $150 \times 63,126$ steps, \mdeff{correct?} \mdeff{Why didn't we sample for $x$ steps in the $6,312,656$ possible pairs? It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}) on batches of $256$ pairs sampled from training sets (\tabref{dataset}).
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ for $7000$ steps ($\sim 1.4$ hour) on batches of $256$ pairs sampled from the validation or test sets (\tabref{dataset}).
+\todo{Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery} and~\ref{fig:5a1a-noise0-orientation-recovery} show that more than $7000$ steps were used. We don't need to give a number and say something like ran until convergence.}
 \mdeff{Jelena: when did you use the validation set? When the test?}
 %\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl} and a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$ orientations; and report the lowest of 6 runs (3 per value of $m$) of 300 steps each.
@@ -282,7 +283,7 @@ As discussed in \secref{method:distance-learning}, the convolutional architectur
 % Noise.
 As we cannot---or do not (yet) know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy datasets and evaluated whether it could learn to ignore noise as being irrelevant information.
 % brute force vs principled engineering
-\figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($5\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($13\degree$) for a more realistic noise variance of $\sigma^2=15$.
+\figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=15$.
 \mdeff{How good is that?}
 While not invariant, the SiameseNN learned to discard noise (while a naive Euclidean distance would be tremendously sensible to it).
 Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will decrease the SiameseNN sensitivity to noise.
@@ -293,7 +294,8 @@ We didn't evaluate sensitivity to the PSF but expect a similar behavior.
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
 %We know how to do it for shifts, not noise or PSF.
 
-Note that we observe again (\secref{results:orientation-recovery:sensitivity}) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$, and that the estimation of more accurate distances (a smaller $L_\text{DE}$) induces the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$).
+We observe that the estimation of more accurate distances (a smaller $L_\text{DE}$) induces the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$).
+Moreover, we observe again (\secref{results:orientation-recovery:sensitivity}) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
 \begin{figure}[ht!]
     \centering
@@ -324,48 +326,55 @@ Note that we observe again (\secref{results:orientation-recovery:sensitivity}) t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Orientation recovery and reconstruction from estimated distances}
+\subsection{Orientation recovery and density reconstruction from estimated distances}
+%\subsection{Density reconstruction from recovered orientations}
 
 \todo{
 \begin{itemize}
     \item Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth} (which deforms the figure).
     \item Add $L_\text{OR}=0.?$ and $E_\text{OR}=0.?$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.
+    \item Would be nice to know $L_\text{DE}$ for the three cases.
+    \item ``With total of $1,650$ projections in the test dataset, we were able to reconstruct the protein.'' \mdeff{But \tabref{dataset} says 838 for test. Was it validation data?}
 \end{itemize}
 }
 
-%\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
-%Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
+%Estimating distances lead to recovering better orientations, which should lead to more accurate reconstructions of density maps.
+%We checked how estimation of distances translates to a better reconstruction of the density map, not
+As a proof-of-concept, we attempted to solve the inverse problem posed by \eqnref{imaging-model} and reconstructed the density map $\x$ from a set of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ as recovered by our method.
+%We ran the full pipeline---distance estimation, orientation recovery, and protein reconstruction---to validate our method.
+%The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
 
-The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
-We ran the pipeline for both, asymmetric (\texttt{5j0n}) and symmetric (\texttt{5a1a}) protein.
-In addition, we ran the pipeline for the simulated realistic noise in the asymmetric protein.
+%For a protein, we trained our SiameseNN trough \eqnref{distance-learning} on its training set, then recovered orientations on the test set.
 
-We then ran the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-noise0-orientation-recovery} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
-With the noiseless projections, the objective function successfully converged to the $L_\text{OR} = 0.0510$ and with the noisy projections, the objective function converged to the $L_\text{OR} = 0.0683$.
-
-The blue curve shows the recovery loss~\eqnref{orientation-recovery}, with the minimum highlighted.
-The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, with the mean $E$ highlighted.
+To understand the effect of miss-recovered orientations, we reconstructed the densities from both the recovered orientations $\{ \widehat{q_i} \}$ and the true orientations $\{ q_i \}$ along which the projections were acquired.
+The density maps were reconstructed by the ASTRA toolbox.
+\todo{Using the ASTRA toolbox, we generated orientation vectors based on angles which we fed into projection 3D geometry in ASTRA.}
+\todo{Make clearer. Are there enough details?}
+\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method, and that we did it only to get a crude idea? Or something along those lines. ;)}
+For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
+\todo{More details. What happened otherwise?}
 
 \begin{figure}[t]
     \centering
     \begin{subfigure}[b]{0.42\textwidth}
         \centering
         \includegraphics[width=\linewidth,height=8em]{figures/5j0n_noise0_ar_aa}
-        \caption{%
-            Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
-        }\label{fig:5j0n-noise0-orientation-recovery}
+        \caption{Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.}%
+        \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_GT}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise0}
-        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
+        \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \caption{%
         Orientation recovery (a) and reconstruction of \texttt{5j0n} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
@@ -378,26 +387,27 @@ The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, 
     \begin{subfigure}[b]{0.42\textwidth}
         \centering
         \includegraphics[width=\linewidth,height=8em]{figures/5j0n_noise16_ar_aa}
-        \caption{%
-            Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
-        }\label{fig:5j0n-noise16-orientation-recovery}
+        \caption{Orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.}%
+        \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_GT_noise16}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5j0n-noise16-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise16}
-        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
+        \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \caption{%
         Orientation recovery (a) and reconstruction of \texttt{5j0n} from noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$ and true (b) or recovered (c) orientations.
         \mdeff{$E=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
-    }\label{fig:5j0n-noise16-reconstruction}
+    }
 \end{figure}
 
 \begin{figure}[t]
@@ -413,51 +423,46 @@ The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, 
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5a1a_ground_truth}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5a1a-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5a1a_aligned}
-        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
+        \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
-    \caption{%
-        Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
-    }\label{fig:5a1a-noise0-reconstruction}
+    \caption{Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.}
 \end{figure}
 
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} without noise in the projection is shown in \figref{5j0n-noise0-orientation-recovery}.
-The smallest error achieved is $E_\text{OR} = 0.1594$ radians.
-The mean orientation recovery error for asymmetric protein \texttt{5j0n} with noisy projections (white noise with variance 16) is shown on histogram in \figref{5j0n-noise16-orientation-recovery}.
-The smallest error achieved is $E_\text{OR} = 0.4184$ radians.
+\figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations (from estimated distances) from clean projections of \texttt{5j0n}.
+The blue curve shows the evolution of the recovery loss until convergence, with the minimum $L_\text{OR}$ highlighted.
+The red histogram shows the errors in the recovered orientations $\{d_q(q_i, \mathbf{T}\widehat{q_i})\}$, with the mean $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) highlighted.
+The reconstructed density map (\figref{5j0n-noise0-reconstruction-recovered}) is \todo{pretty good?} compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
+\mdeff{I'm not sure how to qualify the reconstructed proteins.}
 
-\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method, and that we did it only to get a crude idea? Or something along those lines. ;)}
+As expected from the experiments in \secref{results:distance-estimation:sensitivity}, adding noise (white noise with variance $\sigma^2=16$) worsen the recovered orientations to a mean error of $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$), which leads to a worse reconstruction (\figref{5j0n-noise16-reconstruction-recovered}).
+Note that reconstructing from true orientations worsen too  (\figref{5j0n-noise16-reconstruction-true}) as the projections themselves are degraded.
 
-As a last step of the pipeline, we performed protein reconstruction using the projections and their corresponding estimated orientations.
-Using the ASTRA toolbox, we generated orientation vectors based on angles which we fed into projection 3D geometry in ASTRA.
-With total of $1,650$ projections in the test dataset \mdeff{\tabref{dataset} says 838 for test, was it validation data?}, we were able to reconstruct the protein.
-The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noiseless projections} are shown in \figref{5j0n-noise0-reconstruction}: \textbf{(a)} using the ground-truth orientations and \textbf{(c)} using the estimated aligned orientations.
-The reconstruction results for the asymmetric protein (\texttt{5j0n}) with \textit{noisy projections} are shown in \figref{5j0n-noise16-reconstruction}: \textbf{(b)} using the ground-truth orientations and \textbf{(d)} using the estimated aligned orientations.
-The reconstruction performance is most affected in the presence of noise, due to the degraded estimation of distances in this case.
-We are however confident that these results would substantially improve if a more powerful SiameseNN would be trained on more data.
+Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from clean projections of \texttt{5a1a}.
+A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to a \todo{blurrier} reconstruction (\figref{5j0n-noise0-reconstruction-recovered}) compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
+Orientation recovery is slightly more difficult here \todo{because} \mdeff{Symmetries? Something else? What makes \texttt{5a1a} harder than \texttt{5j0n}?}.
 
-Similarly, we ran the whole reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
-The experimental conditions for the distance estimation were the same as for the asymmetric protein, except that we used the quarter-sphere projections coverage (whereas, in the asymmetric protein we used half-sphere coverage).
-The orientation recovery loss is shown in \figref{5a1a-noise0-orientation-recovery}.
-It successfully converged to $0.0381$.
-The mean orientation recovery error for symmetric protein \texttt{5a1a} is shown in \figref{5a1a-noise0-orientation-recovery}.
-The smallest error achieved was $0.1871$ rad.
-
-Lastly, we performed the protein reconstruction with the same ASTRA toolbox setting as for the asymmetric protein.
-The results of the reconstruction are shown in \figref{5a1a-noise0-reconstruction}.
-We successfully reconstructed the symmetric protein even though the distance estimation was noisier than the one performed on the asymmetric protein.
+We observe that the estimation of more accurate distances not only lead to the recovery of more accurate orientations, but also to the reconstruction of more accurate densities.
+%Reconstruction is most affected by the presence of noise, due to the degraded estimation of distances.
+We are confident that these results would substantially improve if a more powerful SiameseNN would be trained on more data.
+%\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
+%Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
 
 \subsection{Estimating distances on unseen proteins}
 
 \mdeff{Noiseless for all proteins right?}
 
+Finally
 To check the generalization to unseen proteins, and not only to  unseen projections, we trained the distance estimation on the set of four different proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}) that have the same type of symmetry (asymmetric  C1) as the one protein (\texttt{5j0n}) in the test dataset that is used in orientation recovery.
-The orientation recovery reached the error of $L_\text{OR} = 0.0352$ \mdeff{that's the recovery loss, not error right?},
+\todo{Same number of projections as in \tabref{dataset}?}
+The orientation recovery reached the error of $L_\text{OR} = 0.0352$ \mdeff{that's the recovery loss, not error right? Could we have the error? It's easier to understand.},
 to be compared with
 Distance learning transfer across proteins Distance can be learned across proteins
 This proves that distance learning is able to abstract the protein and generalize the distance metric to the unseen proteins.
