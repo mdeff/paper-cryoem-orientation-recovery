@@ -365,19 +365,19 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
-        \label{fig:5j0n-noise0-reconstruction-true}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.27\linewidth}
-        \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise0}
         \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
         \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5j0n-noise0-reconstruction-true}
+    \end{subfigure}
     \caption{%
-        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
+        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and recovered (b) or true (c) orientations.
         \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?}
     }\label{fig:5j0n-noise0-reconstruction}
 \end{figure}
@@ -393,19 +393,19 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT_noise16}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
-        \label{fig:5j0n-noise16-reconstruction-true}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.27\linewidth}
-        \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise16}
         \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
         \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5j0n_reconstruction_GT_noise16}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5j0n-noise16-reconstruction-true}
+    \end{subfigure}
     \caption{%
-        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$ and true (b) or recovered (c) orientations.
+        Orientation recovery (a) and reconstruction of \texttt{5j0n} from noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$ and recovered (b) or true (c) orientations.
         \mdeff{$E=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
     }
 \end{figure}
@@ -422,18 +422,18 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5a1a_ground_truth}
-        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
-        \label{fig:5a1a-noise0-reconstruction-true}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.27\linewidth}
-        \centering
         \includegraphics[height=8em]{figures/5a1a_aligned}
         \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}%
         \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
-    \caption{Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.}
+    \hfill
+    \begin{subfigure}[b]{0.27\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/5a1a_ground_truth}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}%
+        \label{fig:5a1a-noise0-reconstruction-true}
+    \end{subfigure}
+    \caption{Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and recovered (b) or true (c) orientations.}
 \end{figure}
 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations (from estimated distances) from clean projections of \texttt{5j0n}.
@@ -442,7 +442,7 @@ The red histogram shows the errors in the recovered orientations $\{d_q(q_i, \ma
 The reconstructed density map (\figref{5j0n-noise0-reconstruction-recovered}) is \todo{pretty good?} compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
 \mdeff{I'm not sure how to qualify the reconstructed proteins.}
 
-As expected from the experiments in \secref{results:distance-estimation:sensitivity}, adding noise (white noise with variance $\sigma^2=16$) worsen the recovered orientations to a mean error of $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$), which leads to a worse reconstruction (\figref{5j0n-noise16-reconstruction-recovered}).
+As expected from the experiments in \secref{results:distance-estimation:sensitivity}, adding noise (white noise with variance $\sigma^2=16$) worsen the recovered orientations (\figref{5j0n-noise16-orientation-recovery}) to a mean error of $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$), which leads to a worse reconstruction (\figref{5j0n-noise16-reconstruction-recovered}).
 Note that reconstructing from true orientations worsen too  (\figref{5j0n-noise16-reconstruction-true}) as the projections themselves are degraded.
 
 Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from clean projections of \texttt{5a1a}.
