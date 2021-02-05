@@ -159,6 +159,7 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
 \todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want translation invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections).}
 \todo{After some experimention, we ended up with the architecture described in \apxref{siamese-architecture} (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
+% \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
 To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$, we set $d_f = d_q$.

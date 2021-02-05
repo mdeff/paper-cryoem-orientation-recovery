@@ -121,38 +121,49 @@ In particular, the larger the quaternion distance $d_q$, the poorer the predicti
 The other interesting observation is that the trend of $(d_q,d_p)$ plot of the $\beta$-galactosidase protein (\texttt{5a1a}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
 \mdeff{Check these refs. Other ones are used in main text?}
 
-\section{Distance estimation: Influence of network architecture and feature distance}\label{apx:de-influence-arch}
+\section{Choice of feature distance}\label{apx:de-influence-arch}
 
-%\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
+%\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
-\mdeff{Anything about the architecture of $G_w$?}
-
-To further improve our network, we experiment with different feature distance metrics $d_f(\mathbf{f}_i,\mathbf{f}_j)$.
-In the previous experiments we used the Euclidean distance as a features distance metric, \textit{i.e.} $d_f(\mathbf{f}_i,\mathbf{f}_j)=\lVert \mathbf{f}_i-\mathbf{f}_j\rVert_2$.
-%\mdeff{Consistency: In \secref{method:distance-learning}, I used $d_f$  (for consistency with $d_p$ and $d_q$) and $\mathbf{f}_i$ (for consistency with $\p_i$ and $q_i$).}
-
-In this experiment, we test the performance with a geodesic distance, \textit{i.e.}
+There are multiple options for a distance function between features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$.
+As we wrote in \secref{method:distance-learning}, we chose the cosine distance
 \begin{equation*}
-    d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\mathbf{f}_i \cdot \mathbf{f}_j}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right) = 2 \arccos \left( \frac{\sum_{k=1}^n f_{i,k} f_{j,k}}{\sqrt{\sum_{k=1}^n f_{i,k}^2}\sqrt{\sum_{k=1}^n f_{j,k}^2 }} \right).
-    \label{eqn:geodesic-distance}
+    d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right).
 \end{equation*}
+\mdeff{No absolute value here? As in \eqnref{distance:orientations}.}
+A common choice is the Euclidean distance $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$.
 
-Additionally, we parametrize $d_f(\mathbf{f}_i,\mathbf{f}_j)$ as MLP. It consists of six hidden linear layers with \texttt{1024}, \texttt{512}, \texttt{512}, \texttt{256}, \texttt{256}, and \texttt{1} unit respectively. All of them use SeLU as an activation function.
+Another option is to parametrize $d_f$ as a multi-layer perceptron (MLP) and learn it.
+We tried with an MLP made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function.
+The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ to be fed to the MLP.
 
-The experimental conditions are the same as in the previous section with the Euclidean distance metric as feature distance metric.
-\figref{geo-eucl-mlp} shows the training and validation losses of the geodesic distance are better than Euclidean and MLP feature distance metric. We can also observe the performance on the $(d_q, d_p)$ plots and notice that the projection pairs deviate the least using the geodesic distance.
-%\todo{Why? Add and rephrase hypotheses. Cosine distance has the same geometry as $d_q$. Euclidean has not (no periodicity nor curvature). MLP doesn't guarantee it's a distance function (not symmetric, zero between itself, triangle inequality) and might need much more data.}
-The reason for a geodesic distance to perform the best is that it has the same geometry as quaternion distance $d_q$ in $\SO(3)$ space. Whereas, the Euclidean distance is not desirable on $\SO(3)$ since it does not respect the manifold's non-linearity (it has no periodicity nor curvature) and can lead to unpredictable behaviours. The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
-Moreover, MLP does not guarantee that it is a distance function. For MLP to be a distance function, it should have the following properties: (1) support symmetry; (2) output zero with two identical inputs; (3) support triangle inequality. In addition, we might need much more data for the MLP training.
-Hence, it is desirable to have a distance function that respects the structure of $\SO(3)$ space.
+\figref{geo-eucl-mlp} compares the three.
+While an MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality).
+Given its flexibility, it needs a lot of data to properly train---hence why it failed.
+
+The performances of the Euclidean and cosine distances are close.
+The cosine is however best: $L_\text{DE}$ is the lowest, making $d_p$ a better estimator of $d_q$.
+% the projection pairs deviate the least from the identity
+The cosine distance performs better as it models the elliptic geometry of $\SO(3)$, while the Euclidean distance does not (as Euclidean space is neither periodic nor curved).
+%The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
 
 \begin{figure}
     \centering
     \includegraphics[height=7cm]{figures/geo_eucl_mlp_distance_metric.pdf}
     \caption{
-        Training and validation epoch losses w.r.t. feature vectors' distance metric and their corresponding distance ratio $(d_q, d_p)$ plots.
+        Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
+        The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+        The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
+        \todo{Consistency: train -> training set, validation -> validation set. Add $L_\text{DE}$ to the y-axis label. Larger text.}
+        \mdeff{Can we make this figure wider but flatter? To better fit the page and use less vertical space.}
     }\label{fig:geo-eucl-mlp}
 \end{figure}
+
+% it could be tempting to
+An alternative would have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, and avoid the orientation recovery step.
+While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
+% $n_f=4$ dimensional space is too constrained
+\mdeff{Did we try that? Would be nice to have the results if we did.}
 
 \clearpage
 \section{SiameseNN architecture}\label{apx:siamese-architecture}

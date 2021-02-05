@@ -1,10 +1,11 @@
 \section{Experiments}\label{sec:experiments}
 
-%\lau{Put pas tense everywhere.}
-
-\todo{Update throughout (also in figures): $E \rightarrow E_\text{OR}, OR \rightarrow L_\text{OR}$, and use $L_\text{DE}$.}
-
-\mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = plt.figure(figsize=(4, 4))}}.
+\begin{itemize}
+    \item \lau{Put pas tense everywhere.}
+    \item \todo{Update throughout (also in figures): $E \rightarrow E_\text{OR}, OR \rightarrow L_\text{OR}$, and use $L_\text{DE}$.}
+    \item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = plt.figure(figsize=(4, 4))}}.
+    \item \mdeff{We now have one figure per section. That's good, it makes the story of each section easy to grasp.}
+\end{itemize}
 
 To evaluate our method, we started with the orientation recovery experiments that included tests of feasibility and sensitivity to distance estimation error.
 We then learned the distance using a SiameseNN and compared its performance with the baseline.
@@ -140,7 +141,7 @@ We employ the definition of a correct estimation: the estimation must be within 
 
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs (i.e., $150 \times 63,126$ steps, \mdeff{correct?} \mdeff{Why didn't we sample for $x$ steps in the $6,312,656$ possible pairs? It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}) on batches of $256$ pairs sampled from training sets (\tabref{dataset}).
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ for $7000$ steps ($\sim 1.4$ hour) on batches of $256$ pairs sampled from the validation or test sets (\tabref{dataset}).
-\todo{Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery} and~\ref{fig:5a1a-noise0-orientation-recovery} show that more than $7000$ steps were used. We don't need to give a number and say something like ran until convergence.}
+\todo{Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery} and~\ref{fig:5a1a-noise0-orientation-recovery} show that more than $7000$ steps were used. We don't need to give a number, but could say something like we ran until convergence if that's how you did it. ;)}
 \mdeff{Jelena: when did you use the validation set? When the test?}
 %\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl} and a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$ orientations; and report the lowest of 6 runs (3 per value of $m$) of 300 steps each.
