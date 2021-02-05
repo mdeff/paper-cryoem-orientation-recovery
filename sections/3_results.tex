@@ -105,13 +105,14 @@ The mathematical formulation of these three components is given in \eqnref{imagi
         \toprule
         Dataset & Number of projections $P$ (\%) & Maximum number of pairs $P^2$ & Used number of pairs \\
         \midrule
-        Train & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
+        Training & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
         Validation & 1650 (33\%) & 2,722,500 & 27,225 (1\%) \\
         Test & 838 (17\%) & 701,406 & all (sampled per batch) \\
         \bottomrule
     \end{tabular}
     \caption{
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
+        \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
     }\label{tab:dataset}
 \end{table}
 
@@ -135,38 +136,21 @@ We employ the definition of a correct estimation: the estimation must be within 
 \mdeff{Do we use this definition?}
 \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and mean orientation recovery error before and after alignment with the perfect distance $d_q$.
 
-%\mdeff{Why is it good? Intuitive sure. Laurène, can we say something more?}
+\paragraph{Optimization settings.}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{Results}\label{sec:results:orientation-recovery}
-
-
-
-%\mdeff{Story: good distance estimation = good orientation recovery.}
-% \begin{algorithm}[H]
-% \SetAlgoLined
-% \KwResult{Write here the result }
-%  initialization\;
-%  \For{$steps \gets 1$ \textbf{to} $30000$}{
-%   instructions\;
-%   \eIf{condition}{
-%   instructions1\;
-%   instructions2\;
-%   }{
-%   instructions3\;
-%   }
-%  }
-%  \caption{Orientation recovery algorithm}
-% \end{algorithm}
-
+We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs (i.e., $150 \times 63,126$ steps, \mdeff{correct?} \mdeff{Why didn't we sample for $x$ steps in the $6,312,656$ possible pairs? It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}) on batches of $256$ pairs sampled from training sets (\tabref{dataset}).
+We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ for $7000$ steps ($\sim 1.4$ hour) on batches of $256$ pairs sampled from the validation or test sets (\tabref{dataset}).
+\mdeff{Jelena: when did you use the validation set? When the test?}
+%\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
+We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl} and a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$ orientations; and report the lowest of 6 runs (3 per value of $m$) of 300 steps each.
+\mdeff{Above is all about data. Shall we write here about ``optimization settings''? I think they apply to all experiments, but we could clarify if some differ. Alternatively, they could go in the Method section (though to me they are more of a practical than method matter). What do you think?}
+\mdeff{Jelena: could you check the settings, make sure they are used for all experiments, and add anything missing?}
 
 %\subsubsection{Robustness of Recovery to Additive Errors on the Relative Distances}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Sensitivity of orientation recovery to errors in distance estimation}\label{sec:results:orientation-recovery:sensitivity}
 
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
+%\mdeff{Story: good distance estimation = good orientation recovery.}
 
 To prove that orientation recovery is feasible, we first evaluate the performance assuming we have ideal distance metric between two projections, i.e., the quaternion distance between their corresponding orientations.
 The method successfully recovers the orientation of every projection, see \apxref{results:orientation-recovery:exact}.
@@ -251,7 +235,6 @@ To assess the progress and effectiveness of our distance estimation implementati
 %     \label{fig:learned-distance-siamese}
 % \end{figure}
 
-For each protein, we trained the SiameseNN on its training dataset for 150 epochs ($\sim$2.6 hours) using an RMSProp optimizer~\cite{tieleman2012rmsprop}, a learning rate of $10^{-3}$, and a batch size of 256 pairs.
 As a feature distance $d_f$ between the outputs of the two CNNs we used the Geodesic distance \eqnref{geodesic-distance}.
 \mdeff{We wrote in the method that we take $d_f=d_q$. Shall we repeat? I don't think we should if the only experiments where that is untrue is in \apxref{de-influence-arch}.}
 The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs).
@@ -341,24 +324,21 @@ Note that we observe again (\secref{results:orientation-recovery:sensitivity}) t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Orientation recovery from estimated distances}
+\subsection{Orientation recovery and reconstruction from estimated distances}
 
+\todo{
 \begin{itemize}
-    \item \mdeff{We recovered orientations in the last section too.}
-    \item \todo{Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth}.}
-    \item \todo{Add $L_\text{OR}=0.?$ and $E_\text{OR}=0.?$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.}
+    \item Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth} (which deforms the figure).
+    \item Add $L_\text{OR}=0.?$ and $E_\text{OR}=0.?$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.
 \end{itemize}
+}
 
 %\mdeff{Story: pipeline works but better distance estimation is needed for SOTA reconstruction.
 %Method is however promising because learned distance is robust to perturbations and recovery works if distance works.}
-%\todo{Justify threshold because of plateau (figref).
-%Show recovered orientations w.r.t.\ ground truth after alignment.}
-%\todo{Reconstruct the protein to show the full pipeline: from a set of projections to a reconstructed protein.}
 
 The orientation recovery from estimated distances represents a full pipeline needed to reconstruct the protein from a given set of projections.
 We ran the pipeline for both, asymmetric (\texttt{5j0n}) and symmetric (\texttt{5a1a}) protein.
 In addition, we ran the pipeline for the simulated realistic noise in the asymmetric protein.
-The experimental setting for distance estimation was similar to the one used to generate the \figref{losses-siamese}: 150 epochs, 1e-3 learning rate, batch size 256 with random sampling of the projections, but for feature distance metric we used the geodesic distance since it showed the best performance in \figref{geo-eucl-mlp}.
 
 We then ran the orientation recovery on the estimated distances of the asymmetric protein and the performance results can be observed in \figref{5j0n-noise0-orientation-recovery} with the same experimental setting as in \figref{5j0n-orientation-recovery-loss}.
 With the noiseless projections, the objective function successfully converged to the $L_\text{OR} = 0.0510$ and with the noisy projections, the objective function converged to the $L_\text{OR} = 0.0683$.
@@ -379,13 +359,13 @@ The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, 
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_GT}
-        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise0}
-        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
     \end{subfigure}
     \caption{%
         Orientation recovery (a) and reconstruction of \texttt{5j0n} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
@@ -406,13 +386,13 @@ The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, 
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_GT_noise16}
-        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_reconstruction_noise16}
-        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
     \end{subfigure}
     \caption{%
         Orientation recovery (a) and reconstruction of \texttt{5j0n} from noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$ and true (b) or recovered (c) orientations.
@@ -433,13 +413,13 @@ The red histogram shows the recovery error~\eqnref{orientation-recovery-error}, 
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5a1a_ground_truth}
-        \caption{Reconstructing $\x$ from $\{ \p_i, q_i \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, q_i \}$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.27\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5a1a_aligned}
-        \caption{Reconstructing $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
+        \caption{Reconstructed $\x$ from $\{ \p_i, \widehat{q_i} \}$.}
     \end{subfigure}
     \caption{%
         Orientation recovery (a) and reconstruction of \texttt{5a1a} from noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$ and true (b) or recovered (c) orientations.
