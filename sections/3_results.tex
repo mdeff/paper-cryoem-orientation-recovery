@@ -105,16 +105,14 @@ We then corrupted the measurements with different levels of additive Gaussian no
         Dataset & Number of projections $P$ (\%) & Maximum number of pairs $P^2$ & Used number of pairs \\
         \midrule
         Training & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
-        
         Validation & 838 (17\%) & 701,406 & 7,014 (1\%) \\
         Test & 1650 (33\%) & 2,722,500 & all (sampled per batch) \\
         \bottomrule
     \end{tabular}
-    \caption{
+    \caption{%
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
         \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
         \banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$}
-        
     }\label{tab:dataset}
 \end{table}
 
@@ -449,7 +447,7 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         \mdeff{$E_\text{OR}=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}\banjac{Not coincidence. I  use the result from variance 16 for variance 15 on variance plot. I fill fix it to 16 in 9b}
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave \theta. Laurene what do you think?}
+        \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave $\bth$. Laurene what do you think?}
     }
 \end{figure}
 
