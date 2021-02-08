@@ -96,21 +96,21 @@ The challenge of distance estimation is to define the distance between two proje
 We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (i.e., the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
 For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
-We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the asymmetric protein (left) and the symmetric one (right).
+We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5j0n}
-        \caption{Asymmetric protein (\texttt{5j0n}).}
+        \caption{\texttt{5j0n}}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
-        \caption{Symmetric protein (\texttt{5a1a}).}
+        \caption{\texttt{5a1a}}
     \end{subfigure}
     \caption{
-        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ for \textbf{(a)} the asymmetric protein (\texttt{5j0n}) dataset, and \textbf{(b)} the symmetric protein (\texttt{5a1a}) dataset.
+        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ for \textbf{(a)} \texttt{5j0n} dataset, and \textbf{(b)} \texttt{5a1a} dataset.
         The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
     }\label{fig:euclidean-not-robust}
 \end{figure}
@@ -118,7 +118,7 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
-The other interesting observation is that the trend of $(d_q,d_p)$ plot of the $\beta$-galactosidase protein (\texttt{5a1a}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
+The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
 \mdeff{Check these refs. Other ones are used in main text?}
 
 \section{Choice of feature distance}\label{apx:feature-distance}

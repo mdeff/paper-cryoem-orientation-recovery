@@ -7,20 +7,23 @@
     \item \mdeff{We now have one figure per section. That's good, it makes the story of each section easy to grasp.}
 \end{itemize}
 
-To evaluate our method, we started with the orientation recovery experiments that included tests of feasibility and sensitivity to distance estimation error.
-We then learned the distance using a SiameseNN and compared its performance with the baseline.
+We started by evaluating whether orientation recovery was feasible assuming perfect distances, and how it was affected by errors in distance estimations (Section~\ref{sec:results:orientation-recovery:sensitivity}).
+We then learned the distance itself using a SiameseNN and compared its performance with the baseline (Section~\ref{sec:results:distance-estimation:learned}).
 %After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections.  and the network architecture is adjusted
-The robustness of the network to perturbations is then evaluated.
-Finally, we ran the whole machine learning pipeline to recover the orientations from estimated distances.
+Following this, we evaluated the robustness of the network to different types of perturbation in the measurements (Section~\ref{sec:results:distance-estimation:sensitivity}).
+Finally, we ran the whole machinery to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (Section~\ref{sec:results:orientation-recovery:reconstruction}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Experimental conditions}\label{sec:results:data}
 
-\paragraph{Proteins.}
+\paragraph{Density maps.}
 We considered two proteins (\figref{pdb-proteins}): the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetry.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
-For each atomic model, we generated the ground truth by fitting a 5\AA\ density map in Chimera~\cite{pettersen2004ucsf}, which gave us a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and a volume of $69 \times 57 \times 75$ voxels for the HJI.
+For each atomic model, we generated the density map by fitting a 5\AA\ map in Chimera~\cite{pettersen2004ucsf}; this gave us a ($110 \times 155 \times 199$)-sized volume for the $\beta$-galactosidase, and ($69 \times 57 \times 75$)-sized volume for the HJI.
 
-\mdeff{How should we refer to the proteins beyond this point? Symmetric vs asymmetric, $\beta$-galactosidase vs HJI, or \texttt{5a1a} vs \texttt{5j0n}. It should be consistent. I'd vote for \texttt{5a1a} vs \texttt{5j0n}, and refer to the asymmetry if relevant for the experiment, explaining why.}
+%\mdeff{How should we refer to the proteins beyond this point? Symmetric vs asymmetric, $\beta$-galactosidase vs HJI, or \texttt{5a1a} vs \texttt{5j0n}. It should be consistent. I'd vote for \texttt{5a1a} vs \texttt{5j0n}, and refer to the asymmetry if relevant for the experiment, explaining why.}
+%\banjac{Fixed}
 
 \begin{figure}[ht!]
     \centering
@@ -38,7 +41,7 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
             \caption*{\texttt{5j0n}}
         \end{subfigure}
         \caption{%
-            Ground-truth proteins: the $\beta$-galactosidase (\texttt{5a1a})~\cite{5a1a_pdb}, and the lambda excision HJ intermediate (\texttt{5j0n})~\cite{5j0n_pdb}.
+            Ground-truth atomic models: the $\beta$-galactosidase (\texttt{5a1a}), and the lambda excision HJ intermediate (\texttt{5j0n}).
         }\label{fig:pdb-proteins}
     \end{minipage}
     \hfill
@@ -69,36 +72,32 @@ For each atomic model, we generated the ground truth by fitting a 5\AA\ density 
             \caption*{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
         \end{subfigure}
         \caption{%
-            Example projections of \texttt{5j0n}.
+            Example projections of \texttt{5j0n} \textcolor{red}{. Projection of density map, not atomic model. Maybe mention that operators are defined in equation X}.
             % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
         }\label{fig:different-projections}
     \end{minipage}
 \end{figure}
 
-\paragraph{Projections.}
-From these ground truths, we generated $5,000$ synthetic projections of size $275\times 275$ and $116\times 116$, respectively, using the ASTRA projector~\cite{van2015astra}.
-Our projection generator supports two orientation samplings: (i) sampling the Euler angles $\bth=(\theta_3,\theta_2,\theta_1)$ 
+\paragraph{Simulated projections.}
+From these ground truths, we generated $5,000$ synthetic projections of size ($275\times 275$) and ($116\times 116$), respectively, using the ASTRA projector~\cite{van2015astra}.
+\textcolor{red}{Double-check:} Orientations were obtained by uniformly sampling the Euler angles $\bth=(\theta_3,\theta_2,\theta_1) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$. 
 %\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
-Due to protein symmetries, orientations were sampled differently.
-The entire \texttt{5j0n} complex being asymmetric~\cite{doi:10.1002/9780470514160.ch4} makes it sufficient to sample the \textit{half} of the $\mathbb{S}^2$ sphere, since the other half will have equivalent projections that are symmetric to the center of this sphere.
-Conversely, the $\beta$-galactosidase has D2 symmetry, i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
-\mdeff{Do we need so many refs? Please check if they are all relevant.}
-Therefore, we restricted the sampling to the quarter of the $\mathbb{S}^2$ sphere.
-\figref{different-projections} shows example projections.
-\mdeff{We should make it clear which 2 Euler angles parameterize $\mathbb{S}^2$, and which remaining one is to parameterize the full $\SO(3)$. Then we could be explicit and write something like we (uniformly?) sampled $(\theta_2, \theta_1) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$.}
-
-\todo{As opposed projections are mirrored, we cannot resolve chirality.\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.}
-Global orientation is lost by projecting, and chirality is lost by integrating.
+The \texttt{5j0n} complex being asymmetric, it was sufficient to only sample half  the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.%, the other half having equivalent projections symmetric to the center of this sphere. 
+ Similarly, the $\beta$-galactosidase having D2 symmetry, %i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
+%\mdeff{Do we need so many refs? Please check if they are all relevant.}
+ we restricted the sampling to a quarter of the $\mathbb{S}^2$ sphere.
+%\figref{different-projections} shows samples of the simulated projections.
+%\mdeff{We should make it clear which 2 Euler angles parameterize $\mathbb{S}^2$, and which remaining one is to parameterize the full $\SO(3)$. Then we could be explicit and write something like we (uniformly?) sampled .}
+Finally, note that it is not possible to resolve chirality as opposed projections are mirrored.\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.}
+%Global orientation is lost by projecting, and chirality is lost by integrating. 
+ Hence, we only trained on half coverage.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
-That's why we train on half coverage.}
-\mdeff{So this should be integrated above.}
 
-\paragraph{Perturbations.}
-We considered the following perturbations to control the difficulty of orientation recovery: (i) additive white noise, (ii) translations \mdeff{consistency: shifts or translations?}, (iii) inclusion of the effects of the point-spread functions (PSF).
-\mdeff{Did we actually perform experiments with PSF?}
-The mathematical formulation of these three components is given in \eqnref{imaging-model}.
-\figref{different-projections} shows example perturbations.
-\mdeff{Could we show the effect of the PSF?}
+We then corrupted the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
+%\mdeff{Did we actually perform experiments with PSF?}
+%The mathematical formulation of these three components is given in \eqnref{imaging-model}.
+\figref{different-projections} displays samples of the simulated perturbations.
+%\mdeff{Could we show the effect of the PSF?}
 
 \begin{table}[ht!]
     \centering
@@ -107,19 +106,22 @@ The mathematical formulation of these three components is given in \eqnref{imagi
         Dataset & Number of projections $P$ (\%) & Maximum number of pairs $P^2$ & Used number of pairs \\
         \midrule
         Training & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
-        Validation & 1650 (33\%) & 2,722,500 & 27,225 (1\%) \\
-        Test & 838 (17\%) & 701,406 & all (sampled per batch) \\
+        
+        Validation & 838 (17\%) & 701,406 & 7,014 (1\%) \\
+        Test & 1650 (33\%) & 2,722,500 & all (sampled per batch) \\
         \bottomrule
     \end{tabular}
     \caption{
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
         \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
+        \banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$}
+        
     }\label{tab:dataset}
 \end{table}
 
 \paragraph{Distance learning.}
-We used the supervised learning where the input are pairs of images and the output is their respective quaternion distance calculated from the ground truth orientations.
-For training, we split our projection dataset into distinct training, validation, and test sets (\tabref{dataset}).
+To train the SiameseNN, we used as inputs pairs of projections, and as outputs their respective quaternion distances (calculated from their orientations).
+For the training, we split our projection dataset into distinct training, validation, and test sets (\tabref{dataset}).
 The total number of generated projections was $P = 5000$.
 Therefore, the number of possible projection pairs was $P^2 = 25 \times 10^6$.
 Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
@@ -148,7 +150,10 @@ We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{m
 \mdeff{Above is all about data. Shall we write here about ``optimization settings''? I think they apply to all experiments, but we could clarify if some differ. Alternatively, they could go in the Method section (though to me they are more of a practical than method matter). What do you think?}
 \mdeff{Jelena: could you check the settings, make sure they are used for all experiments, and add anything missing?}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %\subsubsection{Robustness of Recovery to Additive Errors on the Relative Distances}
+
 \subsection{Sensitivity of orientation recovery to errors in distance estimation}\label{sec:results:orientation-recovery:sensitivity}
 
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
@@ -167,13 +172,13 @@ For all variances, the mean orientation recovery error $E$ is reported in \figre
     \centering
     \begin{subfigure}[b]{0.48\linewidth}
         \includegraphics[height=5cm]{figures/5j0n_perfect_noisy_ar_aa}
-        \caption{Asymmetric protein (\texttt{5j0n}).}
+        \caption{\texttt{5j0n}}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.50\linewidth}
     \centering
         \includegraphics[height=5cm]{figures/5a1a_perfect_noisy_ar_aa}
-        \caption{Symmetric protein (\texttt{5a1a}).}
+        \caption{\texttt{5a1a}}
     \end{subfigure}
     \caption{
         The mean orientation recovery error $E$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error.
@@ -208,12 +213,12 @@ To assess the progress and effectiveness of our distance estimation implementati
     \centering
     \begin{subfigure}[t]{0.45\linewidth}
         \includegraphics[height=3.5cm]{figures/de_loss_dPdQ_5j0n.pdf}
-        \caption{Asymmetric protein (\texttt{5j0n}).}
+        \caption{\texttt{5j0n}}
         \label{fig:losses-siamese-assym}
     \end{subfigure} \quad \quad
     \begin{subfigure}[t]{0.5\linewidth}
         \includegraphics[height=3.5cm]{figures/de_loss_dPdQ_5a1a.pdf}
-        \caption{Symmetric protein (\texttt{5a1a}).}
+        \caption{\texttt{5a1a}}
         \label{fig:losses-siamese-sym}
     \end{subfigure}
     \caption{
@@ -237,32 +242,32 @@ To assess the progress and effectiveness of our distance estimation implementati
 %     \label{fig:learned-distance-siamese}
 % \end{figure}
 
-As a feature distance $d_f$ between the outputs of the two CNNs we used the Geodesic distance \eqnref{geodesic-distance}.
-\mdeff{We wrote in the method that we take $d_f=d_q$. Shall we repeat? I don't think we should if the only experiments where that is untrue is in \apxref{feature-distance}.}
+%As a feature distance $d_f$ between the outputs of the two CNNs we used the Geodesic distance \eqnref{geodesic-distance}.
+%\mdeff{We wrote in the method that we take $d_f=d_q$. Shall we repeat? I don't think we should if the only experiments where that is untrue is in \apxref{feature-distance}.} %  Checked: we use $d_f=d_q$ for the experiments we have here.
 The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs).
 We limited our training and validation dataset due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 Depending on the available resources on the Google Colaboratory, the training lasted from 2.6 hours to 9.3 hours on one of its GPUs.
-The evolution of the training and validation losses are presented on the left side in \figref{losses-siamese-assym} for the asymmetric protein (\texttt{5j0n}), and on the left side in \figref{losses-siamese-sym} for the symmetric one (\texttt{5a1a}).
-The results demonstrate that the SiameseNN succeeded at learning a proxy distance for the asymmetric protein dataset, as convergence was reached in about 50 epochs ($\sim$ 50 minutes in the best resource availability setting).
+The evolution of the training and validation losses are presented on the left side in \figref{losses-siamese-assym} for \texttt{5j0n}, and on the left side in \figref{losses-siamese-sym} for \texttt{5a1a}.
+The results demonstrate that the SiameseNN succeeded at learning a proxy distance for \texttt{5j0n} dataset, as convergence was reached in about 50 epochs ($\sim$ 50 minutes in the best resource availability setting).
 
 Similarly to Euclidean distance $d_p$, we noticed that the larger distances $d_q$ were poorly predicted and the plot again had a slight plateau phenomenon for the distances higher than~$2.5$ rad.
 \mdeff{Insist that this is much better than Euclidean $d_p$.}
 \mdeff{Future work: fix or downplay the influence of larger distances in orientation recovery.}
 
 It is interesting to see that both validation losses were around $0.2$.
-However, the current SiameseNN architecture slightly overfits at learning the distance for the dataset \texttt{5a1a}, which is very likely due to the symmetry of the $\beta$-galactosidase protein, even thought the quarter-sphere coverage was used.
+However, the current SiameseNN architecture slightly overfits at learning the distance for the dataset \texttt{5a1a}, which is very likely due to the symmetry of the this protein, even thought the quarter-sphere coverage was used.
 %Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
 This simply advocates for the restriction to non-overlapping areas on $\SO(3)$ when sampling the orientations used to generate the SiameseNN training dataset.
 The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.
 %\mdeff{I don't get this explanation. Do you mean that \texttt{5a1a} might have other symmetries than D2?}
-For the rest of the experiments, we used the asymmetric protein (\texttt{5j0n}) dataset.
-Besides using the asymmetric protein, we performed the full protein reconstruction pipeline on the symmetric protein (\texttt{5a1a}).
+For the rest of the experiments, we used the \texttt{5j0n} dataset.
+Besides using the \texttt{5j0n} protein, we performed the full protein reconstruction pipeline on \texttt{5a1a}.
 
 We then fed to the trained SiameseNN $1,000$ pairs of projections randomly selected from the \texttt{5j0n} testing dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair in \figref{losses-siamese} (right side of each subfigure).
 These results confirm that, the SiameseNN was able to predict the orientation distance $d_q$ using only the projections as inputs.
-The prediction performance was slightly better for the asymmetric protein compared to symmetric protein.
+The prediction performance was slightly better for the \texttt{5j0n} compared to \texttt{5a1a}.
 Moreover, it clearly outperformed the Euclidean distance at doing so.
 These preliminary results are encouraging, as much has yet to be gained from improving upon the rather primitive SiameseNN architecture we currently use.
 The architecture of implemented SiameseNN can be seen in \apxref{siamese-architecture}.
@@ -305,10 +310,10 @@ As the SiameseNN will ultimately be trained on known proteins and used to estima
 %we also desire our learned distance function to generalize/transfer across density maps $\x$.
 we also desire our learned distance function to generalize to unseen proteins.
 The distance function $\widehat{d_p}$ must abstract the protein (in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections).
-\mdeff{Noiseless for all proteins right?}
-We attempted to recover the orientations of projections from \texttt{5j0n} while we had trained the SiameseNN on four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
+%\mdeff{Noiseless for all proteins right?}\banjac{yes}
+We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on noiseless projections of four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
 \todo{Same number of projections as in \tabref{dataset}?}
-We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.},
+We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip)},
 to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
 While performance is somewhat degraded, we conclude that it is possible to use a learned distance function on unseen proteins.
 
@@ -351,8 +356,8 @@ While performance is somewhat degraded, we conclude that it is possible to use a
     \item Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth} (which deforms the figure).
     \item Add $L_\text{OR}=...$ and $E_\text{OR}=...$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.
     \item Would be nice to know $L_\text{DE}$ for the three cases.
-    \item ``With total of $1,650$ projections in the test dataset, we were able to reconstruct the protein.'' \mdeff{But \tabref{dataset} says 838 for test. Was it validation data?}
-    \item \mdeff{Training set for distance learning and validation/test set for orientation recovery should have been made clear in 3.1.}
+    %\item ``With total of $1,650$ projections in the test dataset, we were able to reconstruct the protein.'' \mdeff{But \tabref{dataset} says 838 for test. Was it validation data?} \banjac{Great notice!! The table was wrong, I fixed it. In the code I was printing in different order so I mixed it.}
+    \item \mdeff{Training set for distance learning and validation/test set for orientation recovery should have been made clear in 3.1.} \banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment)}
 \end{itemize}
 }
 
@@ -443,11 +448,11 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     The second and third columns show density maps $\widehat{\x}$ reconstructed from projections $\{ \p_i \}$, and recovered orientations $\{ \widehat{q_i} \}$~(b,e,h) or true orientations $\{ q_i \}$~(c,f,i).
         % Explain columns then rows.
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
-        \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?}
+        \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?\banjac{Thanks for notice! I didn't see that. I am rerunning this pipeline for this plot.}}
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
-        \mdeff{$E_\text{OR}=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}
+        \mdeff{$E_\text{OR}=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}\banjac{Not coincidence. I  use the result from variance 16 for variance 15 on variance plot. I fill fix it to 16 in 9b}
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}
+        \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave \theta. Laurene what do you think?}
     }
 \end{figure}
 
