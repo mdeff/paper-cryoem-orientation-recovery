@@ -79,7 +79,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \end{figure}
 
 \paragraph{Simulated projections.}
-From these ground truths, we generated $5,000$ synthetic projections of size ($275\times 275$) and ($116\times 116$), respectively, using the ASTRA projector~\cite{van2015astra}.
+From these ground truths, we generated $P=5,000$ synthetic projections of size ($275\times 275$) and ($116\times 116$), respectively, using the ASTRA projector~\cite{van2015astra}.
 \textcolor{red}{Double-check:} Orientations were obtained by uniformly sampling the Euler angles $\bth=(\theta_3,\theta_2,\theta_1) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$. 
 %\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
 The \texttt{5j0n} complex being asymmetric, it was sufficient to only sample half  the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.%, the other half having equivalent projections symmetric to the center of this sphere. 
@@ -88,9 +88,8 @@ The \texttt{5j0n} complex being asymmetric, it was sufficient to only sample hal
  we restricted the sampling to a quarter of the $\mathbb{S}^2$ sphere.
 %\figref{different-projections} shows samples of the simulated projections.
 %\mdeff{We should make it clear which 2 Euler angles parameterize $\mathbb{S}^2$, and which remaining one is to parameterize the full $\SO(3)$. Then we could be explicit and write something like we (uniformly?) sampled .}
-Finally, note that it is not possible to resolve chirality as opposed projections are mirrored.\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.}
+Finally, as it is not possible to resolve chirality\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.} (opposed projections being mirrored, 2e only trained on half coverage.
 %Global orientation is lost by projecting, and chirality is lost by integrating. 
- Hence, we only trained on half coverage.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 
 We then corrupted the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
@@ -120,10 +119,13 @@ We then corrupted the measurements with different levels of additive Gaussian no
 \end{table}
 
 \paragraph{Distance learning.}
-To train the SiameseNN, we used as inputs pairs of projections, and as outputs their respective quaternion distances (calculated from their orientations).
-For the training, we split our projection dataset into distinct training, validation, and test sets (\tabref{dataset}).
-The total number of generated projections was $P = 5000$.
-Therefore, the number of possible projection pairs was $P^2 = 25 \times 10^6$.
+To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
+
+
+
+The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets (\tabref{dataset}) and then generated datasets with disjoint projection sets; this was made to ensure that no projection appears in projection pairs across the different training datasets. 
+
+
 Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
 To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
 With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
