@@ -123,7 +123,7 @@ To train the SiameseNN, we used as input pairs of projections, and as output the
 
 
 
-The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets (\tabref{dataset}), and then generated the input datasets with disjoint projection sets; this was done to ensure that no projection appears in projection pairs across the different training datasets. 
+The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets (\tabref{dataset}), and then generated the input datasets with disjoint projection sets; this was done to ensure that no projection would appear in projection pairs across the different training datasets. 
 
 
 Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
