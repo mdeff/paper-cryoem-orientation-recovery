@@ -120,16 +120,11 @@ We then corrupted the measurements with different levels of additive Gaussian no
 
 \paragraph{Distance learning.}
 To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
-
-
-
-The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets (\tabref{dataset}), and then generated the input datasets with disjoint projection sets; this was done to ensure that no projection would appear in projection pairs across the different training datasets. 
-
-
-Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
-To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
-With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
-In addition to this, we use only $1\%$ of the possible pairs (last column in the \tabref{dataset}) due to limitation of available resources for the training.
+The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets, and then generated the input datasets with disjoint projection sets (\tabref{dataset}); this was done to ensure that no projection would appear in projection pairs across the different training datasets. 
+%Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
+%To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
+%With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
+ Note that we used only $1\%$ of the possible pairs due to limited available resources for the training.
 %\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
 
 \paragraph{Orientation recovery.}
