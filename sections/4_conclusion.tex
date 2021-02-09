@@ -32,10 +32,17 @@ In the same line of thought, our distance learning method will likely benefit fr
 Further down the line, an extended training will allow us to test different options for the challenging handling of proteins with multiple conformational states.
 These methods have a potential to advance the understanding of the protein structure given only the set of the projections.
 
-\todo{Still a proof-of-concept. Future work:
+\todo{Still a proof-of-concept.
+Method TODO:
 \begin{itemize}
-    \item More data and larger / more powerful SiameseNN for distance learning.
+    \item Angle alignment didn't always work. Even when $L_\text{OR}$ was low (examples?). We might miss a transformation in \eqnref{orientation-recovery-error}.
+    \item We needed to align with \eqnref{orientation-recovery-error} before reconstructing with ASTRA\@. Why?
+    \item More data and larger/more powerful SiameseNN for better distance approximation. More data to close the overfitting gap (e.g., \texttt{5a1a}), more powerful to push $L_\text{DE}$ done.
+\end{itemize}
+Future work:
+\begin{itemize}
     \item Sensitivity / invariance to PSF.
+    \item Train on much larger and diverse projections (proteins, augmentation (noise levels, PSFs).
     \item Real (not synthetic) data.
     \item Proper reconstruction (beyond our simple ASTRA demo).
     \item Full pipeline for unseen proteins.

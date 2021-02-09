@@ -94,7 +94,7 @@ Similarly, the $\beta$-galactosidase having D2 symmetry, %i.e., it is composed o
 Finally, as it is not possible to resolve chirality\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.} (opposed projections being mirrored), we only trained on half coverage.
 %Global orientation is lost by projecting, and chirality is lost by integrating.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
-\todo{Write the range of angles we sampled from for \texttt{5j0n} and \textt{5a1a}.}
+\todo{Write the range of angles we sampled from for \texttt{5j0n} and \texttt{5a1a}.}
 
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %\mdeff{Did we actually perform experiments with PSF?}
@@ -206,6 +206,7 @@ For all variances, the \textbf{mean orientation recovery error} $E_{OR}$ is repo
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that the \textbf{error of the orientation recovery} behaves as a monotonic function of its loss.
 Hence, it suggests that the loss can be used as a good indicator of its performance, which has obvious practical implications for our future works on real data.
+\mdeff{Obvious? I would specify: it allows to know how well the method worked when true distances aren't available.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -243,6 +244,7 @@ For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) 
 \figref{losses-siamese}(a,b) shows how the distance learning loss converged during training.
 Convergence was reached in about 50 epochs. %($50 x ? / 256$ steps).
 %of the distance evolution of the training and validation losses for \texttt{5j0n} and \texttt{5a1a} are presented in and \figref{losses-siamese-sym}, respectively.
+\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
 While overfitting is low (the training and validation losses are close) for \texttt{5j0n}, it is larger for \texttt{5a1a}.
 That's an indication that while we could train and learn a good distance on seen projections (training set), it doesn't generalize well to unseen projections (validation set).
 That suggests that \texttt{5a1a} is harder than \texttt{5j0n}.
@@ -257,7 +259,8 @@ The latter would then only contain projection pairs with a linear $(d_q,d_p)$ re
 \figref{losses-siamese}(c,d) shows the relation between the estimated distance $\widehat{d_p}$ and true distance $d_q$.
 As expected, distances are better estimated for \texttt{5j0n} than \texttt{5a1a}.
 While our learned distance function is a much better estimator than the Euclidean distance (compare \figref{losses-siamese}(c,d) with \figref{euclidean-not-robust}), they share one characteristic: both plateau and underestimate larger distances.
-\todo{Why? Lay some hypotheses.}
+Though the issue is much less severe that with Euclidean distance.
+\todo{Why? Lay some hypotheses. Because the true distances are upper-bounded by $2\pi$?}
 Resolving this issue would ...
 An alternative is to discard the larger distances and only rely on the estimation of local / short distances.
 That would however require a force/loss/counter-balancing in \eqnref{orientation-recovery} to spread the orientations and prevent them to collapse to a single point.
@@ -268,7 +271,8 @@ These results confirm that a SiameseNN is able to estimate differences in orient
 These preliminary results are encouraging; indeed, much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
 Then train on more data (more pairs, data augmentation from imaging model \eqnref{imaging-model}, more proteins).
 % Insist because that's a recurring theme of the paper.
-Those will especially help when the task is more difficult, as for \textt{5a1a}.
+Those will especially help when the task is more difficult, as for \texttt{5a1a}.
+More data required to close the gap on \texttt{5a1a}, more powerful SiameseNN to push the losses down on both.
 % Recurring theme.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -315,6 +319,8 @@ In this experiment, we generated $1,000$ projections per protein.
 The \todo{percentage?} of projections split in the training, validation, and test sets is the same as in \tabref{dataset}.
 Then, four proteins are used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
 We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip)},
+\mdeff{Right, thanks for explaining again. We should probably talk about that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
+% Jelena: Angle recovery is good but it is unable to align. Probably missing something as expected as a flip discovered at the beginning of the project.
 to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
 While performance is somewhat degraded, we conclude that it is possible to use a learned distance function on unseen proteins.
 
