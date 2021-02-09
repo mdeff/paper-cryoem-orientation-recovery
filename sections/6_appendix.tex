@@ -16,54 +16,29 @@ There are many different ways of evaluating the pipeline performance found in th
 \section{Orientation recovery: Recovery from exact distances}\label{apx:results:orientation-recovery:exact}
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
-%\mdeff{I made it concise but precise. Let's do that for all!}
-
-\lau{Smooth} To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-Orientations are perfectly recovered.
-\figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
 \begin{figure}[ht!]
     \centering
-    %\begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[height=7cm]{figures/5j0n_perfect_angle_recovery}
-        %\caption{Asymmetric protein (\texttt{5j0n}).}
-    %\end{subfigure}
-    %\hfill
-    %\begin{subfigure}[b]{0.5\textwidth}
-    %\centering
-    %    \includegraphics[height=5.5cm]{figures/5a1a_perfect_angle_recovery}
-    %    \caption{Symmetric protein (\texttt{5a1a}).}
-    %\end{subfigure}
-    \caption{
-        Example of perfect orientation recovery (for \texttt{5j0n}).
-        The loss~\eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-    }\label{fig:5j0n-orientation-recovery-loss}
-\end{figure}
-
-Empirically we find that the mean orientation recovery error \eqnref{orientation-recovery-error} $E = 0$.
-The sphere coverage before and after the orientation alignment can be seen in the \figref{5j0n-aa-loss-perfect-distances}.
-We can see that the orientation alignment was performed successfully.
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
         \includegraphics[height=6cm]{figures/coverage_alignment_before}
         \caption{Orientations before alignment.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.50\textwidth}
-    \centering
+    \begin{subfigure}[b]{0.50\linewidth}
+        \centering
         \includegraphics[height=6cm]{figures/coverage_alignment_after}
         \caption{Orientations after alignment.}
     \end{subfigure}
     \\
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.45\linewidth}
+        \centering
         \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_before}
         \caption{Orientation recovery error without alignment.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.5\textwidth}
-    \centering
+    \begin{subfigure}[b]{0.5\linewidth}
+        \centering
         \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_after}
         \caption{Orientation recovery error with alignment.}
     \end{subfigure}
@@ -78,6 +53,14 @@ We can see that the orientation alignment was performed successfully.
 %    \label{fig:angle-alignment-perfect}
 \end{figure}
 
+\lau{Smooth} To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+Orientations are perfectly recovered.
+\figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
+
+Empirically we find that the mean orientation recovery error \eqnref{orientation-recovery-error} $E = 0$.
+The sphere coverage before and after the orientation alignment can be seen in the \figref{5j0n-aa-loss-perfect-distances}.
+We can see that the orientation alignment was performed successfully.
+
 \section{Distance estimation: Euclidean distance}\label{apx:results:distance-estimation}
 %\subsection{Estimating Relative Orientations from Projections}
 %\subsection{Relative orientation estimation}
@@ -85,18 +68,6 @@ We can see that the orientation alignment was performed successfully.
 %\mdeff{Story: $d_p$ good estimator of $d_q$.
 %SiameseNN better than l2, but still plateaus.
 %Robust to projection noise.}
-
-The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
-
-%\subsubsection{Euclidean distance}\label{sec:results:distance-estimation:euclidean}
-
-%\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
-%Note the difference between symmetric and asymmetric proteins.}
-
-We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (i.e., the Euclidean distance) as a baseline distance estimator.
-From $P = 5,000$ possible projection, we randomly select $5$ projections.
-For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
-We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
 
 \begin{figure}[ht!]
     \centering
@@ -115,6 +86,18 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
     }\label{fig:euclidean-not-robust}
 \end{figure}
 
+The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
+
+%\subsubsection{Euclidean distance}\label{sec:results:distance-estimation:euclidean}
+
+%\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
+%Note the difference between symmetric and asymmetric proteins.}
+
+We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (i.e., the Euclidean distance) as a baseline distance estimator.
+From $P = 5,000$ possible projection, we randomly select $5$ projections.
+For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
+We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
+
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
@@ -124,6 +107,30 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 \section{Choice of feature distance}\label{apx:feature-distance}
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
+
+\begin{figure}
+    \begin{minipage}[b]{0.4\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/5j0n_perfect_angle_recovery}
+        \caption{%
+            Example of perfect orientation recovery (for \texttt{5j0n}).
+            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+            \todo{Add $L_\text{OR}$ to the y-axis label and blue box.}
+        }\label{fig:5j0n-orientation-recovery-loss}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.55\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/geo_eucl_mlp_distance_metric.pdf}
+        \caption{%
+            Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
+            The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+            The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
+            \todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
+            \todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
+        }\label{fig:geo-eucl-mlp}
+    \end{minipage}
+\end{figure}
 
 There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances: 
 
@@ -137,22 +144,10 @@ $ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, 
 
 The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
 
-\lau{Jelena: Remove MLP.}\figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
+\figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
 % the projection pairs deviate the least from the identity
 This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
 %The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
-
-\begin{figure}
-    \centering
-    \includegraphics[height=7cm]{figures/geo_eucl_mlp_distance_metric.pdf}
-    \caption{
-        Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
-        The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
-        The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
-        \todo{Consistency: train -> training set, validation -> validation set. Add $L_\text{DE}$ to the y-axis label. Larger text.}
-        \mdeff{Can we make this figure wider but flatter? To better fit the page and use less vertical space.}
-    }\label{fig:geo-eucl-mlp}
-\end{figure}
 
 \clearpage
 \section{SiameseNN architecture}\label{apx:siamese-architecture}

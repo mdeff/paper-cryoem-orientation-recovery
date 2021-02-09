@@ -173,6 +173,7 @@ We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{m
         The \textbf{mean orientation recovery error} $E_{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
         Better distance estimation leads to better orientation recovery.
         Moreover, the recovery loss $L_{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+        \todo{Same axis ticks and sizes for both figures.}
     }\label{fig:perfect-with-noise-ar-aa}
 \end{wrapfigure}
 
@@ -467,6 +468,7 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances estimated from clean projections of \texttt{5j0n}.
 A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to a \todo{pretty good?} reconstruction (\figref{5j0n-noise0-reconstruction-recovered}) compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
 \mdeff{I'm not sure how to qualify the reconstructed density maps.} \lau{I'm not sure we should try to be honest. The only thing we could do is give its resolution.}
+\todo{Don't qualify in absolute terms, but say how adding noise results in a reconstruction of lower resolution.}
 
 As expected from the experiments in \secref{results:distance-estimation:sensitivity}, adding white noise with variance $\sigma^2=16$ to the projections worsen the recovered orientations (\figref{5j0n-noise16-orientation-recovery}) to a mean error of $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$).
 That leads to a \todo{worse/lower resolution/blurrier} reconstruction (\figref{5j0n-noise16-reconstruction-recovered}).
