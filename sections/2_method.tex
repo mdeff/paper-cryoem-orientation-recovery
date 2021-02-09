@@ -240,3 +240,5 @@ where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
 Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
+
+\lau{Moved from Experiments: Since \textbf{mean orientation error} is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure (see \apxref{metrics-review}). The \textbf{mean orientation error} was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric.} \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and \textbf{mean orientation recovery error} before and after alignment with the perfect distance $d_q$.
