@@ -18,7 +18,7 @@ There are many different ways of evaluating the pipeline performance found in th
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 %\mdeff{I made it concise but precise. Let's do that for all!}
 
-To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+\lau{Smooth} To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 Orientations are perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
 
@@ -135,9 +135,9 @@ $ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, 
     \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learnt. 
 \end{itemize}
 
-The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality).
+The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
 
-\figref{geo-eucl-mlp} compares the use of the three distances. \lau{\textit{Clarify:} The MLP  fails to ... given its flexibility, it needs a lot of data to properly train.} The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
+\lau{Jelena: Remove MLP.}\figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
 % the projection pairs deviate the least from the identity
 This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
 %The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
@@ -153,13 +153,6 @@ This superiority of the cosine distance is likely due to its capacity to model t
         \mdeff{Can we make this figure wider but flatter? To better fit the page and use less vertical space.}
     }\label{fig:geo-eucl-mlp}
 \end{figure}
-
-\lau{Why do we have that here?}
-% it could be tempting to
-Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
-While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
-% $n_f=4$ dimensional space is too constrained
-\mdeff{Did we try that? Would be nice to have the results if we did.}
 
 \clearpage
 \section{SiameseNN architecture}\label{apx:siamese-architecture}

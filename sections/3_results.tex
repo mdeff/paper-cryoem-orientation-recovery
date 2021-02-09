@@ -81,7 +81,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \end{figure}
 
 \paragraph{Simulated projections.}
-From these ground truths, we generated $P=5,000$ synthetic projections of size ($275\times 275$) and ($116\times 116$), respectively, using the ASTRA projector~\cite{van2015astra}.
+Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of size ($275\times 275$) for \texttt{5a1a} and ($116\times 116$) for \texttt{5j0n}. 
 \textcolor{red}{Jelena:} Orientations were obtained by uniformly sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5j0n}, and $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5a1a}.
 %\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
 The \texttt{5j0n} complex being asymmetric, it was sufficient to only sample half  the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.
@@ -131,7 +131,7 @@ The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate 
 Note that we used only $1\%$ of the possible pairs due to limited available resources for training.
 \todo{Explain why we do that.}
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
-\lau{Jelena:} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.}
+\lau{Jelena:} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} ADD INFORMATION ABOUT DISTRIBUTION BINNING, REASON FOR ONLY CONSIDERING A SUBSET. 
 %\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
 
 Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches. The algorithm was deployed on the test set in \tabref{dataset} to ensure that it did not include any projection that was previously seen during the distance learning.
@@ -247,7 +247,7 @@ Convergence was reached in about 50 epochs. %($50 x ? / 256$ steps).
 \todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
 While overfitting is low (the training and validation losses are close) for \texttt{5j0n}, it is larger for \texttt{5a1a}.
 That's an indication that while we could train and learn a good distance on seen projections (training set), it doesn't generalize well to unseen projections (validation set).
-That suggests that \texttt{5a1a} is harder than \texttt{5j0n}.
+That suggests that \texttt{5a1a} is harder than \texttt{5j0n}. \lau{Hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another. Handling of symmetries could be done wrongly.}
 \mdeff{Why is \texttt{5a1a} harder? Recurring theme (see 3.5).}
 \mdeff{Here's an explanation by Jelena. Is it a good one? Let's discuss.}
 \todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
@@ -260,7 +260,7 @@ The latter would then only contain projection pairs with a linear $(d_q,d_p)$ re
 As expected, distances are better estimated for \texttt{5j0n} than \texttt{5a1a}.
 While our learned distance function is a much better estimator than the Euclidean distance (compare \figref{losses-siamese}(c,d) with \figref{euclidean-not-robust}), they share one characteristic: both plateau and underestimate larger distances.
 Though the issue is much less severe that with Euclidean distance.
-\todo{Why? Lay some hypotheses. Because the true distances are upper-bounded by $2\pi$?}
+\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training? Fixing a bit by sampling distances uniformly.}
 Resolving this issue would ...
 An alternative is to discard the larger distances and only rely on the estimation of local / short distances.
 That would however require a force/loss/counter-balancing in \eqnref{orientation-recovery} to spread the orientations and prevent them to collapse to a single point.
@@ -281,7 +281,7 @@ More data required to close the gap on \texttt{5a1a}, more powerful SiameseNN to
 %\subsection{Generalization of distance learning}
 %\subsection{Generalizability/Abstractability of distance learning}
 
-\mdeff{Shall we use ``noiseless projections'' or ``clean projections''?}
+\mdeff{Shall we use ``noiseless projections'' or ``clean projections''?} \lau{Noiseless if space is not an issue.}
 
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
@@ -296,7 +296,7 @@ As discussed in \secref{method:distance-learning}, the convolutional architectur
 As we cannot---or do not (yet) know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy datasets and evaluated whether it could learn to ignore noise as being irrelevant information.
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$.
-\mdeff{How good is that?}\banjac{To be discussed tomorrow}
+\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
 Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
 
@@ -376,7 +376,7 @@ We reconstructed density maps $\widehat{\x}$ from sets of projections $\{ \p_i \
 Note that we only trained the SiameseNN \eqnref{distance-learning} on projections from the protein (and noise level) we attempted to reconstruct from.
 For best performance, it should be trained on multiple proteins, levels of noise, PSFs, etc.
 
-To understand the effect of miss-recovered orientations, we reconstructed the density maps from both the recovered orientations $\{ \widehat{q_i} \}$ and the true orientations $\{ q_i \}$ along which the projections $\{ \p_i \}$ were acquired.
+\lau{Smooth this paragraph:}To understand the effect of miss-recovered orientations, we reconstructed the density maps from both the recovered orientations $\{ \widehat{q_i} \}$ and the true orientations $\{ q_i \}$ along which the projections $\{ \p_i \}$ were acquired.
 The density maps were reconstructed by the ASTRA toolbox.
 \todo{Using the ASTRA toolbox, we generated orientation vectors based on angles which we fed into projection 3D geometry in ASTRA.}
 \todo{Make clearer. Are there enough details?}

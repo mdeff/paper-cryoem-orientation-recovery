@@ -34,6 +34,13 @@ Second, we can learn the projection manifold by finding the distances that prese
 Hence, from a set of projections $\{\p_k\}_{k=1}^P$, we aim to recover their orientations $\{\widehat{q_k}\}_{k=1}^P$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
 All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}_{k=1}^P$ are perfectly estimated.
 
+\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}
+% it could be tempting to
+Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
+While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
+% $n_f=4$ dimensional space is too constrained
+\mdeff{Did we try that? Would be nice to have the results if we did.}
+
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
 
