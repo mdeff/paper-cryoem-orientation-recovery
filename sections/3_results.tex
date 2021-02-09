@@ -11,7 +11,6 @@
 
 We started by evaluating whether orientation recovery was feasible assuming perfect distances, and how it was affected by errors in distance estimations (Section~\ref{sec:results:orientation-recovery:sensitivity}).
 We then learned the distance itself using a SiameseNN and compared its performance with a baseline (Section~\ref{sec:results:distance-estimation:learned}).
-%After developing and tuning the architecture of the network for the distance estimation, we continue by introducing the perturbation to the projections.  and the network architecture is adjusted
 Following this, we evaluated the robustness of the network to different types of perturbation in the measurements (Section~\ref{sec:results:distance-estimation:sensitivity}).
 Finally, we ran the whole machinery to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (Section~\ref{sec:results:orientation-recovery:reconstruction}).
 
@@ -44,6 +43,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
         \end{subfigure}
         \caption{%
             Ground-truth atomic models: the $\beta$-galactosidase (\texttt{5a1a}), and the lambda excision HJ intermediate (\texttt{5j0n}).
+            \todo{Show 5\AA\ density maps.}
         }\label{fig:pdb-proteins}
     \end{minipage}
     \hfill
@@ -94,6 +94,7 @@ Similarly, the $\beta$-galactosidase having D2 symmetry, %i.e., it is composed o
 Finally, as it is not possible to resolve chirality\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.} (opposed projections being mirrored), we only trained on half coverage.
 %Global orientation is lost by projecting, and chirality is lost by integrating. 
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
+\todo{Write the range of angles we sampled from for \texttt{5j0n} and \textt{5a1a}.}
 
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %\mdeff{Did we actually perform experiments with PSF?}
@@ -114,24 +115,25 @@ We then perturbed the measurements with different levels of additive Gaussian no
     \end{tabular}
     \caption{%
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
+        \todo{Fix the numbers.}
        % \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
         %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(} 
     }\label{tab:dataset}
 \end{table}
 
+% From projections to pairs and substes (which are used for distance learning and orientation recovery).
 \paragraph{Splitting of Datasets.}
 To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
 The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets, and then generated the input datasets with disjoint projection sets (\tabref{dataset}); this was done to ensure that no projection would appear in projection pairs across the different training datasets. 
 %Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
 %To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
 %With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
- Note that we used only $1\%$ of the possible pairs due to limited available resources for training. \lau{Jelena:} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} 
+Note that we used only $1\%$ of the possible pairs due to limited available resources for training. \lau{Jelena:} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} 
 %\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
 
 Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches. The algorithm was deployed on the test set in \tabref{dataset} to ensure that it did not include any projection that was previously seen during the distance learning. 
 
 \paragraph{Optimization settings.}
-
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs. For a batch size of $256$, we have $247$ steps per epoch in training set and 28 steps per epoch in validation set (\tabref{dataset}).
 %(i.e., $150 \times 63,126$ steps, \mdeff{correct?} \mdeff{Why didn't we sample for $x$ steps in the $6,312,656$ possible pairs? It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}\banjac{we have 150 epochs and 63,126 pairs to go through in 1 epochs -> 63,126//265=247 steps per epoch through training data, and 28 steps for validation data}) on batches of $256$ pairs sampled from training sets .
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
@@ -139,8 +141,8 @@ We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2
 %\mdeff{Jelena: when did you use the validation set? When the test?}
 %\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl} and a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$ orientations. We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-%\mdeff{Above is all about data. Shall we write here about ``optimization settings''? I think they apply to all experiments, but we could clarify if some differ. Alternatively, they could go in the Method section (though to me they are more of a practical than method matter). What do you think?}\banjac{Shall I make pseudo algorithm for the two parts of method? I will check other settings.}
-%\mdeff{Jelena: could you check the settings, make sure they are used for all experiments, and add anything missing?} \lau{To be settled during today's meeting.}
+\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?}
+\todo{Shortly mention the expected/average time to solve the different optimization problems. Then we don't discuss that anywhere else.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -151,8 +153,8 @@ We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{m
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 
-\begin{wrapfigure}{r}{0.6\textwidth}
-      \centering
+\begin{wrapfigure}{r}{0.6\linewidth}
+    \centering
     \begin{subfigure}[b]{0.48\linewidth}
         \includegraphics[height=3.3cm]{figures/5j0n_perfect_noisy_ar_aa}
         \caption{\texttt{5j0n}}
@@ -167,8 +169,7 @@ We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{m
         The \textbf{mean orientation recovery error} $E_{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
         Better distance estimation leads to better orientation recovery.
         Moreover, the recovery loss $L_{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
-}
-    \label{fig:perfect-with-noise-ar-aa}
+    }\label{fig:perfect-with-noise-ar-aa}
 \end{wrapfigure}
 
 We first evaluated the feasibility of orientation recovery assuming that the exact quaternion distances between projection pairs were known.
@@ -197,7 +198,6 @@ For all variances, the \textbf{mean orientation recovery error} $E_{OR}$ is repo
 % }
 %     \label{fig:perfect-with-noise-ar-aa}
 % \end{figure}
-
 
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that the \textbf{error of the orientation recovery} behaves as a monotonic function of its loss.
