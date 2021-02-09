@@ -125,26 +125,21 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
-There are multiple options for a distance function between features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$.
-As we wrote in \secref{method:distance-learning}, we chose the cosine distance
-\begin{equation*}
-    d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right).
-\end{equation*}
+There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances: 
+
+\begin{itemize}
+    \item the Euclidean distance, i.e., $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
+    \item the cosine distance, i.e.,
+$ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right)$
 \mdeff{No absolute value here? As in \eqnref{distance:orientations}.}
-A common choice is the Euclidean distance $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$.
+    \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learnt. 
+\end{itemize}
 
-Another option is to parametrize $d_f$ as a multi-layer perceptron (MLP) and learn it.
-We tried with an MLP made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function.
-The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ to be fed to the MLP.
+The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality).
 
-\figref{geo-eucl-mlp} compares the three.
-While an MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality).
-Given its flexibility, it needs a lot of data to properly train---hence why it failed.
-
-The performances of the Euclidean and cosine distances are close.
-The cosine is however best: $L_\text{DE}$ is the lowest, making $d_p$ a better estimator of $d_q$.
+\figref{geo-eucl-mlp} compares the use of the three distances. \lau{\textit{Clarify:} The MLP  fails to ... given its flexibility, it needs a lot of data to properly train.} The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
 % the projection pairs deviate the least from the identity
-The cosine distance performs better as it models the elliptic geometry of $\SO(3)$, while the Euclidean distance does not (as Euclidean space is neither periodic nor curved).
+This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
 %The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
 
 \begin{figure}
@@ -159,8 +154,9 @@ The cosine distance performs better as it models the elliptic geometry of $\SO(3
     }\label{fig:geo-eucl-mlp}
 \end{figure}
 
+\lau{Why do we have that here?}
 % it could be tempting to
-An alternative would have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, and avoid the orientation recovery step.
+Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
 While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
 % $n_f=4$ dimensional space is too constrained
 \mdeff{Did we try that? Would be nice to have the results if we did.}

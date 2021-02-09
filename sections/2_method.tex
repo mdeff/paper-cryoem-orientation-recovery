@@ -236,7 +236,7 @@ We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an 
 where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
 
 \todo{While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.}
-\mdeff{Why is it good? Intuitive. Laurène, can we say something more?}
+\mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
 Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
