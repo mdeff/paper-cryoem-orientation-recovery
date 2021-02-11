@@ -1,6 +1,6 @@
 \section{Experiments}\label{sec:experiments}
 
-\todo{Left to do: uniformise "mean orientation error" in the text with chosen notation.}
+%\todo{Left to do: uniformise "mean orientation error" in the text with chosen notation.}
 
 % \begin{itemize}
 %     %\item \lau{Put pas tense everywhere.} done
@@ -28,26 +28,38 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}[b]{0.55\linewidth}
+    \begin{minipage}[b]{0.45\linewidth}
         \centering
-        \begin{subfigure}[b]{0.49\linewidth}
+        \begin{subfigure}[b]{0.45\linewidth}
             \centering
-            \includegraphics[height=5cm]{figures/5a1a_pdb.png}
+            \includegraphics[width=0.8\linewidth]{figures/5a1a_pdb.png}
             \caption*{\texttt{5a1a}}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[b]{0.42\linewidth}
+        \begin{subfigure}[b]{0.35\linewidth}
             \centering
-            \includegraphics[height=5cm]{figures/5j0n_pdb.png}
+            \includegraphics[width=0.8\linewidth]{figures/5j0n_pdb.png}
+            \caption*{\texttt{5j0n}}
+        \end{subfigure}
+        \\ \vspace{1em}
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/5a1a_5A_.png}
+            \caption*{\texttt{5a1a}}
+        \end{subfigure}
+        %\hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{figures/5j0n_5A_.png}
             \caption*{\texttt{5j0n}}
         \end{subfigure}
         \caption{%
-            Ground-truth atomic models: the $\beta$-galactosidase (\texttt{5a1a}), and the lambda excision HJ intermediate (\texttt{5j0n}).
-            \todo{Show 5\AA\ density maps.}
+            Ground-truth atomic models (up) and 5\AA\ debsity maps (down): the $\beta$-galactosidase (\texttt{5a1a}), and the lambda excision HJ intermediate (\texttt{5j0n}).
+            %\todo{Show 5\AA\ density maps.}
         }\label{fig:pdb-proteins}
     \end{minipage}
     \hfill
-    \begin{minipage}[b]{0.35\linewidth}
+    \begin{minipage}[b]{0.45\linewidth}
         \centering
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
@@ -82,7 +94,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 
 \paragraph{Simulated projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of size ($275\times 275$) for \texttt{5a1a} and ($116\times 116$) for \texttt{5j0n}. 
-\textcolor{red}{Jelena:} Orientations were obtained by uniformly sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5j0n}, and $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5a1a}.
+\todo{Write the range of angles we sampled from for \texttt{5j0n} and \texttt{5a1a}.} Orientations were obtained by uniformly sampling the Euler angles $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5j0n}, and $\bth=(\theta_1,\theta_2,\theta_3) \in [0, \pi[ \times [0, \pi[ \subset [0, \pi[ \times [0, 2\pi[$ for \texttt{5a1a}.
 %\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ before. Which is better? Motivation for $(\theta_3,\theta_2,\theta_1)$ is that $\theta_1$ is the first rotation that is applied, through $\mathbf{R}_{\theta_1}$.} uniformly, and (ii) sampling uniformly on $\SO(3)$.
 The \texttt{5j0n} complex being asymmetric, it was sufficient to only sample half  the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.
 %, the other half having equivalent projections symmetric to the center of this sphere.
@@ -94,7 +106,7 @@ Similarly, the $\beta$-galactosidase having D2 symmetry, %i.e., it is composed o
 Finally, as it is not possible to resolve chirality\footnote{An object is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.} (opposed projections being mirrored), we only trained on half coverage.
 %Global orientation is lost by projecting, and chirality is lost by integrating.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
-\todo{Write the range of angles we sampled from for \texttt{5j0n} and \texttt{5a1a}.}
+
 
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %\mdeff{Did we actually perform experiments with PSF?}
@@ -108,14 +120,14 @@ We then perturbed the measurements with different levels of additive Gaussian no
         \toprule
         Dataset & Number of projections $P$ (\%) & Maximum number of pairs $P^2$ & Used number of pairs \\
         \midrule
-        Training & 2512 (50\%) & 6,312,656 & 63,126 (1\%) \\
-        Validation & 838 (17\%) & 701,406 & 7,014 (1\%) \\
-        Test & 1650 (33\%) & 2,722,500 & all (sampled per batch) \\
+        Training & 2512 (50\%) & 6,310,144 & 63,101 (1\%) \\
+        Validation & 838 (17\%) & 702,244 & 7,022 (1\%) \\
+        Test & 1650 (33\%) & - & - \\
         \bottomrule
     \end{tabular}
     \caption{%
         Split of $P=5000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
-        \todo{Fix the numbers.}
+        %\todo{Fix the numbers.}
        % \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
         %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
     }\label{tab:dataset}
@@ -123,18 +135,19 @@ We then perturbed the measurements with different levels of additive Gaussian no
 
 % From projections to pairs and substes (which are used for distance learning and orientation recovery).
 \paragraph{Splitting of Datasets.}
-To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
-The number of possible projection pairs was $P^2 = 25 \times 10^6$. To generate the training, validation, and test datasets of projection pairs, we first split the $P$ projections into three distinct sets, and then generated the input datasets with disjoint projection sets (\tabref{dataset}); this was done to ensure that no projection would appear in projection pairs across the different training datasets.
+To generate the training, validation, and test datasets, we first split the $P$ projections into three distinct sets (\tabref{dataset}).
+%To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
+We then use training and validation sets to create \textit{disjoint} projection pairs which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations); this was done to ensure that no same projection would appear in projection pairs across the different datasets type.
 %Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
 %To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
 %With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
 Note that we used only $1\%$ of the possible pairs due to limited available resources for training.
 \todo{Explain why we do that.}
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
-\lau{Jelena:} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} ADD INFORMATION ABOUT DISTRIBUTION BINNING, REASON FOR ONLY CONSIDERING A SUBSET. 
+\lau{Jelena:}\banjac{put somewhere or not: The number of possible projection pairs was $P^2 = 25 \times 10^6$.} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} \todo{ADD INFORMATION ABOUT DISTRIBUTION BINNING, REASON FOR ONLY CONSIDERING A SUBSET. }
 %\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
 
-Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches. The algorithm was deployed on the test set in \tabref{dataset} to ensure that it did not include any projection that was previously seen during the distance learning.
+Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches. The algorithm followed by angle alignment were deployed on the test set in \tabref{dataset} to ensure that it did not include any projection that was previously seen during the distance learning.
 
 \paragraph{Optimization settings.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs. For a batch size of $256$, we have $247$ steps per epoch in training set and 28 steps per epoch in validation set (\tabref{dataset}).
@@ -157,32 +170,32 @@ We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{m
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 
-\begin{wrapfigure}{r}{0.6\linewidth}
-    \centering
-    \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[height=3.3cm]{figures/5j0n_perfect_noisy_ar_aa}
-        \caption{\texttt{5j0n}}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.50\linewidth}
-    \centering
-        \includegraphics[height=3.3cm]{figures/5a1a_perfect_noisy_ar_aa}
-        \caption{\texttt{5a1a}}
-    \end{subfigure}
-    \caption{
-        The \textbf{mean orientation recovery error} $E_{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
-        Better distance estimation leads to better orientation recovery.
-        Moreover, the recovery loss $L_{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
-        \todo{Same axis ticks and sizes for both figures.}
-    }\label{fig:perfect-with-noise-ar-aa}
-\end{wrapfigure}
+% \begin{wrapfigure}{r}{0.6\linewidth}
+%     \centering
+%     \begin{subfigure}[b]{0.48\linewidth}
+%         \includegraphics[height=3.3cm]{figures/5j0n_perfect_noisy_ar_aa}
+%         \caption{\texttt{5j0n}}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.50\linewidth}
+%     \centering
+%         \includegraphics[height=3.3cm]{figures/5a1a_perfect_noisy_ar_aa}
+%         \caption{\texttt{5a1a}}
+%     \end{subfigure}
+%     \caption{
+%         The $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
+%         Better distance estimation leads to better orientation recovery.
+%         Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+%         \todo{Same axis ticks and sizes for both figures.}
+%     }\label{fig:perfect-with-noise-ar-aa}
+% \end{wrapfigure}
 
 We first evaluated the feasibility of orientation recovery assuming that the exact quaternion distances between projection pairs were known.
 Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
 
 We then evaluated the behaviour of~\eqnref{orientation-recovery} when the true relative distances were corrupted with an increasing level of additive Gaussian noise. More precisely, we perturbed the relative distances prior to the minimization with an error sampled from a Gaussian distribution with mean 0 and variances in $[0.0, 0.8]$.
 The results are presented in \figref{perfect-with-noise-ar-aa} (red curve).
-For all variances, the \textbf{mean orientation recovery error} $E_{OR}$ is reported in \figref{perfect-with-noise-ar-aa} (blue curve).
+For all variances, the $E_\text{OR}$ is reported in \figref{perfect-with-noise-ar-aa} (blue curve).
 
 % \begin{figure}[ht!]
 %     \centering
@@ -197,17 +210,18 @@ For all variances, the \textbf{mean orientation recovery error} $E_{OR}$ is repo
 %         \caption{\texttt{5a1a}}
 %     \end{subfigure}
 %     \caption{
-%         The mean orientation recovery error $E_{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
+%         The mean orientation recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
 %         Better distance estimation leads to better orientation recovery.
-%         Moreover, the recovery loss $L_{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+%         Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
 % }
 %     \label{fig:perfect-with-noise-ar-aa}
 % \end{figure}
 
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
-Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that the \textbf{error of the orientation recovery} behaves as a monotonic function of its loss.
-Hence, it suggests that the loss can be used as a good indicator of its performance, which has obvious practical implications for our future works on real data.
-\mdeff{Obvious? I would specify: it allows to know how well the method worked when true distances aren't available.}
+Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that $E_\text{OR}$ behaves as a monotonic function of its loss.
+Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
+Hence, it has practical implications for our future works on real data.
+%\mdeff{Obvious? I would specify: it allows to know how well the method worked when true distances aren't available.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -216,31 +230,86 @@ Hence, it suggests that the loss can be used as a good indicator of its performa
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
+% \begin{figure}[ht!]
+%     \centering
+%     \begin{subfigure}[t]{0.45\linewidth}
+%         \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5j0n.pdf}
+%         \caption{\texttt{5j0n}}%
+%         \label{fig:losses-siamese-assym}
+%     \end{subfigure} \quad \quad
+%     \begin{subfigure}[t]{0.5\linewidth}
+%         \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5a1a.pdf}
+%         \caption{\texttt{5a1a}}%
+%         \label{fig:losses-siamese-sym}
+%     \end{subfigure}
+%     \caption{%
+%         Distance learning loss $L_\text{DE}$ \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training (on the left side respectively).
+%         Relationship between orientations' distance $d_q$ and estimated distance $d_p$ on the test dataset (on the right side respectively).
+%         We then fed the trained SiameseNN with $1,000$ pairs of projections randomly selected from the test dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair.
+%         \todo{Arrange figure as a $2\times2$ grid. First row is the losses, second row the dP vs dQ. First column is \texttt{5j0n}, second column is \texttt{5a1a}. It'll be easier to compare the losses and dPdQ this way.}
+%         \todo{Consistency in legend: training and validation set.}
+%     }\label{fig:losses-siamese}
+% \end{figure}
+
+\begin{wrapfigure}{r}{0.6\linewidth}
+    \centering
+    \begin{subfigure}[b]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
+        \caption{\texttt{5j0n}}
+    \end{subfigure}
+    %\hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+        \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
+        \caption{\texttt{5a1a}}
+    \end{subfigure}
+    \caption{
+        The $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
+        Better distance estimation leads to better orientation recovery.
+        Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+        %\todo{Same axis ticks and sizes for both figures.}
+    }\label{fig:perfect-with-noise-ar-aa}
+    
+    
+    \vspace{1em}
+
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/de_5j0n.pdf}
+        \caption{}
+    \end{subfigure}
+    %\hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/de_5a1a.pdf}
+        \caption{}
+%, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+    \end{subfigure}
+    \\ \vspace{1em}
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/dPdQ_5j0n.pdf}
+        \caption{}
+    \end{subfigure}
+    %\hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/dPdQ_5a1a}
+        \caption{}
+    \end{subfigure}
+    \caption{%
+        $L_\text{DE}$ \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training in \textbf{(a)} and \textbf{(b)}.
+        Relationship between $d_q$ and $\widehat{d_p}$ on the test dataset in \textbf{(c)} and \textbf{(d)}.
+        We then fed the trained SiameseNN with $1,000$ pairs of projections randomly selected from the test dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair.
+        First column is \texttt{5j0n}, second column is \texttt{5a1a}.
+        % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
+    }\label{fig:losses-siamese}
+\end{wrapfigure}
+
 We evaluated how well our SiameseNN approximates the orientation distance $d_q$.
 % ---parameterized as a SiameseNN and trained---
 %s to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation}.
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[t]{0.45\linewidth}
-        \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5j0n.pdf}
-        \caption{\texttt{5j0n}}%
-        \label{fig:losses-siamese-assym}
-    \end{subfigure} \quad \quad
-    \begin{subfigure}[t]{0.5\linewidth}
-        \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5a1a.pdf}
-        \caption{\texttt{5a1a}}%
-        \label{fig:losses-siamese-sym}
-    \end{subfigure}
-    \caption{%
-        Distance learning loss $L_\text{DE}$ \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training (on the left side respectively).
-        Relationship between orientations' distance $d_q$ and estimated distance $d_p$ on the test dataset (on the right side respectively).
-        We then fed the trained SiameseNN with $1,000$ pairs of projections randomly selected from the test dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair.
-        \todo{Arrange figure as a $2\times2$ grid. First row is the losses, second row the dP vs dQ. First column is \texttt{5j0n}, second column is \texttt{5a1a}. It'll be easier to compare the losses and dPdQ this way.}
-        \todo{Consistency in legend: training and validation set.}
-    }\label{fig:losses-siamese}
-\end{figure}
 
 \figref{losses-siamese}(a,b) shows how the distance learning loss converged during training.
 Convergence was reached in about 50 epochs. %($50 x ? / 256$ steps).
@@ -282,7 +351,7 @@ More data required to close the gap on \texttt{5a1a}, more powerful SiameseNN to
 %\subsection{Generalization of distance learning}
 %\subsection{Generalizability/Abstractability of distance learning}
 
-\mdeff{Shall we use ``noiseless projections'' or ``clean projections''?} \lau{Noiseless if space is not an issue.}
+%\mdeff{Shall we use ``noiseless projections'' or ``clean projections''?} \lau{Noiseless if space is not an issue.}
 
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
@@ -296,10 +365,11 @@ As discussed in \secref{method:distance-learning}, the convolutional architectur
 % Noise.
 As we cannot---or do not (yet) know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy datasets and evaluated whether it could learn to ignore noise as being irrelevant information.
 % brute force vs principled engineering
-\figref{results:distance-estimation:noise} shows a mean orientation recovery error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$.
-\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
+\figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$.
+%\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
-Moreover, overfitting (i.e., the growing gap between the validation and trainig losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
+Moreover, overfitting (i.e., the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
+While the results are good, there is also room for improvement.
 
 % PSF and conclusion.
 We didn't evaluate sensitivity to the PSF but expect a similar behavior.
@@ -317,10 +387,10 @@ we also desire our learned distance function to generalize to unseen proteins.
 The distance function $\widehat{d_p}$ must abstract the protein (in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections).
 We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on noiseless projections of four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
 In this experiment, we generated $1,000$ projections per protein.
-The \todo{percentage?} of projections split in the training, validation, and test sets is the same as in \tabref{dataset}.
-Then, four proteins are used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
-We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip)},
-\mdeff{Right, thanks for explaining again. We should probably talk about that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
+Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set. 
+The number of projections in every set is the same as in \tabref{dataset}.
+We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip)},
+\mdeff{Right, thanks for explaining again. We should probably talk about that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}\banjac{coming soon}
 % Jelena: Angle recovery is good but it is unable to align. Probably missing something as expected as a flip discovered at the beginning of the project.
 to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
 While performance is somewhat degraded, we conclude that it is possible to use a learned distance function on unseen proteins.
@@ -361,12 +431,12 @@ While performance is somewhat degraded, we conclude that it is possible to use a
 
 \todo{
 \begin{itemize}
-    \item \mdeff{Should we call it Density reconstruction from recovered orientations?}
+    \item \mdeff{Should we call it Density reconstruction from recovered orientations?}\banjac{Density sounds very general to me, 3d protein reconstruction, protein electron density reconstruction?  Or even Complete machine learning pipeline}
     %\item Make the plots in Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery} flatter and remove \texttt{width=linewidth} (which deforms the figure).
     %\item Add $L_\text{OR}=...$ and $E_\text{OR}=...$ in the boxes of Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery}, and~\ref{fig:5a1a-noise0-orientation-recovery}.
     \item Would be nice to know $L_\text{DE}$ for the three cases. \banjac{On the test set?}
     %\item ``With total of $1,650$ projections in the test dataset, we were able to reconstruct the protein.'' \mdeff{But \tabref{dataset} says 838 for test. Was it validation data?} \banjac{Great notice!! The table was wrong, I fixed it. In the code I was printing in different order so I mixed it.}
-    \item \mdeff{Training set for distance learning and validation/test set for orientation recovery should have been made clear in 3.1.} \banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment)}
+    %\item \mdeff{Training set for distance learning and validation/test set for orientation recovery should have been made clear in 3.1.} \banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment)}
 \end{itemize}
 }
 
@@ -390,7 +460,9 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \begin{subfigure}[b]{0.44\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_noise0_ar_aa}
-        \caption{Recovered $\{ \widehat{q_i} \}$ from $\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5j0n}.}%
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$.
+        %$\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5j0n}.
+        }%
         \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
@@ -411,7 +483,9 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \begin{subfigure}[b]{0.44\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_noise16_ar_aa}
-        \caption{Recovered $\{ \widehat{q_i} \}$ from $\{ \p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n} \}$, $\x$ from \texttt{5j0n}.}%
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noisy \texttt{5j0n} projections $\{ \p_i \}$.
+        %$\{ \p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n} \}$, $\x$ from \texttt{5j0n}.
+        }%
         \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
@@ -432,7 +506,9 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \begin{subfigure}[b]{0.44\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5a1a_noise0_ar_aa}
-        \caption{Recovered $\{ \widehat{q_i} \}$ from $\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5a1a}.}%
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5a1a} projections $\{ \p_i \}$.
+        %$\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5a1a}.
+        }%
         \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
@@ -457,24 +533,26 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     The second and third columns show density maps $\widehat{\x}$ reconstructed from projections $\{ \p_i \}$, and recovered orientations $\{ \widehat{q_i} \}$~(b,e,h) or true orientations $\{ q_i \}$~(c,f,i).
         % Explain columns then rows.
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
-        \mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?\banjac{Thanks for notice! I didn't see that. I am rerunning this pipeline for this plot. Update: I reran the 5j0n pipeline with 0 and 16 noise variance and both are shifted by ~0.25 from the results we have in the noise tests... I am not sure why, however, my thinking is that it might be due to working with a different set of generated projections from the same protein (different train-val-test split). What do you think I should do? Should I write about it or rerun the noisy experiments }}
+        %\mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?\banjac{Thanks for notice! I didn't see that. I am rerunning this pipeline for this plot. Update: I reran the 5j0n pipeline with 0 and 16 noise variance and both are shifted by ~0.25 from the results we have in the noise tests... I am not sure why, however, my thinking is that it might be due to working with a different set of generated projections from the same protein (different train-val-test split). What do you think I should do? Should I write about it or rerun the noisy experiments }}
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         %\mdeff{$E_\text{OR}=0.4184$ is the same as for $\sigma^2=15$ (\figref{results:distance-estimation:noise}). Coincidence or error?}\banjac{Not coincidence. I  use the result from variance 16 for variance 15 on variance plot. I fill fix it to 16 in 9b}
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave $\bth$. Laurene what do you think?}\lau{Actually I would just remove the use of the operator in the legend; it's not necessary, plus it allows us to avoid this confusion. In particular, I would not use $P_{\bth_i}$ in the captions, it clashes with the quaternion notation in a big way.}
+        \banjac{Removing $P_{\bth_i}$ in Figure explanation too?}
+        %\mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave $\bth$. Laurene what do you think?}\lau{Actually I would just remove the use of the operator in the legend; it's not necessary, plus it allows us to avoid this confusion. In particular, I would not use $P_{\bth_i}$ in the captions, it clashes with the quaternion notation in a big way.}
     }
 \end{figure}
 
-\figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances estimated from clean projections of \texttt{5j0n}.
+\figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances estimated from noiseless projections of \texttt{5j0n}.
 A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to a \todo{pretty good?} reconstruction (\figref{5j0n-noise0-reconstruction-recovered}) compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
 \mdeff{I'm not sure how to qualify the reconstructed density maps.} \lau{I'm not sure we should try to be honest. The only thing we could do is give its resolution.}
 \todo{Don't qualify in absolute terms, but say how adding noise results in a reconstruction of lower resolution.}
+Note that $L_\text{OR} \approx 0.03$ is higher than the $L_\text{OR} \approx 0.01$ in \figref{results:distance-estimation:shift} due to re-running the pipeline from scratch which includes different dataset splitting into training, validation and test sets which causes these losses to have different values.
 
 As expected from the experiments in \secref{results:distance-estimation:sensitivity}, adding white noise with variance $\sigma^2=16$ to the projections worsen the recovered orientations (\figref{5j0n-noise16-orientation-recovery}) to a mean error of $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$).
 That leads to a \todo{worse/lower resolution/blurrier} reconstruction (\figref{5j0n-noise16-reconstruction-recovered}).
 Note that reconstructing from true orientations worsen too  (\figref{5j0n-noise16-reconstruction-true}) as the projections themselves are degraded.
 
-Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from clean projections of \texttt{5a1a}.
+Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from noiseless projections of \texttt{5a1a}.
 A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to a \todo{blurrier} reconstruction (\figref{5j0n-noise0-reconstruction-recovered}) compared to that with true orientations (\figref{5j0n-noise0-reconstruction-true}).
 Orientation recovery is slightly more difficult for this protein \todo{as distance estimation is more difficult because} \mdeff{Symmetries? Something else? What makes \texttt{5a1a} harder than \texttt{5j0n}?}.
 

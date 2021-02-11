@@ -34,12 +34,11 @@ Second, we can learn the projection manifold by finding the distances that prese
 Hence, from a set of projections $\{\p_k\}_{k=1}^P$, we aim to recover their orientations $\{\widehat{q_k}\}_{k=1}^P$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
 All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}_{k=1}^P$ are perfectly estimated.
 
-\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}
+\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}\mdeff{Did we try that? Would be nice to have the results if we did.}\banjac{Image coming soon}
 % it could be tempting to
 Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
 While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
 % $n_f=4$ dimensional space is too constrained
-\mdeff{Did we try that? Would be nice to have the results if we did.}
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
@@ -250,7 +249,4 @@ where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta
 \mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
-Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
-
-\lau{Moved from Experiments: Since \textbf{mean orientation error} is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure (see \apxref{metrics-review}). The \textbf{mean orientation error} was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric.} \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and \textbf{mean orientation recovery error} before and after alignment with the perfect distance $d_q$.
-\todo{Alternative metrics are discussed in Appendix A.}
+Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations). Since $E_{OR}$ is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. The $E_{OR}$ was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric. \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and $E_{OR}$ before and after alignment with the perfect distance $d_q$. Alternative metrics are discussed in \apxref{metrics-review}.
