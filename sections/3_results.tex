@@ -155,18 +155,19 @@ We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 
-We first evaluated the feasibility of orientation recovery assuming that the exact quaternion distances between projection pairs were known.
+We first evaluated the feasibility of orientation recovery assuming that the exact distances between pairs were known.
 Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
 
-We then evaluated the behaviour of~\eqnref{orientation-recovery} when the true relative distances were corrupted with an increasing level of additive Gaussian noise. More precisely, we perturbed the relative distances prior to the minimization with an error sampled from a Gaussian distribution with mean 0 and variances in $[0.0, 0.8]$.
-The results are presented in \figref{perfect-with-noise-ar-aa} (red curve).
-For all variances, the $E_\text{OR}$ is reported in \figref{perfect-with-noise-ar-aa} (blue curve).
-
+We then evaluated the behavior of~\eqnref{orientation-recovery} when the true distances were increasingly perturbed.
+More precisely, we perturbed the distances prior to the minimization with an error sampled from a Gaussian distribution with mean $0$ and variances $\sigma^2 \in [0.0, 0.8]$.
+\figref{perfect-with-noise-ar-aa} shows that the recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the error in distances: from $E_\text{OR} = 0$ with perfect distances to $E_\text{OR} \approx 0.2$ radians ($\approx 11.5\degree$) for $\sigma^2 = 0.8$.
+% represented as the variance $\sigma^2$ of white noise added to the true distances.
+%More accurate distance estimation leads to more accurate orientation recovery,
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
-Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that $E_\text{OR}$ behaves as a monotonic function of its loss.
-Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
-Hence, it has practical implications for our future works on real data.
-%\mdeff{Obvious? I would specify: it allows to know how well the method worked when true distances aren't available.}
+
+Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (i.e., when recovering the orientations of real not simulated projections).
+%Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
+%Hence, it has practical implications for our future works on real data.
 
 \begin{figure}
     \begin{minipage}[b]{0.48\linewidth}
@@ -186,24 +187,21 @@ Hence, it has practical implications for our future works on real data.
                 %\mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
                 %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
                 %\mdeff{It's actually good to train on identity to force zero distance. And order doesn't matter, so no problem.}
-            \vspace{0.5em}
+            \vspace{2.5em}
             }\label{tab:dataset}
         \end{minipage}
         \begin{subfigure}[b]{0.49\linewidth}
             \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
-            \caption{$E_\text{OR}$ on \texttt{5j0n}.}
+            \caption{Recovering from \texttt{5j0n}.}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
         \centering
             \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
-            \caption{$E_\text{OR}$ on \texttt{5a1a}.}
+            \caption{Recovering from \texttt{5a1a}.}
         \end{subfigure}
-        \caption{
-            Orientation recovery from noisy distances.
-            The error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as the variance $\sigma^2$ of white noise added to the true distances.
-            Better distance estimation leads to better orientation recovery.
-            Moreover, the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+        \caption{%
+            Orientation recovery from perturbed distances.
         }\label{fig:perfect-with-noise-ar-aa}
     \end{minipage}
     \hfill
@@ -248,6 +246,7 @@ Hence, it has practical implications for our future works on real data.
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
+%our method could approximate
 We evaluated how well our SiameseNN approximates the orientation distance $d_q$.
 % ---parameterized as a SiameseNN and trained---
 %s to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
