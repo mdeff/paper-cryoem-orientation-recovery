@@ -13,53 +13,63 @@ There are many different ways of evaluating the pipeline performance found in th
 \item Mean Angle Error (MAE) and Median Angle Error (MedError) evaluated and compared with other pose estimation error metrics in the paper~\cite{RedondoCabrera2016PoseEE}.
 \end{itemize}
 
-\section{Orientation recovery: Recovery from exact distances}\label{apx:results:orientation-recovery:exact}
+\section{Orientation recovery from exact distances}\label{apx:results:orientation-recovery:exact}
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 
+To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+Orientations were perfectly recovered.
+\figref{5j0n-orientation-recovery-loss} shows the convergence of the loss $L_\text{OR}$ to zero.
+\figref{5j0n-aa-loss-perfect-distances} shows how~\eqnref{orientation-recovery-error} perfectly aligned the recovered and true orientations---leading to $E_\text{OR} = 0$.
+% Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
+
 \begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.45\linewidth}
+    \begin{minipage}[t]{0.26\linewidth}
         \centering
-        \includegraphics[height=6cm]{figures/coverage_alignment_before}
-        \caption{Orientations before alignment.}
-    \end{subfigure}
+        \includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
+        \caption{%
+            Example of perfect orientation recovery (for \texttt{5j0n}).
+            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+            \todo{Add $L_\text{OR}$ to the y-axis label and blue box.}
+        }\label{fig:5j0n-orientation-recovery-loss}
+    \end{minipage}
     \hfill
-    \begin{subfigure}[b]{0.50\linewidth}
-        \centering
-        \includegraphics[height=6cm]{figures/coverage_alignment_after}
-        \caption{Orientations after alignment.}
-    \end{subfigure}
-    \\
-    \begin{subfigure}[b]{0.45\linewidth}
-        \centering
-        \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_before}
-        \caption{Orientation recovery error without alignment.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.5\linewidth}
-        \centering
-        \includegraphics[height=5.5cm]{figures/5j0n_perfect_angle_ralignment_after}
-        \caption{Orientation recovery error with alignment.}
-    \end{subfigure}
-    \caption{%
-        Example of perfect alignment after a perfect orientation recovery under the true distance $d_p(\p_i, \p_j) = d_q(q_i, q_j)$ (\texttt{5j0n}).
-        The first row shows the orientation coverage of $\mathbb{S}^2 \subset \SO(3)$ after the recovery.
-        Green points are the ground truth orientations ${\{q_p\}}_{p=1}^P$ and red points are the recovered orientations ${\{\widehat{q_p}\}}_{p=1}^P$. The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, both colors can still be seen.
-        % orientations projected on S²
-        The second row are the histograms of ${\{ d_q (q_p, \T \widehat{q_p}) \}}_{p=1}^P$, with $\T = \mathbf{I}$ on the left (i.e., without alignment) and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
-        Alignment is necessary to evaluate the performance of orientation recovery.
-    }\label{fig:5j0n-aa-loss-perfect-distances}
-%    \label{fig:angle-alignment-perfect}
+    \begin{minipage}[t]{0.71\linewidth}
+%        \begin{subfigure}[b]{0.19\linewidth}
+%            \centering
+%            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
+%            \caption{Orientation recovery error with alignment.}
+%        \end{subfigure}
+%        \hfill
+        \begin{subfigure}[t]{4.3cm}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_before}
+            \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, i.e., before alignment.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{3.4cm}
+            \centering
+            \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
+            \caption{Orientations before alignment.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{3.4cm}
+            \centering
+            \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
+            \caption{Orientations after alignment.}
+        \end{subfigure}
+        \caption{%
+            Example of perfect alignment~\eqnref{orientation-recovery-error} after a perfect orientation recovery~\eqnref{orientation-recovery}.
+            (a)~shows the error before alignment.
+            % and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
+            (b-c)~show the orientations projected on $\mathbb{S}^2 \subset \SO(3)$ before (b) and after (c) alignment.
+            Green points are the true orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
+            % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, 
+            While both colors are seen in (c), they are exactly superimposed.
+        }\label{fig:5j0n-aa-loss-perfect-distances}
+    %    \label{fig:angle-alignment-perfect}
+    \end{minipage}
 \end{figure}
-
-\lau{Smooth} To verify that (i) the lack of a convexity guarantee for \eqnref{orientation-recovery} and (ii) the severe sampling of the sum are non-issues in practice, we attempt orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-Orientations are perfectly recovered.
-\figref{5j0n-orientation-recovery-loss} shows the convergence of~\eqnref{orientation-recovery} to zero.
-
-Empirically we find that the mean orientation recovery error \eqnref{orientation-recovery-error} $E = 0$.
-The sphere coverage before and after the orientation alignment can be seen in the \figref{5j0n-aa-loss-perfect-distances}.
-We can see that the orientation alignment was performed successfully.
 
 \section{Distance estimation: Euclidean distance}\label{apx:results:distance-estimation}
 %\subsection{Estimating Relative Orientations from Projections}
@@ -114,27 +124,15 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
 \begin{figure}
-    \begin{minipage}[b]{0.4\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/5j0n_perfect_angle_recovery}
-        \caption{%
-            Example of perfect orientation recovery (for \texttt{5j0n}).
-            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-            \todo{Add $L_\text{OR}$ to the y-axis label and blue box.}
-        }\label{fig:5j0n-orientation-recovery-loss}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[b]{0.55\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/geo_eucl_mlp_distance_metric.pdf}
-        \caption{%
-            Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
-            The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
-            The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
-            \todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
-            \todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
-        }\label{fig:geo-eucl-mlp}
-    \end{minipage}
+    \centering
+    \includegraphics[width=\linewidth]{figures/geo_eucl_mlp_distance_metric.pdf}
+    \caption{%
+        Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
+        The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+        The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
+        \todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
+        \todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
+    }\label{fig:geo-eucl-mlp}
 \end{figure}
 
 There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances: 
