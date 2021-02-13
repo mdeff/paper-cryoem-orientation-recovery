@@ -78,13 +78,18 @@ We can see that the orientation alignment was performed successfully.
     \hfill
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
-        \caption{\texttt{5a1a}}
+        \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
     \end{subfigure}
-    \caption{
-        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ for \textbf{(a)} \texttt{5j0n} dataset, and \textbf{(b)} \texttt{5a1a} dataset.
-        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
+    \caption{%
+        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
+        Each color represent the distances between one fixed projection and the other $P-1$ projections.
+%        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
+        While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
+        Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
     }\label{fig:euclidean-not-robust}
 \end{figure}
+
+\mdeff{Jelena, were the projections sampled from full or half (but not quarter) coverage here?}
 
 The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
 
