@@ -117,25 +117,6 @@ We then perturbed the measurements with different levels of additive Gaussian no
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
 \figref{different-projections} displays samples of the simulated (perturbed) projections.
 
-\begin{table}[ht!]
-    \centering
-    \begin{tabular}{lrrr}
-        \toprule
-        Dataset & Number of projections $P$ & Maximum number of pairs $P^2$ & Used number of pairs \\
-        \midrule
-        Training & 2,512 (50\%) & 6,310,144 & 63,101 \\ % (1\%) \\
-        Validation & 838 (17\%) & 702,244 & 7,022 \\ % (1\%) \\
-        Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
-        \bottomrule
-    \end{tabular}
-    \caption{%
-        Split of $P=5,000$ projections in training, validation, and test subsets.
-        %\mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
-        %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
-        %\mdeff{It's actually good to train on identity to force zero distance. And order doesn't matter, so no problem.}
-    }\label{tab:dataset}
-\end{table}
-
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Splitting of datasets.}
 For each protein, we split the projections into training, validation, and test subsets; and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
@@ -169,31 +150,10 @@ We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\subsubsection{Robustness of Recovery to Additive Errors on the Relative Distances}
-
 \subsection{Sensitivity of orientation recovery to errors in distance estimation}\label{sec:results:orientation-recovery:sensitivity}
 
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 %\mdeff{Story: good distance estimation = good orientation recovery.}
-
-% \begin{wrapfigure}{r}{0.6\linewidth}
-%     \centering
-%     \begin{subfigure}[b]{0.48\linewidth}
-%         \includegraphics[height=3.3cm]{figures/5j0n_perfect_noisy_ar_aa}
-%         \caption{\texttt{5j0n}}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[b]{0.50\linewidth}
-%     \centering
-%         \includegraphics[height=3.3cm]{figures/5a1a_perfect_noisy_ar_aa}
-%         \caption{\texttt{5a1a}}
-%     \end{subfigure}
-%     \caption{
-%         The $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
-%         Better distance estimation leads to better orientation recovery.
-%         Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
-%         \todo{Same axis ticks and sizes for both figures.}
-%     }\label{fig:perfect-with-noise-ar-aa}
-% \end{wrapfigure}
 
 We first evaluated the feasibility of orientation recovery assuming that the exact quaternion distances between projection pairs were known.
 Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
@@ -202,31 +162,84 @@ We then evaluated the behaviour of~\eqnref{orientation-recovery} when the true r
 The results are presented in \figref{perfect-with-noise-ar-aa} (red curve).
 For all variances, the $E_\text{OR}$ is reported in \figref{perfect-with-noise-ar-aa} (blue curve).
 
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[b]{0.48\linewidth}
-%         \includegraphics[height=3.5cm]{figures/5j0n_perfect_noisy_ar_aa}
-%         \caption{\texttt{5j0n}}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[b]{0.50\linewidth}
-%     \centering
-%         \includegraphics[height=3.5cm]{figures/5a1a_perfect_noisy_ar_aa}
-%         \caption{\texttt{5a1a}}
-%     \end{subfigure}
-%     \caption{
-%         The mean orientation recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
-%         Better distance estimation leads to better orientation recovery.
-%         Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
-% }
-%     \label{fig:perfect-with-noise-ar-aa}
-% \end{figure}
-
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 Another interesting output of \figref{perfect-with-noise-ar-aa} is that it indicates that $E_\text{OR}$ behaves as a monotonic function of its loss.
 Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
 Hence, it has practical implications for our future works on real data.
 %\mdeff{Obvious? I would specify: it allows to know how well the method worked when true distances aren't available.}
+
+\begin{figure}
+    \begin{minipage}[b]{0.48\linewidth}
+        \begin{minipage}{\linewidth}
+            \begin{tabular}{lrrr}
+                \toprule
+                %Dataset & Number of projections $P$ & Maximum number of pairs $P^2$ & Used number of pairs \\
+                Dataset & $P$ & $P^2$ & Used pairs \\
+                \midrule
+                Training & 2,512 (50\%) & 6,310,144 & 63,101 \\ % (1\%) \\
+                Validation & 838 (17\%) & 702,244 & 7,022 \\ % (1\%) \\
+                Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
+                \bottomrule
+            \end{tabular}
+            \captionof{table}{%
+                Split of $P=5,000$ projections in training, validation, and test subsets.
+                %\mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
+                %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
+                %\mdeff{It's actually good to train on identity to force zero distance. And order doesn't matter, so no problem.}
+            \vspace{0.5em}
+            }\label{tab:dataset}
+        \end{minipage}
+        \begin{subfigure}[b]{0.49\linewidth}
+            \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
+            \caption{$E_\text{OR}$ on \texttt{5j0n}.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+            \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
+            \caption{$E_\text{OR}$ on \texttt{5a1a}.}
+        \end{subfigure}
+        \caption{
+            Orientation recovery from noisy distances.
+            The error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as the variance $\sigma^2$ of white noise added to the true distances.
+            Better distance estimation leads to better orientation recovery.
+            Moreover, the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
+        }\label{fig:perfect-with-noise-ar-aa}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.45\linewidth}
+        \begin{subfigure}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/de_5j0n.pdf}
+            \caption{Learning from \texttt{5j0n}.\vspace{0.5em}}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/de_5a1a.pdf}
+            \caption{Learning from \texttt{5a1a}.\vspace{0.5em}}
+    %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+        \end{subfigure}
+        \\ %\vspace{1em}
+        \begin{subfigure}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n.pdf}
+            \caption{Estimating from \texttt{5j0n}.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/dPdQ_5a1a.pdf}
+            \caption{Estimating from \texttt{5a1a}.}
+        \end{subfigure}
+        \caption{%
+            Distance learning.
+            (a,b)~Convergence of the loss $L_\text{DE}$ from \eqnref{distance-learning}.
+            (c,d)~Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs randomly sampled from the test sets.
+            \todo{y-ticks 0,1,2,3 as x-ticks.}
+        }\label{fig:losses-siamese}
+    \end{minipage}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -234,82 +247,6 @@ Hence, it has practical implications for our future works on real data.
 
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
-
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[t]{0.45\linewidth}
-%         \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5j0n.pdf}
-%         \caption{\texttt{5j0n}}%
-%         \label{fig:losses-siamese-assym}
-%     \end{subfigure} \quad \quad
-%     \begin{subfigure}[t]{0.5\linewidth}
-%         \includegraphics[height=3.3cm]{figures/de_loss_dPdQ_5a1a.pdf}
-%         \caption{\texttt{5a1a}}%
-%         \label{fig:losses-siamese-sym}
-%     \end{subfigure}
-%     \caption{%
-%         Distance learning loss $L_\text{DE}$ \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training (on the left side respectively).
-%         Relationship between orientations' distance $d_q$ and estimated distance $d_p$ on the test dataset (on the right side respectively).
-%         We then fed the trained SiameseNN with $1,000$ pairs of projections randomly selected from the test dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair.
-%         \todo{Arrange figure as a $2\times2$ grid. First row is the losses, second row the dP vs dQ. First column is \texttt{5j0n}, second column is \texttt{5a1a}. It'll be easier to compare the losses and dPdQ this way.}
-%         \todo{Consistency in legend: training and validation set.}
-%     }\label{fig:losses-siamese}
-% \end{figure}
-
-\begin{wrapfigure}{r}{0.6\linewidth}
-    \centering
-    \begin{subfigure}[b]{0.49\linewidth}
-        \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
-        \caption{\texttt{5j0n}}
-    \end{subfigure}
-    %\hfill
-    \begin{subfigure}[b]{0.49\linewidth}
-    \centering
-        \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
-        \caption{\texttt{5a1a}}
-    \end{subfigure}
-    \caption{
-        The $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the distance estimation error represented as a variance of white noise $\sigma^2$ added to the true distances.
-        Better distance estimation leads to better orientation recovery.
-        Moreover, the recovery loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a good proxy for the recovery error $E_\text{OR}$, allowing us to assess recovery performance even without ground-truth orientations.
-        %\todo{Same axis ticks and sizes for both figures.}
-    }\label{fig:perfect-with-noise-ar-aa}
-
-
-    \vspace{1em}
-
-    \begin{subfigure}[b]{0.49\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/de_5j0n.pdf}
-        \caption{}
-    \end{subfigure}
-    %\hfill
-    \begin{subfigure}[b]{0.49\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/de_5a1a.pdf}
-        \caption{}
-%, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
-    \end{subfigure}
-    \\ \vspace{1em}
-    \begin{subfigure}[b]{0.49\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/dPdQ_5j0n.pdf}
-        \caption{}
-    \end{subfigure}
-    %\hfill
-    \begin{subfigure}[b]{0.49\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figures/dPdQ_5a1a}
-        \caption{}
-    \end{subfigure}
-    \caption{%
-        $L_\text{DE}$ \eqnref{distance-learning} evaluated on the training and validation datasets during learning/training in \textbf{(a)} and \textbf{(b)}.
-        Relationship between $d_q$ and $\widehat{d_p}$ on the test dataset in \textbf{(c)} and \textbf{(d)}.
-        We then fed the trained SiameseNN with $1,000$ pairs of projections randomly selected from the test dataset, and reported the $(d_q,\widehat{d_p})$ relationship of each pair.
-        First column is \texttt{5j0n}, second column is \texttt{5a1a}.
-        % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
-    }\label{fig:losses-siamese}
-\end{wrapfigure}
 
 We evaluated how well our SiameseNN approximates the orientation distance $d_q$.
 % ---parameterized as a SiameseNN and trained---
