@@ -110,7 +110,7 @@ For this reason, we further restricted orientations to \todo{$(\theta_3,\theta_2
 Note that symmetries aren't an issue when estimating distances, recovering orientations, and reconstructing.
 Projections acquired from symmetric parts of the protein would group together, indicating the symmetries.
 The reconstructed parts can then be copied over.
-\todo{Better writing.}
+\todo{Write better.}
 % i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
 
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
@@ -121,47 +121,49 @@ We then perturbed the measurements with different levels of additive Gaussian no
     \centering
     \begin{tabular}{lrrr}
         \toprule
-        Dataset & Number of projections $P$ (\%) & Maximum number of pairs $P^2$ & Used number of pairs \\
+        Dataset & Number of projections $P$ & Maximum number of pairs $P^2$ & Used number of pairs \\
         \midrule
-        Training & 2,512 (50\%) & 6,310,144 & 63,101 (1\%) \\
-        Validation & 838 (17\%) & 702,244 & 7,022 (1\%) \\
-        Test & 1,650 (33\%) & -- & -- \\
+        Training & 2,512 (50\%) & 6,310,144 & 63,101 \\ % (1\%) \\
+        Validation & 838 (17\%) & 702,244 & 7,022 \\ % (1\%) \\
+        Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
         \bottomrule
     \end{tabular}
     \caption{%
-        Split of $P=5,000$ projections (for both \texttt{5j0n} and \texttt{5a1a}) in training, validation, and test sets.
-        %\todo{Fix the numbers.}
-       % \mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
+        Split of $P=5,000$ projections in training, validation, and test subsets.
+        %\mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
         %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
+        %\mdeff{It's actually good to train on identity to force zero distance. And order doesn't matter, so no problem.}
     }\label{tab:dataset}
 \end{table}
 
-% From projections to pairs and substes (which are used for distance learning and orientation recovery).
-\paragraph{Splitting of Datasets.}
-To generate the training, validation, and test datasets, we first split the $P$ projections into three distinct sets (\tabref{dataset}).
-%To train the SiameseNN, we used as input pairs of projections, and as output their respective quaternion distances (calculated from their orientations).
-We then use training and validation sets to create \textit{disjoint} projection pairs which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations); this was done to ensure that no same projection would appear in projection pairs across the different datasets type.
-%Splitting $P^2$ into the training, validation, and testing sets would mean that some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
-%To ensure that the results generalize to unseen data, we split the projections $P$ (and not $P^2$) into training, validation, and testing projection sets.
-%With these three projections sets we create disjoint projection pair datasets sets (column with $P^2$ values in \tabref{dataset}).
-Note that we used only $1\%$ of the possible pairs due to limited available resources for training.
-\todo{Explain why we do that.}
+% From projections to pairs and subsets (which are used for distance learning and orientation recovery).
+\paragraph{Splitting of datasets.}
+For each protein, we split the projections into training, validation, and test subsets; and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
+% which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations);
+The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN.
+%to ensure that it did not include any projection that was previously seen during the distance learning.
+Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
+%some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
+We further sampled $1\%$ of the training and validation pairs such that the distribution over distances was uniform (independently from the distribution over orientations) \mdeff{True for all experiments?}.
+%\mdeff{It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}
+The goal was to uniformly spread the distance estimation error over the range of distances.
+The error would otherwise concentrate on the extremities as distances are concentrated in the middle.
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
-\lau{Jelena:}\banjac{put somewhere or not: The number of possible projection pairs was $P^2 = 25 \times 10^6$.} The pairs for the training were sampled from $1\%$ of maximum number of training pairs $P_{\text{train}}^2$ ($63,126$ pairs) and validation was performed on $1\%$ of the maximum number of validation pairs $P_{\text{val}}^2$ ($27,225$ pairs). \lau{\textit{Jelena:} We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{\lau{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.}} training time limit of 12 hours.} The training lasted from 2.6 hours to 9.3 hours on one GPU, depending on the available resources on \lau{the Google Colaboratory.} \todo{ADD INFORMATION ABOUT DISTRIBUTION BINNING, REASON FOR ONLY CONSIDERING A SUBSET. }
-%\todo{Better explain why projections (and not pairs) must be separated in the various sets.}
-
-Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches. The algorithm followed by angle alignment were deployed on the test set in \tabref{dataset} to ensure that it did not include any projection that was previously seen during the distance learning.
+%We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
+% \mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 
 \paragraph{Optimization settings.}
-We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs. For a batch size of $256$, we have $247$ steps per epoch in training set and 28 steps per epoch in validation set (\tabref{dataset}).
-%(i.e., $150 \times 63,126$ steps, \mdeff{correct?} \mdeff{Why didn't we sample for $x$ steps in the $6,312,656$ possible pairs? It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}\banjac{we have 150 epochs and 63,126 pairs to go through in 1 epochs -> 63,126//265=247 steps per epoch through training data, and 28 steps for validation data}) on batches of $256$ pairs sampled from training sets .
-We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-%\todo{Figures~\ref{fig:5j0n-noise0-orientation-recovery},~\ref{fig:5j0n-noise16-orientation-recovery} and~\ref{fig:5a1a-noise0-orientation-recovery} show that more than $7000$ steps were used. We don't need to give a number, but could say something like we ran until convergence if that's how you did it. ;)}
-%\mdeff{Jelena: when did you use the validation set? When the test?}
-%\mdeff{With $7000$ steps we actually don't under-sample, as $7000 \times 256 > P^2-P)/2 \approx \num{350e3}$.}
-We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl} and a learning rate of $2$, a learning rate power of $-2$, a batch size of $256$ orientations. We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
 \todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?}
-\todo{Shortly mention the expected/average time to solve the different optimization problems. Then we don't discuss that anywhere else.}
+We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
+With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
+Training took about 6 hours \mdeff{correct?} on a single GPU\@.
+% 2.6 to 9.3 hours depending on available resources.
+% \mdeff{We just want a ball-park (e.g., not a day or a week).}
+We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
+\todo{Jelena: runtime estimation?}
+We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
+We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
+\todo{Jelena: runtime estimation?}
 % ($\sim$ 50 minutes in the best resource availability setting)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

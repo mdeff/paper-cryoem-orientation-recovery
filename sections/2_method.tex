@@ -218,6 +218,7 @@ Note that the sole difference with~\eqnref{distance-learning} is that the minimi
 Here again, we sample the sum in practice and minimize \eqnref{orientation-recovery} with mini-batch SGD.
 Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
 %We experimentally demonstrate in \secref{results:orientation-recovery:exact} that neither approximation affects recovery performance.
+\todo{Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.}
 
 \subsection{Evaluation}\label{sec:method:evaluation}
 
