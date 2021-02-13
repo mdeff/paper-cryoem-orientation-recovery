@@ -24,7 +24,7 @@ Orientations were perfectly recovered.
 % Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.26\linewidth}
+    \begin{minipage}[t]{0.27\linewidth}
         \centering
         \includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         \caption{%
@@ -34,7 +34,7 @@ Orientations were perfectly recovered.
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.71\linewidth}
+    \begin{minipage}[t]{0.70\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -79,26 +79,6 @@ Orientations were perfectly recovered.
 %SiameseNN better than l2, but still plateaus.
 %Robust to projection noise.}
 
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[height=7.5cm]{figures/eucl_notrobust_5j0n}
-        \caption{\texttt{5j0n}}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.45\textwidth}
-        \includegraphics[height=7.5cm]{figures/eucl_notrobust_5a1a}
-        \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
-    \end{subfigure}
-    \caption{%
-        The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
-        Each color represent the distances between one fixed projection and the other $P-1$ projections.
-%        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
-        While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
-        Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-    }\label{fig:euclidean-not-robust}
-\end{figure}
-
 \mdeff{Jelena, were the projections sampled from full or half (but not quarter) coverage here?}
 
 The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
@@ -119,21 +99,44 @@ In particular, the larger the quaternion distance $d_q$, the poorer the predicti
 The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
 \mdeff{Check these refs. Other ones are used in main text?}
 
+\begin{figure}[ht!]
+    \begin{minipage}[t]{0.55\linewidth}
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
+            \caption{\texttt{5j0n}}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
+            \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
+        \end{subfigure}
+        \caption{%
+            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
+            Each color represent the distances between one fixed projection and the other $P-1$ projections.
+    %        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
+            While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
+            Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
+        }\label{fig:euclidean-not-robust}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.4\linewidth}
+        \centering
+        \includegraphics[height=4cm]{figures/geo_eucl_mlp_distance_metric.pdf}
+        \caption{%
+            Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
+            The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+            The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
+            \todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
+            \todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
+        }\label{fig:geo-eucl-mlp}
+    \end{minipage}
+\end{figure}
+
 \section{Choice of feature distance}\label{apx:feature-distance}
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{figures/geo_eucl_mlp_distance_metric.pdf}
-    \caption{%
-        Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
-        The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
-        The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
-        \todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
-        \todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
-    }\label{fig:geo-eucl-mlp}
-\end{figure}
 
 There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances: 
 
