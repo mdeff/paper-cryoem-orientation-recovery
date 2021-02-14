@@ -206,84 +206,64 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
     \end{minipage}
     \hfill
     \begin{minipage}[b]{0.45\linewidth}
-        \begin{subfigure}[b]{0.47\linewidth}
+        \begin{subfigure}[b]{\linewidth}
             \centering
-            \includegraphics[width=\linewidth]{figures/de_5j0n.pdf}
-            \caption{Learning from \texttt{5j0n}.\vspace{0.5em}}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.47\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{figures/de_5a1a.pdf}
-            \caption{Learning from \texttt{5a1a}.\vspace{0.5em}}
-    %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+            \includegraphics[width=0.47\linewidth]{figures/de_5j0n.pdf}
+            \hfill
+            \includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
+            \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right).\vspace{0.8em}}\label{fig:distance-learning:loss}
         \end{subfigure}
         \\ %\vspace{1em}
-        \begin{subfigure}[b]{0.47\linewidth}
+        \begin{subfigure}[b]{\linewidth}
             \centering
-            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n.pdf}
-            \caption{Estimating from \texttt{5j0n}.}
+            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5j0n.pdf}
+            \hspace{0.5cm}
+            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
+            \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.47\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{figures/dPdQ_5a1a.pdf}
-            \caption{Estimating from \texttt{5a1a}.}
-        \end{subfigure}
-        \caption{%
-            Distance learning.
-            (a,b)~Convergence of the loss $L_\text{DE}$ from \eqnref{distance-learning}.
-            (c,d)~Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs randomly sampled from the test sets.
-            \todo{y-ticks 0,1,2,3 as x-ticks.}
-        }\label{fig:losses-siamese}
+        \caption{Distance learning.\todo{y-ticks 0,1,2,3 as x-ticks.}}
     \end{minipage}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Learned function for relative distance estimation }\label{sec:results:distance-estimation:learned}
+\subsection{Learned function for distance estimation }\label{sec:results:distance-estimation:learned}
 
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
-%our method could approximate
-We evaluated how well our SiameseNN approximates the orientation distance $d_q$.
+We evaluated how well our SiameseNN could learn \eqnref{distance-learning} to approximate the orientation distance $d_q$.
 % ---parameterized as a SiameseNN and trained---
-%s to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
+% to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation}.
 
-\figref{losses-siamese}(a,b) shows how the distance learning loss converged during training.
-Convergence was reached in about 50 epochs. %($50 x ? / 256$ steps).
-%of the distance evolution of the training and validation losses for \texttt{5j0n} and \texttt{5a1a} are presented in and \figref{losses-siamese-sym}, respectively.
-\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
-While overfitting is low (the training and validation losses are close) for \texttt{5j0n}, it is larger for \texttt{5a1a}.
-That's an indication that while we could train and learn a good distance on seen projections (training set), it doesn't generalize well to unseen projections (validation set).
-That suggests that \texttt{5a1a} is harder than \texttt{5j0n}. \lau{Hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another. Handling of symmetries could be done wrongly.}
-\mdeff{Why is \texttt{5a1a} harder? Recurring theme (see 3.5).}
-\mdeff{Here's an explanation by Jelena. Is it a good one? Let's discuss.}
-\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
-%Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
-This  advocates for restricting to non-overlapping areas of $\SO(3)$ the sampling of the orientations used to generate the training dataset.
-The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.}
-%\mdeff{I don't get this explanation. Do you mean that \texttt{5a1a} might have other symmetries than D2?}
+\figref{distance-learning:loss} shows how $L_\text{DE}$ converged in about 50 epochs.
+%\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
+We observe that overfitting---the difference between training and validation losses---is small for \texttt{5j0n} but large for \texttt{5a1a}.
+A large overfitting indicates that the distance trained on projections drawn from training sets fail to generalize to unseen projections drawn from validation sets.
+That is a first suggestion (see again in \secref{results:orientation-recovery:reconstruction}) that \texttt{5a1a} is harder than \texttt{5j0n}.
+We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
+% not hard symmetries, but similarities
+We might have miss-handled its symmetry (\secref{results:data}).
+\todo{Think about this.}
 
-\figref{losses-siamese}(c,d) shows the relation between the estimated distance $\widehat{d_p}$ and true distance $d_q$.
-As expected, distances are better estimated for \texttt{5j0n} than \texttt{5a1a}.
-While our learned distance function is a much better estimator than the Euclidean distance (compare \figref{losses-siamese}(c,d) with \figref{euclidean-not-robust}), they share one characteristic: both plateau and underestimate larger distances.
-Though the issue is much less severe that with Euclidean distance.
-\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training? Fixing a bit by sampling distances uniformly.}
-Resolving this issue would ...
-An alternative is to discard the larger distances and only rely on the estimation of local / short distances.
-That would however require a force/loss/counter-balancing in \eqnref{orientation-recovery} to spread the orientations and prevent them to collapse to a single point.
+%\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
+%Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
+%This  advocates for restricting to non-overlapping areas of $\SO(3)$ the sampling of the orientations used to generate the training dataset.
+%The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.}
+
+\figref{distance-learning:dpdq} shows the relationship between the distance $\widehat{d_p}$ estimated from projections and the true distance $d_q$.
+As expected, distances were better estimated for \texttt{5j0n} than \texttt{5a1a}.
+While our learned distance function is a much better estimator than the Euclidean distance---compare \figref{distance-learning:dpdq} with \figref{euclidean-not-robust}---they share one characteristic: both plateau and underestimate the largest distances.
+We did attenuate the phenomenon by sampling training distances uniformly (see \secref{results:data}), and the issue is much less severe than with the Euclidean distance.
+%\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training?}
+While the impact on orientation recovery is unclear, an alternative could be to discard larger distances and only rely on smaller distances for recovery.
+That would however require the addition of a spreading term in \eqnref{orientation-recovery} to prevent the recovered orientations to collapse.
 
 % proxy distance
 These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone.
-%Moreover, it clearly outperformed the Euclidean distance at doing so.
-These preliminary results are encouraging; indeed, much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
-Then train on more data (more pairs, data augmentation from imaging model \eqnref{imaging-model}, more proteins).
-% Insist because that's a recurring theme of the paper.
-Those will especially help when the task is more difficult, as for \texttt{5a1a}.
-More data required to close the gap on \texttt{5a1a}, more powerful SiameseNN to push the losses down on both.
+They are encouraging; indeed, much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
+Moreover, more training data will diminish overfitting.
 % Recurring theme.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

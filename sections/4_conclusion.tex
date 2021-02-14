@@ -39,7 +39,8 @@ Method TODO:
 \begin{itemize}
     \item Angle alignment didn't always work. Even when $L_\text{OR}$ was low (examples?). We might miss a transformation in \eqnref{orientation-recovery-error}.
     \item We needed to align with \eqnref{orientation-recovery-error} before reconstructing with ASTRA\@. Why?
-    \item More data and larger/more powerful SiameseNN for better distance approximation. More data to close the overfitting gap (e.g., \texttt{5a1a}), more powerful to push $L_\text{DE}$ done.
+    \item More data and larger/more powerful SiameseNN for better distance approximation. More data to close the overfitting gap (e.g., \texttt{5a1a}), more powerful to push $L_\text{DE}$ down.
+        Data: more pairs, data augmentation from imaging model \eqnref{imaging-model}, more proteins.
 \end{itemize}
 Future work:
 \begin{itemize}
