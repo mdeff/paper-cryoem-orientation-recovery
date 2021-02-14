@@ -1,8 +1,10 @@
 \clearpage
 
 \section{Different performance metrics}\label{apx:metrics-review}
+
+\todo{Keep? Review and copy-edit necessary.}
+
 There are many different ways of evaluating the pipeline performance found in the field of pose estimation. Some of the evaluations include the following:
-\mdeff{Shall we keep this? Not as a bullet list for sure.} \lau{Maybe in the Appendix, but not in the main text imo.}
 \begin{itemize}
 \item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (e.g. in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
 \item Translation and rotation error between estimated 3D model and true 3D model with fixed thresholds (e.g. in the paper~\cite{shotton2013scene} they require the translation error to be below 5 cm and rotation error to be below 5\degree)
@@ -17,10 +19,11 @@ There are many different ways of evaluating the pipeline performance found in th
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 
+\lau{Smooth.}
 To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 Orientations were perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of the loss $L_\text{OR}$ to zero.
-\figref{5j0n-aa-loss-perfect-distances} shows how~\eqnref{orientation-recovery-error} perfectly aligned the recovered and true orientations---leading to $E_\text{OR} = 0$.
+\figref{5j0n-aa-loss-perfect-distances} shows how~\eqnref{orientation-recovery-error} could then perfectly align the recovered and true orientations---leading to $E_\text{OR} = 0$.
 % Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
@@ -64,29 +67,23 @@ Orientations were perfectly recovered.
             % and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
             (b-c)~show the orientations projected on $\mathbb{S}^2 \subset \SO(3)$ before (b) and after (c) alignment.
             Green points are the true orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
-            % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts, 
+            % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts,
             While both colors are seen in (c), they are exactly superimposed.
         }\label{fig:5j0n-aa-loss-perfect-distances}
     %    \label{fig:angle-alignment-perfect}
     \end{minipage}
 \end{figure}
 
-\section{Distance estimation: Euclidean distance}\label{apx:results:distance-estimation}
-%\subsection{Estimating Relative Orientations from Projections}
-%\subsection{Relative orientation estimation}
-
-%\mdeff{Story: $d_p$ good estimator of $d_q$.
-%SiameseNN better than l2, but still plateaus.
-%Robust to projection noise.}
-
-\mdeff{Jelena, were the projections sampled from full or half (but not quarter) coverage here?}
-
-The challenge of distance estimation is to define the distance between two projections $d_p$ such that it is connected to the distance between two quaternions $d_q$. We start by using the Euclidean distance as the baseline. Then, we learn the distance metric using the SiameseNN architecture. With this network we aim to classify the new unseen pairs of projections without training the network again. Afterwards, we explore different network architectures as well as test the sensitivity of the network to perturbed projections.
-
-%\subsubsection{Euclidean distance}\label{sec:results:distance-estimation:euclidean}
+\section{Euclidean distance between projections}\label{apx:results:distance-estimation}
+% Orientation distance as, Estimating distances with
 
 %\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
 %Note the difference between symmetric and asymmetric proteins.}
+
+\begin{itemize}
+    \item \mdeff{Jelena: from which coverage were the projections sampled from here?}
+    \item \todo{Copy-edit.}
+\end{itemize}
 
 We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (i.e., the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
@@ -138,17 +135,17 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
-There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances: 
+There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances:
 
 \begin{itemize}
     \item the Euclidean distance, i.e., $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
     \item the cosine distance, i.e.,
 $ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right)$
-\mdeff{No absolute value here? As in \eqnref{distance:orientations}.}
-    \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learnt. 
+\todo{No absolute value. So not as in \eqnref{distance:orientations}.}
+    \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learned.
 \end{itemize}
 
-The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
+The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
 
 \figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
 % the projection pairs deviate the least from the identity
