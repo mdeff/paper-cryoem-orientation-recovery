@@ -173,7 +173,7 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
     %\label{eqn:distance:projections}
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
-\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want translation invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections).}
+\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections).}
 \todo{After some experimentation, we ended up with the architecture described in \apxref{siamese-architecture} (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
 % \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 %SiameseNNs come with a variety of more or less powerful architectures.

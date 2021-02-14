@@ -92,7 +92,7 @@ Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic 
 \mdeff{That's not a uniform sampling of $\SO(3)$. Shall we mention it? Argue for it? The distribution over orientations induces the distribution over distances.}
 Orientations were obtained by uniformly sampling the Euler angles $\bth = (\theta_1,\theta_2,\theta_3)$.
 \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}
-As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of translations or rotations.}~\todo{[ref or common knowledge?]}.
+As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}~\todo{[ref or common knowledge?]}.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 % "fundamental issue with reconstruction in cryoEM in general."
 % at high resolutions, the handedness can be determined by the chirality of alpha helices
@@ -273,7 +273,7 @@ Moreover, more training data will diminish overfitting.
 %\subsection{Generalization of distance learning}
 %\subsection{Generalizability/Abstractability of distance learning}
 
-%\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
+%\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, shift, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
@@ -320,7 +320,7 @@ While performance is somewhat degraded, we conclude that it is possible to train
     \begin{subfigure}[t]{0.47\linewidth}
         \includegraphics[width=\linewidth]{figures/de_translation_nums}
         \caption{%
-            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with translations $t_{i_1}$ and $t_{i_2}$ sampled from a triangular distribution with mean 0 and of increasing limits.
+            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with shifts $t_{i_1}$ and $t_{i_2}$ sampled from a triangular distribution with mean 0 and of increasing limits.
             Learning is not harder as projections get shifted farther, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$.
     }\label{fig:results:distance-estimation:shift}
     \end{subfigure}
