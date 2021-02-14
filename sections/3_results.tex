@@ -227,7 +227,8 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Learned function for distance estimation }\label{sec:results:distance-estimation:learned}
+\subsection{Learning to estimate distances}\label{sec:results:distance-estimation:learned}
+%\subsection{Learned function for distance estimation}
 
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
@@ -272,49 +273,47 @@ Moreover, more training data will diminish overfitting.
 %\subsection{Generalization of distance learning}
 %\subsection{Generalizability/Abstractability of distance learning}
 
-%\mdeff{Shall we use ``noiseless projections'' or ``clean projections''?} \lau{Noiseless if space is not an issue.}
-
 %\mdeff{Story: learned distance is minimally sensible to perturbations (additive noise, translation, PSF) because we can train it to ignore irrelevant information.
 %Thanks again to good model of cryo-EM imaging.}
-%\mdeff{Better word? (perturbations, corruptions, quality, non-ideal)}
 
 % Intro and shift.
 We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
-\figref{results:distance-estimation:shift} indeed shows that learning distances (and hence recovering orientations) is insensible to shifts in projections.
+\figref{results:distance-estimation:shift} indeed shows that learning distances (and hence recovering orientations) is insensible to off-centering shifts.
 
 % Noise.
-As we cannot---or do not (yet) know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy datasets and evaluated whether it could learn to ignore noise as being irrelevant information.
+As we cannot---or do not yet know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to ignore noise as being irrelevant information.
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$.
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
 Moreover, overfitting (i.e., the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
-While the results are good, there is also room for improvement.
 
 % PSF and conclusion.
 We didn't evaluate sensitivity to the PSF but expect a similar behavior.
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
 %We know how to do it for shifts, not noise or PSF.
 
-We observe that the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$).
-Moreover, we observe again (\secref{results:orientation-recovery:sensitivity}) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
+We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and (ii) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
 %\subsection{Estimating distances on unseen proteins}
 
 As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
 %we also desire our learned distance function to generalize/transfer across density maps $\x$.
 we also desire our learned distance function to generalize to unseen proteins.
-The distance function $\widehat{d_p}$ must abstract the protein (in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections).
-We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on noiseless projections of four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
-In this experiment, we generated $1,000$ projections per protein.
-Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
-The number of projections in every set is the same as in \tabref{dataset}.
-We obtained a recovery loss of $L_\text{OR} = 0.0352$ \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip)},
-\mdeff{Right, thanks for explaining again. We should probably talk about that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}\banjac{coming soon}
+The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
+We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
+%In this experiment, we generated $1,000$ projections per protein.
+%Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
+%The number of projections in every set is the same as in \tabref{dataset}.
+We obtained a recovery loss of $L_\text{OR} = 0.0352$,
+\mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
+\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
+\mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
+\banjac{Coming soon.}
 % Jelena: Angle recovery is good but it is unable to align. Probably missing something as expected as a flip discovered at the beginning of the project.
 to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
-While performance is somewhat degraded, we conclude that it is possible to use a learned distance function on unseen proteins.
+While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.
 
 \begin{figure}[ht!]
     \centering
@@ -335,13 +334,13 @@ While performance is somewhat degraded, we conclude that it is possible to use a
     \end{subfigure}
     \caption{%
         Sensitivity of distance learning to perturbations in the projections of \texttt{5j0n}.
-        The box plots show the distance learning loss $L_\text{DE}$ per epoch \eqnref{distance-learning} on the training (blue) and validation (red) sets.
+        The box plots show the distance learning loss $L_\text{DE}$~\eqnref{distance-learning}.
+        % per epoch on the training and validation sets.
         %\mdeff{Numbers are per pair or per batch of 256 pairs?}
-        Boxes show the orientation recovery loss $L_\text{OR}$ \eqnref{orientation-recovery} and error $E_\text{OR}$ \eqnref{orientation-recovery-error}.
-        %\mdeff{It's confusing that red and blue are used for both train vs validation and $E_\text{OR}$ vs $L_\text{OR}$. I don't think we need colors for $E_\text{OR}$ and $L_\text{OR}$. They could both be in the same black box.}
-        %\todo{Legend consistency: train -> training set, validation -> validation set.}
-        %\todo{Add $L_\text{DE}$ to the y-axis legend.}
-        %\todo{Add $\sigma^2$ to the x-axis legend of (b).}
+        Boxes show the orientation recovery loss $L_\text{OR}$~\eqnref{orientation-recovery} and error $E_\text{OR}$~\eqnref{orientation-recovery-error}.
+        \todo{y-axis from 0 to 1 (or less) to better see the difference between (a) and (b).}
+        \mdeff{Shifts were done on 16 pixels not 15?}
+        \todo{Consistency: translation -> shift.}
     }
 \end{figure}
 
