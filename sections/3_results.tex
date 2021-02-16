@@ -1,8 +1,10 @@
 \section{Experiments}\label{sec:experiments}
 
-% \begin{itemize}
-%     \item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
-% \end{itemize}
+\begin{itemize}
+    %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
+    \item \todo{use $\bth=(\theta_3,\theta_2,\theta_1)$}
+    %\item \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}\banjac{It is also easier for me since in the code I also use the order 3,2,1, I put this here to confirm with Laurene}
+\end{itemize}
 
 % Feasibility (one component).
 We started by evaluating whether orientation recovery \eqnref{orientation-recovery} was feasible assuming perfect distances, and how it was affected by errors in distance estimations (\secref{results:orientation-recovery:sensitivity}).
@@ -40,13 +42,13 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
         \begin{subfigure}[b]{0.46\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5a1a_5A_.png}
-            \caption{Density map $\x$ of \texttt{5a1a}.}
+            \caption{Density map of \texttt{5a1a} with 5\AA\ resolution.}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.46\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_5A_.png}
-            \caption{Density map $\x$ of \texttt{5j0n}.}
+            \caption{Density map of \texttt{5j0n} with 5\AA\ resolution.}
         \end{subfigure}
         \caption{%
             Two proteins with different symmetries.
@@ -89,28 +91,31 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 
 \paragraph{Simulated projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}.
-\mdeff{That's not a uniform sampling of $\SO(3)$. Shall we mention it? Argue for it? The distribution over orientations induces the distribution over distances.}
-Orientations were obtained by uniformly sampling the Euler angles $\bth = (\theta_1,\theta_2,\theta_3)$.
-\mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}
-As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}~\todo{[ref or common knowledge?]}.
+Orientations were obtained by uniformly sampling the Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.
+\banjac{}
+%\mdeff{That's not a uniform sampling of $\SO(3)$. Shall we mention it? Argue for it? The distribution over orientations induces the distribution over distances.}\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea. }
+
+As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}~\todo{[ref or common knowledge?]}\banjac{Laurene?}.
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 % "fundamental issue with reconstruction in cryoEM in general."
 % at high resolutions, the handedness can be determined by the chirality of alpha helices
 % https://discuss.cryosparc.com/t/ab-initio-reconstruction-chirality-issue/2202
 %Hence, we only sampled orientations from half the directions.
 % it was sufficient to only sample half the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.
-It was hence sufficient to only sample half the directions \todo{$\theta_1 \in [0, \pi[ \; \subset [0, 2\pi[$} (\figref{imaging-geometry}). % for \texttt{5j0n}
+It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \;  \times \; [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
 % half coverage of the direction sphere
-\mdeff{Did we try distance learning and estimation on full coverage of \texttt{5j0n}? I remember we first believed opposed projections would be identical. But as they are mirrored, the SiameseNN should be able to distinguish them.}
+\mdeff{Did we try distance learning and estimation on full coverage of \texttt{5j0n}? I remember we first believed opposed projections would be identical. But as they are mirrored, the SiameseNN should be able to distinguish them.}\todo{I will rerun that again. In the log I found that we started using half-coverage when working with kNN and Euclidean distance. I don't remember if I ran on the full coverage after, maybe, but I will reran again to be sure.}
 That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture, as we did to get invariance to off-centering shifts (\secref{method:distance-learning}).
+%\banjac{Following the intuition from using an Euclidean distance as our $d_p$, we assumed the symmetries will be problematic to learn distances...}
+%\banjac{Nevertheless, we tried distance learning and estimation on a full direction coverage of \texttt{5j0n}...}
 
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a} illustrates the phenomenon.
-For this reason, we further restricted orientations to \todo{$(\theta_3,\theta_2,\theta_1) \in \dots$} for \texttt{5a1a}.
+For this reason, we further restricted orientations to \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \;  \times \; [0, \pi[ \; \times \; [0, \frac{\pi}{2}[ \; $} for \texttt{5a1a} and \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \; \times [0, \frac{\pi}{2}[ \; \times \; [0, 2\pi[ $} for \texttt{5j0n} \banjac{(\figref{orientation-constraints}a,c)}.
 Note that symmetries aren't an issue when estimating distances, recovering orientations, and reconstructing.
 Projections acquired from symmetric parts of the protein would group together, indicating the symmetries.
 The reconstructed parts can then be copied over.
-\todo{Write better.}
+\todo{Write better. Might change due to the experiment above.}
 % i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
 
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
@@ -126,26 +131,30 @@ The training and validation sets were used to train and evaluate the SiameseNN, 
 %to ensure that it did not include any projection that was previously seen during the distance learning.
 Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
 %some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
-We further sampled $1\%$ of the training and validation pairs such that the distribution over distances was uniform (independently from the distribution over orientations) \mdeff{True for all experiments?}.
+We further sampled $1\%$ of the training and validation pairs such that the distribution over distances was uniform (independently from the distribution over orientations) 
+%\mdeff{True for all experiments?}\banjac{checked all models we show, yes}.
 %\mdeff{It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}
 The goal was to uniformly spread the distance estimation error over the range of distances.
-The error would otherwise concentrate on the extremities as distances are concentrated in the middle.
+The error would otherwise concentrate on the extremities as distances are concentrated in the middle \banjac{(\figref{orientation-constraints}b,d)}.
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 %We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 % \mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 
 \paragraph{Optimization settings.}
-\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?}
+%\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?}\banjac{Checked, yes, parameters are the same}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-Training took about 6 hours \mdeff{correct?} on a single GPU\@.
+\banjac{Training took about 8.75 hours on a single Tesla K40c GPU\@ or 3.3 hours on a single Tesla T4 GPU\@. There is a multi-GPU support, hence it can be even faster with more GPU-s.}
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (e.g., not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-\todo{Jelena: runtime estimation?}
+\banjac{Optimization took about 3.75 hours on a single Tesla K40c GPU\@ if the trigger for early stopping was not activated. 
+Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.}
+%\todo{Jelena: runtime estimation?}
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
 We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-\todo{Jelena: runtime estimation?}
+\banjac{Angle alignment is usually ran on the CPU and it takes around 8 minutes per run.}
+%\todo{Jelena: runtime estimation?}
 % ($\sim$ 50 minutes in the best resource availability setting)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -222,7 +231,9 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
             \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
-        \caption{Distance learning.\todo{y-ticks 0,1,2,3 as x-ticks.}}
+        \caption{Distance learning.
+        %\todo{y-ticks 0,1,2,3 as x-ticks.}
+        }
     \end{minipage}
 \end{figure}
 
@@ -253,7 +264,7 @@ That is a first suggestion (see again in \secref{results:orientation-recovery:re
 We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
 % not hard symmetries, but similarities
 We might have miss-handled its symmetry (\secref{results:data}).
-\todo{Think about this.}
+\todo{Think about this: why is \texttt{5a1a} harder than \texttt{5j0n}?}
 
 %\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
 %Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
@@ -314,13 +325,14 @@ We attempted to recover the orientations of noiseless projections from \texttt{5
 %Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
 %The number of projections in every set is the same as in \tabref{dataset}.
 We obtained a recovery loss of $L_\text{OR} = 0.0352$,
-\mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
-\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
-\mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
-\banjac{Coming soon.}
+% \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
+% \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
+% \mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
+% \banjac{Coming soon.}
 % Jelena: Angle recovery is good but it is unable to align. Probably missing something as expected as a flip discovered at the beginning of the project.
 to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
 While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.
+\todo{Reference \apxref{non-determinism}, rerun for robustness to unseen}
 
 \begin{figure}[ht!]
     \centering
@@ -345,9 +357,9 @@ While performance is somewhat degraded, we conclude that it is possible to train
         % per epoch on the training and validation sets.
         %\mdeff{Numbers are per pair or per batch of 256 pairs?}
         Boxes show the orientation recovery loss $L_\text{OR}$~\eqnref{orientation-recovery} and error $E_\text{OR}$~\eqnref{orientation-recovery-error}.
-        \todo{y-axis from 0 to 1 (or less) to better see the difference between (a) and (b).}
-        \mdeff{Shifts were done on 16 pixels not 15?}
-        \todo{Consistency: translation -> shift.}
+        %\todo{y-axis from 0 to 1 (or less) to better see the difference between (a) and (b).}
+        %\mdeff{Shifts were done on 16 pixels not 15?}
+        %\todo{Consistency: translation -> shift.}
     }
 \end{figure}
 
@@ -366,8 +378,14 @@ For best performance, it should be trained on multiple proteins, levels of noise
 \lau{Smooth this paragraph.}
 To understand the effect of miss-recovered orientations, we reconstructed the density maps from both the recovered orientations $\{ \widehat{q_i} \}$ and the true orientations $\{ q_i \}$ along which the projections $\{ \p_i \}$ were acquired.
 The density maps were reconstructed by the ASTRA toolbox.
-\todo{Using the ASTRA toolbox, we generated orientation vectors based on angles which we fed into projection 3D geometry in ASTRA.}
-\todo{Make clearer. Are there enough details?}
+\banjac{Using the ASTRA toolbox, we first create a 3D parallel beam geometry specified by 3D vectors.
+These 3D vectors are our aligned recovered orientations that are converted to a 12-dimensional vector which consists of triplets describing ray direction, the center of detector, the vector from detector pixel (0,0) to (0,1), and the vector from detector pixel (0,0) to (1,0)\footnote{https://www.astra-toolbox.com/docs/geom3d.html}.
+The center of detector was assumed to be at (0,0) and the rest of 9 values are received from converting Euler angles to a rotation matrix.
+This projection geometry is called \texttt{parallel3d} and is used to create projection geometry.
+The volume geometry is created using the 3D GPU algorithm called \texttt{BP3D\_CUDA} and the projection geometry we previously built.
+}
+%\todo{Make clearer. Are there enough details?}\banjac{I don't think I can go more specific.}
+
 While these reconstructions can be compared with the ground-truth density maps shown in \figref{pdb-proteins}, keep in mind that they were reconstructed from $1,650$ projections and ASTRA\@.
 A state-of-the-art attempt would do it with more than $10^5$ projections and a more robust iterative reconstruction algorithm, such as those discussed in \secref{introduction}.
 \todo{But it's ok to compare reconstructions from true and recovered orientations.}
@@ -375,9 +393,12 @@ A state-of-the-art attempt would do it with more than $10^5$ projections and a m
 \lau{Not naïve actually, just direct hence less robust. I think it's a good idea to write this, i.e. that the quality of reconstruction is likely to improve with a more robust algorithm, but I'm wondering if we should not put that in the discussion/conclusion.}
 \mdeff{I think it's important here for people to interpret those reconstructions. They are are just here to evaluate how good orientation recovery is. And will we even discuss reconstruction in the discussion/conclusion?}
 For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
+
 \todo{More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}
+\banjac{I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}
 \lau{Yeah but I wouldn't blame ASTRA at all, it's dangerous territory. There is just an engineering problem we haven't been able to solve, let's not blame well-know, widely-used existing packages out there if possible.}
 \mdeff{Put it as you think is best. ;)}
+\banjac{I will take one more look at it.}
 
 \begin{figure}[t]
     \centering
@@ -452,6 +473,7 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
     \caption{%
         Orientation recovery and density reconstruction from estimated distances.
         The first column~(a,d,g) shows orientation recovery:
+        \banjac{The orange and green boxes contain the $L_{DE}$ \eqnref{distance-learning} on validation and training sets respectively.}
         The blue curve shows the evolution of the recovery loss until convergence, with the minimum $L_\text{OR}$ \eqnref{orientation-recovery} highlighted.
         The red histogram shows the errors in the recovered orientations $\{d_q(q_i, \mathbf{T}\widehat{q_i})\}$, with the mean $E_\text{OR}$ \eqnref{orientation-recovery-error} highlighted.
     The second and third columns show density maps $\widehat{\x}$ reconstructed from projections $\{ \p_i \}$, and recovered orientations $\{ \widehat{q_i} \}$~(b,e,h) or true orientations $\{ q_i \}$~(c,f,i).
@@ -459,14 +481,14 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \banjac{Removing $P_{\bth_i}$ in Figure explanation too?}
+        %\banjac{Removing $P_{\bth_i}$ in Figure explanation too?}
         %\mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave $\bth$. Laurene what do you think?}\lau{Actually I would just remove the use of the operator in the legend; it's not necessary, plus it allows us to avoid this confusion. In particular, I would not use $P_{\bth_i}$ in the captions, it clashes with the quaternion notation in a big way.}
     }
 \end{figure}
 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances estimated from noiseless projections of \texttt{5j0n}.
 A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to the reconstruction from true orientations shown in \figref{5j0n-noise0-reconstruction-true}.
-\todo{Quantify the resolution of the reconstructions.}
+\todo{Quantify the resolution of the reconstructions.}\todo{Working on this with Laurene. Have some problems uploading density maps on the website.}
 
 %Note that $L_\text{OR} \approx 0.03$ is higher than the $L_\text{OR} \approx 0.01$ in \figref{results:distance-estimation:shift} due to re-running the pipeline from scratch which includes different dataset splitting into training, validation and test sets which causes these losses to have different values.
 %\mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?

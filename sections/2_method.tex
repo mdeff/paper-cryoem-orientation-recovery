@@ -34,11 +34,41 @@ Second, we can learn the projection manifold by finding the distances that prese
 Hence, from a set of projections $\{\p_k\}_{k=1}^P$, we aim to recover their orientations $\{\widehat{q_k}\}_{k=1}^P$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
 All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}_{k=1}^P$ are perfectly estimated.
 
-\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}\mdeff{Did we try that? Would be nice to have the results if we did.}\banjac{Image coming soon}
+%\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}\mdeff{Did we try that? Would be nice to have the results if we did.}\banjac{Image coming soon}
 % it could be tempting to
 Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
-While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
+\banjac{\figref{4d-vs-256d-de} shows difference in distance learning depending on the size of embedding space $n_f$}
+While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives \banjac{smaller variance and} enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
 % $n_f=4$ dimensional space is too constrained
+
+\begin{figure}[ht!]
+    \centering
+    \centering
+    \begin{minipage}[b]{0.8\linewidth}
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_4d.pdf}
+            \caption{$n_f=4$ and half-directions.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_256.pdf}
+            \caption{$n_f=256$ and half-directions.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
+            \caption{$n_f=256$ and all-directions.}
+        \end{subfigure}
+        
+        \caption{\banjac{
+        Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}. 
+        Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
+        Different direction constrains in \apxref{orientation-constraints}.
+        \todo{Seems a bit inappropriate to put these images in the methods without explaining the optimization settings. What do you think should they stay here or be moved somewhere else?}}
+        }\label{fig:4d-vs-256d-de}
+    \end{minipage}
+    
+\end{figure}
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
@@ -174,7 +204,7 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
 \todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections).}
-\todo{After some experimentation, we ended up with the architecture described in \apxref{siamese-architecture} (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
+\todo{After some experimentation, we ended up with the architecture described in \apxref{siamese-architecture} with $n_f=256$ (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
 % \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 %SiameseNNs come with a variety of more or less powerful architectures.
 %At the current stage of development, we work with a simple one.
@@ -218,7 +248,7 @@ Note that the sole difference with~\eqnref{distance-learning} is that the minimi
 Here again, we sample the sum in practice and minimize \eqnref{orientation-recovery} with mini-batch SGD.
 Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
 %We experimentally demonstrate in \secref{results:orientation-recovery:exact} that neither approximation affects recovery performance.
-\todo{Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.}
+\todo{Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.}\banjac{This would be repeating? What do we want here?}
 
 \subsection{Evaluation}\label{sec:method:evaluation}
 
@@ -246,9 +276,9 @@ We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an 
     \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
 \end{equation*}
 where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
-
-\todo{While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.}
-\mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
+%\todo{While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.}
+%\mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
+\banjac{While it requires optimization, this performance metric allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp.}
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
 Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations). Since $E_{OR}$ is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. The $E_{OR}$ was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric. \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and $E_{OR}$ before and after alignment with the perfect distance $d_q$. Alternative metrics are discussed in \apxref{metrics-review}.
