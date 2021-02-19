@@ -131,7 +131,7 @@ The training and validation sets were used to train and evaluate the SiameseNN, 
 %to ensure that it did not include any projection that was previously seen during the distance learning.
 Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
 %some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
-We further sampled $1\%$ of the training and validation pairs such that the distribution over distances was uniform (independently from the distribution over orientations) 
+We further sampled $1\%$ of the training and validation pairs such that the distribution over distances was uniform (independently from the distribution over orientations)
 %\mdeff{True for all experiments?}\banjac{checked all models we show, yes}.
 %\mdeff{It seems arbitrary to artificially limit the pairs to $1\%$, and we'd see more combinations instead of seeing $150$ times the same pairs.}
 The goal was to uniformly spread the distance estimation error over the range of distances.
@@ -148,7 +148,7 @@ With batches of $256$ pairs, that was $247$ steps per epoch for the training set
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (e.g., not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-\banjac{Optimization took about 3.75 hours on a single Tesla K40c GPU\@ if the trigger for early stopping was not activated. 
+\banjac{Optimization took about 3.75 hours on a single Tesla K40c GPU\@ if the trigger for early stopping was not activated.
 Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.}
 %\todo{Jelena: runtime estimation?}
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).

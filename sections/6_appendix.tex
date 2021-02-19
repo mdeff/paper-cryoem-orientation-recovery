@@ -2,36 +2,32 @@
 
 \section{\banjac{Uniform Euler Angles Sampling and Uniform Quaternions Sampling }}\label{apx:uniform-sampling}
 
-
-
-
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.26\linewidth}
         \centering
         \includegraphics[height=10em]{figures/dQ_5j0n_uniform_angles}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.66\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_angles_ang}
-        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}%
+        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}
     \end{subfigure}
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.26\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_angles}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.66\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_angles_q}
-        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}%
+        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}
     \end{subfigure}
-    
-     \caption{
+     \caption{%
         \textbf{Uniform Euler angles sampling.} \textbf{(a)} Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections of \texttt{5j0n} that cover all directions of sphere. \textbf{(b)} Orientations with uniform sampling in angle space. \textbf{(c)} Distribution of angles. \textbf{(d)} Distribution of quaternion components.
         }\label{fig:uniform-angles}
 \end{figure}
@@ -41,28 +37,27 @@
     \begin{subfigure}[b]{0.26\linewidth}
         \centering
         \includegraphics[height=10em]{figures/dQ_5j0n_uniform_quaternions.pdf}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.66\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_quaternions_ang.pdf}
-        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}%
+        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}
     \end{subfigure}
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.26\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_quaternion.png}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.66\linewidth}
         \centering
         \includegraphics[height=10em]{figures/uniform_quaternions_q.pdf}
-        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}%
+        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}
     \end{subfigure}
-    
-     \caption{
+     \caption{%
         \textbf{Uniform quaternion sampling.} \textbf{(a)} Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections of \texttt{5j0n} that cover all directions of sphere. \textbf{(b)} Orientations with uniform sampling in angle space. \textbf{(c)} Distribution of angles. \textbf{(d)} Distribution of quaternion components.
         }\label{fig:uniform-angles}
 \end{figure}
@@ -75,35 +70,32 @@
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
         \includegraphics[height=10em]{figures/5j0n-half.png}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
         \includegraphics[height=10em]{figures/dQ_5j0n_half.pdf}
-        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5j0n}.}%
+        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5j0n}.}
     \end{subfigure}
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
         \includegraphics[height=10em]{figures/5a1a_quarter.png}
-        \caption{}%
+        \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
         \includegraphics[height=10em]{figures/dQ_5a1a_quarter.pdf}
-        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5a1a}.}%
+        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5a1a}.}
     \end{subfigure}
-    
-     \caption{
-        Orientation constraints for \texttt{5j0n} (up) and \texttt{5a1a} (down). 
+     \caption{%
+        Orientation constraints for \texttt{5j0n} (up) and \texttt{5a1a} (down).
         Visualization of orientations in 3D space that is calculated using $(\theta_2, \theta_1)$, therefore covering half of $\mathbb{S}^2$-sphere for \texttt{5j0n} and quarter of $\mathbb{S}^2$-sphere for \texttt{5a1a} (left).
         Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections (right).
         }\label{fig:orientation-constraints}
 \end{figure}
-
-
 
 \section{Different performance metrics}\label{apx:metrics-review}
 
@@ -271,7 +263,7 @@ This superiority of the cosine distance is likely due to its capacity to model t
 %     \centering
 %     \includegraphics[height=19cm]{figures/model_plot.png}
 %     \caption{%
-        
+
 %     }\label{fig:de-architecture}
 % \end{figure}
 
