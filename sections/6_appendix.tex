@@ -1,102 +1,5 @@
 \clearpage
 
-\section{\banjac{Uniform Euler Angles Sampling and Uniform Quaternions Sampling }}\label{apx:uniform-sampling}
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.26\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/dQ_5j0n_uniform_angles}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_angles_ang}
-        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}
-    \end{subfigure}
-    \\ \vspace{1em}
-    \begin{subfigure}[b]{0.26\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_angles}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_angles_q}
-        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}
-    \end{subfigure}
-     \caption{%
-        \textbf{Uniform Euler angles sampling.} \textbf{(a)} Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections of \texttt{5j0n} that cover all directions of sphere. \textbf{(b)} Orientations with uniform sampling in angle space. \textbf{(c)} Distribution of angles. \textbf{(d)} Distribution of quaternion components.
-        }\label{fig:uniform-angles}
-\end{figure}
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.26\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/dQ_5j0n_uniform_quaternions.pdf}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_quaternions_ang.pdf}
-        \caption{$\bth = (\theta_3,\theta_2,\theta_1)$}
-    \end{subfigure}
-    \\ \vspace{1em}
-    \begin{subfigure}[b]{0.26\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_quaternion.png}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/uniform_quaternions_q.pdf}
-        \caption{$q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$}
-    \end{subfigure}
-     \caption{%
-        \textbf{Uniform quaternion sampling.} \textbf{(a)} Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections of \texttt{5j0n} that cover all directions of sphere. \textbf{(b)} Orientations with uniform sampling in angle space. \textbf{(c)} Distribution of angles. \textbf{(d)} Distribution of quaternion components.
-        }\label{fig:uniform-angles}
-\end{figure}
-
-\newpage
-\section{\banjac{Orientations Constraints}}\label{apx:orientation-constraints}
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.45\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/5j0n-half.png}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/dQ_5j0n_half.pdf}
-        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5j0n}.}
-    \end{subfigure}
-    \\ \vspace{1em}
-    \begin{subfigure}[b]{0.45\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/5a1a_quarter.png}
-        \caption{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\linewidth}
-        \centering
-        \includegraphics[height=10em]{figures/dQ_5a1a_quarter.pdf}
-        \caption{Distribution of distances with half-sphere direction coverage used in \texttt{5a1a}.}
-    \end{subfigure}
-     \caption{%
-        Orientation constraints for \texttt{5j0n} (up) and \texttt{5a1a} (down).
-        Visualization of orientations in 3D space that is calculated using $(\theta_2, \theta_1)$, therefore covering half of $\mathbb{S}^2$-sphere for \texttt{5j0n} and quarter of $\mathbb{S}^2$-sphere for \texttt{5a1a} (left).
-        Distribution of distances with $10,000$ projection pairs randomly sampled from $5,000$ projections (right).
-        }\label{fig:orientation-constraints}
-\end{figure}
-
 \section{Different performance metrics}\label{apx:metrics-review}
 
 \todo{Keep? Review and copy-edit necessary.}
@@ -111,6 +14,108 @@ There are many different ways of evaluating the pipeline performance found in th
 \item Average Orientation Similarity (AOS) is the difference between the true and estimated model with a cosine similarity term~\cite{RedondoCabrera2016PoseEE}
 \item Mean Angle Error (MAE) and Median Angle Error (MedError) evaluated and compared with other pose estimation error metrics in the paper~\cite{RedondoCabrera2016PoseEE}.
 \end{itemize}
+
+\section{Sampling of orientations}\label{apx:orientation-sampling}
+
+\figref{uniform-orientations} shows some properties of a uniform distribution of orientations over $\SO(3)$.
+\figref{uniform-angles} shows a non-uniform distribution of orientations---created by sampling Euler angles uniformly---that might happen in real cryo-EM acquisitions.
+\mdeff{Should we use a single color for all plots if they don't require different colors to be understood?}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.30\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions.pdf}
+        \caption{Distribution of ($10,000<P^2$) distances.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.66\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_quaternions_ang.pdf}
+        \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
+    \end{subfigure}
+    \\ \vspace{1em}
+    \begin{subfigure}[b]{0.30\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_quaternion.png}
+        \caption{Sampled directions $(\theta_2, \theta_1)$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.66\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_quaternions_q.pdf}
+        \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
+    \end{subfigure}
+    \caption{%
+        Uniform sampling of $P=5,000$ orientations from $\SO(3)$.
+        \mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}
+        }\label{fig:uniform-orientations}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.36\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/dQ_5j0n_uniform_angles.pdf}
+        \caption{Distribution of ($10,000<P^2$) distances.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.62\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_angles_ang.pdf}
+        \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
+    \end{subfigure}
+    \\ \vspace{1em}
+    \begin{subfigure}[b]{0.30\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_angles.png}
+        \caption{Sampled directions $(\theta_2, \theta_1)$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.66\linewidth}
+        \centering
+        \includegraphics[height=8em]{figures/uniform_angles_q.pdf}
+        \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
+    \end{subfigure}
+     \caption{%
+        Uniform sampling of $P=5,000$ Euler angles from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ inducing a non-uniform distribution of orientations.
+        }\label{fig:uniform-angles}
+\end{figure}
+
+\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half (to learn from asymmetric proteins like \texttt{5j0n}) or a quarter (e.g., for proteins with D2 symmetry like \texttt{5a1a}) of the 2-sphere.
+Observe that while the distributions flatten (compare with Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a), the shorter distances are still way under-sampled.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.22\linewidth}
+        \centering
+        \includegraphics[height=7em]{figures/5j0n-half.png}
+        \caption{Directions sampled from \todo{$(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$}, an half of the 2-sphere.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.22\linewidth}
+        \centering
+        \includegraphics[height=7em]{figures/5a1a_quarter.png}
+        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\pi[ \, \times \, [0,\frac{\pi}{2}[$, a quarter of the 2-sphere.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.22\linewidth}
+        \centering
+        \includegraphics[height=7em]{figures/dQ_5j0n_half.pdf}
+        \caption{Induced distribution of distances (half).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.22\linewidth}
+        \centering
+        \includegraphics[height=7em]{figures/dQ_5a1a_quarter.pdf}
+        \caption{Induced distribution of distances (quarter).}
+    \end{subfigure}
+    \caption{%
+        Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the 2-sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
+        \todo{Make the difference between half and quarter coverage clearer.}
+        \mdeff{Have a single histogram with two colors? They are mostly the same, and we could save space.}
+        }\label{fig:orientation-constraints}
+\end{figure}
 
 \section{Orientation recovery from exact distances}\label{apx:results:orientation-recovery:exact}
 
