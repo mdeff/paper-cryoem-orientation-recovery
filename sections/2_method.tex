@@ -59,15 +59,17 @@ While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ 
             \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
             \caption{$n_f=256$ and all-directions.}
         \end{subfigure}
-        
-        \caption{\banjac{
-        Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}. 
-        Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
-        Different direction constrains in \figref{orientation-constraints}.
-        \todo{Seems a bit inappropriate to put these images in the methods without explaining the optimization settings. What do you think should they stay here or be moved somewhere else?}}
+        \caption{%
+            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}.
+            Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
+            Different direction constrains in \figref{orientation-constraints}.
+            \banjac{Seems a bit inappropriate to put these images in the methods without explaining the optimization settings. What do you think should they stay here or be moved somewhere else?}
+            \mdeff{Yes, it should go in Experiments or the Appendices. Let's wait for the angle recovery results on full coverage to make a decision.}
+            \todo{Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.}
+            \todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture.}
         }\label{fig:4d-vs-256d-de}
     \end{minipage}
-    
+
 \end{figure}
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
