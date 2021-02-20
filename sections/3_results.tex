@@ -150,20 +150,19 @@ Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ pos
 We further sampled $1\%$ of the training and validation pairs to control the distribution of distances, as discussed above.
 
 \paragraph{Optimization.}
-%\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?}\banjac{Checked, yes, parameters are the same}
+%\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-\banjac{Training took about 8.75 hours on a single Tesla K40c GPU\@ or 3.3 hours on a single Tesla T4 GPU\@. There is a multi-GPU support, hence it can be even faster with more GPU-s.}
+Training took about $3.3$ hours on a single Tesla T4 or $8.75$ hours on a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (e.g., not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-\banjac{Optimization took about 3.75 hours on a single Tesla K40c GPU\@ if the trigger for early stopping was not activated.
-Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.}
-%\todo{Jelena: runtime estimation?}
+Optimization took about $3.75$ hours on a single Tesla K40c (without early stopping).
+%Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
 We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-\banjac{Angle alignment is usually ran on the CPU and it takes around 8 minutes per run.}
-%\todo{Jelena: runtime estimation?}
+Optimization took about 8 minutes of CPU per run.
+% 8 minutes per run => 6*8 = 48 minutes
 % ($\sim$ 50 minutes in the best resource availability setting)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
