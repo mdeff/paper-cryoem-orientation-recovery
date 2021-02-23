@@ -1,10 +1,10 @@
 \section{Experiments}\label{sec:experiments}
 
-\begin{itemize}
-    %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
-    \item \todo{use $\bth=(\theta_3,\theta_2,\theta_1)$}
-    %\item \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}\banjac{It is also easier for me since in the code I also use the order 3,2,1, I put this here to confirm with Laurene}
-\end{itemize}
+% \begin{itemize}
+%     %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
+%     \item \todo{use $\bth=(\theta_3,\theta_2,\theta_1)$}
+%     %\item \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}\banjac{It is also easier for me since in the code I also use the order 3,2,1, I put this here to confirm with Laurene}
+% \end{itemize}
 
 % Feasibility (one component).
 We started by evaluating whether orientation recovery \eqnref{orientation-recovery} was feasible assuming perfect distances, and how it was affected by errors in distance estimations (\secref{results:orientation-recovery:sensitivity}).
@@ -102,6 +102,7 @@ It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \
 \mdeff{Did we try distance learning and estimation on full coverage of \texttt{5j0n}? I remember we first believed opposed projections would be identical. But as they are mirrored, the SiameseNN should be able to distinguish them.}
 \banjac{I will rerun that again. In the log I found that we started using half-coverage when working with kNN and Euclidean distance. I don't remember if I ran on the full coverage after, maybe, but I will reran again to be sure.}
 \mdeff{Hmm interesting\ldots. It shouldn't be an issue for Euclidean either. So maybe it was something else. Let's see. Thanks.}
+\banjac{Located in Appendix, full coverage with uniform angles. The uniform rotations is running.}
 That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture, as we did to get invariance to off-centering shifts (\secref{method:distance-learning}).
 %\banjac{Following the intuition from using an Euclidean distance as our $d_p$, we assumed the symmetries will be problematic to learn distances...}
 %\banjac{Nevertheless, we tried distance learning and estimation on a full direction coverage of \texttt{5j0n}...}
@@ -110,6 +111,7 @@ Symmetries are problematic to learn distances: two projections can be identical 
 \figref{euclidean-not-robust:5a1a} illustrates the phenomenon.
 For this reason, we further restricted orientations to \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} for \texttt{5a1a} and \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$} for \texttt{5j0n} (\figref{orientation-constraints}).
 \mdeff{For consistency, could we restrict the range of only one of $\theta_2$ or $\theta_1$? (Now we restrict $\theta_1$ for \texttt{5j0n} and $\theta_2$ for \texttt{5a1a}.) The idea is to restrict to half in the previous paragraph (for all proteins irrespective of symmetries) then restrict further in this paragraph for symmetric proteins (i.e., for \texttt{5a1a} not \texttt{5j0n}).}
+\banjac{I agree. However, I will see how time serves me to fix all the 5a1a experiments.}
 Note that symmetries aren't an issue when estimating distances, recovering orientations, and reconstructing.
 Projections acquired from symmetric parts of the protein would group together, indicating the symmetries.
 The reconstructed parts can then be copied over.
@@ -329,8 +331,9 @@ As the SiameseNN will ultimately be trained on known proteins and used to estima
 %we also desire our learned distance function to generalize/transfer across density maps $\x$.
 we also desire our learned distance function to generalize to unseen proteins.
 The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
-We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{5nvu_pdb}, \texttt{5nvs}~\cite{5nvs_pdb}, \texttt{6mem}~\cite{6mem_pdb}, \texttt{6o1o}~\cite{6o1o_pdb} \todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}, which have the same type of symmetry as \texttt{5j0n}).
+We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
 %In this experiment, we generated $1,000$ projections per protein.
+%\todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}
 %Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
 %The number of projections in every set is the same as in \tabref{dataset}.
 We obtained a recovery loss of $L_\text{OR} = 0.0352$,
@@ -401,7 +404,7 @@ A state-of-the-art attempt would do it with more than $10^5$ projections and a m
 \mdeff{I think it's important here for people to interpret those reconstructions. They are are just here to evaluate how good orientation recovery is. And will we even discuss reconstruction in the discussion/conclusion?}
 For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
 
-\todo{More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}
+\todo{HERE AND NOT IN THE DISCUSSION. More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}
 \banjac{I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}
 \lau{Yeah but I wouldn't blame ASTRA at all, it's dangerous territory. There is just an engineering problem we haven't been able to solve, let's not blame well-know, widely-used existing packages out there if possible.}
 \mdeff{Put it as you think is best. ;)}
@@ -491,7 +494,35 @@ For an unknown reason, we had to align the recovered orientations with \eqnref{o
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
         %\banjac{Removing $P_{\bth_i}$ in Figure explanation too?}
         %\mdeff{It would be clearer here to have $P_{q_i}$ instead of $P_{\bth_i}$ but we didn't introduce this notation. Should we?}\banjac{IMO: Since our goal is to provide the microscope with 3 euler angles, and since ASTRA is using euler angles to generate the projections, I would leave $\bth$. Laurene what do you think?}\lau{Actually I would just remove the use of the operator in the legend; it's not necessary, plus it allows us to avoid this confusion. In particular, I would not use $P_{\bth_i}$ in the captions, it clashes with the quaternion notation in a big way.}
-        \todo{Word subscripts in roman not italic type, e.g., $L_\text{DE,train}$ not $L_{DE,train}$.}
+        %\todo{Word subscripts in roman not italic type, e.g., $L_\text{DE,train}$ not $L_{DE,train}$.}\banjac{done}
+    }
+\end{figure}
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[t]{0.3\linewidth}
+        \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_apr.pdf}
+        \caption{%
+            \texttt{5j0n} with noiseless projections.
+    }\label{fig:results:fsc-5j0n-noise0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\linewidth}
+        \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_noisy_apr}
+        \caption{%
+        \texttt{5j0n} with noisy projections.\todo{Run the pipeline, now I miss noisy projections}
+        }\label{fig:results:fsc-5j0n-noise16}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.3\linewidth}
+        \includegraphics[width=\linewidth]{figures/FSC_5a1a_gt_5a1a_apr.pdf}
+        \caption{%
+        \texttt{5a1a} with noiseless projections.
+        }\label{fig:results:fsc-5a1a-noise0}
+    \end{subfigure}
+    \caption{%
+     Fourier Shell Correlation (FSC) for every reconstruction.\footnote{FSC validation server: https://www.ebi.ac.uk/pdbe/emdb/validation/fsc/}
     }
 \end{figure}
 

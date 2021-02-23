@@ -19,7 +19,7 @@ There are many different ways of evaluating the pipeline performance found in th
 
 \figref{uniform-orientations} shows some properties of a uniform distribution of orientations over $\SO(3)$.
 \figref{uniform-angles} shows a non-uniform distribution of orientations---created by sampling Euler angles uniformly---that might happen in real cryo-EM acquisitions.
-\mdeff{Should we use a single color for all plots if they don't require different colors to be understood?}
+%\mdeff{Should we use a single color for all plots if they don't require different colors to be understood?}\banjac{done}
 
 \begin{figure}[ht!]
     \centering
@@ -48,7 +48,7 @@ There are many different ways of evaluating the pipeline performance found in th
     \end{subfigure}
     \caption{%
         Uniform sampling of $P=5,000$ orientations from $\SO(3)$.
-        \mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}
+        %\mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}\banjac{yes, we sample uniformly on SO(3), sorry my mistake in wording}
         }\label{fig:uniform-orientations}
 \end{figure}
 
@@ -115,6 +115,37 @@ Observe that while the distributions flatten (compare with Figures~\ref{fig:unif
         \todo{Make the difference between half and quarter coverage clearer.}
         \mdeff{Have a single histogram with two colors? They are mostly the same, and we could save space.}
         }\label{fig:orientation-constraints}
+\end{figure}
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.55\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/5j0n_ar_aa_fullcvg.pdf}
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/FSC_5j0n_gt_5j0n_apr_fullcvg.pdf}
+        \caption{Fourier Shell Correlation of the reconstruction.}
+    \end{subfigure}
+    \\ \vspace{1em}
+    \begin{subfigure}[b]{0.55\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/5j0n_ar_aa_fullcvg_uniform2.pdf}
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/FSC_5j0n_gt_5j0n_apr_fullcvg_uniform2.pdf}
+        \caption{Fourier Shell Correlation of the reconstruction.}
+    \end{subfigure}
+    \caption{%
+        Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage (up) and orientations with uniform distribution of orientations from full 2-sphere coverage (down).
+        }\label{fig:uniform-angles-vs-rotations}
 \end{figure}
 
 \section{Orientation recovery from exact distances}\label{apx:results:orientation-recovery:exact}
@@ -238,6 +269,24 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
 \mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
 \banjac{Coming soon.}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.35\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
+        \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the \texttt{5j0n}.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.55\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
+    \end{subfigure}
+    \caption{%
+            Robustness to unseen protein \texttt{5j0n} pipeline results.
+        }\label{fig:robustness-to-unseen-pipeline}
+\end{figure}
 
 
 \section{Choice of feature distance}\label{apx:feature-distance}
