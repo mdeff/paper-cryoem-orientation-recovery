@@ -144,7 +144,7 @@ Observe that while the distributions flatten (compare with Figures~\ref{fig:unif
         \caption{Fourier Shell Correlation of the reconstruction.}
     \end{subfigure}
     \caption{%
-        Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage (up) and orientations with uniform distribution of orientations from full 2-sphere coverage (down).
+        Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage (up) and orientations with uniform distribution of orientations from full 2-sphere coverage (down).\todo{*up* is used in the main content, remove here}
         }\label{fig:uniform-angles-vs-rotations}
 \end{figure}
 
@@ -324,24 +324,15 @@ This superiority of the cosine distance is likely due to its capacity to model t
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[t]{0.47\linewidth}
-        \includegraphics[width=\linewidth]{figures/model_plot_4d.png}
-        \caption{%
-           \banjac{Last layer converts feature vector to 4-dimensional vector.}
-    }\label{fig:de-architecture:4d}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.47\linewidth}
+    \begin{subfigure}[t]{0.8\linewidth}
         \includegraphics[width=\linewidth]{figures/model_plot_256d.png}
-        \caption{%
-           Last layer converts feature vector to a higher-dimensional vector of size 256. This architecture of network was used throughout all experiments.
-        }\label{fig:de-architecture:256d}
     \end{subfigure}
     \caption{%
         Distance estimation network architecture.
         We have two input images of dimensions $116 \times 116$.
         Each one goes to its CNN (part where we share the weights, selected with a dashed line).
         The output is a scalar value representing the distance between these two images.
-        \mdeff{Those are two similar to warrant two figures. We can just say that the last layer is different for $n_f=4$.}
+        Last layer converts feature vector to a higher-dimensional vector of size $n_f=256$. This architecture of network was used throughout all experiments. The last layer was different for $n_f=4$.
+        %\mdeff{Those are two similar to warrant two figures. We can just say that the last layer is  different for $n_f=4$.}
     }\label{fig:de-architecture}
 \end{figure}
