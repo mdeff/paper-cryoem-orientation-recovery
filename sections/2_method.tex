@@ -36,7 +36,7 @@ All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\wideha
 
 %\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}\mdeff{Did we try that? Would be nice to have the results if we did.}\banjac{Image coming soon}
 % it could be tempting to
-Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, i.e., $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
+Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, \ie, $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
 \banjac{\figref{4d-vs-256d-de} shows difference in distance learning depending on the size of embedding space $n_f$}
 While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives \banjac{smaller variance and} enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
 % $n_f=4$ dimensional space is too constrained
@@ -118,11 +118,11 @@ They parameterize rotation matrices as
     \end{pmatrix}.
 \end{equation*}
 %Composition of rotations is given by multiplications of quaternions.
-Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation, i.e., antipodal points of $\mathbb{S}^3$ are equivalent.
+Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation, \ie, antipodal points of $\mathbb{S}^3$ are equivalent.
 % q=-q is like rotation by the negated angle in the opposed direction
 %\paragraph{Distances.}
 Unlike Euler angles, $\mathbb{S}^3$ is isomorphic to the universal cover of $\SO(3)$.
-Hence, the distance between two orientations, i.e., the length of the geodesic between them on $\SO(3)$, is given by
+Hence, the distance between two orientations, \ie, the length of the geodesic between them on $\SO(3)$, is given by
 \begin{equation}
     \begin{aligned}
         d_q &: \mathbb{S}^3 \times \mathbb{S}^3 \rightarrow [0,\pi], \\
@@ -147,7 +147,7 @@ The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle) of the rotatio
 % - intuitive
 % - unique
 % - 3x3 matrix, 9 parameters
-% - used for angle alignment due to its transformation versatility (e.g. mirrors)
+% - used for angle alignment due to its transformation versatility (\eg mirrors)
 % simpler to compose
 % avoid problem of gimbal lock
 %Rotation matrix: Minor disadvantage: Multiplication of matrices is ~2 times slower than quaternions. Minor Advantage: Matrix-vector multiplication is ~2 times faster, and large. Huge disadvantage: Normalization! Ghram-Shmit is asymmetrical, which does not give a higher order accurate answer when doing differential equations. More sophisticated methods are very complex and expensive.
@@ -205,7 +205,7 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
     %\label{eqn:distance:projections}
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
-\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (i.e., training on perturbed projections).}
+\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (\ie, training on perturbed projections).}
 \todo{After some experimentation, we ended up with the architecture described in \apxref{siamese-architecture} with $n_f=256$ (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
 % \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 %SiameseNNs come with a variety of more or less powerful architectures.
@@ -234,7 +234,7 @@ Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, I
 The embedding of distance matrices in Euclidean space (given by their eigenvectors) is especially well-described.
 In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmanic2015edm} provides theoretical guarantees on the recovery of points from distances.
 
-We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting for which we are unaware of any theoretical characterization (e.g., on the shape of the loss function or its behavior when distances are missing or noisy).
+We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting for which we are unaware of any theoretical characterization (\eg, on the shape of the loss function or its behavior when distances are missing or noisy).
 The fact that $\mathbb{S}^3$ is locally Euclidean does however offer some hope. % on the feasibility of this minimization.
 Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in \apxref{results:orientation-recovery:exact}.
 
@@ -261,7 +261,7 @@ While not a part of the method \textit{per se}, the evaluation of the orientatio
 % (without reconstructing the protein)
 %Before discussing the results, we remark that one cannot directly quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgment of the protein reconstruction.
 Unfortunately, we cannot directly take the difference between the recovered orientations $\{\widehat{q_k}\}_{k=1}^P$ and the true orientations $\{q_k\}_{k=1}^P$ as orientations are rotations up to an arbitrary reference orientation.
-Any global rotation or reflection of the recovered orientations is as valid as any other, i.e., $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$, where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices. % that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space.
+Any global rotation or reflection of the recovered orientations is as valid as any other, \ie, $d_q(q_i, q_j) = d_q(\T q_i , \T q_j) \; \forall \, \T \in \Or(4)$, where $\Or(4)$ is the group of $4 \times 4$ orthogonal matrices. % that represent the symmetries of $\mathbb{S}^3$ (isometries of $\R^4$) of 4D Euclidean space.
 Hence, we align the sets of orientations and compute the \textit{mean orientation recovery error} as
 \begin{equation}
     E_\text{OR} = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.

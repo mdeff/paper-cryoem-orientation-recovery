@@ -7,7 +7,7 @@ This advent of atomic-resolution cryo-EM has had a tremendous impact in biomedic
 In single-particle cryo-EM, every 3D particle adopts a random orientation $\bth_i$ in the ice layer before being imaged with parallel beams of electrons.
 Hence, the projection geometry associated to each acquired 2D projection (\figref{imaging-geometry}) is unknown.
 Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
-We consider that a cryo-EM measurement (i.e., a projection) $\p_i \in \R^{n_p}$ is acquired through
+We consider that a cryo-EM measurement (\ie, a projection) $\p_i \in \R^{n_p}$ is acquired through
 \begin{equation}
     \label{eqn:imaging-model}
     \p_i = \mathbf{C}_{\boldsymbol\varphi} \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \x + \mathbf{n},
@@ -15,7 +15,7 @@ We consider that a cryo-EM measurement (i.e., a projection) $\p_i \in \R^{n_p}$ 
 where $\x \in \R^{n_x}$ is the unknown 3D density map~\cite{dimaio_creating_2007} (Coulomb potential).
 %\mdeff{Alternative notation: $\p_i = \mathbf{C}(\boldsymbol\varphi) \mathbf{S}(\mathbf{t}) \mathbf{P}(\bth_i) \x + \mathbf{n}$ if we want to write $\mathbf{R}(\bth_i) = \mathbf{R}(q_i) = \mathbf{R}(-q_i)$ later.}
 %\mdeff{Alternative notation: $\x: \R^3 \rightarrow \R$ and $\p_i: \R^2 \rightarrow \R$ as functions, so $\x$ can be rotated by $\mathbf{R} \in \mathbf{SO}(3)$ as $\mathbf{R}\x$. But then $\x$ is not a vector for the SiameseNN.}
-The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (i.e., the x-ray transform).
+The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (\ie, the x-ray transform).
 % consistency: 3D pose = orientation
 The operator $\mathbf{S}_{\mathbf{t}_i}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t}_i = (t_{i_1}, t_{i_2})$.
 The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
@@ -104,7 +104,7 @@ Unfortunately, the outcome of these iterative-refinement procedures is most ofte
 
 Several methods have been designed to produce a first rough \textit{ab initio} structure for the refinement procedure~\cite{singer2020computational}.
 An early approach~\cite{kam1980reconstruction} proposed to reconstruct an initial structure such that the first few moments of the distribution of its theoretical measurements match the ones of its experimental projections.
-Since then, \textit{moment-matching} techniques have been refined and extended~\cite{salzman1990method,goncharov1988integral,sharon2019method}, \textit{e.g.}, to accommodate for non-uniform orientation configurations.
+Since then, \textit{moment-matching} techniques have been refined and extended~\cite{salzman1990method,goncharov1988integral,sharon2019method}, \eg, to accommodate for non-uniform orientation configurations.
 However, they typically remain sensitive to error in data and can require relatively high computational complexity.
 
 Another popular approach relies on the central-slice theorem, which relates the Fourier transform of a projection to a plane (orthogonal to the projection direction) in the Fourier transform of the 3D object~\cite{Natterer2001mathematics}.

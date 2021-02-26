@@ -6,11 +6,11 @@
 
 There are many different ways of evaluating the pipeline performance found in the field of pose estimation. Some of the evaluations include the following:
 \begin{itemize}
-\item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (e.g. in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
-\item Translation and rotation error between estimated 3D model and true 3D model with fixed thresholds (e.g. in the paper~\cite{shotton2013scene} they require the translation error to be below 5 cm and rotation error to be below 5\degree)
-\item The average distance of all the points of the model from their transformed version, and if the error is less than the constant multiple of diameter of the 3D model, it is considered correctly evaluated (e.g. evaluation error is used in papers \cite{10.1007/978-3-642-37331-2_42, xiang2018posecnn})
-\item Reprojection error that projects the estimated points onto the image and computes the pairwise distances in the image space, instead of computing distances in the 3D model space (e.g. used in paper~\cite{xiang2018posecnn})
-\item The recovery error measured as Frobenius norm from estimated 3D model and true model, where 3D model is composed of 3D locations of important landmarks (e.g. elbow for human pose estimation)~\cite{wangni2018monocular}
+\item Intersection over Union (IoU) of the object 3D cloud with a custom threshold classifying it as a good estimate or not (\eg, in the paper~\cite{10.1007/s11263-014-0733-5} the threshold score above 0.5 is considered good estimation).
+\item Translation and rotation error between estimated 3D model and true 3D model with fixed thresholds (\eg, in the paper~\cite{shotton2013scene} they require the translation error to be below 5 cm and rotation error to be below 5\degree)
+\item The average distance of all the points of the model from their transformed version, and if the error is less than the constant multiple of diameter of the 3D model, it is considered correctly evaluated (\eg, evaluation error is used in papers~\cite{10.1007/978-3-642-37331-2_42, xiang2018posecnn})
+\item Reprojection error that projects the estimated points onto the image and computes the pairwise distances in the image space, instead of computing distances in the 3D model space (\eg, used in paper~\cite{xiang2018posecnn})
+\item The recovery error measured as Frobenius norm from estimated 3D model and true model, where 3D model is composed of 3D locations of important landmarks (\eg, elbow for human pose estimation)~\cite{wangni2018monocular}
 \item Average Orientation Similarity (AOS) is the difference between the true and estimated model with a cosine similarity term~\cite{RedondoCabrera2016PoseEE}
 \item Mean Angle Error (MAE) and Median Angle Error (MedError) evaluated and compared with other pose estimation error metrics in the paper~\cite{RedondoCabrera2016PoseEE}.
 \end{itemize}
@@ -82,7 +82,7 @@ There are many different ways of evaluating the pipeline performance found in th
         }\label{fig:uniform-angles}
 \end{figure}
 
-\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half (to learn from asymmetric proteins like \texttt{5j0n}) or a quarter (e.g., for proteins with D2 symmetry like \texttt{5a1a}) of the 2-sphere.
+\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half (to learn from asymmetric proteins like \texttt{5j0n}) or a quarter (\eg, for proteins with D2 symmetry like \texttt{5a1a}) of the 2-sphere.
 Observe that while the distributions flatten (compare with Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a), the shorter distances are still way under-sampled.
 
 \begin{figure}[ht!]
@@ -165,7 +165,7 @@ Orientations were perfectly recovered.
         \includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5j0n}).
-            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, i.e., $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
             \todo{Add $L_\text{OR}$ to the y-axis label and blue box.}
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
@@ -180,7 +180,7 @@ Orientations were perfectly recovered.
         \begin{subfigure}[t]{4.3cm}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_before}
-            \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, i.e., before alignment.}
+            \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, \ie, before alignment.}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{3.4cm}
@@ -218,7 +218,7 @@ Orientations were perfectly recovered.
     \item \todo{Copy-edit.}
 \end{itemize}
 
-We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (i.e., the Euclidean distance) as a baseline distance estimator.
+We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
 For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
 We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
@@ -245,7 +245,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
         \caption{%
             The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the half-sphere direction coverage.
             Each color represent the distances between one fixed projection and the other $P-1$ projections.
-    %        The color corresponds to projection pairs that share one projection, i.e., distance between one projection with all other projections.
+    %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
         }\label{fig:euclidean-not-robust}
@@ -296,14 +296,14 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances:
 
 \begin{itemize}
-    \item the Euclidean distance, i.e., $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
-    \item the cosine distance, i.e.,
+    \item the Euclidean distance, \ie, $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
+    \item the cosine distance, \ie,
 $ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right)$
 \todo{No absolute value. So not as in \eqnref{distance:orientations}.}
     \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learned.
 \end{itemize}
 
-The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (i.e., the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
+The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (\ie, the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
 
 \figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
 % the projection pairs deviate the least from the identity

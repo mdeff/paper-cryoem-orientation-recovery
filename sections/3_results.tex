@@ -1,7 +1,7 @@
 \section{Experiments}\label{sec:experiments}
 
 % \begin{itemize}
-%     %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, e.g., \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
+%     %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, \eg, \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
 %     \item \todo{use $\bth=(\theta_3,\theta_2,\theta_1)$}
 %     %\item \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}\banjac{It is also easier for me since in the code I also use the order 3,2,1, I put this here to confirm with Laurene}
 % \end{itemize}
@@ -112,13 +112,13 @@ That is the kind of physical knowledge that should ideally be built into the Sia
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a} illustrates the phenomenon.
 For this reason, we further restricted orientations to \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} for \texttt{5a1a} and \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$} for \texttt{5j0n} (\figref{orientation-constraints}).
-\mdeff{For consistency, could we restrict the range of only one of $\theta_2$ or $\theta_1$? (Now we restrict $\theta_1$ for \texttt{5j0n} and $\theta_2$ for \texttt{5a1a}.) The idea is to restrict to half in the previous paragraph (for all proteins irrespective of symmetries) then restrict further in this paragraph for symmetric proteins (i.e., for \texttt{5a1a} not \texttt{5j0n}).}
+\mdeff{For consistency, could we restrict the range of only one of $\theta_2$ or $\theta_1$? (Now we restrict $\theta_1$ for \texttt{5j0n} and $\theta_2$ for \texttt{5a1a}.) The idea is to restrict to half in the previous paragraph (for all proteins irrespective of symmetries) then restrict further in this paragraph for symmetric proteins (\ie, for \texttt{5a1a} not \texttt{5j0n}).}
 \banjac{I agree. However, I will see how time serves me to fix all the 5a1a experiments.}
 Note that symmetries aren't an issue when estimating distances, recovering orientations, and reconstructing.
 Projections acquired from symmetric parts of the protein would group together, indicating the symmetries.
 The reconstructed parts can then be copied over.
 \todo{Write better. Might change due to the experiment above.}
-% i.e., it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
+% \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
 
 Orientations were obtained by uniformly sampling the Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.
 %\mdeff{That's not a uniform sampling of $\SO(3)$. Shall we mention it? Argue for it?}
@@ -159,7 +159,7 @@ We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tielema
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
 Training took about $3.3$ hours on a single Tesla T4 or $8.75$ hours on a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
-% \mdeff{We just want a ball-park (e.g., not a day or a week).}
+% \mdeff{We just want a ball-park (\eg, not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
 Optimization took about $3.75$ hours on a single Tesla K40c (without early stopping).
 %Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
@@ -187,7 +187,7 @@ More precisely, we perturbed the distances prior to the minimization with an err
 %More accurate distance estimation leads to more accurate orientation recovery,
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 
-Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (i.e., when recovering the orientations of real not simulated projections).
+Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real not simulated projections).
 %Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
 %Hence, it has practical implications for our future works on real data.
 
@@ -318,7 +318,7 @@ As we cannot---or do not yet know how to---build noise invariance into the archi
 \figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$.
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
-Moreover, overfitting (i.e., the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
+Moreover, overfitting (\ie, the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
 
 % PSF and conclusion.
 We didn't evaluate sensitivity to the PSF but expect a similar behavior.
@@ -582,7 +582,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 %\todo{HERE AND NOT IN THE DISCUSSION. More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}\banjac{I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}\lau{Yeah but I wouldn't blame ASTRA at all, it's dangerous territory. There is just an engineering problem we haven't been able to solve, let's not blame well-know, widely-used existing packages out there if possible.}\mdeff{Put it as you think is best. ;)}\banjac{I will take one more look at it.}\mdeff{Great! Thanks for the investigation. Even if you can't exactly confirm, it's a good hypothesis. Leaving it at ``unknown reason'' is suspicious from a reader's POV.}
 
 
-%we  were used for reconstruction. just direct hence less robust. I think it's a good idea to write this, i.e. that the quality of reconstruction is likely to improve with a more robust algorithm,A state-of-the-art attempt would do it with more than $10^5$ projections and a more robust iterative reconstruction algorithm, such as those discussed in \secref{introduction}. \todo{But it's ok to compare reconstructions from true and recovered orientations.}\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method (compared to the SOTA discussed in the intro), and that we did it only to get a crude idea? Or something along those lines. ;)}\lau{Not naïve actually,  but I'm wondering if we should not put that in the discussion/conclusion.}\mdeff{I think it's important here for people to interpret those reconstructions. They are are just here to evaluate how good orientation recovery is. And will we even discuss reconstruction in the discussion/conclusion?}
+%we  were used for reconstruction. just direct hence less robust. I think it's a good idea to write this, \ie that the quality of reconstruction is likely to improve with a more robust algorithm,A state-of-the-art attempt would do it with more than $10^5$ projections and a more robust iterative reconstruction algorithm, such as those discussed in \secref{introduction}. \todo{But it's ok to compare reconstructions from true and recovered orientations.}\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method (compared to the SOTA discussed in the intro), and that we did it only to get a crude idea? Or something along those lines. ;)}\lau{Not naïve actually,  but I'm wondering if we should not put that in the discussion/conclusion.}\mdeff{I think it's important here for people to interpret those reconstructions. They are are just here to evaluate how good orientation recovery is. And will we even discuss reconstruction in the discussion/conclusion?}
 %For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
 
 
