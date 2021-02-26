@@ -136,6 +136,8 @@ As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sample pai
 %\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 See \apxref{orientation-sampling} for further illustrations.
 
+\todo{Write here that half-coverage and Euler uniform in figures 8 and 10 are for historical reasons.}
+
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}.
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
@@ -329,6 +331,7 @@ We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) th
 
 %\subsection{Estimating distances on unseen proteins}
 
+\todo{Move to Appendix with the corresponding figure.}
 As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
 %we also desire our learned distance function to generalize/transfer across density maps $\x$.
 we also desire our learned distance function to generalize to unseen proteins.
