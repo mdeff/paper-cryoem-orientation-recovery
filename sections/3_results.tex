@@ -232,17 +232,21 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
     \begin{minipage}[b]{0.45\linewidth}
         \begin{subfigure}[b]{\linewidth}
             \centering
-            \includegraphics[width=0.47\linewidth]{figures/de_5j0n_fullcov.pdf}
+            %\includegraphics[width=0.47\linewidth]{figures/de_5j0n_fullcov.pdf}
+            \includegraphics[width=0.47\linewidth]{figures/de_5j0n_fullcov_uniformS2.pdf}
             \hfill
-            \includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
+            %\includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
+            \includegraphics[width=0.47\linewidth]{figures/de_5a1a_quartercov_uniformS2.pdf}
             \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right).\vspace{0.8em}}\label{fig:distance-learning:loss}
         \end{subfigure}
         \\ %\vspace{1em}
         \begin{subfigure}[b]{\linewidth}
             \centering
-            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5j0n_fullcov.pdf}
+            %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5j0n_fullcov.pdf}
+            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5j0n_fullcvg_uniformS2_noise0.pdf}
             \hspace{0.5cm}
-            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
+            %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
+            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_halfInplane.pdf}
             \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.
@@ -407,7 +411,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \centering
     \begin{subfigure}[b]{0.56\linewidth}
         \centering
-        \includegraphics[height=10em]{figures/5j0n_ar_aa_fullcvg_uniform2}
+        %\includegraphics[height=10em]{figures/5j0n_ar_aa_fullcvg_uniform2}
+        \includegraphics[height=10em]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$.
         %$\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5j0n}.
         }%
@@ -416,7 +421,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \hfill
     \begin{subfigure}[b]{0.4\linewidth}
         \centering  
-        \includegraphics[height=10em]{figures/FSC_5j0n_fullcvg_uniformS2_noise0_fin_vs_init.pdf}
+        %\includegraphics[height=10em]{figures/FSC_5j0n_fullcvg_uniformS2_noise0_fin_vs_init.pdf} 
+        \includegraphics[height=10em]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init.pdf} 
         \caption{FSC between final reconstruction and initial volume.}%
         \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
@@ -430,7 +436,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.56\linewidth}
         \centering
-        \includegraphics[height=10em]{figures/5j0n_fullcov_noise16_ar_aa}
+        %\includegraphics[height=10em]{figures/5j0n_fullcov_noise16_ar_aa}
+        \includegraphics[height=10em]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noisy \texttt{5j0n} projections $\{ \p_i \}$.
         %$\{ \p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n} \}$, $\x$ from \texttt{5j0n}.
         }%
@@ -439,7 +446,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \hfill
     \begin{subfigure}[b]{0.4\linewidth}
         \centering
-        \includegraphics[height=10em]{figures/FSC_5j0n_fullcvg_noise16_fin_vs_init.pdf}
+        %\includegraphics[height=10em]{figures/FSC_5j0n_fullcvg_noise16_fin_vs_init.pdf}
+        \includegraphics[height=10em]{figures/5j0n_fullcvg_uniformS2_noise16_FSC_apr_init.pdf}
         \caption{FSC between final reconstruction and initial volume.}%
         \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
@@ -453,7 +461,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.56\linewidth}
         \centering
-        \includegraphics[height=10em]{figures/5a1a_noise0_ar_aa}
+        \includegraphics[height=10em]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5a1a} projections $\{ \p_i \}$.
         %$\{ \p_i = \mathbf{P}_{\bth_i} \x \}$, $\x$ from \texttt{5a1a}.
         }%
@@ -462,7 +470,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \hfill
     \begin{subfigure}[b]{0.4\linewidth}
         \centering
-        \includegraphics[height=10em]{figures/FSC_5a1a_fin_vs_init.pdf}
+        %\includegraphics[height=10em]{figures/FSC_5a1a_fin_vs_init.pdf}
+        \includegraphics[height=10em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_FSC_apr_init.pdf}
         \caption{FSC between final reconstruction and initial volume.}%
         \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
@@ -486,7 +495,6 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-     
     }
 \end{figure}
 
@@ -494,87 +502,69 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_init}
-        \caption{Initial}%
-        \label{fig:5j0n-noise0-reconstruction-recovered}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_gt}
+        %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_gt}  
+        \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
         \caption{Ground-truth}%
         \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_ap}
-        \caption{Before alignment}%
+        %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_ap}
+        \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}
+        \caption{Random angles.}%
         \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_apr}
+        %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_apr}
+        \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
         \caption{Final}%
         \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \\ \vspace{1em}
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_init}
-        \caption{Initial}%
-        \label{fig:5j0n-noise0-reconstruction-recovered}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_gt}
-        \caption{Ground-truth}%
+        %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_gt}
+        %\caption{Ground-truth}%
         \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_ap}
-        \caption{Before alignment}%
+        %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_ap}
+        %\caption{Before alignment}%
         \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_apr}
+        \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
         \caption{Final}%
         \label{fig:5j0n-noise16-reconstruction-true}
     \end{subfigure}
     \\ \vspace{1em}
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5a1a_noise0_init}
-        \caption{Initial}%
-        \label{fig:5j0n-noise0-reconstruction-recovered}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/5a1a_noise0_gt}
-        \caption{Reconstructed $\widehat{\x}$ from $\{ \p_i, q_i \}$.}%
+        \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_gt.png}
+        \caption{Ground-truth.}%
         \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5a1a_noise0_ap}
-        \caption{Reconstructed $\widehat{\x}$ from $\{ \p_i, \widehat{q_i} \}$.}%
+        \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_rand.png}
+        \caption{Random angles.}%
         \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/5a1a_noise0_apr}
-        \caption{Reconstructed $\widehat{\x}$ from $\{ \p_i, q_i \}$.}%
+        \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_apr.png}
+        \caption{Final.}%
         \label{fig:5a1a-noise0-reconstruction-true}
     \end{subfigure}
     \caption{%
