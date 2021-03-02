@@ -17,31 +17,32 @@ There are many different ways of evaluating the pipeline performance found in th
 
 \section{Sampling of orientations}\label{apx:orientation-sampling}
 
+\todo{What do we want to say here? Sampling of orientations, or sampling of distances?}
 \figref{uniform-orientations} shows some properties of a uniform distribution of orientations over $\SO(3)$.
 \figref{uniform-angles} shows a non-uniform distribution of orientations---created by sampling Euler angles uniformly---that might happen in real cryo-EM acquisitions.
-%\mdeff{Should we use a single color for all plots if they don't require different colors to be understood?}\banjac{done}
+\figref{recovery-nonuniform} (to be compared with \figref{5j0n-noise0-orientation-recovery},b) shows that our method is robust to uneven samplings.
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.30\linewidth}
+    \begin{subfigure}[b]{0.36\linewidth}
         \centering
         \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions.pdf}
         \caption{Distribution of ($10,000<P^2$) distances.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
+    \begin{subfigure}[b]{0.62\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_quaternions_ang.pdf}
         \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
     \end{subfigure}
     \\ \vspace{1em}
-    \begin{subfigure}[b]{0.30\linewidth}
+    \begin{subfigure}[b]{0.36\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_quaternion.png}
         \caption{Sampled directions $(\theta_2, \theta_1)$.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
+    \begin{subfigure}[b]{0.62\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_quaternions_q.pdf}
         \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
@@ -66,13 +67,13 @@ There are many different ways of evaluating the pipeline performance found in th
         \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
     \end{subfigure}
     \\ \vspace{1em}
-    \begin{subfigure}[b]{0.30\linewidth}
+    \begin{subfigure}[b]{0.36\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_angles.png}
         \caption{Sampled directions $(\theta_2, \theta_1)$.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.66\linewidth}
+    \begin{subfigure}[b]{0.62\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_angles_q.pdf}
         \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
@@ -82,44 +83,35 @@ There are many different ways of evaluating the pipeline performance found in th
         }\label{fig:uniform-angles}
 \end{figure}
 
-\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half (to learn from asymmetric proteins like \texttt{5j0n}) or a quarter (\eg, for proteins with D2 symmetry like \texttt{5a1a}) of the 2-sphere.
-Observe that while the distributions flatten (compare with Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a), the shorter distances are still way under-sampled.
+\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half or a quarter of the 2-sphere.
+% (to learn from asymmetric proteins like \texttt{5j0n})
+% (\eg, for proteins with D2 symmetry like \texttt{5a1a})
+While the distributions flatten (compare with Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a), the shorter distances are still way under-sampled.
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[t]{0.32\linewidth}
         \centering
         %\includegraphics[height=7em]{figures/5j0n-half.png}
         \includegraphics[height=9em]{figures/5j0n-cvg.pdf}
         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the 2-sphere.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[t]{0.32\linewidth}
         \centering
-        %\includegraphics[height=7em]{figures/5a1a_quarter.png}
         \includegraphics[height=9em]{figures/5a1a-cvg.pdf}
         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the 2-sphere.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[t]{0.32\linewidth}
         \centering
-        %\includegraphics[height=7em]{figures/dQ_5j0n_half.pdf}
         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
-        \caption{Induced distribution of distances (half vs. quarter).}
+        \caption{Induced distribution of distances.}
     \end{subfigure}
-    % \hfill
-    % \begin{subfigure}[b]{0.22\linewidth}
-    %     \centering
-    %     \includegraphics[height=7em]{figures/dQ_5a1a_quarter.pdf}
-    %     \caption{Induced distribution of distances (quarter).}
-    % \end{subfigure}
     \caption{%
         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the 2-sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
-        %\todo{Make the difference between half and quarter coverage clearer.}
-        %\mdeff{Have a single histogram with two colors? They are mostly the same, and we could save space.}
         }\label{fig:orientation-constraints}
 \end{figure}
-
 
 \begin{figure}[ht!]
     \centering
@@ -132,24 +124,12 @@ Observe that while the distributions flatten (compare with Figures~\ref{fig:unif
     \begin{subfigure}[b]{0.4\linewidth}
         \centering
         \includegraphics[height=11em]{figures/FSC_5j0n_fullcvg_noise0_fin_vs_init.pdf}
-        \caption{Fourier Shell Correlation of the reconstruction.}
+        \caption{Fourier Shell Correlation (FSC) of the reconstruction.}
     \end{subfigure}
-    \\ \vspace{1em}
-    % \begin{subfigure}[b]{0.55\linewidth}
-    %     \centering
-    %     \includegraphics[height=11em]{figures/5j0n_ar_aa_fullcvg_uniform2.pdf}
-    %     \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$}
-    % \end{subfigure}
-    % \hfill
-    % \begin{subfigure}[b]{0.4\linewidth}
-    %     \centering
-    %     \includegraphics[height=11em]{figures/FSC_5j0n_fullcvg_uniformS2_noise0_fin_vs_init.pdf}
-    %     \caption{Fourier Shell Correlation of the reconstruction.}
-    % \end{subfigure}
     \caption{%
-        Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        %(up) and orientations with uniform distribution of orientations from full 2-sphere coverage (down).\todo{*up* is used in the main content, remove here}
-        }\label{fig:uniform-angles-vs-rotations}
+        Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
+        %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
+        }\label{fig:recovery-nonuniform}
 \end{figure}
 
 \section{Orientation recovery from exact distances}\label{apx:results:orientation-recovery:exact}
@@ -170,8 +150,7 @@ Orientations were perfectly recovered.
         \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5a1a}).
-            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
-            %\todo{Add $L_\text{OR}$ to the y-axis label and blue box.}
+            The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
@@ -206,12 +185,13 @@ Orientations were perfectly recovered.
         \end{subfigure}
         \caption{%
             Example of perfect alignment~\eqnref{orientation-recovery-error} after a perfect orientation recovery~\eqnref{orientation-recovery}.
-            The alignment error with corresponding orientations projected on $\mathbb{S}^2 \subset \SO(3)$ before (a) and after (b) alignment.
+            The alignment error with corresponding directions $(\theta_2, \theta_1)$ before (a) and after (b) alignment.
             % and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
             %(b-c)~show the orientations projected on $\mathbb{S}^2 \subset \SO(3)$ before (b) and after (c) alignment.
             Green points are the true orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
             % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts,
-            While both colors are seen in (c), they are exactly superimposed.
+            While both colors are seen in (b), they are exactly superimposed.
+            \todo{Would be nice to have the same ticks and labels for the x-axis and y-axis of both plots.}
         }\label{fig:5j0n-aa-loss-perfect-distances}
     %    \label{fig:angle-alignment-perfect}
     \end{minipage}

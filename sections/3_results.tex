@@ -2,7 +2,6 @@
 
 % \begin{itemize}
 %     %\item \mdeff{In general, we should try to make the text in figures larger. A trick I use in matplotlib is to lower the figure size, \eg, \texttt{fig = %plt.figure(figsize=(4, 4))}}.done
-%     \item \todo{use $\bth=(\theta_3,\theta_2,\theta_1)$}
 %     %\item \mdeff{Consistency: we used $\bth=(\theta_3,\theta_2,\theta_1)$ in \secref{method:orientation-representation} and \figref{imaging-geometry}. $(\theta_3,\theta_2,\theta_1)$ indicates that $\theta_1$ is the first rotation (and $\theta_3$ is the in-plane) via $\mathbf{R}_{\theta_3}\mathbf{R}_{\theta_2}\mathbf{R}_{\theta_1}$. But if there's a standard in the field we should use it. Either way, please update the notation everywhere.}\banjac{It is also easier for me since in the code I also use the order 3,2,1, I put this here to confirm with Laurene}
 % \end{itemize}
 
@@ -25,30 +24,30 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}[b]{0.45\linewidth}
+    \begin{minipage}[b]{0.50\linewidth}
         \centering
-        \begin{subfigure}[b]{0.46\linewidth}
+        \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5a1a_pdb.png}
             \caption{Atomic model of \texttt{5a1a}.}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[b]{0.46\linewidth}
+        \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_pdb.png}
             \caption{Atomic model of \texttt{5j0n}.}
         \end{subfigure}
         \\ \vspace{0.5em}
-        \begin{subfigure}[b]{0.46\linewidth}
+        \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5a1a_5A_.png}
-            \caption{Density map of \texttt{5a1a} with 5\AA\ resolution.}
+            \caption{5\AA\ density map $\x$ of \texttt{5a1a}.}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[b]{0.46\linewidth}
+        \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_5A_.png}
-            \caption{Density map of \texttt{5j0n} with 5\AA\ resolution.}
+            \caption{5\AA\ density map $\x$ of \texttt{5j0n}.}
         \end{subfigure}
         \caption{%
             Two proteins with different symmetries.
@@ -61,26 +60,26 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_noise0}
-            \caption{$\mathbf{P}_{\bth} \mathbf{x}$}
+            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_noise16}
-            \caption{$\mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
         \end{subfigure}
         \\ \vspace{0.5em}
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_translated}
-            \caption{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
+            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
-            \caption{$\mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
         \end{subfigure}
         \caption{%
             Example projections of \texttt{5j0n}.
@@ -90,56 +89,21 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \end{figure}
 
 \paragraph{Orientations.}
-As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}~\todo{[Laurène: ref or common knowledge?]}.
-%\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
-% "fundamental issue with reconstruction in cryoEM in general."
-% at high resolutions, the handedness can be determined by the chirality of alpha helices
-% https://discuss.cryosparc.com/t/ab-initio-reconstruction-chirality-issue/2202
-%Hence, we only sampled orientations from half the directions.
-% it was sufficient to only sample half the $\mathbb{S}^2$ sphere parametrized by $(\theta_1,\theta_2)$.
-It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
-% half coverage of the direction sphere
-\mdeff{Did we try distance learning and estimation on full coverage of \texttt{5j0n}? I remember we first believed opposed projections would be identical. But as they are mirrored, the SiameseNN should be able to distinguish them.}
-\banjac{I will rerun that again. In the log I found that we started using half-coverage when working with kNN and Euclidean distance. I don't remember if I ran on the full coverage after, maybe, but I will reran again to be sure.}
-\mdeff{Hmm interesting\ldots. It shouldn't be an issue for Euclidean either. So maybe it was something else. Let's see. Thanks.}
-\banjac{Located in Appendix, full coverage with uniform angles. The uniform rotations is running.}
-That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture, as we did to get invariance to off-centering shifts (\secref{method:distance-learning}).
-\mdeff{Move that discussion to \secref{method:distance-learning} if full coverage works.}
-\mdeff{Then mention somewhere that 3.1 (fig 8) and 3.3 (fig 10) were done with half-coverage for historical reasons but that the conclusions wouldn't change. Or even omit it, as they are just intermediate results about the second part of the pipeline which isn't much concerned by coverage.}
-%\banjac{Following the intuition from using an Euclidean distance as our $d_p$, we assumed the symmetries will be problematic to learn distances...}
-%\banjac{Nevertheless, we tried distance learning and estimation on a full direction coverage of \texttt{5j0n}...}
-
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
-\figref{euclidean-not-robust:5a1a} illustrates the phenomenon.
-For this reason, we further restricted orientations to \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} for \texttt{5a1a} and \banjac{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$} for \texttt{5j0n} (\figref{orientation-constraints}).
-\mdeff{For consistency, could we restrict the range of only one of $\theta_2$ or $\theta_1$? (Now we restrict $\theta_1$ for \texttt{5j0n} and $\theta_2$ for \texttt{5a1a}.) The idea is to restrict to half in the previous paragraph (for all proteins irrespective of symmetries) then restrict further in this paragraph for symmetric proteins (\ie, for \texttt{5a1a} not \texttt{5j0n}).}
-\banjac{I agree. However, I will see how time serves me to fix all the 5a1a experiments.}
-Note that symmetries aren't an issue when estimating distances, recovering orientations, and reconstructing.
-Projections acquired from symmetric parts of the protein would group together, indicating the symmetries.
-The reconstructed parts can then be copied over.
-\todo{Write better. Might change due to the experiment above.}
+\figref{euclidean-not-robust:5a1a} illustrates the problem.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted orientations to \todo{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} (\figref{orientation-constraints}) for that protein.
+Symmetries aren't an issue beyond training: recovered orientations will cover one of the identical subdomains.
+% projections from identical parts of a protein will collapse be identified upon orientation recovery. 
+% close projections whose orientations are far due to a symmetry will be recovered as being
+% symmetries/projections will collapse/overlap/be identified/grouped
+% indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
 
-Orientations were obtained by uniformly sampling the Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.
-%\mdeff{That's not a uniform sampling of $\SO(3)$. Shall we mention it? Argue for it?}
-%\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea.}
-\lau{TO DO.}\mdeff{Laurène: could you write a sentence (with a ref?) about the expected distribution of orientations from a real cryo-EM acquisition? I remember we discussed that $\SO(3)$ uniform was a reasonable model but that deviation from uniformity is to be expected. (That could be a motivation for the choice of Euler uniform: it shows the method works even if orientations aren't uniformly sampled.)}
-\mdeff{Jelena: if it's easy, we might want to try recovery and reconstruction from uniformly sampled orientations (maybe it's better?). If it's not easy, we should write something about why we chose Euler uniform. (No need to say it's best. We can say we started with that and a more realistic sampling would be $\SO(3)$ uniform.)}
-% The sampling of orientations only matter for orientation recovery (test set).
-% For distance learning (training and validation sets),
-Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a and~\ref{fig:orientation-constraints}b,d show that a (mostly) uniform distribution of orientations induces a distribution of distances that is skewed towards larger distances.
-As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sample pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
-% such that the distribution of distances was uniform (independently from the distribution of orientations)
-% The goal was to uniformly spread the distance estimation error over the range of distances.
-%\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
-%We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
-%\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
-See \apxref{orientation-sampling} for further illustrations.
-
-\todo{Write here that half-coverage and Euler uniform in figures 8 and 10 are for historical reasons.}
-
 \paragraph{Projections.}
-Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}.
+Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
+\footnote{Orientations used in \secref{results:orientation-recovery:sensitivity} (\figref{perfect-with-noise-ar-aa}) and \secref{results:distance-estimation:sensitivity} (\figref{results:distance-estimation}) were actually obtained by uniformly sampling the Euler angles $\bth$, constrained to $(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$ for \texttt{5j0n}. Our conclusions would be identical if orientations were uniformly sampled from $\SO(3)$ instead.}
+%\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea.}
+\mdeff{Laurène: could you write a sentence (with a ref?) about the expected distribution of orientations from a real cryo-EM acquisition? I remember we discussed that $\SO(3)$ uniform was a reasonable model but that deviation from uniformity is to be expected. (We can refer to the appendix to say that the method works just as well with Euler uniform.)}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
 \figref{different-projections} displays samples of the simulated (perturbed) projections.
@@ -151,23 +115,32 @@ For each protein, we split the projections into training, validation, and test s
 The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN.
 %\banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment).}
 %to ensure that it did not include any projection that was previously seen during the distance learning.
-Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
-%some of the projections appearing in pairs in the training dataset can appear in pairs in the other datasets.
-We further sampled $1\%$ of the training and validation pairs to control the distribution of distances, as discussed above.
+%Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
+% The sampling of orientations only matter for orientation recovery (test set).
+% For distance learning (training and validation sets),
+Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a and~\ref{fig:orientation-constraints}b,d show that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
+As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
+% such that the distribution of distances was uniform (independently from the distribution of orientations)
+% The goal was to uniformly spread the distance estimation error over the range of distances.
+%\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
+%We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
+%\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
+See \apxref{orientation-sampling} for further illustrations.
+While $1,650$ projections were enough to perfectly reconstruct 5\AA\ density maps,\footnote{We obtained an \todo{FSC of 1 across frequencies} by reconstructing from $1,650$ projections and their true orientations.} our method is not limited by the number of projections as optimization is done per batch.
 
 \paragraph{Optimization.}
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-Training took about $3.3$ hours on a single Tesla T4 or $8.75$ hours on a single Tesla K40c. Our code can train faster on multiple GPUs.
+It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (\eg, not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-Optimization took about $3.75$ hours on a single Tesla K40c (without early stopping).
+It took about $3.75$ hours of a single Tesla K40c (without early stopping).
 %Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
 We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-Optimization took about 8 minutes of CPU per run.
+It took about 50 minutes of CPU.
 % 8 minutes per run => 6*8 = 48 minutes
 % ($\sim$ 50 minutes in the best resource availability setting)
 
@@ -250,7 +223,6 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.
-        %\todo{y-ticks 0,1,2,3 as x-ticks.}
         }
     \end{minipage}
 \end{figure}
@@ -378,8 +350,7 @@ While performance is somewhat degraded, we conclude that it is possible to train
         % per epoch on the training and validation sets.
         %\mdeff{Numbers are per pair or per batch of 256 pairs?}
         Boxes show the orientation recovery loss $L_\text{OR}$~\eqnref{orientation-recovery} and error $E_\text{OR}$~\eqnref{orientation-recovery-error}.
-        %\mdeff{y-axis could be even smaller than 1: I would use the smallest possible before the boxes obscure the box plots in (b).}
-    }
+    }\label{fig:results:distance-estimation}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -495,10 +466,9 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
+        \mdeff{Could we have larger text in the FSC figures?}
     }
 \end{figure}
-
-
 
 \begin{figure}[t]
     \centering
@@ -515,7 +485,6 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_ap}
         \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}
         \caption{Random angles.}%
-        \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
@@ -523,52 +492,50 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise0_apr}
         \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
         \caption{Final}%
-        \label{fig:5j0n-noise0-reconstruction-true}
+        \label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_gt}
         %\caption{Ground-truth}%
-        \label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         %\includegraphics[height=8em]{figures/5j0n_fullcvg_noise16_ap}
         %\caption{Before alignment}%
-        \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
         \caption{Final}%
-        \label{fig:5j0n-noise16-reconstruction-true}
+        \label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \\ \vspace{1em}
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_gt.png}
         \caption{Ground-truth.}%
-        \label{fig:5j0n-noise0-reconstruction-true}
+        \label{fig:5a1a-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_rand.png}
         \caption{Random angles.}%
-        \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
         \includegraphics[height=8em]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_apr.png}
         \caption{Final.}%
-        \label{fig:5a1a-noise0-reconstruction-true}
+        \label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \caption{%
         \todo{Add reconstructions - 4 images per protein: initial, ground truth, without alignment, aligned}
+        \mdeff{Shall we show the densities reconstructed from random angles? If not, we could show our reconstructed densities in Figure 11. The ground-truths are shown in Figure 6.}
     }
 \end{figure}
 
