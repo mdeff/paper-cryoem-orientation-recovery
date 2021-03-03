@@ -305,28 +305,6 @@ We didn't evaluate sensitivity to the PSF but expect a similar behavior.
 
 We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and (ii) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
-%\subsection{Estimating distances on unseen proteins}
-
-\todo{Move to Appendix with the corresponding figure.}
-As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
-%we also desire our learned distance function to generalize/transfer across density maps $\x$.
-we also desire our learned distance function to generalize to unseen proteins.
-The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
-We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
-%In this experiment, we generated $1,000$ projections per protein.
-%\todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}
-%Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
-%The number of projections in every set is the same as in \tabref{dataset}.
-We obtained a recovery loss of $L_\text{OR} = 0.0352$,
-% \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
-% \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
-% \mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
-% \banjac{Coming soon.}
-% Jelena: Angle recovery is good but it is unable to align. Probably missing something as expected as a flip discovered at the beginning of the project.
-to be compared with $L_\text{OR} \approx 0.11$ when the SiameseNN was trained on \texttt{5j0n} alone.
-While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.
-\todo{Reference \apxref{non-determinism}, rerun for robustness to unseen}
-
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[t]{0.47\linewidth}

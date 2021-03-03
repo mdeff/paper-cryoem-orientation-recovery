@@ -203,10 +203,7 @@ Orientations were perfectly recovered.
 %\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
 %Note the difference between symmetric and asymmetric proteins.}
 
-\begin{itemize}
-    \item \mdeff{Jelena: from which coverage were the projections sampled from here?}
-    \item \todo{Copy-edit.}
-\end{itemize}
+\todo{Copy-edit.}
 
 We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
@@ -255,31 +252,6 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
     \end{minipage}
 \end{figure}
 
-\section{Non-determinism of the Orientation Recovery}\label{apx:non-determinism}
-\mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
-\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
-\mdeff{Right, thanks for explaining again. We should probably discuss that issue somewhere. An Appendix? Do we have examples when it worked and when it didn't?}
-\banjac{Coming soon.}
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[b]{0.35\linewidth}
-        \centering
-        \includegraphics[height=11em]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
-        \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the \texttt{5j0n}.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.55\linewidth}
-        \centering
-        \includegraphics[height=11em]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
-        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
-    \end{subfigure}
-    \caption{%
-            Robustness to unseen protein \texttt{5j0n} pipeline results.
-        }\label{fig:robustness-to-unseen-pipeline}
-\end{figure}
-
-
 \section{Choice of feature distance}\label{apx:feature-distance}
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
@@ -301,17 +273,49 @@ The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ unit
 This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
 %The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
 
+\section{Estimating distances on unseen proteins}\label{apx:unseen-proteins}
+%\section{Non-determinism of the Orientation Recovery}\label{apx:non-determinism}
+
+As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
+%we also desire our learned distance function to generalize/transfer across density maps $\x$.
+we also desire our learned distance function to generalize to unseen proteins.
+The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
+We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
+%In this experiment, we generated $1,000$ projections per protein.
+%\todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}
+%Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
+%The number of projections in every set is the same as in \tabref{dataset}.
+We obtained a recovery loss of \todo{$L_\text{OR} = 0.0352$},
+to be compared with \todo{$L_\text{OR} \approx 0.11$} when the SiameseNN was trained on \texttt{5j0n} alone.
+While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.
+
+\todo{Distance learning and orientation recovery worked well, but alignment didn't.}
+\mdeff{Why is dPdQ so bad? Seems contradictory to a low $L_\text{DE}$ and $L_\text{OR}$. Maybe that's why alignment didn't work? But then I don't get why $L_\text{DE}$ and $L_\text{OR}$ are so low\ldots.}
+
+\mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
+\banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
+\mdeff{Could we show the ground-truth and estimated orientations in \figref{robustness-to-unseen-pipeline}?}
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.35\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
+        \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the \texttt{5j0n}.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.55\linewidth}
+        \centering
+        \includegraphics[height=11em]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
+        \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
+    \end{subfigure}
+    \caption{%
+            Robustness to unseen protein \texttt{5j0n} pipeline results.
+        }\label{fig:robustness-to-unseen-pipeline}
+\end{figure}
+
 \clearpage
 \section{SiameseNN architecture}\label{apx:siamese-architecture}
-
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[height=19cm]{figures/model_plot.png}
-%     \caption{%
-
-%     }\label{fig:de-architecture}
-% \end{figure}
-
 
 \begin{figure}[ht!]
     \centering
