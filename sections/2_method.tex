@@ -206,10 +206,10 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
 \todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (\ie, training on perturbed projections).}
-\todo{As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}~\todo{[Laurène: ref or common knowledge?]}.
+As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}.
 % It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
 That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture.
-}
+
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 % "fundamental issue with reconstruction in cryoEM in general."
 % at high resolutions, the handedness can be determined by the chirality of alpha helices

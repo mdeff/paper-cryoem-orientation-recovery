@@ -103,7 +103,6 @@ Symmetries aren't an issue beyond training: recovered orientations will cover on
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
 \footnote{Orientations used in \secref{results:orientation-recovery:sensitivity} (\figref{perfect-with-noise-ar-aa}) and \secref{results:distance-estimation:sensitivity} (\figref{results:distance-estimation}) were actually obtained by uniformly sampling the Euler angles $\bth$, constrained to $(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$ for \texttt{5j0n}. Our conclusions would be identical if orientations were uniformly sampled from $\SO(3)$ instead.}
 %\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea.}
-\mdeff{Laurène: could you write a sentence (with a ref?) about the expected distribution of orientations from a real cryo-EM acquisition? I remember we discussed that $\SO(3)$ uniform was a reasonable model but that deviation from uniformity is to be expected. (We can refer to the appendix to say that the method works just as well with Euler uniform.)}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
 \figref{different-projections} displays samples of the simulated (perturbed) projections.
@@ -336,21 +335,21 @@ We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) th
 
 \subsection{Orientation recovery and reconstruction of density maps}\label{sec:results:orientation-recovery:reconstruction}
 
-\lau{Decide what we want to put in appendix.} As a proof-of-concept, we attempted to solve the inverse problem posed by \eqnref{imaging-model}.
-We reconstructed density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through our method.
-An important point to note is that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct. This is obviously a very specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in Section~\ref{sec:discussion}.
-
-To gain insight on the impact of errors in the recovered orientations, we compared the density map reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ with that reconstructed from the true orientations $\{ q_i \}$. Both density maps were reconstructed by the ASTRA toolbox. The rationale behind not comparing directly with the original ground-truth (\figref{pdb-proteins}) is that the robustness of the reconstruction method can impact the quality of the reconstruction when only few projections are considered, which was the case here (only $1,650$ projections).
+As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \textit{i.e.}, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed pipeline.
+It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct. This is obviously a very specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in Section~\ref{sec:discussion}.
 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances that were estimated from noiseless projections of \texttt{5j0n}.
-A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to the reconstruction from true orientations shown in \figref{5j0n-noise0-reconstruction-true}. \lau{Decide what we want to say based on Jelena's latest results.}
+A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to the reconstruction from true orientations shown in \figref{5j0n-noise0-reconstruction-true}. 
 
 As predicted by our other experiments, corrupting the projections with a higher level of noise ($\sigma^2=16$) negatively impacts the quality of the orientation recovery (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$).
 Unsurprisingly, this leads to a reconstruction with lower resolution, as shown in \figref{5j0n-noise16-reconstruction-recovered}. Note that part of this decrease in resolution originates from reconstructing with degraded projections, as the same effect is observed with the reconstruction obtained from true orientations (\figref{5j0n-noise16-reconstruction-true}).
 
 Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from the noiseless projections of \texttt{5a1a}.
-A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}. \lau{Same here, decide what we want to say.}
+A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}.
 Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
+
+To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the true orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox. The results are displayed in~\figref{noise-reconstruction}. \lau{Add descriptive text based on final version of Figure 12.} 
+%\lau{\textit{We don't need to keep what follows anymore, right?} The rationale behind not comparing directly with the original ground-truth (\figref{pdb-proteins}) is that the robustness of the reconstruction method can impact the quality of the reconstruction when only few projections are considered, which was the case here (only $1,650$ projections).}
 
 In conclusion, the more accurate the estimation of the pairwise distances, the higher the quality of the orientation recovery, which leads to reconstructions with a higher resolution. %This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
 
@@ -443,9 +442,11 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
         \mdeff{Could we have larger text in the FSC figures?}
     }
+    \label{fig:noise-orientation-recovery}
 \end{figure}
 
 \begin{figure}[t]
+    
     \begin{subfigure}[b]{0.24\linewidth}
         \centering
         \includegraphics[height=8em]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
@@ -489,8 +490,9 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \end{subfigure}
     \caption{%
         \todo{Add reconstructions - 4 images per protein: initial, ground truth, without alignment, aligned}
-        \mdeff{Shall we show the densities reconstructed from random orientations? If not, we could show our reconstructed densities in Figure 11. The ground-truths are not exactly the ones in Figure 6, but they should be right?}
+        \mdeff{Shall we show the densities reconstructed from random orientations? If not, we could show our reconstructed densities in Figure 11. The ground-truths are not exactly the ones in Figure 6, but they should be right?} \lau{There is some display issues as (c) and (d) appear much bigger than (a). I think it's great to have the reconstruction from random angles; is that what's illustrated in (b) and (f) right now? MAIN COMMENT: I would put the FSC curves currently in Figure 11 in Figure 12. Also I would remove the reconstructions displayed in Figure 11 as they are redundant with Figure 12. Keep Figure 11 about angle recovery, and Figure 12 about reconstruction.}
     }
+    \label{fig:noise-reconstruction}
 \end{figure}
 
 %\todo{HERE AND NOT IN THE DISCUSSION. More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}\banjac{I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}\lau{Yeah but I wouldn't blame ASTRA at all, it's dangerous territory. There is just an engineering problem we haven't been able to solve, let's not blame well-know, widely-used existing packages out there if possible.}\mdeff{Put it as you think is best. ;)}\banjac{I will take one more look at it.}\mdeff{Great! Thanks for the investigation. Even if you can't exactly confirm, it's a good hypothesis. Leaving it at ``unknown reason'' is suspicious from a reader's POV.}
