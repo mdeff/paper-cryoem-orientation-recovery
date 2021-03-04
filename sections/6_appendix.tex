@@ -50,7 +50,8 @@ There are many different ways of evaluating the pipeline performance found in th
     \caption{%
         Uniform sampling of $P=5,000$ orientations from $\SO(3)$.
         %\mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}\banjac{yes, we sample uniformly on SO(3), sorry my mistake in wording}
-        }\label{fig:uniform-orientations}
+        \mdeff{I'd like to merge \figref{uniform-orientations} and \figref{uniform-angles} (they take a lot of space). We could keep the two spheres (c), but merge the histograms (a,b,d) by using one color for $\SO(3)$ uniform and another color for Euler uniform (like in \figref{orientation-constraints}c).}
+    }\label{fig:uniform-orientations}
 \end{figure}
 
 \begin{figure}[ht!]
@@ -80,7 +81,7 @@ There are many different ways of evaluating the pipeline performance found in th
     \end{subfigure}
      \caption{%
         Uniform sampling of $P=5,000$ Euler angles from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ inducing a non-uniform distribution of orientations.
-        }\label{fig:uniform-angles}
+    }\label{fig:uniform-angles}
 \end{figure}
 
 \figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half or a quarter of the 2-sphere.
@@ -110,7 +111,7 @@ While the distributions flatten (compare with Figures~\ref{fig:uniform-orientati
     \end{subfigure}
     \caption{%
         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the 2-sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
-        }\label{fig:orientation-constraints}
+    }\label{fig:orientation-constraints}
 \end{figure}
 
 \begin{figure}[ht!]
@@ -129,7 +130,7 @@ While the distributions flatten (compare with Figures~\ref{fig:uniform-orientati
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        }\label{fig:recovery-nonuniform}
+    }\label{fig:recovery-nonuniform}
 \end{figure}
 
 \section{Orientation recovery from exact distances}\label{apx:results:orientation-recovery:exact}
@@ -235,6 +236,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
+            \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
     \hfill
@@ -310,8 +312,8 @@ While performance is somewhat degraded, we conclude that it is possible to train
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
     \end{subfigure}
     \caption{%
-            Robustness to unseen protein \texttt{5j0n} pipeline results.
-        }\label{fig:robustness-to-unseen-pipeline}
+        Robustness to unseen protein \texttt{5j0n} pipeline results.
+    }\label{fig:robustness-to-unseen-pipeline}
 \end{figure}
 
 \clearpage
