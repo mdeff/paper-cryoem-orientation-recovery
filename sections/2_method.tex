@@ -206,7 +206,10 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
 \todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (\ie, training on perturbed projections).}
-As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}.
+As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality.%
+% chirality/handedness
+\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}
+% \lau{I searched for a ref, but I don't think there is a relevant one. In a recent paper from Amit Singer (a big name in cryo-EM), they simply mention "The reconstruction of φ is possible up to three intrinsic ambiguities: a global 3-D rotation, the position of the center of the molecule (3-D location), and handedness. The latter symmetry, also called chirality, means that it is impossible to distinguish whether the molecule was reflected about a 2-D plane through the origin". Thus I suggest we don't include a ref.}
 % It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
 That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture.
 
