@@ -90,6 +90,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \end{figure}
 
 \paragraph{Orientations.}
+\todo{Move that discussion after the dataset split if we can do \texttt{5a1a} with full coverage on the test set.}
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a} illustrates the problem.
 To capture only one of four identical projections of \texttt{5a1a}, we restricted orientations to \todo{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} (\figref{orientation-constraints}) for that protein.
@@ -106,7 +107,7 @@ Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic 
 %\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea.}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
-\figref{different-projections} displays samples of the simulated (perturbed) projections.
+\figref{different-projections} displays samples of the simulated projections.
 
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Datasets.}
@@ -336,7 +337,8 @@ We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) th
 
 \subsection{Orientation recovery and reconstruction of density maps}\label{sec:results:orientation-recovery:reconstruction}
 
-\mdeff{true orientations $\rightarrow$ ground-truth orientations?}
+\mdeff{True orientations $\rightarrow$ ground-truth orientations?}
+\todo{Insist that reconstructions are shown to evaluate the recovered orientations, and that's why we don't reconstruct from noisy projections.}
 
 As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \textit{i.e.}, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed pipeline.
 It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct. This is obviously a very specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in Section~\ref{sec:discussion}.
@@ -391,7 +393,6 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         % The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         % The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         % The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \todo{Make the three figures taller (with large enough text) then remove \texttt{height=3cm} (which deforms them).}
     }
 \end{figure}
 
@@ -423,7 +424,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 
     \vspace{1em}
     \begin{subfigure}[b]{0.23\linewidth}
-        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_gt_noisy.png}
+        %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_gt_noisy.png}
         \caption*{}
     \end{subfigure}
     \hfill
@@ -474,8 +475,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         The Fourier shell correlations (d,f,j) show the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
         \mdeff{Why are (a,g) different from the ones in Figure 6? I thought 1,650 projections were enough for a perfect reconstruction given ground-truth orientations.}
         \todo{Larger text in the FSC plots. (Then try to reduce the overall figure size.)}
-        Orientations were recovered either from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
-        \mdeff{Wouldn't it be clearer if we'd reconstruct from noisy projections (filling the second row)?}
+        Orientations were recovered from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
+        %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
     }\label{fig:reconstructions}
 \end{figure}
 
