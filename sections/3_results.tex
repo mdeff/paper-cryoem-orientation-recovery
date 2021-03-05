@@ -51,6 +51,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
             \caption{5\AA\ density map $\x$ of \texttt{5j0n}.}
         \end{subfigure}
         \caption{%
+            %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
             Two proteins with different symmetries.
             %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
         }\label{fig:pdb-proteins}
@@ -90,11 +91,12 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \end{figure}
 
 \paragraph{Orientations.}
-\todo{Move that discussion after the dataset split if we can do \texttt{5a1a} with full coverage on the test set.}
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a} illustrates the problem.
-To capture only one of four identical projections of \texttt{5a1a}, we restricted orientations to \todo{$(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$} (\figref{orientation-constraints}) for that protein.
-Symmetries aren't an issue beyond training: recovered orientations will cover one of the identical subdomains.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (\figref{orientation-constraints}) for that protein.
+% Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
+% (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
+Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subdomains.
 % projections from identical parts of a protein will collapse be identified upon orientation recovery.
 % close projections whose orientations are far due to a symmetry will be recovered as being
 % symmetries/projections will collapse/overlap/be identified/grouped
