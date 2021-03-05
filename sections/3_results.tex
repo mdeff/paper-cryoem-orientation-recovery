@@ -340,7 +340,7 @@ We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) th
 \subsection{Orientation recovery and reconstruction of density maps}\label{sec:results:orientation-recovery:reconstruction}
 
 \mdeff{True orientations $\rightarrow$ ground-truth orientations?}
-\todo{Insist that reconstructions are shown to evaluate the recovered orientations, and that's why we don't reconstruct from noisy projections.}
+\todo{Insist that reconstructions are only shown to evaluate the recovered orientations (done with ASTRA, not a SOTA iterative method), and that's why we don't reconstruct from noisy projections.}
 
 As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \textit{i.e.}, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed pipeline.
 It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct. This is obviously a very specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in Section~\ref{sec:discussion}.

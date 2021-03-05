@@ -298,6 +298,9 @@ While performance is somewhat degraded, we conclude that it is possible to train
 \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
 \mdeff{Could we show the ground-truth and estimated orientations in \figref{robustness-to-unseen-pipeline}?}
 
+While alignment is in principle only necessary to compute $E_\text{OR}$, for an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA\@.
+\banjac{Hypothesis: I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}
+
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.35\linewidth}
