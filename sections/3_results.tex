@@ -212,7 +212,8 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \includegraphics[width=0.47\linewidth]{figures/de_5j0n_fullcov_uniformS2.pdf}
             \hfill
             %\includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
-            \includegraphics[width=0.47\linewidth]{figures/de_5a1a_quartercov_uniformS2.pdf}
+            %\includegraphics[width=0.47\linewidth]{figures/de_5a1a_quartercov_uniformS2.pdf}
+            \includegraphics[width=0.47\linewidth]{figures/de_5a1a_last.pdf}
             \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right).\vspace{0.8em}}\label{fig:distance-learning:loss}
         \end{subfigure}
         \\ %\vspace{1em}
@@ -222,7 +223,8 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \includegraphics[width=0.40\linewidth]{figures/dPdQ_5j0n_fullcvg_uniformS2_noise0.pdf}
             \hspace{0.5cm}
             %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
-            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_halfInplane.pdf}
+            %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_halfInplane.pdf}
+            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0.pdf}
             \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.
@@ -381,7 +383,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \hfill
     \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
+        %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
+        \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_ar_aa.pdf}
         \caption{Noiseless projections of \texttt{5a1a}.}%
         \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
@@ -478,6 +481,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \mdeff{Why are (a,g) different from the ones in Figure 6? I thought 1,650 projections were enough for a perfect reconstruction given ground-truth orientations.}
         \todo{Larger text in the FSC plots. (Then try to reduce the overall figure size.)}
         Orientations were recovered from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
+        \todo{Update reconstruction plots for \texttt{5a1a}}
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
     }\label{fig:reconstructions}
 \end{figure}
