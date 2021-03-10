@@ -40,14 +40,14 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
         \\ \vspace{0.5em}
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
-            \includegraphics[height=3cm]{figures/5a1a_5A_.png}
+            \includegraphics[height=3cm]{figures/5a1a_5A.png}
             \caption{5\AA\ density map $\x$ of \texttt{5a1a}.}%
             \label{fig:density-map:5j0n:ground-truth}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
-            \includegraphics[height=3cm]{figures/5j0n_5A_.png}
+            \includegraphics[height=3cm]{figures/5j0n_5A.png}
             \caption{5\AA\ density map $\x$ of \texttt{5j0n}.}
         \end{subfigure}
         \caption{%
@@ -224,10 +224,12 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \hspace{0.5cm}
             %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a.pdf}
             %\includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_halfInplane.pdf}
-            \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0.pdf}
+            \includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_1.pdf}
+            \includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_2.pdf}
             \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).}\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.
+        \banjac{To discuss which to use?}
         }
     \end{minipage}
 \end{figure}
@@ -365,7 +367,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[b]{0.22\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_ar_aa_fullcvg_uniform2}
         \includegraphics[width=\linewidth]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
@@ -373,7 +375,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[b]{0.22\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_fullcov_noise16_ar_aa}
         \includegraphics[width=\linewidth]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
@@ -381,12 +383,19 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[b]{0.22\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
+        \caption{Noiseless projections of \texttt{5a1a} (quarter coverage).}%
+        \label{fig:5a1a-noise0-orientation-recovery-all-quarter}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.22\linewidth}
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_ar_aa.pdf}
         \caption{Noiseless projections of \texttt{5a1a}.}%
-        \label{fig:5a1a-noise0-orientation-recovery}
+        \label{fig:5a1a-noise0-orientation-recovery-quarter-full}
     \end{subfigure}
     \caption{%
         % Our pipeline.
@@ -453,13 +462,13 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \vspace{1em}
     \begin{subfigure}[b]{0.23\linewidth}
         \centering
-        \includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_gt.png}
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_gt.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.18\linewidth}
         \centering
-        \includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_rand.png}
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_rand.png}
         \caption{}
     \end{subfigure}
     \hfill
@@ -475,13 +484,43 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_FSC_apr_init.pdf}
         \caption{}
     \end{subfigure}
+    
+    \vspace{1em}
+    \begin{subfigure}[b]{0.23\linewidth}
+        \centering
+        %\includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_gt.png}
+        \caption*{}\label{fig:5a1a-noise0-reconstruction-true}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.18\linewidth}
+        \centering
+        %\includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_rand.png}
+        \caption*{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\linewidth}
+        \centering
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_apr.png}
+        \caption{}\label{fig:5a1a-noise0-reconstruction-recovered}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.31\linewidth}
+        \centering
+        %\includegraphics[height=3cm]{figures/FSC_5a1a_fin_vs_init.pdf}
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_FSC_apr_init.pdf}
+        \caption{}
+    \end{subfigure}
+    
     \caption{%
         Density maps $\widehat{\x}$ reconstructed from ground-truth (a,g), random (b,h), and recovered (c,e,i) orientations.
         The Fourier shell correlations (d,f,j) show the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
-        \mdeff{Why are (a,g) different from the ones in Figure 6? I thought 1,650 projections were enough for a perfect reconstruction given ground-truth orientations.}
+        %\mdeff{Why are (a,g) different from the ones in Figure 6? I thought 1,650 projections were enough for a perfect reconstruction given ground-truth orientations.}
+        %\banjac{Updated.}
         \todo{Larger text in the FSC plots. (Then try to reduce the overall figure size.)}
+        \banjac{I don't have access to the FSC plot settings}
         Orientations were recovered from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
-        \todo{Update reconstruction plots for \texttt{5a1a}}
+        %\todo{Update reconstruction plots for \texttt{5a1a}}
+        \banjac{Discuss updated \texttt{5a1a}}
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
     }\label{fig:reconstructions}
 \end{figure}
