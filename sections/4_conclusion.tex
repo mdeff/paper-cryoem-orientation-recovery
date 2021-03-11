@@ -4,19 +4,19 @@
 In this work, we explored the use of distance learning between pairs of 2D cryo-EM projections from a 3D protein structure to infer the unknown orientation at which each projection was imaged from.
 Our two-step method relies on the training of a SiameseNN to estimate pairwise distances between unseen projections, followed by the recovery of the orientations from these distances through an appropriate minimization scheme.
 
-The benefit of this approach, at least in theory, is that it would permit to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset, \ie, without the need for intermediate reconstruction procedure or initial volume estimate; this has obvious useful implications in the field.
+The benefit of this approach, at least in theory, is that it would permit to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset, \ie, without the need for intermediate reconstruction procedure or initial volume estimate; this has obvious attractive implications in the field.
 
 At the current stage of development, the method has been evaluated on synthetic datasets for two different proteins.
 The results provide key insights on the viability of the proposed scheme.
-First, they demonstrate that a SiameseNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to off-centering shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important feat in cryo-EM\@.
-\mdeff{The two phrases in the following sentence sound redundant.}
-Second, they guarantee that an accurate distance estimation leads to a correct recovery of the orientations, while providing indications that the quality of this recovery depends on the precision of the estimated distances (\secref{results:orientation-recovery:sensitivity}, \secref{results:distance-estimation:sensitivity}).
-\todo{Finally, our method was able to recover orientations with an error of $0.20$ to $0.25$ radians ($11$ to $14\degree$) from noiseless and noisy projections---leading to an initial volume/reconstruction with a resolution of $???$ (\secref{results:orientation-recovery:reconstruction}).}
-All in all, the estimation of more accurate distances leads to the recovery of more accurate orientations which leads to the reconstruction of a more accurate initial volume.
+First, they demonstrate that a SiameseNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to off-centering shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important condition in cryo-EM\@.
+%\mdeff{The two phrases in the following sentence sound redundant.}
+Second, they guarantee that an accurate distance estimation leads to a correct recovery of the orientations. % , while providing indications that the quality of this recovery depends on the precision of the estimated distances (\secref{results:orientation-recovery:sensitivity}, \secref{results:distance-estimation:sensitivity}).
+Finally, our method was able to recover orientations with an error of $0.20$ to $0.25$ radians ($11$ to $14\degree$) from noiseless and noisy projections---leading to an initial volume/reconstruction with a resolution of \lau{$???$ (\secref{results:orientation-recovery:reconstruction}).}
+In summary, the more accurate the estimated distances, the more precise the recovery of the orientations, and, ultimately, the better the reconstructed volume.
 
 % Future work.
-While the method is not yet at the stage where it can be deployed in practice, we believe that a series of developments could help it become a relevant contributor for single-particle cryo-EM reconstruction.%
-\footnote{Note that the present project will not be further continued by its authors due to other professional occupations. Hence, we strongly encourage you to build on these ideas and hopefully make it a practical tool.}
+While the method is not yet at the stage where it can be deployed in practice, we believe that a series of developments could help it become a more relevant contributor for single-particle cryo-EM reconstruction.%
+\footnote{Note that the present project will not be further continued by its authors due to other professional occupations. Hence, we strongly encourage anyone interested to build on these ideas and, hopefully, make it a practical tool.}
 As previously discussed, the results underline the importance of learning an accurate distance estimator. % $\widehat{d_p}$.
 In this regard, the performance of the SiameseNN could be improved in several ways.
 % Method gains: mostly distance learning maybe recovery (not alignment).
