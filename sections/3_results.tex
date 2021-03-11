@@ -121,7 +121,7 @@ The training and validation sets were used to train and evaluate the SiameseNN, 
 %Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
 % The sampling of orientations only matter for orientation recovery (test set).
 % For distance learning (training and validation sets),
-Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a and~\ref{fig:orientation-constraints}b,d show that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
+Figures~\ref{fig:orientation-sampling:distances} and~\ref{fig:orientation-constraints:distances} show that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
 As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
 % such that the distribution of distances was uniform (independently from the distribution of orientations)
 % The goal was to uniformly spread the distance estimation error over the range of distances.
@@ -214,7 +214,7 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
             %\includegraphics[width=0.47\linewidth]{figures/de_5a1a_quartercov_uniformS2.pdf}
             %\includegraphics[width=0.23\linewidth]{figures/de_5a1a_last.pdf}
-            \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right).\vspace{0.8em}}\label{fig:distance-learning:loss}
+            \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right). \todo{y-ticks for \texttt{5a1a} as \texttt{5j0n}.}\vspace{0.8em}}\label{fig:distance-learning:loss}
         \end{subfigure}
         \\ %\vspace{1em}
         \begin{subfigure}[b]{\linewidth}
@@ -354,7 +354,8 @@ A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the r
 
 As predicted by our other experiments, corrupting the projections with a higher level of noise ($\sigma^2=16$) negatively impacts the quality of the orientation recovery (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$).
 Unsurprisingly, this leads to a reconstruction with lower resolution, as shown in \figref{5j0n-noise16-reconstruction-recovered}.
-Note that part of this decrease in resolution originates from reconstructing with degraded projections, as the same effect is observed with the reconstruction obtained from true orientations (\figref{5j0n-noise16-reconstruction-true}).
+\todo{Note that part of this decrease in resolution originates from reconstructing with degraded projections, as the same effect is observed with the reconstruction obtained from true orientations (\figref{5j0n-noise16-reconstruction-true}).}
+\mdeff{Not true anymore as we don't reconstruct from noisy projections.}
 
 Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from the noiseless projections of \texttt{5a1a}.
 A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}.
@@ -388,7 +389,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         \includegraphics[width=\linewidth]{figures/5a1a_noise0_ar_aa.pdf}
         \caption{Noiseless projections of \texttt{5a1a}.}%
-        \label{fig:5a1a-noise0-orientation-recovery-all-quarter}
+        \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
     % \begin{subfigure}[b]{0.22\linewidth}
@@ -408,6 +409,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         % The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         % The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         % The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
+        \todo{Same y-ticks for the three blue and red plots.}
+        \mdeff{Check $L_\text{DE}$, \eg, it's 0.106 for val in (c) while it's 0.105 in Figure 8a.}
     }
 \end{figure}
 

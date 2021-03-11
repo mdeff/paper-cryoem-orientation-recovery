@@ -18,37 +18,33 @@ There are many different ways of evaluating the pipeline performance found in th
 \section{Sampling of orientations}\label{apx:orientation-sampling}
 
 \todo{What do we want to say here? Sampling of orientations, or sampling of distances?}
-\figref{uniform-orientations} shows some properties of a uniform distribution of orientations over $\SO(3)$.
-\figref{uniform-angles} shows a non-uniform distribution of orientations---created by sampling Euler angles uniformly---that might happen in real cryo-EM acquisitions.
+\figref{orientation-sampling} compares a uniform distribution of orientations over $\SO(3)$ and a non-uniform distribution of orientations---created by sampling Euler angles uniformly. %---that might happen in real cryo-EM acquisitions.
 \figref{recovery-nonuniform} (to be compared with \figref{5j0n-noise0-orientation-recovery},b) shows that our method is robust to uneven samplings.
 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.36\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
-        \caption{Distribution of ($10,000<P^2$) distances.}
+        \includegraphics[height=7em]{figures/uniform_quaternion.png}%
+        \hspace{1em}%
+        \includegraphics[height=7em]{figures/uniform_angles.png}
+        \caption{Directions $(\theta_2, \theta_1)$ sampled uniformly from $\SO(3)$ (left) and Euler angles (right).}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.62\linewidth}
+    \hspace{4em}
+    \begin{subfigure}[b]{0.46\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_ang.pdf}
         \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
     \end{subfigure}
     \\ \vspace{1em}
-    \begin{subfigure}[b]{0.18\linewidth}
+    \begin{subfigure}[b]{0.36\linewidth}
         \centering
-        \includegraphics[height=8em]{figures/uniform_quaternion.png}
-        \caption{Sampled directions $(\theta_2, \theta_1)$ of Group 1.}
+        \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
+        \caption{Distribution of ($10,000<P^2$) distances.}%
+        \label{fig:orientation-sampling:distances}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.18\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/uniform_angles.png}
-        \caption{Sampled directions $(\theta_2, \theta_1)$ of Group 2.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.62\linewidth}
+    \hspace{4em}
+    \begin{subfigure}[b]{0.46\linewidth}
         \centering
         \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_q.pdf}
         \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
@@ -56,44 +52,14 @@ There are many different ways of evaluating the pipeline performance found in th
     \caption{%
         Uniform sampling of $P=5,000$ orientations from $\SO(3)$ (Group 1) and uniform sampling of $P=5,000$ Euler angles from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ inducing a non-uniform distribution of orientations (Group 2).
         %\mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}\banjac{yes, we sample uniformly on SO(3), sorry my mistake in wording}
-        %\mdeff{I'd like to merge \figref{uniform-orientations} and \figref{uniform-angles} (they take a lot of space). We could keep the two spheres (c), but merge the histograms (a,b,d) by using one color for $\SO(3)$ uniform and another color for Euler uniform (like in \figref{orientation-constraints}c).}
-    }\label{fig:uniform-orientations}
+        \todo{Legend with ``$\SO(3)$ uniform'' and ``Euler uniform'' rather than ``Group 1'' and ``Group 2''.}
+    }\label{fig:orientation-sampling}
 \end{figure}
-
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[b]{0.36\linewidth}
-%         \centering
-%         \includegraphics[height=8em]{figures/dQ_5j0n_uniform_angles.pdf}
-%         \caption{Distribution of ($10,000<P^2$) distances.}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[b]{0.62\linewidth}
-%         \centering
-%         \includegraphics[height=8em]{figures/uniform_angles_ang.pdf}
-%         \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
-%     \end{subfigure}
-%     \\ \vspace{1em}
-%     \begin{subfigure}[b]{0.36\linewidth}
-%         \centering
-%         \includegraphics[height=8em]{figures/uniform_angles.png}
-%         \caption{Sampled directions $(\theta_2, \theta_1)$.}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[b]{0.62\linewidth}
-%         \centering
-%         \includegraphics[height=8em]{figures/uniform_angles_q.pdf}
-%         \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
-%     \end{subfigure}
-%      \caption{%
-%         Uniform sampling of $P=5,000$ Euler angles from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ inducing a non-uniform distribution of orientations.
-%     }\label{fig:uniform-angles}
-% \end{figure}
 
 \figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half or a quarter of the 2-sphere.
 % (to learn from asymmetric proteins like \texttt{5j0n})
 % (\eg, for proteins with D2 symmetry like \texttt{5a1a})
-While the distributions flatten (compare with Figures~\ref{fig:uniform-orientations},\ref{fig:uniform-angles}a), the shorter distances are still way under-sampled.
+While the distributions flatten (compare with \figref{orientation-sampling:distances}), the shorter distances are still way under-sampled.
 
 \begin{figure}[ht!]
     \centering
@@ -113,7 +79,8 @@ While the distributions flatten (compare with Figures~\ref{fig:uniform-orientati
     \begin{subfigure}[t]{0.32\linewidth}
         \centering
         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
-        \caption{Induced distribution of distances.}
+        \caption{Induced distribution of distances.}%
+        \label{fig:orientation-constraints:distances}
     \end{subfigure}
     \caption{%
         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the 2-sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
@@ -198,7 +165,6 @@ Orientations were perfectly recovered.
             Green points are the true orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
             % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts,
             While both colors are seen in (b), they are exactly superimposed.
-            %\todo{Would be nice to have the same ticks and labels for the x-axis and y-axis of both plots.}
         }\label{fig:5j0n-aa-loss-perfect-distances}
     %    \label{fig:angle-alignment-perfect}
     \end{minipage}
@@ -254,8 +220,6 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
             The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning} on the training (blue) and validation (red) sets.
             The inserted plots show the relationship between $d_q(q_i, q_j)$ and $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$.
-            %\todo{Consistency: train -> training set, validation -> validation set, and Geodesic -> Cosine. Add $L_\text{DE}$ to the y-axis label. Larger text.}
-            %\todo{Remove the MLP results. It didn't work at all. Make the difference between Euclidean and Cosine easier to see.}
         }\label{fig:geo-eucl-mlp}
     \end{minipage}
 \end{figure}
