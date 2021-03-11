@@ -214,7 +214,10 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             \includegraphics[width=0.47\linewidth]{figures/de_5a1a.pdf}
             %\includegraphics[width=0.47\linewidth]{figures/de_5a1a_quartercov_uniformS2.pdf}
             %\includegraphics[width=0.23\linewidth]{figures/de_5a1a_last.pdf}
-            \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right). \todo{y-ticks for \texttt{5a1a} as \texttt{5j0n}.}\vspace{0.8em}}\label{fig:distance-learning:loss}
+            \caption{Loss converged on \texttt{5j0n} (left) and \texttt{5a1a} (right). 
+            %\todo{y-ticks for \texttt{5a1a} as \texttt{5j0n}.}
+            \vspace{0.8em}}
+            \label{fig:distance-learning:loss}
         \end{subfigure}
         \\ %\vspace{1em}
         \begin{subfigure}[b]{\linewidth}
@@ -409,8 +412,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         % The first row~(a,b,c) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5j0n}.
         % The second row~(d,e,f) shows the process for noisy projections $\p_i = \mathbf{P}_{\bth_i} \x + \mathbf{n}$, where $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I}), \sigma^2=16$, and $\x$ comes from \texttt{5j0n}.
         % The third row~(g,h,i) shows the process for noiseless projections $\p_i = \mathbf{P}_{\bth_i} \x$, where $\x$ comes from \texttt{5a1a}.
-        \todo{Same y-ticks for the three blue and red plots.}
-        \mdeff{Check $L_\text{DE}$, \eg, it's 0.106 for val in (c) while it's 0.105 in Figure 8a.}
+        %\todo{Same y-ticks for the three blue and red plots.}
+        %\mdeff{Check $L_\text{DE}$, \eg, it's 0.106 for val in (c) while it's 0.105 in Figure 8a.}
     }
 \end{figure}
 
@@ -481,6 +484,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \begin{subfigure}[b]{0.23\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_apr.png}
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_noise0_apr.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
@@ -488,6 +492,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \centering
         %\includegraphics[height=3cm]{figures/FSC_5a1a_fin_vs_init.pdf}
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_FSC_apr_init.pdf}
+        \includegraphics[height=3cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
         \caption{}
     \end{subfigure}
     
@@ -522,13 +527,13 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         The Fourier shell correlations (d,f,j) show the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
         %\mdeff{Why are (a,g) different from the ones in Figure 6? I thought 1,650 projections were enough for a perfect reconstruction given ground-truth orientations.}
         %\banjac{Updated.}
-        \todo{Larger text in the FSC plots. (Then try to reduce the overall figure size.)}
-        \banjac{I don't have access to the FSC plot settings}
+        %\todo{Larger text in the FSC plots. (Then try to reduce the overall figure size.)}
+        %\banjac{I don't have access to the FSC plot settings}
         Orientations were recovered from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
         %\todo{Update reconstruction plots for \texttt{5a1a}}
-        \banjac{Discuss updated \texttt{5a1a}} \lau{Suggestions: 1. remove artifact below b), 2. have (g), (i) and (k) be all displayed at the same size, 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field), 4. add short captions. Other comment: I'm a little bit surprised at the FSC in (j), let's discuss this evening.}
+        %\banjac{Discuss updated \texttt{5a1a}} 
+        \lau{Suggestions: 1. remove artifact below b), 2. have (g), (i) and (k) be all displayed at the same size, 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field), 4. add short captions. Other comment: I'm a little bit surprised at the FSC in (j), let's discuss this evening.}
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        \banjac{Remove the artifact in (b). Fix the FSC plots.}
     }\label{fig:reconstructions}
 \end{figure}
 
