@@ -75,8 +75,8 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
             % * (ii) how a projection (=integration through z in the new coordinate system) is made from a 3D volume.
             % $\p_i = \mathbf{P} \Rot(\bth) \x$ \todo{($\mathbf{P}$ is a projection/integration)}.
             Geometry of the imaging model defined in \eqnref{imaging-model}.
-            The 3D protein structure $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the orientation $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$ of the microscope's detector plane.
-            The direction $(\theta_2, \theta_1) \in [0,\pi] \times [0,2\pi[$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$) form the \textit{orientation} $\bth = (\theta_3, \theta_2, \theta_1)$.
+            The 3D density $\x$ in the coordinate system $(x_1, x_2, x_3)$ is imaged along the \textit{orientation} $\bth$ to produce the 2D \textit{projection} $\p$ in the coordinate system $(y_1, y_2)$ of the microscope's detector plane.
+            The orientation $\bth = (\theta_3, \theta_2, \theta_1)$ is decomposed as the direction $(\theta_2, \theta_1) \in [0,\pi] \times [0,2\pi[$ (parameterizing the sphere $\mathbb{S}^2$) and the in-plane rotation $\theta_3 \in [0,2\pi[$ (parameterizing the circle $\mathbb{S}^1$).
             In our work, we represent the orientation $\bth$ as a unit quaternion $q$.
             %The 3D rotation $\Rot(\bth) = \Rot(q) \in \SO(3)$ maps the object coordinate system to the projection coordinate system.
             %\mdeff{$\Rot$, $\bth$, and $q$ all represent orientations. That's the problem with notation that separates the representation not the semantic (though we might need that separation later).}
@@ -120,6 +120,7 @@ Hence, despite the many aforementioned advances, the task of providing a robust 
 %\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.} 
 In this work, we present a new approach to estimate the unknown orientations in SPA directly from the acquired dataset of projections, hence bypassing some of the aforementioned limitations. The novelty consists in first estimating the relative distances between pairs of projections (by using a Siamese neural network previously trained on a synthetic dataset), and then recovering the absolute orientation of each projections from these relative distances. By doing so, the recovery of the orientations can be achieved without the need for any intermediate reconstruction procedure or initial volume estimate, which has useful implications for SPA\@.
 \mdeff{``bypassing some limitations'' and ``has useful implications'' are too vague IMO\@. Could we be more specific? Not on the how (that's the method) but on the why.}
+\mdeff{Idea: Our method is direct (as opposed to iterative refinement schemes) and does not require any prior model of the reconstructed protein.}
 %Our two-steps method  learns to estimate the unknown orientation $\bth_i$ (represented by a unit quaternion $q_i$) associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
 
 

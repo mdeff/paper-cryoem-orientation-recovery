@@ -260,27 +260,6 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
     \end{minipage}
 \end{figure}
 
-\section{Choice of feature distance}\label{apx:feature-distance}
-
-%\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
-
-There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances:
-
-\begin{itemize}
-    \item the Euclidean distance, \ie, $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
-    \item the cosine distance, \ie,
-$ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right)$
-\todo{No absolute value. So not as in \eqnref{distance:orientations}.}
-    \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learned.
-\end{itemize}
-
-The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (\ie, the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
-
-\figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
-% the projection pairs deviate the least from the identity
-This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
-%The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
-
 \section{Estimating distances on unseen proteins}\label{apx:unseen-proteins}
 %\section{Non-determinism of the Orientation Recovery}\label{apx:non-determinism}
 
@@ -323,6 +302,63 @@ While alignment is in principle only necessary to compute $E_\text{OR}$, for an 
     \caption{%
         Robustness to unseen protein \texttt{5j0n} pipeline results.
     }\label{fig:robustness-to-unseen-pipeline}
+\end{figure}
+
+\section{SiameseNN: choice of feature distance}\label{apx:siamese:feature-distance}
+
+%\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
+
+There are multiple options for a distance function $d_f$ between two features $\mathbf{f}_i = \mathcal{G}_w(\p_i) \in \R^{n_f}$. We compared the performance of three different distances:
+
+\begin{itemize}
+    \item the Euclidean distance, \ie, $d_f(\mathbf{f}_i, \mathbf{f}_j) = \| \mathbf{f}_i - \mathbf{f}_j \|_2$
+    \item the cosine distance, \ie,
+$ d_f(\mathbf{f}_i,\mathbf{f}_j) = 2 \arccos \left( \frac{\langle \mathbf{f}_i, \mathbf{f}_j \rangle}{\lVert \mathbf{f}_i \rVert \lVert \mathbf{f}_j \rVert} \right)$
+\todo{No absolute value. So not as in \eqnref{distance:orientations}.}
+    \item the parametrization of $d_f$ as a multi-layer perceptron (MLP) whose parameters are learned.
+\end{itemize}
+
+The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function. The features $\mathbf{f}_i$ and $\mathbf{f}_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@. Note that, while a MLP can approximate any function, there is no guarantee that the learned function will satisfy the axioms of a proper distance function (\ie, the identity of indiscernibles, symmetry, and triangle inequality). \lau{Say that we were not able to train.}
+
+\figref{geo-eucl-mlp} compares the use of the first two distances. The Euclidean distance yields better results, but the cosine distance is ultimately the best performer of all: $L_\text{DE}$ is the lowest, which makes $d_p$ a better estimator of $d_q$.
+% the projection pairs deviate the least from the identity
+This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
+%The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
+
+\section{SiameseNN: embedding dimension}\label{apx:siamese:embedding-dimension}
+
+\figref{4d-vs-256d-de} shows the performance of our distance estimator $\widehat{d_p}$ depending on the size of embedding space $n_f$.
+It clearly indicates that $n_f=4$ is not of sufficient dimensionality.
+% $n_f=4$ dimensional space is too constrained
+
+\begin{figure}[ht!]
+    \centering
+    \centering
+    \begin{minipage}[b]{0.8\linewidth}
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_4d.pdf}
+            \caption{$n_f=4$ and half-directions.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_256.pdf}
+            \caption{$n_f=256$ and half-directions.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.31\linewidth}
+            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
+            \caption{$n_f=256$ and all-directions.}
+        \end{subfigure}
+        \caption{%
+            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}.
+            Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
+            Different direction constrains in \figref{orientation-constraints}.
+            \banjac{Seems a bit inappropriate to put these images in the methods without explaining the optimization settings. What do you think should they stay here or be moved somewhere else?}
+            \mdeff{Yes, it should go in Experiments or the Appendices. Let's wait for the angle recovery results on full coverage to make a decision.}
+            \todo{Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.}
+            \todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture. Motivation (on top of half in-plane being much easier for 5a1a) to predict the direction and in-plane angle separately.}
+        }\label{fig:4d-vs-256d-de}
+    \end{minipage}
 \end{figure}
 
 \clearpage

@@ -29,48 +29,23 @@ First, the greater the similarity between two 2D projections $(\p_i, \p_j)$, the
 % TODO: differences in orientation / distances
 Hence, we aim to estimate differences in orientation $d_q(q_i, q_j)$ from the projections themselves as $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:distance-learning}).
 % where $\widehat{d_p}$ is learned from training data
-\todo{Second, orientations are constrained by their relative differences.}
-Second, we can learn the projection manifold by finding the distances that preserves the geometry of local neighborhoods in the space of orientations.
-Hence, from a set of projections $\{\p_k\}_{k=1}^P$, we aim to recover their orientations $\{\widehat{q_k}\}_{k=1}^P$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
-All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}_{k=1}^P$ are perfectly estimated.
+% Sparse set of distances to a global assignment of orientations.
+\todo{Second, orientations are constrained by their relative differences.
+Second, we can learn the projection manifold by finding the distances that preserves the geometry of local neighborhoods in the space of orientations.}
+Hence, from a set of projections $\{\p_k\}$, we aim to recover their orientations $\{\widehat{q_k}\}$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
+All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}$ are perfectly estimated.
 
-%\lau{Moved from Appendix}. \lau{Jelena: What you observed when trying that.}\mdeff{Did we try that? Would be nice to have the results if we did.}\banjac{Image coming soon}
-% it could be tempting to
-Note that an alternative could have been to train $\mathcal{G}_w$ to directly map projections to orientations, \ie, $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$, hence avoiding the orientation recovery step.
-\banjac{\figref{4d-vs-256d-de} shows difference in distance learning depending on the size of embedding space $n_f$}
-While that solution is simpler, learning an embedding in a space of $n_f \gg 4$ dimensions gives \banjac{smaller variance and} enough room for $\mathcal{G}_w$ to represent different proteins, noise levels, PSFs, etc., which are then abstracted by taking distances.
-% $n_f=4$ dimensional space is too constrained
-
-\begin{figure}[ht!]
-    \centering
-    \centering
-    \begin{minipage}[b]{0.8\linewidth}
-        \begin{subfigure}[t]{0.31\linewidth}
-            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_4d.pdf}
-            \caption{$n_f=4$ and half-directions.}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.31\linewidth}
-            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_256.pdf}
-            \caption{$n_f=256$ and half-directions.}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.31\linewidth}
-            \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
-            \caption{$n_f=256$ and all-directions.}
-        \end{subfigure}
-        \caption{%
-            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}.
-            Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
-            Different direction constrains in \figref{orientation-constraints}.
-            \banjac{Seems a bit inappropriate to put these images in the methods without explaining the optimization settings. What do you think should they stay here or be moved somewhere else?}
-            \mdeff{Yes, it should go in Experiments or the Appendices. Let's wait for the angle recovery results on full coverage to make a decision.}
-            \todo{Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.}
-            \todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture.}
-        }\label{fig:4d-vs-256d-de}
-    \end{minipage}
-
-\end{figure}
+% line of work:
+% 1. Graph Laplacian tomography from unknown random projections
+% 2. Reference free structure determination through eigenvectors of center ofmass operators
+% 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
+Our overall/two-steps approach is similar to~\cite{coifman2008graphprojections}.
+% reconstruced 2D images from 1D projections
+The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
+As they noted, the choice of an Euclidean distance for $\widehat{d_p}$ is sensible to .
+For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
+SiameseNN more robust to perturbations than Euclidean distance
+optimization vs eigenvectors (sensible to outliers?)
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
@@ -225,8 +200,13 @@ That is the kind of physical knowledge that should ideally be built into the Sia
 %\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
-To facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$ (empirically checked in \apxref{feature-distance}), we set $d_f = d_q$.
+We however set $d_f$ as the cosine distance to facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$ (empirically evaluated in \apxref{siamese:feature-distance}).
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
+
+One could hope to train $\mathcal{G}_w$ to directly map projections to orientations as $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$.
+While that would avoid the orientation recovery step, a space of $n_f=4$ dimensions does not have room for $\mathcal{G}_w$ to represent the other factors of variation in $\p$, such as different noise levels, PSFs, or proteins.
+% While those factors can be represented, they are then abstracted by taking distances.
+We tested it in \apxref{siamese:embedding-dimension}.
 
 As evaluating a sum over $\frac{P^2-P}{2}$ pairs is computationally intractable,
 %for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
