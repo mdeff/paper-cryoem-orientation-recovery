@@ -89,20 +89,21 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.55\linewidth}
+    \begin{subfigure}[b]{0.60\linewidth}
         \centering
-        \includegraphics[height=11em]{figures/5j0n_ar_aa_fullcvg.pdf}
+        \includegraphics[height=4cm]{figures/5j0n_ar_aa_fullcvg.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \centering
-        \includegraphics[height=11em]{figures/FSC_5j0n_fullcvg_noise0_fin_vs_init.pdf}
-        \caption{Fourier Shell Correlation (FSC) of the reconstruction.}
+        \includegraphics[height=4cm]{figures/FSC_5j0n_fullcvg_noise0_fin_vs_init.pdf}
+        \caption{Fourier shell correlation of the reconstruction.}
     \end{subfigure}
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
+        \todo{Update the FSC plot as in \figref{reconstructions}.}
     }\label{fig:recovery-nonuniform}
 \end{figure}
 
@@ -118,17 +119,18 @@ Orientations were perfectly recovered.
 % Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.37\linewidth}
+    \begin{minipage}[t]{0.39\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5a1a}).
             The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
+            \todo{Update to full in-plane.}
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.60\linewidth}
+    \begin{minipage}[t]{0.58\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -142,7 +144,7 @@ Orientations were perfectly recovered.
         %     \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, \ie, before alignment.}
         % \end{subfigure}
         % \hfill
-        \begin{subfigure}[t]{0.46\linewidth}
+        \begin{subfigure}[t]{0.47\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
@@ -150,7 +152,7 @@ Orientations were perfectly recovered.
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.46\linewidth}
+        \begin{subfigure}[t]{0.47\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
@@ -190,7 +192,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 \mdeff{Check these refs. Other ones are used in main text?}
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.52\linewidth}
+    \begin{minipage}[t]{0.57\linewidth}
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
             \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
