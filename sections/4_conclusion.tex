@@ -25,6 +25,8 @@ First, the architecture of the SiameseNN's twin CNNs should be expanded and tune
 % , as well as the distance metric between the two CNN outputs.
 % For instance, one could parametrize the function $d_f$---which compares the similarity of the features outputs (see \figref{schematic:distance-learning})---as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 Second, the training of the SiameseNN could be improved, perhaps by providing more supervision by separately predicting the differences in direction $(\theta_2,\theta_1)$ and in-plane angle $\theta_3$.
+\todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture. Motivation (on top of half in-plane being much easier for 5a1a) to predict the direction and in-plane angle separately.}
+
 % \mdeff{Let's ignore improvements to recovery and concentrate the story on better distance learning -> better recovery -> better reconstruction.}
 %Among others, one shall explore whether reducing the influence of larger distances in orientation recovery could bring further gain in accuracy.
 % \mdeff{The following are issues with alignment---not directly related to our method---that we mentioned elsewhere.}

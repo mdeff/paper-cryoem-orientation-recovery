@@ -166,11 +166,11 @@ We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful functi
 }\label{fig:schematic:distance-learning}
 \end{figure}
 
-From a training dataset ${\{ \mathbf{p}_{i}, q_i \}}_{i=1}^{P}$, we learn the projection distance
+From a training dataset ${\{ \p_i, q_i \}}_{i=1}^{P}$, we learn the projection distance
 \begin{equation}
     \widehat{d_p} = \argmin_{d_p} L_\text{DE},
     \quad \text{where} \quad
-    L_\text{DE} = \sum_{i,j} \left| d_p\big(\mathbf{p}_{i},\mathbf{p}_{j}\big) - d_q\big(q_i,q_j\big) \right|^2
+    L_\text{DE} = \sum_{i,j} \left| d_p\big(\p_i,\p_j\big) - d_q\big(q_i,q_j\big) \right|^2
     \label{eqn:distance-learning}
 \end{equation}
 is the loss and $d_q$ is defined in~\eqnref{distance:orientations}.
@@ -188,6 +188,9 @@ As projections are made by integrating through the 3D volume, projections from o
 % It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
 That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture.
 
+scale invariance?, in practice is to make $\G_w$ accept projections of any size $n_p$ as input, while yielding a representation $\f$ of size $n_f$ in all cases.
+That is achieved by an average pooling layer over the remaining pixels after six layers of convolutions and max pooling (see \apxref{siamese-architecture}).
+
 %\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
 % "fundamental issue with reconstruction in cryoEM in general."
 % at high resolutions, the handedness can be determined by the chirality of alpha helices
@@ -199,11 +202,10 @@ That is the kind of physical knowledge that should ideally be built into the Sia
 %Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights.
 %\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
-The distance in the feature space $d_f$ is often taken to be the Euclidean distance $d_f(\f_i, \f_j) = \Vert \f_i - \f_j \Vert_2$.
-We however set $d_f$ as the cosine distance to facilitate the learning of a distance that respects the elliptic geometry of $\mathbb{S}^3$ (empirically evaluated in \apxref{siamese:feature-distance}).
+We set the feature space distance $d_f$ as the cosine distance to facilitate the learning of a $\widehat{d_p}$ that respects the elliptic geometry of $\mathbb{S}^3$ (\apxref{siamese:feature-distance}).
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
-One could hope to train $\mathcal{G}_w$ to directly map projections to orientations as $\widehat{q_i} = \mathbf{f}_i = \mathcal{G}_w(\p_i)$.
+One could hope to train $\mathcal{G}_w$ to directly map projections to orientations as $\widehat{q_i} = \f_i = \G_w(\p_i)$.
 While that would avoid the orientation recovery step, a space of $n_f=4$ dimensions does not have room for $\mathcal{G}_w$ to represent the other factors of variation in $\p$, such as different noise levels, PSFs, or proteins.
 % While those factors can be represented, they are then abstracted by taking distances.
 We tested it in \apxref{siamese:embedding-dimension}.
