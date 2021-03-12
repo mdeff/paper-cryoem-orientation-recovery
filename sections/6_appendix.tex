@@ -67,13 +67,13 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
         \centering
         %\includegraphics[height=7em]{figures/5j0n-half.png}
         \includegraphics[height=9em]{figures/5j0n-cvg.pdf}
-        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the 2-sphere.}
+        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.32\linewidth}
         \centering
         \includegraphics[height=9em]{figures/5a1a-cvg.pdf}
-        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the 2-sphere.}
+        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.32\linewidth}
@@ -83,7 +83,7 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
         \label{fig:orientation-constraints:distances}
     \end{subfigure}
     \caption{%
-        Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the 2-sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
+        Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
     }\label{fig:orientation-constraints}
 \end{figure}
 
@@ -320,10 +320,12 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
 
 \section{SiameseNN: embedding dimension}\label{apx:siamese:embedding-dimension}
 
+\mdeff{Merge \apxref{siamese:feature-distance} and \apxref{siamese:embedding-dimension} as a single appendix discussing SiameseNN (feature space) hyper-parameters?}
+
 \figref{4d-vs-256d-de} shows the performance of our distance estimator $\widehat{d_p}$ depending on the size of embedding space $n_f$.
 It clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections.
 % $n_f=4$ dimensional space is too constrained
-That is a motivation to embed the projections in a space of higher dimensions that can represent more variation than the orientation, and abstract that variation by only considering distances between embedded projections $\f_i = \G_w(\p_i)$.
+That is a motivation to embed the projections in a space of higher dimensions that can represent more variation than the orientation, and abstract that variation by solely considering the distances between the embedded projections $\f_i = \G_w(\p_i)$.
 %Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.
 
 %Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.

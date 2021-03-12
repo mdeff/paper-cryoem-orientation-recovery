@@ -93,10 +93,10 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
 \paragraph{Orientations.}
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a} illustrates the problem.
-To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (\figref{orientation-constraints}) for that protein.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$, a quarter of the sphere as illustrated in \figref{orientation-constraints}, for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
-Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subdomains.
+Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
 % projections from identical parts of a protein will collapse be identified upon orientation recovery.
 % close projections whose orientations are far due to a symmetry will be recovered as being
 % symmetries/projections will collapse/overlap/be identified/grouped

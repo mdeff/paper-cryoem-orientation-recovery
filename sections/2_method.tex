@@ -35,17 +35,19 @@ Second, we can learn the projection manifold by finding the distances that prese
 Hence, from a set of projections $\{\p_k\}$, we aim to recover their orientations $\{\widehat{q_k}\}$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
 All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}$ are perfectly estimated.
 
+% Goal: we're not alone in doing that. Gives first intuitions on the method.
 % line of work:
 % 1. Graph Laplacian tomography from unknown random projections
 % 2. Reference free structure determination through eigenvectors of center ofmass operators
 % 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
-Our overall/two-steps approach is similar to~\cite{coifman2008graphprojections}.
-% reconstruced 2D images from 1D projections
-The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
-As they noted, the choice of an Euclidean distance for $\widehat{d_p}$ is sensible to .
+Our overall approach is similar to~\cite{coifman2008graphprojections}.
+While the authors are concerned with the reconstruction of 2D images from 1D projections, they used the same two-steps approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
+% The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
+As they noted, the Euclidean distance is not robust to perturbations.
 For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
-SiameseNN more robust to perturbations than Euclidean distance
-optimization vs eigenvectors (sensible to outliers?)
+% SiameseNN more robust to perturbations than Euclidean distance
+% optimization vs eigenvectors (sensibility to outliers?)
+%We'll discuss how we alleviate that issue in \secref{method:distance-learning}.
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
