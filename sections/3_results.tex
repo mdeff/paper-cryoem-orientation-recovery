@@ -34,7 +34,7 @@ For each atomic model, we generated the density map by fitting a 5\AA\ map in Ch
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
-            \includegraphics[height=3cm]{figures/5j0n_pdb.png}
+            \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
             \caption{Atomic model of \texttt{5j0n}.}
         \end{subfigure}
         \\ \vspace{0.5em}
@@ -428,7 +428,8 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     \hfill
     \begin{subfigure}[b]{0.23\linewidth}
         \centering
-        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
+        %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
+        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
         \caption{}\label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
@@ -436,33 +437,34 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \centering
         %\includegraphics[height=3cm]{figures/FSC_5j0n_fullcvg_uniformS2_noise0_fin_vs_init.pdf}
         %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init.pdf}
-        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
+        %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
+        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_FSC_apr_init_customFSC.pdf}
         \caption{}
     \end{subfigure}
 
-    \vspace{1em}
-    \begin{subfigure}[b]{0.23\linewidth}
-        %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_gt_noisy.png}
-        \caption*{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.19\linewidth}
-        \caption*{}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
-        \centering
-        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
-        \caption{}\label{fig:5j0n-noise16-reconstruction-recovered}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.31\linewidth}
-        \centering
-        %\includegraphics[height=3cm]{figures/FSC_5j0n_fullcvg_noise16_fin_vs_init.pdf}
-        %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_FSC_apr_init.pdf}
-        \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_FSC_apr_init_customFSC.pdf}
-        \caption{}
-    \end{subfigure}
+    % \vspace{1em}
+    % \begin{subfigure}[b]{0.23\linewidth}
+    %     %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_gt_noisy.png}
+    %     \caption*{}
+    % \end{subfigure}
+    % \hfill
+    % \begin{subfigure}[b]{0.19\linewidth}
+    %     \caption*{}
+    % \end{subfigure}
+    % \hfill
+    % \begin{subfigure}[b]{0.23\linewidth}
+    %     \centering
+    %     \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
+    %     \caption{}\label{fig:5j0n-noise16-reconstruction-recovered}
+    % \end{subfigure}
+    % \hfill
+    % \begin{subfigure}[b]{0.31\linewidth}
+    %     \centering
+    %     %\includegraphics[height=3cm]{figures/FSC_5j0n_fullcvg_noise16_fin_vs_init.pdf}
+    %     %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_FSC_apr_init.pdf}
+    %     \includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise16_FSC_apr_init_customFSC.pdf}
+    %     \caption{}
+    % \end{subfigure}
 
     \vspace{1em}
     \begin{subfigure}[b]{0.23\linewidth}
@@ -519,12 +521,13 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     % \end{subfigure}
 
     \caption{%
-        Density maps $\widehat{\x}$ reconstructed from ground-truth (a,g), random (b,h), and recovered (c,e,i) orientations.
-        The Fourier shell correlations (d,f,j) show the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
+        Density maps $\widehat{\x}$ reconstructed from ground-truth (a,e), random (b,f), and recovered (c,g) orientations.
+        The Fourier shell correlations (d,h) show the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
         Orientations were recovered from noiseless projections of \texttt{5j0n} (c), noisy projections of \texttt{5j0n} (e), or noiseless projections of \texttt{5a1a} (i).
         \lau{Suggestions: 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field), 4. add short captions.}
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        \mdeff{Suggestion to gain space: all \texttt{5j0n} reconstructions on the first line, and group (d) and (f) as a single plot with two colors and a legend? That would also make the FSC difference easier to see. Shall we even show (e)? It's barely different from (c).}
+        %\mdeff{Suggestion to gain space: all \texttt{5j0n} reconstructions on the first line, and group (d) and (f) as a single plot with two colors and a legend? That would also make the FSC difference easier to see. Shall we even show (e)? It's barely different from (c).}
+        \banjac{Only Noisy16 is shown for \texttt{5j0n}}
     }\label{fig:reconstructions}
 \end{figure}
 
