@@ -120,18 +120,19 @@ Orientations were perfectly recovered.
 % Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.39\linewidth}
+    \begin{minipage}[t]{0.33\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
-        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
+        % \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
+        \includegraphics[height=3.5cm]{figures/5a1a_quartercov_uniformS2_perfect_ar_aa}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5a1a}).
             The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
-            \todo{Update to full in-plane.}
+            %\todo{Update to full in-plane.}
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.58\linewidth}
+    \begin{minipage}[t]{0.64\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -149,7 +150,7 @@ Orientations were perfectly recovered.
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
-            \includegraphics[height=3cm]{figures/BeforeAA.pdf}
+            \includegraphics[height=3.5cm]{figures/BeforeAA.pdf}
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
@@ -157,7 +158,7 @@ Orientations were perfectly recovered.
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
-            \includegraphics[height=3cm]{figures/AfterAA.pdf}
+            \includegraphics[height=3.5cm]{figures/AfterAA.pdf}
             \caption{Orientations after alignment.}
         \end{subfigure}
         \caption{%
@@ -234,29 +235,38 @@ While performance is somewhat degraded, we conclude that it is possible to train
 
 \todo{Distance learning and orientation recovery worked well, but alignment didn't.}
 \mdeff{Why is dPdQ so bad? Seems contradictory to a low $L_\text{DE}$ and $L_\text{OR}$. Maybe that's why alignment didn't work? But then I don't get why $L_\text{DE}$ and $L_\text{OR}$ are so low\ldots.}
+\banjac{I don't know why it is bad, but the result of alignment visualized in the rotation vector space looks the same as for other cases we were not able to align. It seems the same transformation is missing...}
 
 \mdeff{Could we also have $E_\text{OR}$? It's easier to understand and compare.}
 \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
 \mdeff{Could we show the ground-truth and estimated orientations in \figref{robustness-to-unseen-pipeline}?}
+\banjac{Visualized on the sphere - Coverage?}
 
 While alignment is in principle only necessary to compute $E_\text{OR}$, for an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA\@.
 \banjac{Hypothesis: I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.35\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \centering
-        \includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
-        \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}.}
+        %\includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
+        \includegraphics[height=4cm]{figures/de_5j0n_unseen.pdf}
+        \caption{Distance estimation loss on training and validation sets of \texttt{5nvu}, \texttt{5nvs}, \texttt{6mem}, and \texttt{6o1o}.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.60\linewidth}
+    \begin{subfigure}[b]{0.28\linewidth}
+        \centering
+        \includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
+        \caption{$\widehat{d_p}$ and $d_q$ relationship on $1,000$ pairs sampled from the test set of \texttt{5j0n}.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.35\linewidth}
         \centering
         \includegraphics[height=4cm]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
     \end{subfigure}
     \caption{%
-        Robustness to unseen protein \texttt{5j0n} pipeline results.
+        Robustness to unseen protein \texttt{5j0n} with noiseless projections pipeline results.
     }\label{fig:robustness-to-unseen-pipeline}
 \end{figure}
 
