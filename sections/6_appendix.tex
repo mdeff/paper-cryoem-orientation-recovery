@@ -193,29 +193,55 @@ In particular, the larger the quaternion distance $d_q$, the poorer the predicti
 The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
 \mdeff{Check these refs. Other ones are used in main text?}
 
+% \begin{figure}[ht!]
+%     \begin{minipage}[t]{0.57\linewidth}
+%         \begin{subfigure}[t]{0.48\textwidth}
+%             \centering
+%             \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
+%             \caption{\texttt{5j0n}}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}[t]{0.48\textwidth}
+%             \centering
+%             \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
+%             \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
+%         \end{subfigure}
+%         \caption{%
+%             The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the half-sphere direction coverage.
+%             Each color represent the distances between one fixed projection and the other $P-1$ projections.
+%     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
+%             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
+%             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
+%             \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
+%         }\label{fig:euclidean-not-robust}
+%     \end{minipage}
+% \end{figure}
+
 \begin{figure}[ht!]
     \begin{minipage}[t]{0.57\linewidth}
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
-            \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
+            \includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
             \caption{\texttt{5j0n}}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
-            \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
+            \includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
             \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
         \end{subfigure}
         \caption{%
-            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the half-sphere direction coverage.
+            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the full-sphere direction coverage for \texttt{5j0n} (left) and quarter-sphere direction coverage for \texttt{5a1a} (right) on 1,000 pairs sampled.
             Each color represent the distances between one fixed projection and the other $P-1$ projections.
     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-            \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
+            \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
+            % \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
+
 
 \section{Estimating distances on unseen proteins}\label{apx:unseen-proteins}
 %\section{Non-determinism of the Orientation Recovery}\label{apx:non-determinism}
@@ -361,5 +387,7 @@ That is a motivation to embed the projections in a space of higher dimensions th
         \mdeff{Also the batch size could be made more explicit than \texttt{None}.}
         \mdeff{Make the figure smaller: don't repeat every sizes as input and output. Try a more horizontal aspect ratio?}
         \mdeff{The size of the convolutional filters (\eg, $3 \times 3$) are missing.}
+        \banjac{Oh wow, it was 512 all along... I actually never ran for 256... I will run several experiments for the numbers in between for the previous plot you commented.}
+        \banjac{This plot was generated by the framework.}
     }\label{fig:de-architecture}
 \end{figure}
