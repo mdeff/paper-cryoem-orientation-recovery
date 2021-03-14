@@ -96,12 +96,13 @@ Symmetries are problematic to learn distances: two projections can be identical 
 To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$, a quarter of the sphere as illustrated in \figref{orientation-constraints}, for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
-Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
+%Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
 % projections from identical parts of a protein will collapse be identified upon orientation recovery.
 % close projections whose orientations are far due to a symmetry will be recovered as being
 % symmetries/projections will collapse/overlap/be identified/grouped
 % indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
+This treatment of symmetries is incomplete\footnote{\todo{Explain.}} but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
@@ -256,14 +257,14 @@ For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) 
 
 \figref{distance-learning:loss} shows how $L_\text{DE}$ converged in about 50 epochs.
 %\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
-We observe that overfitting---the difference between training and validation losses---is small for \texttt{5j0n} but large for \texttt{5a1a}.
+We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
 A large overfitting indicates that the distance trained on projections drawn from training sets fail to generalize to unseen projections drawn from validation sets.
 That is a first suggestion (see again in \secref{results:orientation-recovery:reconstruction}) that \texttt{5a1a} is harder than \texttt{5j0n}.
 We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
 % not hard symmetries, but similarities
-We might have miss-handled its symmetry (\secref{results:data}).
-\mdeff{Can the in-place rotation $\theta_3$ induce a symmetry?}
+%We might have miss-handled its symmetry (\secref{results:data}).
 \todo{Think about this: why is \texttt{5a1a} harder than \texttt{5j0n}?}
+% \mdeff{$275 \times 275$ vs $116 \times 116$ projection size? The former induces a larger average pooling size, \ie, it's harder for $\G_w$ to see more global features.}
 
 %\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
 %Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
@@ -275,8 +276,10 @@ As expected, distances were better estimated for \texttt{5j0n} than \texttt{5a1a
 While our learned distance function is a much better estimator than the Euclidean distance---compare \figref{distance-learning:dpdq} with \figref{euclidean-not-robust}---they share one characteristic: both plateau and underestimate the largest distances.
 We did attenuate the phenomenon by sampling training distances uniformly (see \secref{results:data}), and the issue is much less severe than with the Euclidean distance.
 %\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training?}
-While the impact on orientation recovery is unclear, an alternative could be to discard larger distances and only rely on smaller distances for recovery.
+%While the impact on orientation recovery is unclear
+An alternative could be to discard larger distances and only rely on smaller distances for recovery.
 That would however require the addition of a spreading term in \eqnref{orientation-recovery} to prevent the recovered orientations to collapse.
+Outliers are explained by our incomplete treatment of symmetries.
 
 % proxy distance
 These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone.
