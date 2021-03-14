@@ -78,11 +78,14 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
     \begin{subfigure}[t]{0.32\linewidth}
         \centering
         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
-        \caption{Induced distribution of distances.}%
+        \caption{Induced distribution of distances.
+            \mdeff{Was the older plot wrong? It showed a plateau in distances.}
+        }%
         \label{fig:orientation-constraints:distances}
     \end{subfigure}
     \caption{%
         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
+        \mdeff{We might think about integrating this figure with \figref{orientation-sampling}.}
     }\label{fig:orientation-constraints}
 \end{figure}
 
@@ -98,13 +101,12 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
         \centering
         % \includegraphics[height=4cm]{figures/FSC_5j0n_fullcvg_noise0_fin_vs_init.pdf}
         \includegraphics[height=4cm]{figures/5j0n_fullcvg_noise0_FSC_apr_init_customFSC.pdf}
-        
         \caption{Fourier shell correlation of the reconstruction.}
     \end{subfigure}
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        %\todo{Update the FSC plot as in \figref{reconstructions}.}
+        \todo{Same color for FSC line and text as \figref{reconstructions} noiseless.}
     }\label{fig:recovery-nonuniform}
 \end{figure}
 
@@ -221,12 +223,14 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
     \begin{minipage}[t]{0.57\linewidth}
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
+            % \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
             \includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
             \caption{\texttt{5j0n}}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
+            % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
             \includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
             \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
         \end{subfigure}
@@ -237,7 +241,8 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
             \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
-            % \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
+            \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
+            \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
@@ -251,13 +256,17 @@ As the SiameseNN will ultimately be trained on known proteins and used to estima
 we also desire our learned distance function to generalize to unseen proteins.
 The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
 We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
+\mdeff{The type of symmetry shouldn't play a role.}
+\mdeff{But the resolution might. Do all the density maps have a resolution of 3.67\AA\@? What are the projection's size? $116 \times 116$?}
 %In this experiment, we generated $1,000$ projections per protein.
 %\todo{should be the same ``kind'' of refs as the ones used in 3.1 for \texttt{5j0n} and \texttt{5a1a}}
 %Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
 %The number of projections in every set is the same as in \tabref{dataset}.
-We obtained a recovery loss of \todo{$L_\text{OR} = 0.0352$},
-to be compared with \todo{$L_\text{OR} \approx 0.11$} when the SiameseNN was trained on \texttt{5j0n} alone.
-While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.
+We obtained a recovery loss of \todo{$L_\text{OR} = 0.014$},
+to be compared with \todo{$L_\text{OR} \approx 0.066$} when the SiameseNN was trained on \texttt{5j0n} alone.
+\mdeff{Weird that $L_\text{OR}$ is lower. Maybe OR finds a set of orientations that satisfy well the distances, though I can't understand how (it's not degenerated right?). Then bad distances -> bad orientations -> AA fails. If that's the case we should be careful about how we report it in \secref{discussion}.}
+\mdeff{What happens if we train with \texttt{5j0n} too? E.g., \texttt{5j0n} + 1/2/4 others. That should work.}
+\todo{While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.}
 
 \todo{Distance learning and orientation recovery worked well, but alignment didn't.}
 \mdeff{Why is dPdQ so bad? Seems contradictory to a low $L_\text{DE}$ and $L_\text{OR}$. Maybe that's why alignment didn't work? But then I don't get why $L_\text{DE}$ and $L_\text{OR}$ are so low\ldots.}
@@ -267,6 +276,7 @@ While performance is somewhat degraded, we conclude that it is possible to train
 \banjac{I fully agree, however, I already mentioned that I wasn't able to align the orientations even though the $L_\text{OR}$ was very good. Looking at the estimation and GT in rotation space, it is visible we have some kind of transformation between these two (transformation similar to one we found the flip is causing, but it is not the flip).}
 \mdeff{Could we show the ground-truth and estimated orientations in \figref{robustness-to-unseen-pipeline}?}
 \banjac{Visualized on the sphere - Coverage?}
+\mdeff{Coverage or rotation-vector, whichever you think best illustrate the non-alignment issue.}
 
 While alignment is in principle only necessary to compute $E_\text{OR}$, for an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA\@.
 \banjac{Hypothesis: I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}
@@ -277,7 +287,9 @@ While alignment is in principle only necessary to compute $E_\text{OR}$, for an 
         \centering
         %\includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
         \includegraphics[height=4cm]{figures/de_5j0n_unseen.pdf}
-        \caption{Distance estimation loss on training and validation sets of \texttt{5nvu}, \texttt{5nvs}, \texttt{6mem}, and \texttt{6o1o}.}
+        \caption{Distance estimation loss on training and validation sets of \texttt{5nvu}, \texttt{5nvs}, \texttt{6mem}, and \texttt{6o1o}.
+            \mdeff{Could we add the validation set of \texttt{5j0n} as a third line? (I'm not sure whether we'll keep it, but it could help us understand what's happening.)}
+        }
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.28\linewidth}
