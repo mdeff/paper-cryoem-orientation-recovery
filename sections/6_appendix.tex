@@ -79,7 +79,8 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
         \centering
         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
         \caption{Induced distribution of distances.
-            \mdeff{Was the older plot wrong? It showed a plateau in distances.}
+            %\mdeff{Was the older plot wrong? It showed a plateau in distances.} 
+            %\banjac{Fixed, data was overwritten with previous df.}
         }%
         \label{fig:orientation-constraints:distances}
     \end{subfigure}
@@ -106,7 +107,7 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        \todo{Same color for FSC line and text as \figref{reconstructions} noiseless.}
+        %\todo{Same color for FSC line and text as \figref{reconstructions} noiseless.}
     }\label{fig:recovery-nonuniform}
 \end{figure}
 
@@ -220,19 +221,26 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 % \end{figure}
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.57\linewidth}
-        \begin{subfigure}[t]{0.48\textwidth}
+    \begin{minipage}[t]{0.99\linewidth}
+        \begin{subfigure}[t]{0.31\textwidth}
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
             \includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
-            \caption{\texttt{5j0n}}
+            \caption{\texttt{5j0n} with full-sphere direction coverage}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.48\textwidth}
+        \begin{subfigure}[t]{0.31\textwidth}
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
             \includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
-            \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
+            \caption{\texttt{5a1a} with quarter-sphere direction coverage}\label{fig:euclidean-not-robust:5a1a}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.31\textwidth}
+            \centering
+            % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
+            \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
+            \caption{\texttt{5a1a} with full-sphere direction coverage}\label{fig:euclidean-not-robust:5a1a}
         \end{subfigure}
         \caption{%
             The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the full-sphere direction coverage for \texttt{5j0n} (left) and quarter-sphere direction coverage for \texttt{5a1a} (right) on 1,000 pairs sampled.
@@ -243,6 +251,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
             \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
             \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
+            \banjac{More pairs. The full-cvg for \texttt{5a1a} is added.}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
@@ -289,6 +298,7 @@ While alignment is in principle only necessary to compute $E_\text{OR}$, for an 
         \includegraphics[height=4cm]{figures/de_5j0n_unseen.pdf}
         \caption{Distance estimation loss on training and validation sets of \texttt{5nvu}, \texttt{5nvs}, \texttt{6mem}, and \texttt{6o1o}.
             \mdeff{Could we add the validation set of \texttt{5j0n} as a third line? (I'm not sure whether we'll keep it, but it could help us understand what's happening.)}
+            \banjac{I won't have time to rerun it, however, I can report only the test set final loss value. The values in the boxes are the final loss value anyway.}
         }
     \end{subfigure}
     \hfill
@@ -338,32 +348,36 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.48\linewidth}
-        \begin{subfigure}[t]{0.48\linewidth}
-            \centering
-            \includegraphics[height=3.5cm]{figures/dPdQ_5j0n_4d.pdf}
-            \caption*{$n_f=4$} % and half-directions.
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.48\linewidth}
-            \centering
-            \includegraphics[height=3.5cm]{figures/dPdQ_5j0n_256.pdf}
-            \caption*{$n_f=256$} % and half-directions.
-        \end{subfigure}
-        % \hfill
-        % \begin{subfigure}[t]{0.31\linewidth}
-        %     \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
-        %     \caption{$n_f=256$ and all-directions.}
+        \centering
+        \includegraphics[height=4cm]{figures/de_nf.pdf}
+    
+    
+        % \begin{subfigure}[t]{0.48\linewidth}
+        %     \centering
+        %     \includegraphics[height=3.5cm]{figures/dPdQ_5j0n_4d.pdf}
+        %     \caption*{$n_f=4$} % and half-directions.
         % \end{subfigure}
+        % \hfill
+        % \begin{subfigure}[t]{0.48\linewidth}
+        %     \centering
+        %     \includegraphics[height=3.5cm]{figures/dPdQ_5j0n_256.pdf}
+        %     \caption*{$n_f=256$} % and half-directions.
+        % \end{subfigure}
+        % % \hfill
+        % % \begin{subfigure}[t]{0.31\linewidth}
+        % %     \includegraphics[width=\linewidth]{figures/dPdQ_5j0n_full.pdf}
+        % %     \caption{$n_f=256$ and all-directions.}
+        % % \end{subfigure}
         \caption{%
             Performance of distance learning w.r.t.\ the choice of embedding dimensionality $n_f$.
-            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test set of \texttt{5j0n}.
-            \mdeff{Might be interesting to show other choices for $n_f$. There will probably be a trend of increasing performance with diminishing returns.}
+            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled on \texttt{5j0n}.
+            %\mdeff{Might be interesting to show other choices for $n_f$. There will probably be a trend of increasing performance with diminishing returns.}
             %Different direction constrains in \figref{orientation-constraints}.
         }\label{fig:4d-vs-256d-de}
     \end{subfigure}
         \caption{%
             Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$ (a) and of embedding dimensionality $n_f$ (b).
-            \mdeff{Both figures should be similar as they show the same thing: performance w.r.t.\ the choice of an hyper-parameter ($d_f$ and $n_f$). Do we have $L_\text{DE}$ for the two $n_f$?}
+            %\mdeff{Both figures should be similar as they show the same thing: performance w.r.t.\ the choice of an hyper-parameter ($d_f$ and $n_f$). Do we have $L_\text{DE}$ for the two $n_f$?}
         }
 \end{figure}
 
@@ -401,5 +415,6 @@ That is a motivation to embed the projections in a space of higher dimensions th
         \mdeff{The size of the convolutional filters (\eg, $3 \times 3$) are missing.}
         \banjac{Oh wow, it was 512 all along... I actually never ran for 256... I will run several experiments for the numbers in between for the previous plot you commented.}
         \banjac{This plot was generated by the framework.}
+        \banjac{I will update this plot when I find time during the week.}
     }\label{fig:de-architecture}
 \end{figure}
