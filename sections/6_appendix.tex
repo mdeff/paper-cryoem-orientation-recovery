@@ -79,10 +79,7 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
         \centering
         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
         \caption{Induced distribution of distances.
-            %\mdeff{Was the older plot wrong? It showed a plateau in distances.} 
-            %\banjac{Fixed, data was overwritten with previous df.}
-        }%
-        \label{fig:orientation-constraints:distances}
+        }\label{fig:orientation-constraints:distances}
     \end{subfigure}
     \caption{%
         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
@@ -94,20 +91,20 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
     \centering
     \begin{subfigure}[b]{0.60\linewidth}
         \centering
-        \includegraphics[height=4cm]{figures/5j0n_ar_aa_fullcvg.pdf}
+        \includegraphics[height=3cm]{figures/5j0n_ar_aa_fullcvg.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.38\linewidth}
         \centering
         % \includegraphics[height=4cm]{figures/FSC_5j0n_fullcvg_noise0_fin_vs_init.pdf}
-        \includegraphics[height=4cm]{figures/5j0n_fullcvg_noise0_FSC_apr_init_customFSC.pdf}
+        \includegraphics[height=3cm]{figures/5j0n_fullcvg_noise0_FSC_apr_init_customFSC.pdf}
         \caption{Fourier shell correlation of the reconstruction.}
     \end{subfigure}
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        %\todo{Same color for FSC line and text as \figref{reconstructions} noiseless.}
+        \todo{No penalty for non-uniform sampling.}
     }\label{fig:recovery-nonuniform}
 \end{figure}
 
@@ -123,7 +120,7 @@ Orientations were perfectly recovered.
 % Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.33\linewidth}
+    \begin{minipage}[t]{0.34\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         % \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
@@ -149,7 +146,7 @@ Orientations were perfectly recovered.
         %     \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, \ie, before alignment.}
         % \end{subfigure}
         % \hfill
-        \begin{subfigure}[t]{0.47\linewidth}
+        \begin{subfigure}[t]{0.48\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
@@ -157,7 +154,7 @@ Orientations were perfectly recovered.
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.47\linewidth}
+        \begin{subfigure}[t]{0.48\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
@@ -233,7 +230,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
             \includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
-            \caption{\texttt{5a1a} with quarter-sphere direction coverage}\label{fig:euclidean-not-robust:5a1a}
+            \caption{\texttt{5a1a} with quarter-sphere direction coverage}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.31\textwidth}
@@ -252,6 +249,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
             \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
             \banjac{More pairs. The full-cvg for \texttt{5a1a} is added.}
+            \mdeff{Thanks! I think the old kind of plots illustrates it better. Can we have the three conditions in the old style?}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
@@ -292,25 +290,25 @@ While alignment is in principle only necessary to compute $E_\text{OR}$, for an 
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.32\linewidth}
+    \begin{subfigure}[t]{0.32\linewidth}
         \centering
         %\includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
-        \includegraphics[height=4cm]{figures/de_5j0n_unseen.pdf}
+        \includegraphics[height=3cm]{figures/de_5j0n_unseen.pdf}
         \caption{Distance estimation loss on training and validation sets of \texttt{5nvu}, \texttt{5nvs}, \texttt{6mem}, and \texttt{6o1o}.
             \mdeff{Could we add the validation set of \texttt{5j0n} as a third line? (I'm not sure whether we'll keep it, but it could help us understand what's happening.)}
             \banjac{I won't have time to rerun it, however, I can report only the test set final loss value. The values in the boxes are the final loss value anyway.}
         }
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.28\linewidth}
+    \begin{subfigure}[t]{0.28\linewidth}
         \centering
-        \includegraphics[height=4cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
+        \includegraphics[height=3cm]{figures/dPdQ_5j0n_robustness_to_unseen.pdf}
         \caption{$\widehat{d_p}$ and $d_q$ relationship on $1,000$ pairs sampled from the test set of \texttt{5j0n}.}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.35\linewidth}
+    \begin{subfigure}[t]{0.35\linewidth}
         \centering
-        \includegraphics[height=4cm]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
+        \includegraphics[height=3cm]{figures/5j0n_ar_aa_robustness_to_unseen.pdf}
         \caption{Recovered $\{ \widehat{q_i} \}$ from noiseless \texttt{5j0n} projections $\{ \p_i \}$ from protein unseen from distance estimation algorithm.}
     \end{subfigure}
     \caption{%
@@ -335,7 +333,7 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
 
 \begin{figure}[ht]
     \centering
-    \begin{subfigure}[b]{0.49\linewidth}
+    \begin{subfigure}[t]{0.46\linewidth}
         \centering
         % \includegraphics[height=4cm]{figures/geo_eucl_mlp_distance_metric.pdf}
         \includegraphics[height=4cm]{figures/dPdQ_feat_distances.pdf}
@@ -347,10 +345,9 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
         }\label{fig:geo-eucl-mlp}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[t]{0.52\linewidth}
         \centering
         \includegraphics[height=4cm]{figures/de_nf.pdf}
-    
     
         % \begin{subfigure}[t]{0.48\linewidth}
         %     \centering
@@ -371,13 +368,12 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
         \caption{%
             Performance of distance learning w.r.t.\ the choice of embedding dimensionality $n_f$.
             Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled on \texttt{5j0n}.
-            %\mdeff{Might be interesting to show other choices for $n_f$. There will probably be a trend of increasing performance with diminishing returns.}
             %Different direction constrains in \figref{orientation-constraints}.
+            \todo{Very interesting: 4 is not enough but 8 already is.}
         }\label{fig:4d-vs-256d-de}
     \end{subfigure}
         \caption{%
             Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$ (a) and of embedding dimensionality $n_f$ (b).
-            %\mdeff{Both figures should be similar as they show the same thing: performance w.r.t.\ the choice of an hyper-parameter ($d_f$ and $n_f$). Do we have $L_\text{DE}$ for the two $n_f$?}
         }
 \end{figure}
 
