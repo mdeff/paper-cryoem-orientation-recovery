@@ -17,75 +17,99 @@
 
 \section{Sampling of orientations}\label{apx:orientation-sampling}
 
-\todo{What do we want to say here? Sampling of orientations, or sampling of distances?}
-\figref{orientation-sampling} compares a uniform distribution of orientations over $\SO(3)$ and a non-uniform distribution of orientations---created by sampling Euler angles uniformly. %---that might happen in real cryo-EM acquisitions.
-\figref{recovery-nonuniform} (to be compared with \figref{5j0n-noise0-orientation-recovery},b) shows that our method is robust to uneven samplings.
+%\todo{What do we want to say here? Sampling of orientations, or sampling of distances?}
+%\banjac{Here is sampling of orientations.}
+\figref{orientation-sampling} compares different directions $(\theta_2, \theta_1)$ constraints on the sphere, a uniform distribution of orientations over $\SO(3)$(top left), a non-uniform distribution of orientations---created by sampling Euler angles uniformly (top right) both on full 2-sphere coverage, half-sphere non-uniform sampling (bottom left), and quarter-sphere uniform sampling (bottom right). %---that might happen in real cryo-EM acquisitions.
+Their corresponding distribution of distances is shown in \figref{orientation-sampling:distances}.
+\figref{recovery-nonuniform} (to be compared with \figref{5j0n-noise0-orientation-recovery},b) shows that our method is robust to uneven samplings (uniform vs. non-uniform). Therefore, there is no penalty for non-uniform sampling.
+While the distributions distances for half and quarter direction coverage flatten (compared with both full direction coverage), the shorter distances are still way under-sampled.
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[b]{0.36\linewidth}
-        \centering
-        \includegraphics[height=7em]{figures/uniform_quaternion.png}%
-        \hspace{1em}%
-        \includegraphics[height=7em]{figures/uniform_angles.png}
-        \caption{Directions $(\theta_2, \theta_1)$ sampled uniformly from $\SO(3)$ (left) and Euler angles (right).}
-    \end{subfigure}
+    \begin{minipage}{.33\linewidth}
+        \begin{subfigure}[b]{0.99\linewidth}
+            \centering
+            \includegraphics[height=6.5em]{figures/uniform_quaternion.png}%
+            \hspace{1em}%
+            \includegraphics[height=6.5em]{figures/uniform_angles.png}
+            \\ \vspace{2em}
+            \includegraphics[height=7em]{figures/5j0n-cvg2.pdf}
+            \hspace{1em}%
+            \includegraphics[height=7em]{figures/5a1a-cvg2.pdf}
+            \caption{Directions $(\theta_2, \theta_1)$ sampling on the sphere.}
+            \label{fig:orientation-sampling}
+        \end{subfigure}
+    \end{minipage}
     \hfill
-    \begin{subfigure}[b]{0.58\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_ang.pdf}
-        \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
-    \end{subfigure}
-    \\ \vspace{1em}
-    \begin{subfigure}[b]{0.36\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
-        \caption{Distribution of ($10,000<P^2$) distances.}%
-        \label{fig:orientation-sampling:distances}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.58\linewidth}
-        \centering
-        \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_q.pdf}
-        \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
-    \end{subfigure}
+    \begin{minipage}{.65\linewidth}
+        \begin{subfigure}[b]{0.37\linewidth}
+            \centering
+            % \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
+            \includegraphics[height=8em]{figures/dQ_distribution_coverage.pdf}
+            \caption{Distribution of distances $d_q$.}%
+            \label{fig:orientation-sampling:distances}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.6\linewidth}
+            \centering
+            \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_ang.pdf}
+            \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
+            \label{fig:distribution-angles}
+        \end{subfigure}
+        \\ \vspace{3em}
+        % \begin{subfigure}[b]{0.36\linewidth}
+        %     \centering
+        %     \includegraphics[height=7em]{figures/5j0n-cvg2.pdf}
+        %     \hspace{1em}%
+        %     \includegraphics[height=7em]{figures/5a1a-cvg2.pdf}
+        %     \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere (left) and from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
+        % \end{subfigure}
+        % \hfill
+        \begin{subfigure}[b]{0.97\linewidth}
+            \centering
+            \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_q.pdf}
+            \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
+            \label{fig:distribution-quaternions}
+        \end{subfigure}
+    \end{minipage}
     \caption{%
-        Uniform sampling of $P=5,000$ orientations from $\SO(3)$ (Group 1) and uniform sampling of $P=5,000$ Euler angles from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ inducing a non-uniform distribution of orientations (Group 2).
-        %\mdeff{That's not uniform in quaternion space, as shown by (d). ;) It's uniform in rotation / SO(3) space. How did you sample it? A classic way is to draw from $\mathcal{N}(0, I_4)$ then normalize to unit norm. More at \url{https://mathworld.wolfram.com/SpherePointPicking.html}.}\banjac{yes, we sample uniformly on SO(3), sorry my mistake in wording}
-    }\label{fig:orientation-sampling}
+        Sampling and distribution of ($P < 10,000$) orientations as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce: uniform from $\SO(3)$ (blue), uniform sampling of Euler angles (orange) both from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ full sphere coverage, uniform of Euler angles from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere (green), and uniform on $\SO(3)$ from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere (red).
+    }
 \end{figure}
 
-\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half or a quarter of the 2-sphere.
+%\figref{orientation-constraints} shows distributions of induced distances when directions $(\theta_2, \theta_1)$ are constrained to an half or a quarter of the 2-sphere.
 % (to learn from asymmetric proteins like \texttt{5j0n})
 % (\eg, for proteins with D2 symmetry like \texttt{5a1a})
-While the distributions flatten (compare with \figref{orientation-sampling:distances}), the shorter distances are still way under-sampled.
+%While the distributions flatten (compare with \figref{orientation-sampling:distances}), the shorter distances are still way under-sampled.
 
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}[t]{0.32\linewidth}
-        \centering
-        %\includegraphics[height=7em]{figures/5j0n-half.png}
-        \includegraphics[height=9em]{figures/5j0n-cvg.pdf}
-        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.32\linewidth}
-        \centering
-        \includegraphics[height=9em]{figures/5a1a-cvg.pdf}
-        \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.32\linewidth}
-        \centering
-        \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
-        \caption{Induced distribution of distances.
-        }\label{fig:orientation-constraints:distances}
-    \end{subfigure}
-    \caption{%
-        Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
-        \mdeff{We might think about integrating this figure with \figref{orientation-sampling}.}
-    }\label{fig:orientation-constraints}
-\end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \begin{subfigure}[t]{0.32\linewidth}
+%         \centering
+%         %\includegraphics[height=7em]{figures/5j0n-half.png}
+%         % \includegraphics[height=9em]{figures/5j0n-cvg.pdf}
+%         \includegraphics[height=9em]{figures/5j0n-cvg2.pdf}
+%         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere.}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.32\linewidth}
+%         \centering
+%         % \includegraphics[height=9em]{figures/5a1a-cvg.pdf}
+%         \includegraphics[height=9em]{figures/5a1a-cvg2.pdf}
+%         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.32\linewidth}
+%         \centering
+%         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
+%         \caption{Induced distribution of distances.
+%         }\label{fig:orientation-constraints:distances}
+%     \end{subfigure}
+%     \caption{%
+%         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
+%         \mdeff{We might think about integrating this figure with \figref{orientation-sampling}.}
+%     }\label{fig:orientation-constraints}
+% \end{figure}
 
 \begin{figure}[ht!]
     \centering
@@ -104,7 +128,7 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
     \caption{%
         Orientation recovery and density reconstruction from projections acquired from non-uniformly orientations (uniformly sampled Euler angles).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
-        \todo{No penalty for non-uniform sampling.}
+        %\todo{No penalty for non-uniform sampling.}
     }\label{fig:recovery-nonuniform}
 \end{figure}
 
@@ -112,7 +136,7 @@ While the distributions flatten (compare with \figref{orientation-sampling:dista
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 
-\lau{Smooth.}
+\lau{Smooth.}\banjac{Looks fine for me, was it already passed through?}
 To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 Orientations were perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of the loss $L_\text{OR}$ to zero.
@@ -180,9 +204,7 @@ Orientations were perfectly recovered.
 %\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
 %Note the difference between symmetric and asymmetric proteins.}
 
-\todo{Copy-edit.}
-
-We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
+\todo{Copy-edit.} We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
 For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
 We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
@@ -190,8 +212,8 @@ We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-n
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
-The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate,noauthor_5a1asym_nodate}.
-\mdeff{Check these refs. Other ones are used in main text?}
+The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry.
+%\mdeff{Check these refs. Other ones are used in main text?}
 
 % \begin{figure}[ht!]
 %     \begin{minipage}[t]{0.57\linewidth}
@@ -221,35 +243,38 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
     \begin{minipage}[t]{0.99\linewidth}
         \begin{subfigure}[t]{0.31\textwidth}
             \centering
-            % \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
-            \includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
+            %\includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}   % on half-sphere
+            %\includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
+            \includegraphics[height=5cm]{figures/dPdQ_5j0n_euclidean2}
             \caption{\texttt{5j0n} with full-sphere direction coverage}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.31\textwidth}
             \centering
-            % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
-            \includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
+            %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
+            %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
+            \includegraphics[height=5cm]{figures/dPdQ_5a1a_euclidean2}
             \caption{\texttt{5a1a} with quarter-sphere direction coverage}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.31\textwidth}
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
-            \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
+            % \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
+            \includegraphics[height=5cm]{figures/dPdQ_5a1a_full_euclidean2}
             \caption{\texttt{5a1a} with full-sphere direction coverage}\label{fig:euclidean-not-robust:5a1a}
         \end{subfigure}
         \caption{%
-            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the full-sphere direction coverage for \texttt{5j0n} (left) and quarter-sphere direction coverage for \texttt{5a1a} (right) on 1,000 pairs sampled.
+            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with full-sphere direction coverage for \texttt{5j0n} (a), quarter-sphere direction coverage for \texttt{5a1a} (b), and full-sphere direction coverage for \texttt{5j0n} (c) on 5,000 pairs sampled for each of 5 randomly selected fixed projections.
             Each color represent the distances between one fixed projection and the other $P-1$ projections.
     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-            \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
-            \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
-            \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
-            \banjac{More pairs. The full-cvg for \texttt{5a1a} is added.}
-            \mdeff{Thanks! I think the old kind of plots illustrates it better. Can we have the three conditions in the old style?}
+            % \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
+            % \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
+            % \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
+            % \banjac{More pairs. The full-cvg for \texttt{5a1a} is added.}
+            % \mdeff{Thanks! I think the old kind of plots illustrates it better. Can we have the three conditions in the old style?}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
@@ -316,7 +341,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 %     }\label{fig:robustness-to-unseen-pipeline}
 % \end{figure}
 
-\section{SiameseNN: feature distance}\label{apx:siamese:feature-distance}
+\section{SiameseNN: feature distance and embedding dimension}\label{apx:siamese:feature-distance-and-embedding-dimension}
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
@@ -339,8 +364,6 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
         \includegraphics[height=4cm]{figures/dPdQ_feat_distances.pdf}
         \caption{%
             Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$.
-            The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning}.
-            The inserted plots show the relationship between $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$ and $d_q(q_i, q_j)$.
             %\mdeff{It might be clearer (also for the caption) to move the inserted plots out and show them separately on the right (in places of the ones that are there now).}
         }\label{fig:geo-eucl-mlp}
     \end{subfigure}
@@ -348,7 +371,6 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
     \begin{subfigure}[t]{0.52\linewidth}
         \centering
         \includegraphics[height=4cm]{figures/de_nf.pdf}
-    
         % \begin{subfigure}[t]{0.48\linewidth}
         %     \centering
         %     \includegraphics[height=3.5cm]{figures/dPdQ_5j0n_4d.pdf}
@@ -367,50 +389,55 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
         % % \end{subfigure}
         \caption{%
             Performance of distance learning w.r.t.\ the choice of embedding dimensionality $n_f$.
-            Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled on \texttt{5j0n}.
             %Different direction constrains in \figref{orientation-constraints}.
-            \todo{Very interesting: 4 is not enough but 8 already is.}
+            %\todo{Very interesting: 4 is not enough but 8 already is.}
         }\label{fig:4d-vs-256d-de}
     \end{subfigure}
         \caption{%
-            Performance of distance learning w.r.t.\ the choice of feature distance function $d_f$ (a) and of embedding dimensionality $n_f$ (b).
+            Performance of our distance estimator $\widehat{d_p}$ w.r.t.\ the choice of feature distance function $d_f$ (a) and of embedding space dimension $n_f$ (b). 
+            The box plots show the distance learning loss $L_\text{DE}$ \eqnref{distance-learning}.
+            The inserted plots show the relationship between $d_p(\p_i, \p_j) = d_f(\mathcal{G}_w(\p_i), \mathcal{G}_w(\p_j))$ and $d_q(q_i, q_j)$ on $1,000$ pairs sampled on \texttt{5j0n}.
         }
 \end{figure}
 
-\section{SiameseNN: embedding dimension}\label{apx:siamese:embedding-dimension}
-
-\mdeff{Merge \apxref{siamese:feature-distance} and \apxref{siamese:embedding-dimension} as a single appendix discussing SiameseNN (feature space) hyper-parameters?}
-
-\figref{4d-vs-256d-de} shows the performance of our distance estimator $\widehat{d_p}$ depending on the size of embedding space $n_f$.
-It clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections.
+Moreover, \figref{4d-vs-256d-de} clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections. It also suggests that $n_f=8$ already achieves the optimum performance.
 % $n_f=4$ dimensional space is too constrained
 That is a motivation to embed the projections in a space of higher dimensions that can represent more variation than the orientation, and abstract that variation by solely considering the distances between the embedded projections $\f_i = \G_w(\p_i)$.
-%Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.
 
-%Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
+% \section{SiameseNN: embedding dimension}\label{apx:siamese:embedding-dimension}
+% \mdeff{Merge \apxref{siamese:feature-distance} and \apxref{siamese:embedding-dimension} as a single appendix discussing SiameseNN (feature space) hyper-parameters?}
+% \figref{4d-vs-256d-de} shows the performance of our distance estimator $\widehat{d_p}$ depending on the size of embedding space $n_f$.
+% It clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections.
+% % $n_f=4$ dimensional space is too constrained
+% That is a motivation to embed the projections in a space of higher dimensions that can represent more variation than the orientation, and abstract that variation by solely considering the distances between the embedded projections $\f_i = \G_w(\p_i)$.
+% %Great motivation for our indirect method and $n_f>4$, even when trained and tested on the same protein.
+% %Difference in the architecture of networks with $n_f=4$ or $n_f=256$ is in \apxref{siamese-architecture}.
 
 %\clearpage
 \section{SiameseNN architecture}\label{apx:siamese-architecture}
 
 \begin{figure}[ht!]
     \centering
-    \begin{subfigure}[t]{0.5\linewidth}
-        \includegraphics[width=\linewidth]{figures/model_plot_256d.png}
+    \begin{subfigure}[t]{1.0\linewidth}
+        % \includegraphics[width=\linewidth]{figures/model_plot_256d.png}
+        \includegraphics[width=\linewidth]{figures/architecture.pdf}
     \end{subfigure}
     \caption{%
         Distance estimation network architecture.
-        We have two input images of dimensions $116 \times 116$.
-        Each one goes to its CNN (part where we share the weights, selected with a dashed line).
-        The output is a scalar value representing the distance between these two images.
-        Last layer converts feature vector to a higher-dimensional vector of size $n_f=256$. This architecture of network was used throughout all experiments. The last layer was different for $n_f=4$.
-        \mdeff{Would be easier to only show the CNN $\G_w$, say that an image $\p \in \R^{n_p}$ (with $n_p = 116 \times 116$ for \texttt{5j0n} and $275 \times 275$ for \texttt{5a1a}) goes in and a feature $\f \in \R^{n_f}$ ($n_f=256$) goes out.}
-        \mdeff{Why is the last layer 512 dimensions if $n_f=256$?}
-        \mdeff{The \texttt{average\_pooling} is here to make $\G_w$ agnostic to the image size right? We should explain that. Maybe show two models as two columns, one with input $116 \times 116$ and the other with $275 \times 275$? Or instead of numbers, write $\lceil \sqrt{n_p}/2 \rceil$, $\lceil \sqrt{n_p}/4 \rceil$, etc.?}
-        \mdeff{Also the batch size could be made more explicit than \texttt{None}.}
-        \mdeff{Make the figure smaller: don't repeat every sizes as input and output. Try a more horizontal aspect ratio?}
-        \mdeff{The size of the convolutional filters (\eg, $3 \times 3$) are missing.}
-        \banjac{Oh wow, it was 512 all along... I actually never ran for 256... I will run several experiments for the numbers in between for the previous plot you commented.}
-        \banjac{This plot was generated by the framework.}
-        \banjac{I will update this plot when I find time during the week.}
+        We have two input images $\p_i,\p_j \in \R^{n_p}$ ($n_p=116$).
+        Each one goes to its CNN (part where we share the weights, upper and lower networks).
+        Each of these CNN networks ends with average pooling layer with output feature $\f \in \R^{n_f}$ ($n_f=512$).
+        Two feature vectors are then concatenated to measure their distance $d_f(\f_i, \f_j)=d_p(\p_i,\p_j)$ ($d_f$ is cosine distance) which corresponds to distance between these two images.
+        % This output is a scalar value representing the distance between these two images.
+        % Last layer converts feature vector to a higher-dimensional vector of size $n_f=512$. This architecture of network was used throughout all experiments. The last layer was different for experiments in \figref{4d-vs-256d-de}.
+        % \mdeff{Would be easier to only show the CNN $\G_w$, say that an image $\p \in \R^{n_p}$ (with $n_p = 116 \times 116$ for \texttt{5j0n} and $275 \times 275$ for \texttt{5a1a}) goes in and a feature $\f \in \R^{n_f}$ ($n_f=256$) goes out.}
+        % \mdeff{Why is the last layer 512 dimensions if $n_f=256$?}
+        % \mdeff{The \texttt{average\_pooling} is here to make $\G_w$ agnostic to the image size right? We should explain that. Maybe show two models as two columns, one with input $116 \times 116$ and the other with $275 \times 275$? Or instead of numbers, write $\lceil \sqrt{n_p}/2 \rceil$, $\lceil \sqrt{n_p}/4 \rceil$, etc.?}
+        % \mdeff{Also the batch size could be made more explicit than \texttt{None}.}
+        % \mdeff{Make the figure smaller: don't repeat every sizes as input and output. Try a more horizontal aspect ratio?}
+        % \mdeff{The size of the convolutional filters (\eg, $3 \times 3$) are missing.}
+        % \banjac{Oh wow, it was 512 all along... I actually never ran for 256... I will run several experiments for the numbers in between for the previous plot you commented.}
+        % \banjac{This plot was generated by the framework.}
+        % \banjac{I will update this plot when I find time during the week.}
     }\label{fig:de-architecture}
 \end{figure}
