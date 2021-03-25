@@ -24,7 +24,7 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}[b]{0.50\linewidth}
+    \begin{minipage}[b]{0.51\linewidth}
         \centering
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
@@ -92,7 +92,7 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
 
 \paragraph{Orientations.}
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
-\figref{euclidean-not-robust:5a1a} illustrates the problem.
+\figref{euclidean-not-robust:5a1a-full} illustrates the problem.
 To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$, a quarter of the sphere as illustrated in \figref{orientation-sampling} (bottom right), for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
@@ -102,7 +102,7 @@ To capture only one of four identical projections of \texttt{5a1a}, we restricte
 % symmetries/projections will collapse/overlap/be identified/grouped
 % indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
-This treatment of symmetries is incomplete\footnote{\todo{Explain.}} but sufficient for a proof-of-concept.
+This treatment of symmetries is incomplete\footnote{\todo{Explain. TODO: discuss together the treatment of symmetries.}} but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
@@ -122,7 +122,7 @@ The training and validation sets were used to train and evaluate the SiameseNN, 
 %Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
 % The sampling of orientations only matter for orientation recovery (test set).
 % For distance learning (training and validation sets),
-Figures~\ref{fig:orientation-sampling:distances} and~\ref{fig:orientation-constraints:distances} show that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
+\figref{orientation-sampling:distances} shows that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
 As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
 % such that the distribution of distances was uniform (independently from the distribution of orientations)
 % The goal was to uniformly spread the distance estimation error over the range of distances.
@@ -135,6 +135,7 @@ While $1,650$ projections were enough to perfectly reconstruct the density maps,
 \paragraph{Optimization.}
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
+The architecture of the sister CNN in the SiameseNN is shown in \apxref{siamese-architecture}.
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
 It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
@@ -267,7 +268,7 @@ That is a first suggestion (see again in \secref{results:orientation-recovery:re
 We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
 % not hard symmetries, but similarities
 %We might have miss-handled its symmetry (\secref{results:data}).
-\todo{Think about this: why is \texttt{5a1a} harder than \texttt{5j0n}?}
+%\todo{Think about this: why is \texttt{5a1a} harder than \texttt{5j0n}?}\banjac{Not anymore}
 % \mdeff{$275 \times 275$ vs $116 \times 116$ projection size? The former induces a larger average pooling size, \ie, it's harder for $\G_w$ to see more global features.}
 
 %\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
@@ -365,7 +366,8 @@ Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orienta
 A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}.
 Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
 
-To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the ground-truth orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox. The results are displayed in~\figref{reconstructions}, and tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method. 
+To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the ground-truth orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox using GPU implementation of the CGLS algorithm for 3D data sets. 
+The results are displayed in~\figref{reconstructions}, and tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method. 
 %\lau{\textit{We don't need to keep what follows anymore, right?} The rationale behind not comparing directly with the original ground-truth (\figref{pdb-proteins}) is that the robustness of the reconstruction method can impact the quality of the reconstruction when only few projections are considered, which was the case here (only $1,650$ projections).}
 
 In conclusion, the more accurate the estimation of the pairwise distances, the higher the quality of the orientation recovery, which leads to reconstructions with a higher resolution. %This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).

@@ -204,13 +204,13 @@ That is achieved by an average pooling layer over the remaining pixels after six
 %Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights.
 %\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
-We set the feature space distance $d_f$ as the cosine distance to facilitate the learning of a $\widehat{d_p}$ that respects the elliptic geometry of $\mathbb{S}^3$ (\apxref{siamese:feature-distance}).
+We set the feature space distance $d_f$ as the cosine distance to facilitate the learning of a $\widehat{d_p}$ that respects the elliptic geometry of $\mathbb{S}^3$ (\apxref{siamese:feature-distance-and-embedding-dimension}).
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
 One could hope to train $\mathcal{G}_w$ to directly map projections to orientations as $\widehat{q_i} = \f_i = \G_w(\p_i)$.
 While that would avoid the orientation recovery step, a space of $n_f=4$ dimensions does not have room for $\mathcal{G}_w$ to represent the other factors of variation in $\p$, such as different noise levels, PSFs, or proteins.
 % While those factors can be represented, they are then abstracted by taking distances.
-We tested it in \apxref{siamese:embedding-dimension}.
+We tested it in \apxref{siamese:feature-distance-and-embedding-dimension}.
 
 As evaluating a sum over $\frac{P^2-P}{2}$ pairs is computationally intractable,
 %for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
@@ -278,4 +278,4 @@ where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta
 \banjac{While it requires optimization, this performance metric allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp.}
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
-Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations). Since $E_{OR}$ is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. The $E_{OR}$ was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric. \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and $E_{OR}$ before and after alignment with the perfect distance $d_q$. Alternative metrics are discussed in \apxref{metrics-review}.
+Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations). Since $E_{OR}$ is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. The $E_{OR}$ was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric. \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and $E_{OR}$ before and after alignment with the perfect distance $d_q$. %Alternative metrics are discussed in \apxref{metrics-review}.

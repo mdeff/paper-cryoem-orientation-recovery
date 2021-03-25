@@ -19,10 +19,13 @@
 
 %\todo{What do we want to say here? Sampling of orientations, or sampling of distances?}
 %\banjac{Here is sampling of orientations.}
-\figref{orientation-sampling} compares different directions $(\theta_2, \theta_1)$ constraints on the sphere, a uniform distribution of orientations over $\SO(3)$(top left), a non-uniform distribution of orientations---created by sampling Euler angles uniformly (top right) both on full 2-sphere coverage, half-sphere non-uniform sampling (bottom left), and quarter-sphere uniform sampling (bottom right). %---that might happen in real cryo-EM acquisitions.
+We compared different directions $(\theta_2, \theta_1)$ constraints on the 2-sphere, shown in \figref{orientation-sampling}; a uniform distribution of orientations over $\SO(3)$ (top left), a non-uniform distribution of orientations---created by sampling Euler angles uniformly following the z-y-z convention (top right) both on full 2-sphere coverage, the half-sphere non-uniform sampling (bottom left), and quarter-sphere uniform sampling (bottom right)---that might happen in real cryo-EM acquisitions. 
 Their corresponding distribution of distances is shown in \figref{orientation-sampling:distances}.
-\figref{recovery-nonuniform} (to be compared with \figref{5j0n-noise0-orientation-recovery},b) shows that our method is robust to uneven samplings (uniform vs. non-uniform). Therefore, there is no penalty for non-uniform sampling.
 While the distributions distances for half and quarter direction coverage flatten (compared with both full direction coverage), the shorter distances are still way under-sampled.
+The difference between uniform and non-uniform sampling on full 2-sphere coverage is shown in Euler angles in \figref{distribution-angles} and quaternion parameters in \figref{distribution-quaternions}.
+
+Comparing the performance from \figref{recovery-nonuniform} and \figref{5j0n-noise0-orientation-recovery},b shows that our method is robust to uneven samplings (uniform vs. non-uniform). Therefore, there is no penalty for non-uniform sampling.
+
 
 \begin{figure}[ht!]
     \centering
@@ -136,7 +139,7 @@ While the distributions distances for half and quarter direction coverage flatte
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 
-\lau{Smooth.}\banjac{Looks fine for me, was it already passed through?}
+%\lau{Smooth.}\banjac{Looks fine for me, was it already passed through?}
 To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
 Orientations were perfectly recovered.
 \figref{5j0n-orientation-recovery-loss} shows the convergence of the loss $L_\text{OR}$ to zero.
@@ -204,15 +207,15 @@ Orientations were perfectly recovered.
 %\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
 %Note the difference between symmetric and asymmetric proteins.}
 
-\todo{Copy-edit.} We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
+We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
 From $P = 5,000$ possible projection, we randomly select $5$ projections.
 For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
-We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for both the \texttt{5j0n} (left) and \texttt{5a1a} (right).
+We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for full 2-sphere directions coverage (\figref{euclidean-not-robust:5j0n-full}) on \texttt{5j0n}, and quarter and full 2-sphere direction coverage (\figref{euclidean-not-robust:5a1a-quarter} and \figref{euclidean-not-robust:5a1a-full}, respectively) on \texttt{5a1a}.
 
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
 In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
-The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry.
+The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} (\figref{euclidean-not-robust:5a1a-full}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry. Constraining the direction sampling on the quarter sphere (\figref{euclidean-not-robust:5a1a-quarter}) seems to circumvent the symmetry issue.
 %\mdeff{Check these refs. Other ones are used in main text?}
 
 % \begin{figure}[ht!]
@@ -241,28 +244,31 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 
 \begin{figure}[ht!]
     \begin{minipage}[t]{0.99\linewidth}
-        \begin{subfigure}[t]{0.31\textwidth}
+        \begin{subfigure}[t]{0.33\textwidth}
             \centering
             %\includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}   % on half-sphere
             %\includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
             \includegraphics[height=5cm]{figures/dPdQ_5j0n_euclidean2}
-            \caption{\texttt{5j0n} with full-sphere direction coverage}
+            \caption{Full directions coverage on \texttt{5j0n}}
+            \label{fig:euclidean-not-robust:5j0n-full}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.31\textwidth}
+        \begin{subfigure}[t]{0.33\textwidth}
             \centering
             %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
             %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
             \includegraphics[height=5cm]{figures/dPdQ_5a1a_euclidean2}
-            \caption{\texttt{5a1a} with quarter-sphere direction coverage}
+            \caption{Quarter directions coverage on \texttt{5a1a}}
+            \label{fig:euclidean-not-robust:5a1a-quarter}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.31\textwidth}
+        \begin{subfigure}[t]{0.33\textwidth}
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
             % \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
             \includegraphics[height=5cm]{figures/dPdQ_5a1a_full_euclidean2}
-            \caption{\texttt{5a1a} with full-sphere direction coverage}\label{fig:euclidean-not-robust:5a1a}
+            \caption{Full directions coverage on \texttt{5a1a}}
+            \label{fig:euclidean-not-robust:5a1a-full}
         \end{subfigure}
         \caption{%
             The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with full-sphere direction coverage for \texttt{5j0n} (a), quarter-sphere direction coverage for \texttt{5a1a} (b), and full-sphere direction coverage for \texttt{5j0n} (c) on 5,000 pairs sampled for each of 5 randomly selected fixed projections.
@@ -400,7 +406,7 @@ We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were un
         }
 \end{figure}
 
-Moreover, \figref{4d-vs-256d-de} clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections. It also suggests that $n_f=8$ already achieves the optimum performance.
+The search for optimal embedded feature size resulted in \figref{4d-vs-256d-de} that clearly indicates that a space of $n_f=4$ dimensions is insufficient to represent the complexity/variability of projections. It also suggests that $n_f=8$ already achieves the optimum performance.
 % $n_f=4$ dimensional space is too constrained
 That is a motivation to embed the projections in a space of higher dimensions that can represent more variation than the orientation, and abstract that variation by solely considering the distances between the embedded projections $\f_i = \G_w(\p_i)$.
 
@@ -420,14 +426,14 @@ That is a motivation to embed the projections in a space of higher dimensions th
     \centering
     \begin{subfigure}[t]{1.0\linewidth}
         % \includegraphics[width=\linewidth]{figures/model_plot_256d.png}
-        \includegraphics[width=\linewidth]{figures/architecture.pdf}
+        %\includegraphics[width=\linewidth]{figures/architecture.pdf}
+        \includegraphics[width=\linewidth]{figures/architecture2.pdf}
     \end{subfigure}
     \caption{%
-        Distance estimation network architecture.
-        We have two input images $\p_i,\p_j \in \R^{n_p}$ ($n_p=116$).
-        Each one goes to its CNN (part where we share the weights, upper and lower networks).
-        Each of these CNN networks ends with average pooling layer with output feature $\f \in \R^{n_f}$ ($n_f=512$).
-        Two feature vectors are then concatenated to measure their distance $d_f(\f_i, \f_j)=d_p(\p_i,\p_j)$ ($d_f$ is cosine distance) which corresponds to distance between these two images.
+        The sister CNN architecture, the part of the distance estimation network architecture from \figref{schematic:distance-learning} where we share the weights with another sister CNN.
+        We have an input image $\p_i \in \R^{n_p}$ ($n_p=116$, the dimension used for all the proteins' projections) which goes through one sister CNN.
+        The network includes stacking of seven convolutional and max pooling layers and it ends with an average pooling layer with the output feature vector $\f \in \R^{n_f}$ ($n_f=512$).
+        This feature vector is later paired with the output feature vector $\f_j$ from the second projection $\p_j$ to measure their distance $d_f(\f_i, \f_j)=d_p(\p_i,\p_j)$. Here, $d_f$ is a cosine distance, and $d_p$ corresponds to distance between these two projections.
         % This output is a scalar value representing the distance between these two images.
         % Last layer converts feature vector to a higher-dimensional vector of size $n_f=512$. This architecture of network was used throughout all experiments. The last layer was different for experiments in \figref{4d-vs-256d-de}.
         % \mdeff{Would be easier to only show the CNN $\G_w$, say that an image $\p \in \R^{n_p}$ (with $n_p = 116 \times 116$ for \texttt{5j0n} and $275 \times 275$ for \texttt{5a1a}) goes in and a feature $\f \in \R^{n_f}$ ($n_f=256$) goes out.}
