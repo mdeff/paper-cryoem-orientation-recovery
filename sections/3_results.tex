@@ -307,8 +307,8 @@ As discussed in \secref{method:distance-learning}, the convolutional architectur
 % Noise.
 As we cannot---or do not yet know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to ignore noise as being irrelevant information.
 % brute force vs principled engineering
-\figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$. 
-\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
+\figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$11.8$ dB). 
+%\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
 Moreover, overfitting (\ie, the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
