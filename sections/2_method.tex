@@ -34,7 +34,7 @@ All in all, from a set of projections $\{\p_k\}$, we aim to recover their orient
 % 2. Reference free structure determination through eigenvectors of center ofmass operators
 % 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
 Our approach is similar to~\cite{coifman2008graphprojections}.
-While the authors are concerned with the reconstruction of 2D images from 1D projections, they use the same two-steps approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
+While the authors are concerned with the reconstruction of 2D images from 1D projections, they use the same two-step approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
 % The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
 The Euclidean distance is however not robust to perturbations:
 For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
