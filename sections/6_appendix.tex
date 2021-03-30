@@ -103,15 +103,14 @@ Comparing Figures~\ref{fig:nonuniform:recovery} with~\ref{fig:5j0n-noise0-orient
 
 %\mdeff{Story: works perfectly despite no convexity guarantee and sampling.}
 
-%\lau{Smooth.}\banjac{Looks fine for me, was it already passed through?}
-To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $d_p(\p_i, \p_j) = d_q(q_i, q_j)$.
+To verify that the lack of a convexity guarantee for \eqnref{orientation-recovery} and the sampling of the sum are non-issues in practice, we attempted orientation recovery under exact distance estimation $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
 Orientations were perfectly recovered.
-\figref{5j0n-orientation-recovery-loss} shows the convergence of the loss $L_\text{OR}$ to zero.
+\figref{5j0n-orientation-recovery-loss} shows the convergence of $L_\text{OR}$ to zero.
 \figref{5j0n-aa-loss-perfect-distances} shows how~\eqnref{orientation-recovery-error} could then perfectly align the recovered and true orientations---leading to $E_\text{OR} = 0$.
-% Demonstrating that alignment is necessary to evaluate the performance of orientation recovery.
+It illustrates how alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.34\linewidth}
+    \begin{minipage}[t]{0.35\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         % \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
@@ -123,7 +122,7 @@ Orientations were perfectly recovered.
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.64\linewidth}
+    \begin{minipage}[t]{0.63\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -137,7 +136,7 @@ Orientations were perfectly recovered.
         %     \caption{Error histogram $\{ d_q (q_i, \widehat{q_i}) \}$, \ie, before alignment.}
         % \end{subfigure}
         % \hfill
-        \begin{subfigure}[t]{0.48\linewidth}
+        \begin{subfigure}[t]{0.49\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
@@ -145,7 +144,7 @@ Orientations were perfectly recovered.
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[t]{0.48\linewidth}
+        \begin{subfigure}[t]{0.49\linewidth}
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
@@ -154,11 +153,9 @@ Orientations were perfectly recovered.
         \end{subfigure}
         \caption{%
             Example of perfect alignment~\eqnref{orientation-recovery-error} after a perfect orientation recovery~\eqnref{orientation-recovery}.
-            The alignment error with corresponding directions $(\theta_2, \theta_1)$ before (a) and after (b) alignment.
+            The red histogram shows the errors in the recovered orientations  (a) $\{d_q(q_i, \widehat{q_i})\}$ and (b) $\{d_q(q_i, \T \widehat{q_i})\}$, with the mean $E_\text{OR}$ highlighted.
             % and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
-            %(b-c)~show the orientations projected on $\mathbb{S}^2 \subset \SO(3)$ before (b) and after (c) alignment.
-            Green points are the true orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
-            % The Figure (b) is exactly aligned which can be seen when zoomed. Due to plotting artifacts,
+            Directions $(\theta_2, \theta_1)$ are shown in the insert: Green points are the ground-truth orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
             While both colors are seen in (b), they are exactly superimposed.
         }\label{fig:5j0n-aa-loss-perfect-distances}
     %    \label{fig:angle-alignment-perfect}
@@ -206,7 +203,7 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
 %     \end{minipage}
 % \end{figure}
 
-\begin{figure}[ht!]
+\begin{figure}
     \begin{minipage}[t]{0.99\linewidth}
         \begin{subfigure}[t]{0.33\textwidth}
             \centering
