@@ -19,7 +19,7 @@ Finally, we ran the whole machinery to assess how well orientations could be rec
 \paragraph{Density maps.}
 We considered two proteins (\figref{pdb-proteins}): the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate}, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetry.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
-From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for the $\beta$-galactosidase, and $69 \times 57 \times 75$ voxels for the HJI\@.
+From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a}, and $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
 % -sized volume
 
 \begin{figure}[ht!]
@@ -105,9 +105,8 @@ To capture only one of four identical projections of \texttt{5a1a}, we restricte
 This treatment of symmetries is incomplete\footnote{\todo{Explain. TODO: discuss together the treatment of symmetries.}} but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
-Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
+Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (then interpolated to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
 \footnote{Orientations used in \secref{results:orientation-recovery:sensitivity} (\figref{perfect-with-noise-ar-aa}) and \secref{results:distance-estimation:sensitivity} (\figref{results:distance-estimation}) were actually obtained by uniformly sampling the Euler angles $\bth$, constrained to $(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$ for \texttt{5j0n}. Our conclusions would be identical if orientations were uniformly sampled from $\SO(3)$ instead.}
-%\banjac{I remember putting somewhere that we have support for both, but I don't see it. I can put a histogram and respective $S^2$ space visualization in the appendix that will visualize the difference. Why we used it? From the log I see that OR was not converging to 0 so we thought is is because we have underestimated learned distance. Shortly after, the OR started working and we didn't continue further with this idea.}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
 \figref{different-projections} displays samples of the simulated projections.
@@ -135,7 +134,6 @@ While $1,650$ projections were enough to perfectly reconstruct the density maps,
 \paragraph{Optimization.}
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
-The architecture of the sister CNN in the SiameseNN is shown in \apxref{siamese-architecture}.
 With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
 It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
