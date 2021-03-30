@@ -31,17 +31,16 @@
 \maketitle
 
 \begin{abstract}
-    \todo{Revisit once all else is done.}
     A major challenge in single-particle cryo-electron microscopy (cryo-EM) is that the orientations adopted by the 3D particles prior to imaging are unknown; yet, this knowledge is essential for high-resolution reconstruction.
     We present a method to recover these orientations directly from the acquired set of 2D projections.
-    Our approach consists of two steps: (i) the estimation of the distances between pairs of projections, and (ii) the recovery of the orientation of each projection from these distances.
+    Our approach consists of two steps: (i) the estimation of distances between pairs of projections, and (ii) the recovery of the orientation of each projection from these distances.
     In step (i), pairwise distances are estimated by a Siamese neural network trained on synthetic cryo-EM projections from resolved bio-structures.
     In step (ii), orientations are recovered by minimizing the difference between the distances estimated from the projections and the distances induced by the recovered orientations.
-%(through stochastic gradient descent) an objective function by
-    We evaluated the method on synthetic cryo-EM datasets. Current results demonstrate that orientations can be accurately recovered from projections corrupted with a high level of noise. Additional experiments indicate that the quality of this recovery depends on the precision of the estimated distances---and thus by extension, on the accuracy of the SiameseNN training procedure.  
+    We evaluated the method on synthetic cryo-EM datasets.
+    Current results demonstrate that orientations can be accurately recovered from projections that are shifted and corrupted with a high level of noise.
+    The accuracy of the recovery depends on the accuracy of the distance estimator.
     While not yet deployed in a real experimental setup, the proposed method offers a novel take on orientation recovery in SPA and may bring interesting new perspectives in the field. 
-    %The preliminary results , the orientations recovered from non-perturbed projections are within $10\degree$, and from perturbed projections are within $24\degree$ of the true orientations.
-    The code of the method is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
+    Our code is available at \url{https://github.com/JelenaBanjac/protein-reconstruction}.
 \end{abstract}
 
 %\input{TODO}
