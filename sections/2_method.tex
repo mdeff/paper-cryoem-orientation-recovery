@@ -219,7 +219,7 @@ In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmani
 
 We however aim to embed the orientations $q$ in $\mathbb{S}^3$ (\secref{method:orientation-representation}), a setting for which we are unaware of any theoretical characterization (\eg, on the shape of the loss function or its behavior when distances are missing or noisy).
 The fact that $\mathbb{S}^3$ is locally Euclidean does however offer some hope. % on the feasibility of this minimization.
-Indeed, despite the non-convex loss function and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in \apxref{results:orientation-recovery:exact}.
+Indeed, despite the non-convexity and the lack of theoretical guarantees, we are able to appropriately minimize our loss function, as we experimentally demonstrate in \apxref{results:orientation-recovery:exact}.
 
 We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
 \begin{equation}
@@ -233,7 +233,7 @@ Note that the sole difference with~\eqnref{distance-learning} is that the minimi
 Here again, we sample the sum in practice and minimize \eqnref{orientation-recovery} with mini-batch SGD.
 Sampling the sum amounts to building a sparse (instead of complete) distance graph before embedding, a common strategy.
 %We experimentally demonstrate in \secref{results:orientation-recovery:exact} that neither approximation affects recovery performance.
-\todo{Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.}\banjac{This would be repeating? What do we want here?}
+%\todo{Orientations were recovered through \eqnref{orientation-recovery} in a stochastic setting, with the loss function varying over the batches.}
 
 \subsection{Evaluation}\label{sec:method:evaluation}
 
@@ -261,9 +261,12 @@ We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an 
     \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
 \end{equation*}
 where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
-%\todo{While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.}
-%\mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
-\banjac{While it requires optimization, this performance metric allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp.}
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
-Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations). Since $E_{OR}$ is used in the pose estimation tasks and it is considered reliable performance metric, we decided to use it as our performance measure. The $E_{OR}$ was used to quantify the quality of recovery. The average difference between predicted and actual angles is then given in degree (or rad), which makes it an intuitive comparison metric. \figref{5j0n-aa-loss-perfect-distances} shows a successful convergence and $E_{OR}$ before and after alignment with the perfect distance $d_q$. %Alternative metrics are discussed in \apxref{metrics-review}.
+Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
+\figref{5j0n-aa-loss-perfect-distances} shows an alignment to $E_{OR}=0$ after a perfect recovery.
+
+%Alternative metrics are discussed in \apxref{metrics-review}.
+%\todo{While it requires optimization, this performance metric is intuitive as it gives average error of the estimated orientations.}
+%\mdeff{Why is it good? Intuitive. Laurène, can we say something more?} \lau{If really, something along the line "... allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp."}
+%\banjac{While it requires optimization, this performance metric allows to quantify the performance of orientation recovery with a measure that is more intuitive to grasp.}
