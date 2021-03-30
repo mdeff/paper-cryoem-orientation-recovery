@@ -2,7 +2,6 @@
 
 \todo{%
 \begin{itemize}
-    \item intuition behind distances -> positions?
     \item explain the maps (Euler/quaternion -> SO(3)) more, give intuition why quaternions are better
     \item sampled sum
 \end{itemize}
@@ -27,37 +26,30 @@
 Our approach relies on two observations (\figref{intuition-method}), yielding two steps (\figref{schematic:method-overview}).
 First, the greater the similarity between two 2D projections $(\p_i, \p_j)$, the more likely they originated from two 3D particles that adopted close orientations $(q_i, q_j)$ in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this observation guides a number of applications in the field~\cite{frank2006three}.
 % TODO: differences in orientation / distances
-Hence, we aim to estimate differences in orientation $d_q(q_i, q_j)$ from the projections themselves as $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:distance-learning}).
+Hence, we aim to \textit{estimate distances} between orientations $d_q(q_i, q_j)$ from the projections themselves as $\widehat{d_p}(\p_i, \p_j)$, which we discuss in \secref{method:distance-learning}.
 % where $\widehat{d_p}$ is learned from training data
 % Sparse set of distances to a global assignment of orientations.
-\todo{Second, orientations are constrained by their relative differences.
-Second, we can learn the projection manifold by finding the distances that preserves the geometry of local neighborhoods in the space of orientations.}
-Hence, from a set of projections $\{\p_k\}$, we aim to recover their orientations $\{\widehat{q_k}\}$ such that the induced distances $d_q(\widehat{q_i}, \widehat{q_j})$ are close to the estimated distances $\widehat{d_p}(\p_i, \p_j)$ (\secref{method:orientation-recovery}).
-All in all, $d_q(q_i, q_j) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(\widehat{q_i}, \widehat{q_j})$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}$ are perfectly estimated.
+Second, an orientation $q$ is constrained by the distances between itself and the other orientations $\{ d(q, q_j) \}$.
+Hence, we aim to \textit{recover orientations} $\{\widehat{q_k}\}$ such that the induced distances $\{ d_q(\widehat{q_i}, \widehat{q_j}) \}$ are close to the estimated distances $\{ \widehat{d_p}(\p_i, \p_j) \}$, which we discuss in \secref{method:orientation-recovery}.
+%\todo{Second, we can learn the projection manifold by finding the distances that preserves the geometry of local neighborhoods in the space of orientations.}
+All in all, from a set of projections $\{\p_k\}$, we aim to recover their orientations $\{\widehat{q_k}\}$ such that $d_q(\widehat{q_i}, \widehat{q_j}) \approx \widehat{d_p}(\p_i, \p_j) \approx d_q(q_i, q_j)$, with equality if $\widehat{d_p}$ and $\{\widehat{q_k}\}$ are perfectly estimated.
+% Our method effectively (i) estimates a metric space, then (ii) embed/realize it in the space of 3D orientations, $\SO(3)$.
 
 % Goal: we're not alone in doing that. Gives first intuitions on the method.
 % line of work:
 % 1. Graph Laplacian tomography from unknown random projections
 % 2. Reference free structure determination through eigenvectors of center ofmass operators
 % 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
-Our overall approach is similar to~\cite{coifman2008graphprojections}.
-While the authors are concerned with the reconstruction of 2D images from 1D projections, they used the same two-steps approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
+Our approach is similar to~\cite{coifman2008graphprojections}.
+While the authors are concerned with the reconstruction of 2D images from 1D projections, they use the same two-steps approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
 % The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
-As they noted, the Euclidean distance is not robust to perturbations.
+The Euclidean distance is however not robust to perturbations:
 For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
-% SiameseNN more robust to perturbations than Euclidean distance
+They noted that issue and we observed it too (\apxref{results:distance-estimation}), hence we propose to \textit{learn} $\widehat{d_p}$ from examples (\secref{method:distance-learning}).
 % optimization vs eigenvectors (sensibility to outliers?)
-%We'll discuss how we alleviate that issue in \secref{method:distance-learning}.
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
 %This distance function then allows us to estimate, for any new projection dataset, the relative orientations between pairs of projections.
-
-% Our method effectively (i) estimates a metric space, then (ii) embed/realize it in the space of 3D orientations, $\SO(3)$.
-
-%Given sufficiently many and accurate estimations
-%If the distances are exact geodesic distances between orientations, then orientation recovery will find a perfect realization of the metric space, with zero error.
-%In practice, distances estimated from projections will only be a proxy of true distances.
-%Experiment \secref{results:orientation-recovery:sensitivity} shows that a lower distance estimation error translates to a lower orientation recovery error.
 
 %\subsection{Unit Quaternions and the Geodesic Distance}
 %\subsection{Parameterization of orientations}
