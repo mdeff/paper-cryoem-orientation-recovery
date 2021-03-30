@@ -1,11 +1,5 @@
 \section{Method}
 
-\todo{%
-\begin{itemize}
-    \item sampled sum
-\end{itemize}
-}
-
 % \lau{Lau: As far as I'm concerned, everything below before subsection 2.1 could also go at the end of the Introduction. Beyond the fact that it contains literature review and conceptual information that would go well in the intro, I find the current architecture of Section 2 a bit puzzling. First there is text to explain the methods and detail their intuition/key components, then there are three consecutive subsections that kind of do the same, but from a maths points of view. The aforementioned suggestion of putting the first text in the intro could solve this. Another possibility: put the descriptive texts in their corresponding sub-sections, so that those contain both the motivation and the maths. I'm open to further suggestions and suggestions ;-) }
 % \mdeff{Indeed. The "Distance Learning" and "Orientation Recovery" paragraphs might go in their respective sub-sections. But I'd like to keep a high-level motivation of the whole method (the text linked to the second figure to appear alongside \figref{imaging-geometry}.}
 % \lau{Fine for me.}
@@ -152,9 +146,9 @@ We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful functi
     \centering
     \includegraphics[width=\linewidth]{schematic_distance_learning}
     \caption{%
-        \textbf{Distance learning.}
-        We are looking for a distance $d_p$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
-        We propose to parameterize $d_p$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of projections with associated orientation.
+        Distance learning.
+        We are looking for a distance $\widehat{d_p}$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
+        We propose to parameterize $\widehat{d_p}$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of projections with associated orientation.
         %\mdeff{Why the output "loss" arrow? To me, this system is closed.}
         %\mdeff{"Loss Function" could be called Optimization or Learning or Training.}
 }\label{fig:schematic:distance-learning}
@@ -174,40 +168,42 @@ The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\c
     %\label{eqn:distance:projections}
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
-\todo{NN architecture constrains (a priori) the function space $\G_w$ is drawn from. Convolution because we want shift invariance (embodiment of prior expert knowledge, generalization guarantee). Ideally we would like noise and PSF invariance too, but those are hard to build in. Hence we resort to data augmentation (\ie, training on perturbed projections).}
-As projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other---preventing cryo-EM reconstructions to resolve chirality.%
-% chirality/handedness
-\footnote{A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.}
-% \lau{I searched for a ref, but I don't think there is a relevant one. In a recent paper from Amit Singer (a big name in cryo-EM), they simply mention "The reconstruction of φ is possible up to three intrinsic ambiguities: a global 3-D rotation, the position of the center of the molecule (3-D location), and handedness. The latter symmetry, also called chirality, means that it is impossible to distinguish whether the molecule was reflected about a 2-D plane through the origin". Thus I suggest we don't include a ref.}
-% It was hence sufficient to only sample half the directions \banjac{$(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \pi[ $} (\figref{imaging-geometry}). % for \texttt{5j0n}
-That is the kind of physical knowledge that should ideally be built into the SiameseNN architecture.
-
-scale invariance?, in practice is to make $\G_w$ accept projections of any size $n_p$ as input, while yielding a representation $\f$ of size $n_f$ in all cases.
-That is achieved by an average pooling layer over the remaining pixels after six layers of convolutions and max pooling (see \apxref{siamese-architecture}).
-
-%\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
-% "fundamental issue with reconstruction in cryoEM in general."
-% at high resolutions, the handedness can be determined by the chirality of alpha helices
-% https://discuss.cryosparc.com/t/ab-initio-reconstruction-chirality-issue/2202
-\todo{After some experimentation, we ended up with the architecture described in \apxref{siamese-architecture} with $n_f=256$ (for all experiments). While it gave good performance for a reasonable runtime, it can be optimized further. Especially when training on more data (beyond our proof-of-concept).}
-% \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
-%SiameseNNs come with a variety of more or less powerful architectures.
-%At the current stage of development, we work with a simple one.
-%Our SiameseNN is composed of two convolutional neural networks (CNNs) with shared weights.
-%\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
 SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 We set the feature space distance $d_f$ as the cosine distance to facilitate the learning of a $\widehat{d_p}$ that respects the elliptic geometry of $\mathbb{S}^3$ (\apxref{siamese:feature-distance-and-embedding-dimension}).
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
+% $\frac{P^2-P}{2}$ is lower but we use P^2 in practice. Also, NN needs to learn d(p,p)=0 and is not necessarily symmetric depending on d_f.
+As evaluating a sum over $P^2$ pairs is computationally intractable,
+%for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
+we minimize \eqnref{distance-learning} with stochastic gradient descent (SGD) over small batches of pairs, and update the weights $w$ by back-propagation.
+% error / objective value
+
+The architecture of $\G_w$ is described in \apxref{siamese-architecture}.
+% with $n_f=512$.
+% \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
+%\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
+When designing an architecture, we constrain the functional space from which the trained $\G_w$ is drawn from and express our prior expert knowledge.
+% which then gives us a generalization guarantee.
+For example, we realize shift invariance, \ie, a guarantee that a shift $\mathbf{S_t}$ does not change our estimated distances and orientations, with a fully convolutional architecture.
+Size invariance, \ie, taking projections $\p$ of varying sizes $n_p$ while yielding a representation $\f$ of a fixed size $n_f$, is realized by a final average pooling layer.
+As we do not (yet) know how to realize an invariance to noise or PSF, we resort to data augmentation, \ie, training on perturbed projections.
+In \secref{results:distance-estimation:sensitivity}, we show that a built-in invariance (shift) is far preferable to one learned through augmentation (noise).
+Finally, as projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other.%
+\footnote{That fact prevents cryo-EM reconstructions to resolve chirality, \ie, they could not distinguish your left from your right hand.}
+%cannot tell whether the protein was mirrored.
+% chirality/handedness
+%A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.
+% \lau{I searched for a ref, but I don't think there is a relevant one. In a recent paper from Amit Singer (a big name in cryo-EM), they simply mention "The reconstruction of φ is possible up to three intrinsic ambiguities: a global 3-D rotation, the position of the center of the molecule (3-D location), and handedness. The latter symmetry, also called chirality, means that it is impossible to distinguish whether the molecule was reflected about a 2-D plane through the origin". Thus I suggest we don't include a ref.}
+That is another kind of physical knowledge that should ideally be built into our method.
+%\mdeff{Not only a rotation, but an integration through $z_3$. (As opposed projections are mirrored, we cannot resolve chirality. Projecting looses global orientation, integrating looses chirality.)}
+% "fundamental issue with reconstruction in cryoEM in general."
+% at high resolutions, the handedness can be determined by the chirality of alpha helices
+% https://discuss.cryosparc.com/t/ab-initio-reconstruction-chirality-issue/2202
+
 One could hope to train $\mathcal{G}_w$ to directly map projections to orientations as $\widehat{q_i} = \f_i = \G_w(\p_i)$.
 While that would avoid the orientation recovery step, a space of $n_f=4$ dimensions does not have room for $\mathcal{G}_w$ to represent the other factors of variation in $\p$, such as different noise levels, PSFs, or proteins.
 % While those factors can be represented, they are then abstracted by taking distances.
-We tested it in \apxref{siamese:feature-distance-and-embedding-dimension}.
-
-As evaluating a sum over $\frac{P^2-P}{2}$ pairs is computationally intractable,
-%for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
-we minimize \eqnref{distance-learning} with stochastic gradient descent (SGD) over small batches of pairs, and update weights by back-propagation.
-% error / objective value
+We tested that hypothesis in \apxref{siamese:feature-distance-and-embedding-dimension}.
 
 \subsection{Orientation recovery}\label{sec:method:orientation-recovery}
 %\subsection{Orientation recovery from relative orientations}
