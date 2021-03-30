@@ -30,16 +30,17 @@ Comparing the performance from \figref{recovery-nonuniform} and \figref{5j0n-noi
 \begin{figure}[ht!]
     \centering
     \begin{minipage}{.33\linewidth}
-        \begin{subfigure}[b]{0.99\linewidth}
+        \begin{subfigure}[b]{\linewidth}
             \centering
-            \includegraphics[height=6.5em]{figures/uniform_quaternion.png}%
-            \hspace{1em}%
-            \includegraphics[height=6.5em]{figures/uniform_angles.png}
-            \\ \vspace{2em}
-            \includegraphics[height=7em]{figures/5j0n-cvg2.pdf}
-            \hspace{1em}%
-            \includegraphics[height=7em]{figures/5a1a-cvg2.pdf}
-            \caption{Directions $(\theta_2, \theta_1)$ sampling on the sphere.}
+            \includegraphics[height=2.5cm]{figures/uniform_quaternion.png}%
+            \hfill
+            \includegraphics[height=2.5cm]{figures/uniform_angles.png}
+            \\ \vspace{0.2cm}
+            \includegraphics[height=2.5cm]{figures/5j0n-cvg2.pdf}
+            \hfill
+            \includegraphics[height=2.5cm]{figures/5a1a-cvg2.pdf}
+            \caption{Sampled directions $(\theta_2, \theta_1)$.}%
+            %\caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere (left) and from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
             \label{fig:orientation-sampling}
         \end{subfigure}
     \end{minipage}
@@ -48,35 +49,29 @@ Comparing the performance from \figref{recovery-nonuniform} and \figref{5j0n-noi
         \begin{subfigure}[b]{0.37\linewidth}
             \centering
             % \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
-            \includegraphics[height=8em]{figures/dQ_distribution_coverage.pdf}
+            \includegraphics[height=2.4cm]{figures/dQ_distribution_coverage.pdf}
             \caption{Distribution of distances $d_q$.}%
             \label{fig:orientation-sampling:distances}
+            \vspace{0.2cm}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.6\linewidth}
             \centering
-            \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_ang.pdf}
-            \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}
+            \includegraphics[height=2.4cm]{figures/uniform_quaternions_vs_angles_ang.pdf}
+            \caption{Distribution of Euler angles $\bth = (\theta_3,\theta_2,\theta_1)$.}%
             \label{fig:distribution-angles}
+            \vspace{0.2cm}
         \end{subfigure}
-        \\ \vspace{3em}
-        % \begin{subfigure}[b]{0.36\linewidth}
-        %     \centering
-        %     \includegraphics[height=7em]{figures/5j0n-cvg2.pdf}
-        %     \hspace{1em}%
-        %     \includegraphics[height=7em]{figures/5a1a-cvg2.pdf}
-        %     \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere (left) and from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
-        % \end{subfigure}
-        % \hfill
         \begin{subfigure}[b]{0.97\linewidth}
             \centering
-            \includegraphics[height=8em]{figures/uniform_quaternions_vs_angles_q.pdf}
-            \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}
+            \includegraphics[height=2.4cm]{figures/uniform_quaternions_vs_angles_q.pdf}
+            \caption{Distribution of quaternions $q = a + b\boldsymbol{i} + c\boldsymbol{j} + d\boldsymbol{k}$.}%
             \label{fig:distribution-quaternions}
         \end{subfigure}
     \end{minipage}
     \caption{%
         Sampling and distribution of ($P < 10,000$) orientations as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce: uniform from $\SO(3)$ (blue), uniform sampling of Euler angles (orange) both from $[0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ full sphere coverage, uniform of Euler angles from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere (green), and uniform on $\SO(3)$ from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere (red).
+        %Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
     }
 \end{figure}
 
@@ -84,35 +79,6 @@ Comparing the performance from \figref{recovery-nonuniform} and \figref{5j0n-noi
 % (to learn from asymmetric proteins like \texttt{5j0n})
 % (\eg, for proteins with D2 symmetry like \texttt{5a1a})
 %While the distributions flatten (compare with \figref{orientation-sampling:distances}), the shorter distances are still way under-sampled.
-
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[t]{0.32\linewidth}
-%         \centering
-%         %\includegraphics[height=7em]{figures/5j0n-half.png}
-%         % \includegraphics[height=9em]{figures/5j0n-cvg.pdf}
-%         \includegraphics[height=9em]{figures/5j0n-cvg2.pdf}
-%         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,2\pi[$, an half of the sphere.}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.32\linewidth}
-%         \centering
-%         % \includegraphics[height=9em]{figures/5a1a-cvg.pdf}
-%         \includegraphics[height=9em]{figures/5a1a-cvg2.pdf}
-%         \caption{Directions sampled from $(\theta_2, \theta_1) \in [0,\frac{\pi}{2}[ \, \times \, [0,\pi[$, a quarter of the sphere.}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.32\linewidth}
-%         \centering
-%         \includegraphics[height=9em]{figures/dQ_half_vs_quarter.pdf}
-%         \caption{Induced distribution of distances.
-%         }\label{fig:orientation-constraints:distances}
-%     \end{subfigure}
-%     \caption{%
-%         Distributions of $P=5,000$ directions $(\theta_2, \theta_1)$ as points on the sphere (see also \figref{imaging-geometry}), illustrating their constrained range, and the distances they induce.
-%         \mdeff{We might think about integrating this figure with \figref{orientation-sampling}.}
-%     }\label{fig:orientation-constraints}
-% \end{figure}
 
 \begin{figure}[ht!]
     \centering
