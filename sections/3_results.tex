@@ -93,7 +93,7 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
 \paragraph{Orientations.}
 Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
 \figref{euclidean-not-robust:5a1a-full} illustrates the problem.
-To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$, a quarter of the sphere as illustrated in \figref{orientation-sampling} (bottom right), for that protein.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}) for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
 %Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
@@ -115,13 +115,13 @@ We then perturbed the measurements with different levels of additive Gaussian no
 \paragraph{Datasets.}
 For each protein, we split the projections into training, validation, and test subsets; and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
 % which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations);
-The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN.
+The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN\@.
 %\banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment).}
 %to ensure that it did not include any projection that was previously seen during the distance learning.
 %Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
 % The sampling of orientations only matter for orientation recovery (test set).
 % For distance learning (training and validation sets),
-\figref{orientation-sampling:distances} shows that (mostly) uniform distributions of orientations induce distributions of distances that are skewed towards larger distances.
+Sampling orientations (mostly) uniformly induces a distribution of distances that is skewed towards larger distances (shown in \figref{orientation-sampling:distances}).
 As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
 % such that the distribution of distances was uniform (independently from the distribution of orientations)
 % The goal was to uniformly spread the distance estimation error over the range of distances.
@@ -129,7 +129,7 @@ As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1
 %We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 %\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 See \apxref{orientation-sampling} for further illustrations.
-While $1,650$ projections were enough to perfectly reconstruct the density maps,\footnote{We obtained an \todo{FSC of 1 across frequencies} by reconstructing from $1,650$ projections and their ground-truth orientations.} our method is not limited by the number of projections as optimization is done per batch.
+While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch.
 
 \paragraph{Optimization.}
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
@@ -457,7 +457,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init.pdf}
         %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
         \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_FSC_apr_init_customFSC2.pdf}
-        \caption{}
+        \caption{}\label{fig:5j0n-reconstruction-fsc}
     \end{subfigure}
 
     \vspace{1em}
@@ -492,12 +492,12 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_FSC_apr_init.pdf}
         % \includegraphics[height=2cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
         \includegraphics[height=2.5cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC2.pdf}
-        \caption{}
+        \caption{}\label{fig:5a1a-reconstruction-fsc}
     \end{subfigure}
     \caption{%
-        Density maps $\widehat{\x}$ reconstructed from \textbf{(a,f)} ground-truth orientations, \textbf{(b,g)} random orientations, \textbf{(c,h)} orientations recovered from noiseless projections, and \textbf{(d,i)} orientations recovered from noisy projections.
+        Density maps $\widehat{\x}$ reconstructed from (a,f) ground-truth orientations, (b,g) random orientations, (c,h) orientations recovered from noiseless projections, and (d,i) orientations recovered from noisy projections.
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        The FSC curves in \textbf{(e,j)} indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
+        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
         % \lau{Suggestions: 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field),}
     }\label{fig:reconstructions}
 \end{figure}
