@@ -2,7 +2,6 @@
 
 \todo{%
 \begin{itemize}
-    \item explain the maps (Euler/quaternion -> SO(3)) more, give intuition why quaternions are better
     \item sampled sum
 \end{itemize}
 }
@@ -68,9 +67,9 @@ A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product 
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
-While Euler angles are a concise representation of orientation ($3$ numbers for $3$ degrees of freedom), they suffer from a topological constraint (there is no covering map from the $3$-torus to $\SO(3)$) which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
+While Euler angles are a concise representation of orientation ($3$ numbers for $3$ degrees of freedom), they suffer from a topological constraint---there is no covering map from the $3$-torus to $\SO(3)$---which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
 This makes their optimization by gradient descent (\secref{method:orientation-recovery}) problematic.
-On the other hand, the optimization of rotation matrices---made of $9$ numbers---would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
+On the other hand, the optimization of rotation matrices (made of $9$ numbers) would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
 We solve both problems by representing orientations with unit quaternions.
 
@@ -87,7 +86,8 @@ They parameterize rotation matrices as
     \end{pmatrix}.
 \end{equation*}
 %Composition of rotations is given by multiplications of quaternions.
-Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation, \ie, antipodal points of $\mathbb{S}^3$ are equivalent.
+Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation.
+%, \ie, antipodal points of $\mathbb{S}^3$ are equivalent.
 % q=-q is like rotation by the negated angle in the opposed direction
 %\paragraph{Distances.}
 Unlike Euler angles, $\mathbb{S}^3$ is isomorphic to the universal cover of $\SO(3)$.
@@ -100,7 +100,7 @@ Hence, the distance between two orientations, \ie, the length of the geodesic be
     \end{aligned}
 \end{equation}
 where $\langle \cdot, \cdot \rangle$ is the inner product and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
-The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle) of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
+The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle $\theta$) of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
 
