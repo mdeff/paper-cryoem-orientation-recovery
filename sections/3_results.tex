@@ -6,11 +6,11 @@
 % \end{itemize}
 
 % Feasibility (one component).
-We started by evaluating whether orientation recovery \eqnref{orientation-recovery} was feasible assuming perfect distances, and how it was affected by errors in distance estimations (\secref{results:orientation-recovery:sensitivity}).
-We then learned to estimate distances \eqnref{distance-learning} and evaluated how accurate they were (\secref{results:distance-estimation:learned}).
+We first evaluated whether orientation recovery through \eqnref{orientation-recovery} was feasible assuming perfect distances, and how it was affected by errors in the distances (\secref{results:orientation-recovery:sensitivity}).
+We then learned to estimate the distances through \eqnref{distance-learning} and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}).
 % Real stuff (the two steps together).
-Following this, we evaluated the robustness of distance learning to perturbations of the projections and its transferability to unseen proteins (\secref{results:distance-estimation:sensitivity}).
-Finally, we ran the whole machinery to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (\secref{results:orientation-recovery:reconstruction}).
+Following this, we evaluated the robustness of distance learning to perturbations in the projections (\secref{results:distance-estimation:sensitivity}).
+Finally, we ran the whole machinery on a simplified synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (\secref{results:orientation-recovery:reconstruction}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -19,7 +19,7 @@ Finally, we ran the whole machinery to assess how well orientations could be rec
 \paragraph{Density maps.}
 We considered two proteins (\figref{pdb-proteins}): the $\beta$-galactosidase, a protein with a dihedral (D2) symmetry~\cite{noauthor_d2sym_nodate}, and the lambda excision HJ intermediate (HJI), an asymmetric protein with local cyclic (C1) symmetry.
 Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal} and \texttt{5j0n}~\cite{laxmikanthan2016structure}, respectively.
-From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a}, and $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
+From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting the models with a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a} and one of $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
 % -sized volume
 
 \begin{figure}[ht!]
@@ -90,9 +90,9 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
     \end{minipage}
 \end{figure}
 
-\paragraph{Orientations.}
-Symmetries are problematic to learn distances: two projections can be identical while not having been acquired from the same orientation---breaking an axiom of proper distance functions.
-\figref{euclidean-not-robust:5a1a-full} illustrates the problem.
+\paragraph{Handling of Symmetry.}
+Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles).
+\figref{euclidean-not-robust:5a1a-full} illustrates this problem.
 To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}) for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
@@ -102,7 +102,7 @@ To capture only one of four identical projections of \texttt{5a1a}, we restricte
 % symmetries/projections will collapse/overlap/be identified/grouped
 % indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
-This treatment of symmetries is incomplete\footnote{\todo{Explain. TODO: discuss together the treatment of symmetries.}} but sufficient for a proof-of-concept.
+This treatment of symmetries is incomplete\footnote{\todo{TODO: Briefly discuss this.}} but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (then interpolated to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
@@ -113,7 +113,7 @@ We then perturbed the measurements with different levels of additive Gaussian no
 
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Datasets.}
-For each protein, we split the projections into training, validation, and test subsets; and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
+For each protein, we split the projections into training, validation, and test subsets, and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
 % which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations);
 The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN\@.
 %\banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment).}
@@ -122,19 +122,19 @@ The training and validation sets were used to train and evaluate the SiameseNN, 
 % The sampling of orientations only matter for orientation recovery (test set).
 % For distance learning (training and validation sets),
 Sampling orientations (mostly) uniformly induces a distribution of distances that is skewed towards larger distances (shown in \figref{orientation-sampling:distances}).
-As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances.
+As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1\%$ of the training and validation pairs to make the distribution of distances uniform---for $\widehat{d_p}$ to be uniformly accurate over the whole $[0,\pi]$ range of distances
 % such that the distribution of distances was uniform (independently from the distribution of orientations)
 % The goal was to uniformly spread the distance estimation error over the range of distances.
 %\mdeff{So those pairs are sampled from $63,126$ pairs from the training dataset, rather than the $P^2$ possible pairs? If true, we should motivate somewhere why we limit our training dataset.}
 %We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 %\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
-See \apxref{orientation-sampling} for further illustrations.
+(see \apxref{orientation-sampling} for further illustrations).
 While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch.
 
 \paragraph{Optimization.}
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
-With batches of $256$ pairs, that was $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
+Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
 It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. Our code can train faster on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (\eg, not a day or a week).}
@@ -143,7 +143,7 @@ It took about $3.75$ hours of a single Tesla K40c (without early stopping).
 %Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
 We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-It took about 50 minutes of CPU.
+This took about 50 minutes of CPU.
 % 8 minutes per run => 6*8 = 48 minutes
 % ($\sim$ 50 minutes in the best resource availability setting)
 
@@ -165,7 +165,7 @@ More precisely, we perturbed the distances prior to the minimization with an err
 %More accurate distance estimation leads to more accurate orientation recovery,
 These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 
-Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real not simulated projections).
+Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real projections).
 %Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
 %Hence, it has practical implications for our future works on real data.
 
@@ -253,27 +253,25 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
-We evaluated how well our SiameseNN could learn \eqnref{distance-learning} to approximate the orientation distance $d_q$.
+We evaluated the ability of the SiameseNN to learn to approximate the orientation distance $d_q$ through \eqnref{distance-learning}.
 % ---parameterized as a SiameseNN and trained---
 % to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation:euclidean}.
 
-\figref{distance-learning:loss} shows how $L_\text{DE}$ converged in about 50 epochs.
+\figref{distance-learning:loss} shows the convergence of the $L_\text{DE}$, reached in about 50 epochs.
 %\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
-We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
-A large overfitting indicates that the distance trained on projections drawn from training sets fail to generalize to unseen projections drawn from validation sets.
-That is a first suggestion (see again in \secref{results:orientation-recovery:reconstruction}) that \texttt{5a1a} is harder than \texttt{5j0n}.
-We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
+%We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
+%A large overfitting indicates that the distance trained on projections drawn from training sets fail to generalize to unseen projections drawn from validation sets.
+%That is a first suggestion (see again in \secref{results:orientation-recovery:reconstruction}) that \texttt{5a1a} is harder than \texttt{5j0n}.
+%We have two hypotheses: Some proteins have 3D density maps whose projections with close orientations are harder to distinguish from one another.
 % not hard symmetries, but similarities
 %We might have miss-handled its symmetry (\secref{results:data}).
 %\todo{Think about this: why is \texttt{5a1a} harder than \texttt{5j0n}?}\banjac{Not anymore}
 % \mdeff{$275 \times 275$ vs $116 \times 116$ projection size? The former induces a larger average pooling size, \ie, it's harder for $\G_w$ to see more global features.}
-
 %\todo{This is most likely due to the symmetry of the protein (even though a quarter-sphere coverage was used.
 %Indeed, its synthetic dataset may still contain pairs of projections that share the same $d_p$, yet differ in their $d_q$.
 %This  advocates for restricting to non-overlapping areas of $\SO(3)$ the sampling of the orientations used to generate the training dataset.
 %The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.}
-
 \figref{distance-learning:dpdq} shows the relationship between the distance $\widehat{d_p}$ estimated from projections and the true distance $d_q$.
 As expected, distances were better estimated for \texttt{5j0n} than \texttt{5a1a}.
 While our learned distance function is a much better estimator than the Euclidean distance---compare \figref{distance-learning:dpdq} with \figref{euclidean-not-robust}---they share one characteristic: both plateau and underestimate the largest distances.
@@ -285,9 +283,8 @@ That would however require the addition of a spreading term in \eqnref{orientati
 Outliers are explained by our incomplete treatment of symmetries.
 
 % proxy distance
-These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone.
-They are encouraging; indeed, much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
-Moreover, more training data will diminish overfitting.
+These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone, even though much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
+The use of additional training data should help further diminish overfitting.
 % Recurring theme.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -300,25 +297,26 @@ Moreover, more training data will diminish overfitting.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
-We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
-As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
-\figref{results:distance-estimation:shift} indeed shows that learning distances (and hence recovering orientations) is insensible to off-centering shifts.
+We first demonstrated that the learning of the distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the built-in shift invariance of the SiameseNN. 
+%We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
+%As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
+% indeed shows that learning distances (and hence recovering orientations)
 
 % Noise.
-As we cannot---or do not yet know how to---build noise invariance into the architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to ignore noise as being irrelevant information.
+As we cannot---or do not yet know how to---build noise invariance into the SiameseNN architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$12$ dB). 
 %\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
-While a naive distance function (like an Euclidean distance) would be tremendously sensitive to noise, the SiameseNN mostly learned to discard it.
-Moreover, overfitting (\ie, the growing gap between the validation and training losses) indicates that more training data will further decrease the SiameseNN's sensitivity to noise.
+Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SiameseNN mostly learned to discard it.
+Moreover, the observed overfitting indicates that more training data should further decrease the sensitivity of the SiameseNN to noise.
 
 % PSF and conclusion.
-We didn't evaluate sensitivity to the PSF but expect a similar behavior.
+Note that we did not evaluate sensitivity to the PSF at this stage but expect a similar behavior.
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
 %We know how to do it for shifts, not noise or PSF.
 
-We observe again (\secref{results:orientation-recovery:sensitivity}) that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and (ii) that an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
+Here again (\secref{results:orientation-recovery:sensitivity}), we observed again  that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and that (ii) an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
 \begin{figure}[ht!]
     \centering

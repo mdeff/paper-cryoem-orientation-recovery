@@ -2,7 +2,7 @@
 
 Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field of structural biology over the last decades~\cite{dubochet1988cryo, frank2006three, chap0-nat2015MethodYear}.
 The use of electron beams to image ice-embedded samples has permitted the recovery of 3D bio-structures at unprecedented resolution.
-This advent of atomic-resolution cryo-EM has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
+This ``resolution revolution'' has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
 
 In single-particle cryo-EM, every 3D particle adopts a random orientation $\bth_i$ in the ice layer before being imaged with parallel beams of electrons.
 Hence, the projection geometry associated to each acquired 2D projection (\figref{imaging-geometry}) is unknown.
@@ -18,10 +18,10 @@ where $\x \in \R^{n_x}$ is the unknown 3D density map~\cite{dimaio_creating_2007
 The operator $\mathbf{P}_{\bth_i}: \R^{n_x} \to \R^{n_p}$ is the projection along the orientation $\bth_i$ (\ie, the x-ray transform).
 % consistency: 3D pose = orientation
 The operator $\mathbf{S}_{\mathbf{t}_i}: \R^{n_p} \to \R^{n_p}$ is a shift of the projection by $\mathbf{t}_i = (t_{i_1}, t_{i_2})$.
-The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism.
+The convolution operator $\mathbf{C}_{\boldsymbol\varphi}: \R^{n_p} \to \R^{n_p}$ models the microscope point-spread function (PSF) with parameters $\boldsymbol\varphi = (d_1, d_2, \alpha_\mathrm{ast})$, where $d_1$ is the defocus-major, $d_2$ is the defocus-minor, and $\alpha_\mathrm{ast}$ is the angle of astigmatism~\cite{vulovic_image_2013,rullgard_simulation_2011}.
 Finally, $\mathbf{n} \in \R^{n_p}$ represents additive noise.
 \figref{different-projections} illustrates the effect of projection, shift, and noise.
-The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ acquired along unknown orientations.
+The challenge is then to reconstruct $\x$ from a set of projections $\{\p_i\}_{i=1}^P$ acquired along unknown orientations.
 %\mdeff{We shall decompose $\mathbf{P}_{\bth_i}$ into a rotation $R(\bth_i)$ and an integration.} \lau{The most straightforward way is to simply rewrite $P_theta$ as a rotation operator, followed by a summation operator along lines. That being said, now that I look at it, I would suggest not to rewrite it like this; this is really not so standard in the cryo-EM community. Plus everyone now that the rotation operator is implicitly contained in the projection one, so it's not really needed either.}
 
 % \tdplotsetmaincoords{60}{110}
@@ -87,8 +87,8 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
         \centering
         \includegraphics[height=0.7\linewidth]{intuition-method}
         \caption{%
-            Single-particle cryo-EM produces $P$ in the order of $10^5$ projections taken from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
-            Observing that distances between orientations constrain them, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where $d_q(q_i, q_j)$ is the distance (angle) between orientations $q_i$ and $q_j$.
+            Single-particle cryo-EM produces $P$ projections (with $P$ in the order of $10^5$) from unknown orientations: $\{(\p_i, q_i)\}_{i=1}^P$.
+            Observing that distances between orientations constrain the latter, we aim to \textit{recover the orientations} $\{q_i\}$ from $\{d_q(q_i, q_j)\}$, where $d_q(q_i, q_j)$ is the distance (angle) between orientations $q_i$ and $q_j$.
             Observing that the similarity between projections depends on their relative orientation, we aim to \textit{estimate the distance} $d_q(q_i, q_j)$ from the projections $(\p_i, \p_j)$.
             % \todo{The projections don't look to be on the surface of the sphere: They should be on tangent planes.}
             % \todo{The gray line to the center is the projection direction to be labeled $(\theta_1, \theta_2)$ with a color consistent with \figref{imaging-geometry}.}
@@ -99,8 +99,8 @@ The overall challenge is to reconstruct $\x$ from a set of projections $\{\p_i\}
 
 % RELATED WORKS
 
-A popular approach is to alternatively refine the 3D structure and an estimation of orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}.
-Unfortunately, the outcome of these iterative-refinement procedures is most often predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
+A popular approach is to alternatively refine the 3D structure and an estimation of the orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}.
+Yet, the outcome of these iterative-refinement procedures is still often predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
 
 Several methods have been designed to produce a first rough \textit{ab initio} structure for the refinement procedure~\cite{singer2020computational}.
 An early approach~\cite{kam1980reconstruction} proposed to reconstruct an initial structure such that the first few moments of the distribution of its theoretical measurements match the ones of its experimental projections.
@@ -112,20 +112,19 @@ Hence, every two projections \textit{de facto} share a common 1D intersection in
 Exploiting this principle, \textit{common-lines} methods aim at uniquely determining the orientations of each projection by identifying the common-lines between triplets of projections~\cite{penczek1994ribosome,mallick2006structure,singer2010detecting,wang2013orientation,greenberg2017common,pragier2019common}---a real technical challenge given the massive amount of noise in cryo-EM data.
 %If needs be for downside: sensitivity to high-noise levels, small particles, etc.
 
-Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
+Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem~\cite{sigworth1998maximum}---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
 This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability.
-More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward.
+More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward. \todo{Mdeff can you please add a sentence on the Holmes paper.}
 
 Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
 %\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.} 
-On the other hand, \todo{why ML can help (good forward model for training, plenty of data, well-studied modality (images) with known high-performing NN architectures).}
-In this work, we present a new approach to estimate the unknown orientations in SPA directly from the acquired dataset of projections, hence bypassing some of the aforementioned limitations.
+On the other hand, machine-learning techniques have had a profound influence in imaging in reason of their remarkable ability to autonomously capture data representations~\cite{lecun2015deep}. 
+
+In this work, we present a new learning-based approach to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset of projections, hence bypassing some of the aforementioned limitations.
 % \mdeff{That's method:} The novelty consists in first estimating the relative distances between pairs of projections (by using a Siamese neural network previously trained on a synthetic dataset), and then recovering the absolute orientation of each projections from these relative distances.
-By doing so, the recovery of the orientations can be achieved without the need for any intermediate reconstruction procedure or initial volume estimate, which has useful implications for SPA\@.
-\mdeff{``bypassing some limitations'' and ``has useful implications'' are too vague IMO\@. Could we be more specific? Not on the how (that's the method) but on the why. Think about an ML audience.}
-\mdeff{Idea: Our method is direct (as opposed to iterative refinement schemes) and does not require any prior model of the reconstructed protein.}
+By doing so, the recovery of the orientations can be achieved without the need for any intermediate reconstruction procedure or initial volume estimate. %, which has useful implications for SPA\@.
+%\mdeff{``bypassing some limitations'' and ``has useful implications'' are too vague IMO\@. Could we be more specific? Not on the how (that's the method) but on the why. Think about an ML audience.}
+%\mdeff{Idea: Our method is direct (as opposed to iterative refinement schemes) and does not require any prior model of the reconstructed protein.}
 %Our two-step method  learns to estimate the unknown orientation $\bth_i$ (represented by a unit quaternion $q_i$) associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
-
-
 
 %\mdeff{Content. (p1) Why is the general problem of protein reconstruction important and difficult. (p2) Short background on single-particle cryo-EM and how reconstruction is done. (p3) Previous work on orientation estimation (or initial structure estimation). If there's none (because people have researched other routes), state it and write why it's an interesting route to explore. How does it compare to initial rough structure estimation? Or whatever the other routes are. (p4) Our contribution on top of previous work.}
