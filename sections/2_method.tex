@@ -38,7 +38,7 @@ While the authors are concerned with the reconstruction of 2D images from 1D pro
 % The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
 The Euclidean distance is however not robust to perturbations:
 For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
-They noted that issue and we observed it too (\apxref{results:distance-estimation}), hence we propose to \textit{learn} $\widehat{d_p}$ from examples (\secref{method:distance-learning}).
+They noted that issue and we observed it too (\apxref{results:distance-estimation:euclidean}), hence we propose to \textit{learn} $\widehat{d_p}$ from examples (\secref{method:distance-learning}).
 % optimization vs eigenvectors (sensibility to outliers?)
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.

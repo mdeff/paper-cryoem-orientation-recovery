@@ -110,11 +110,11 @@ Orientations were perfectly recovered.
 It illustrates how alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.35\linewidth}
+    \begin{minipage}[t]{0.30\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         % \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
-        \includegraphics[height=3.5cm]{figures/5a1a_quartercov_uniformS2_perfect_ar_aa}
+        \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_perfect_ar_aa}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5a1a}).
             The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
@@ -122,7 +122,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.63\linewidth}
+    \begin{minipage}[t]{0.66\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -140,7 +140,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
-            \includegraphics[height=3.5cm]{figures/BeforeAA.pdf}
+            \includegraphics[height=3cm]{figures/BeforeAA.pdf}
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
@@ -148,7 +148,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
-            \includegraphics[height=3.5cm]{figures/AfterAA.pdf}
+            \includegraphics[height=3cm]{figures/AfterAA.pdf}
             \caption{Orientations after alignment.}
         \end{subfigure}
         \caption{%
@@ -162,46 +162,18 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
     \end{minipage}
 \end{figure}
 
-\section{Euclidean distance between projections}\label{apx:results:distance-estimation}
-% Orientation distance as, Estimating distances with
+\section{Euclidean distance between projections}\label{apx:results:distance-estimation:euclidean}
 
 %\mdeff{Story: simplest baseline estimator, $d_{pe}$ somewhat estimates $d_q$, quickly plateaus (even in the simplest noiseless and centered case).
 %Note the difference between symmetric and asymmetric proteins.}
 
-We evaluate $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
-From $P = 5,000$ possible projection, we randomly select $5$ projections.
-For each of these projections, we compute the Euclidean distance between aforementioned projection and all the others $d_p(\mathbf{p}_i,\mathbf{p}_j)=\lVert\mathbf{p}_i-\mathbf{p}_j\rVert_2$ and their corresponding orientation distance $d_q(q_i,q_j)$ through~\eqnref{distance:orientations}.
-We then report the $(d_q,d_p)$ relationship for all pairs in \figref{euclidean-not-robust}, for full 2-sphere directions coverage (\figref{euclidean-not-robust:5j0n-full}) on \texttt{5j0n}, and quarter and full 2-sphere direction coverage (\figref{euclidean-not-robust:5a1a-quarter} and \figref{euclidean-not-robust:5a1a-full}, respectively) on \texttt{5a1a}.
-
+We evaluate $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
+\figref{euclidean-not-robust} shows the relationship between $\widehat{d_p}$ and $d_q$.
 Two principal observations can be made from this experiment.
 First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
-In particular, the larger the quaternion distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
-The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \texttt{5a1a} (\figref{euclidean-not-robust:5a1a-full}) appears to take symmetric shape of letter \texttt{M} which can be explained with the fact that this protein has intrinsic dihedral (D2) symmetry. Constraining the direction sampling on the quarter sphere (\figref{euclidean-not-robust:5a1a-quarter}) seems to circumvent the symmetry issue.
-%\mdeff{Check these refs. Other ones are used in main text?}
-
-% \begin{figure}[ht!]
-%     \begin{minipage}[t]{0.57\linewidth}
-%         \begin{subfigure}[t]{0.48\textwidth}
-%             \centering
-%             \includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}
-%             \caption{\texttt{5j0n}}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[t]{0.48\textwidth}
-%             \centering
-%             \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
-%             \caption{\texttt{5a1a}}\label{fig:euclidean-not-robust:5a1a}
-%         \end{subfigure}
-%         \caption{%
-%             The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with the half-sphere direction coverage.
-%             Each color represent the distances between one fixed projection and the other $P-1$ projections.
-%     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
-%             While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
-%             Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-%             \mdeff{Is there a reason (other than historical) for those dPdQ plots to be different (w.r.t.\ how distances are sampled) from the ones in \figref{distance-learning:dpdq} and \figref{geo-eucl-mlp}?}
-%         }\label{fig:euclidean-not-robust}
-%     \end{minipage}
-% \end{figure}
+In particular, the larger the orientation distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
+Second, because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
+Restricting directions to a quarter capture only one of four identical projections, solving the issue.
 
 \begin{figure}
     \begin{minipage}[t]{0.99\linewidth}
@@ -209,39 +181,34 @@ The other interesting observation is that the trend of $(d_q,d_p)$ plot of the \
             \centering
             %\includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}   % on half-sphere
             %\includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
-            \includegraphics[height=5cm]{figures/dPdQ_5j0n_euclidean2}
-            \caption{Full directions coverage on \texttt{5j0n}}
+            \includegraphics[height=3cm]{figures/dPdQ_5j0n_euclidean2.pdf}
+            \caption{Full direction coverage on \texttt{5j0n}.}%
             \label{fig:euclidean-not-robust:5j0n-full}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.33\textwidth}
-            \centering
-            %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
-            %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
-            \includegraphics[height=5cm]{figures/dPdQ_5a1a_euclidean2}
-            \caption{Quarter directions coverage on \texttt{5a1a}}
-            \label{fig:euclidean-not-robust:5a1a-quarter}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.33\textwidth}
             \centering
             % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
             % \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
-            \includegraphics[height=5cm]{figures/dPdQ_5a1a_full_euclidean2}
-            \caption{Full directions coverage on \texttt{5a1a}}
+            \includegraphics[height=3cm]{figures/dPdQ_5a1a_full_euclidean2.pdf}
+            \caption{Full direction coverage on \texttt{5a1a}.}%
             \label{fig:euclidean-not-robust:5a1a-full}
         \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.33\textwidth}
+            \centering
+            %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
+            %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
+            \includegraphics[height=3cm]{figures/dPdQ_5a1a_euclidean2.pdf}
+            \caption{Quarter direction coverage on \texttt{5a1a}.}%
+            \label{fig:euclidean-not-robust:5a1a-quarter}
+        \end{subfigure}
         \caption{%
-            The Euclidean distance between two projections $d_p(\p_i, \p_j) = \Vert \p_i - \p_j \Vert_2$ versus their actual relative orientation $d_q(q_i, q_j)$ with full-sphere direction coverage for \texttt{5j0n} (a), quarter-sphere direction coverage for \texttt{5a1a} (b), and full-sphere direction coverage for \texttt{5j0n} (c) on 5,000 pairs sampled for each of 5 randomly selected fixed projections.
+            Euclidean distance between projections $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
+            From $P = 5,000$ possible projection, we randomly selected $5$ projections.
             Each color represent the distances between one fixed projection and the other $P-1$ projections.
     %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
-            While there is some correlation, especially at small distances, the Euclidean distance is a poor estimator.
-            Because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-            % \banjac{Old plot is commented out. You can choose the one you prefer. This one has the same settings as all other.}
-            % \mdeff{Mmmh the old one better showed shorter distances. Could we get that by showing more pairs? Otherwise we can keep the old way.}
-            % \mdeff{Either way, can we show full-coverage on \texttt{5a1a} in a third plot? So we can use this figure to illustrate the issue of symmetry.}
-            % \banjac{More pairs. The full-cvg for \texttt{5a1a} is added.}
-            % \mdeff{Thanks! I think the old kind of plots illustrates it better. Can we have the three conditions in the old style?}
+            \todo{Make the plots flatter. Larger text. Remove the legend (we explain it and it's two small anyway).}
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}
