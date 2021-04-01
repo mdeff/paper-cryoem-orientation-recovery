@@ -102,7 +102,7 @@ To capture only one of four identical projections of \texttt{5a1a}, we restricte
 % symmetries/projections will collapse/overlap/be identified/grouped
 % indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
-This treatment of symmetries is incomplete\footnote{\todo{TODO: Briefly discuss this.}} but sufficient for a proof-of-concept.
+This treatment of symmetries is incomplete\footnote{\banjac{The extension to make it symmetry invariant is needed.}} but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (then interpolated to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
@@ -135,7 +135,8 @@ While $1,650$ projections were enough to perfectly reconstruct the density maps 
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. Our code can train faster on multiple GPUs.
+It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. 
+Our code has a support for multiple GPUs training.
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (\eg, not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
