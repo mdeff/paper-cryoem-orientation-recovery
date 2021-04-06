@@ -135,8 +135,8 @@ While $1,650$ projections were enough to perfectly reconstruct the density maps 
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c. 
-Our code has a support for multiple GPUs training.
+It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c.
+Our code supports training on multiple GPUs.
 % 2.6 to 9.3 hours depending on available resources.
 % \mdeff{We just want a ball-park (\eg, not a day or a week).}
 We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
@@ -144,7 +144,7 @@ It took about $3.75$ hours of a single Tesla K40c (without early stopping).
 %Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
 We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
 We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-This took about 50 minutes of CPU.
+This took about 50 minutes of CPU\@.
 % 8 minutes per run => 6*8 = 48 minutes
 % ($\sim$ 50 minutes in the best resource availability setting)
 
