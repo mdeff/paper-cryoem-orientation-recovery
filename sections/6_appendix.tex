@@ -288,7 +288,7 @@ There are multiple options for a distance function $d_f$ between two features $\
 % the projection pairs deviate the least from the identity
 This superiority of the cosine distance is likely due to its capacity to model the elliptic geometry of $\SO(3)$, a feat the Euclidean distance does not achieve, the Euclidean space being neither periodic nor curved.
 %The $\SO(3)$ is non-linear and it can be explained with the fact that Euclidean distance of two quaternions can be small, despite the rotation being large~\cite{huynh_metrics_2009,DBLP:journals/corr/abs-1805-01026}.
-We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were unable to train it.
+%We also tried to parametrize $d_f$ as a multi-layer perceptron (MLP) but were unable to train it.
 
 % The MLP we tested was made of six layers with $1024, 512, 512, 256, 256, 1$ units, all of which use the SeLU activation function.
 % The features $\f_i$ and $\f_j$ were stacked as an array of size $2n_f$ before being fed to the MLP\@.
