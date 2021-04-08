@@ -300,7 +300,7 @@ The use of additional training data should help further diminish overfitting.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
-We first demonstrated that the learning of the distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the built-in shift invariance of the SiameseNN. 
+We first demonstrated that the learning of the distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the built-in shift invariance of the SiameseNN.
 %We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 %As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
 % indeed shows that learning distances (and hence recovering orientations)
@@ -308,7 +308,7 @@ We first demonstrated that the learning of the distances is insensible to off-ce
 % Noise.
 As we cannot---or do not yet know how to---build noise invariance into the SiameseNN architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
-\figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$12$ dB). 
+\figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$12$ dB).
 %\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SiameseNN mostly learned to discard it.
@@ -365,8 +365,8 @@ Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orienta
 A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}.
 Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
 
-To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the ground-truth orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox using GPU implementation of the CGLS algorithm for 3D data sets. 
-The results are displayed in~\figref{reconstructions}, and tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method. 
+To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the ground-truth orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox using GPU implementation of the CGLS algorithm for 3D data sets.
+The results are displayed in~\figref{reconstructions}, and tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method.
 %\lau{\textit{We don't need to keep what follows anymore, right?} The rationale behind not comparing directly with the original ground-truth (\figref{pdb-proteins}) is that the robustness of the reconstruction method can impact the quality of the reconstruction when only few projections are considered, which was the case here (only $1,650$ projections).}
 
 In conclusion, the more accurate the estimation of the pairwise distances, the higher the quality of the orientation recovery, which leads to reconstructions with a higher resolution. %This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
