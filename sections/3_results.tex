@@ -90,7 +90,7 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
     \end{minipage}
 \end{figure}
 
-\paragraph{Handling of Symmetry.}
+\paragraph{Protein symmetries.}
 Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles).
 \figref{euclidean-not-robust:5a1a-full} illustrates this problem.
 To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}) for that protein.
@@ -102,7 +102,9 @@ To capture only one of four identical projections of \texttt{5a1a}, we restricte
 % symmetries/projections will collapse/overlap/be identified/grouped
 % indicating the symmetries. The reconstructed subunit can then be copied over.
 % \ie, it is composed of four identical sub-units with two rotations of magnitude $\pi$ radians around the first axis followed by $\pi$ radians rotation around second axis, as illustrated and explained in~\cite{symmetry_in_protein,symmetry,scipion-em-github, rcsb-symmetry-view, EmpereurMot2019GeometricDO}.
-This treatment of symmetries is incomplete\footnote{\banjac{The extension to make it symmetry invariant is needed.}} but sufficient for a proof-of-concept.
+This treatment of symmetries is incomplete%
+\footnote{The remaining issue is that one of four distances is arbitrarily chosen per pair of projections.}
+but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
 Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (then interpolated to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
@@ -274,14 +276,14 @@ For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) 
 %This  advocates for restricting to non-overlapping areas of $\SO(3)$ the sampling of the orientations used to generate the training dataset.
 %The latter would then only contain projection pairs with a linear $(d_q,d_p)$ relationship, which should ensure a successful training of the network.}
 \figref{distance-learning:dpdq} shows the relationship between the distance $\widehat{d_p}$ estimated from projections and the true distance $d_q$.
-As expected, distances were better estimated for \texttt{5j0n} than \texttt{5a1a}.
+%As expected, distances were better estimated for \texttt{5j0n} than \texttt{5a1a}.
+The outliers for \texttt{5a1a} are explained by our incomplete treatment of its symmetry.
 While our learned distance function is a much better estimator than the Euclidean distance---compare \figref{distance-learning:dpdq} with \figref{euclidean-not-robust}---they share one characteristic: both plateau and underestimate the largest distances.
 We did attenuate the phenomenon by sampling training distances uniformly (see \secref{results:data}), and the issue is much less severe than with the Euclidean distance.
 %\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training?}
 %While the impact on orientation recovery is unclear
 An alternative could be to discard larger distances and only rely on smaller distances for recovery.
 That would however require the addition of a spreading term in \eqnref{orientation-recovery} to prevent the recovered orientations to collapse.
-Outliers are explained by our incomplete treatment of symmetries.
 
 % proxy distance
 These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone, even though much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
@@ -371,7 +373,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}[b]{0.26\linewidth}
+    \begin{subfigure}[b]{0.251\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_ar_aa_fullcvg_uniform2}
         \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
@@ -379,7 +381,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.232\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_fullcov_noise16_ar_aa}
         \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
@@ -387,7 +389,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.26\linewidth}
+    \begin{subfigure}[b]{0.251\linewidth}
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         % \includegraphics[width=\linewidth]{figures/5a1a_noise0_ar_aa.pdf}
@@ -396,7 +398,7 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
         }%
         \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
-    \begin{subfigure}[b]{0.23\linewidth}
+    \begin{subfigure}[b]{0.232\linewidth}
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise16_LAST_ar_aa.pdf}
