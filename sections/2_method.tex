@@ -34,11 +34,11 @@ All in all, from a set of projections $\{\p_k\}$, we aim to recover their orient
 % 2. Reference free structure determination through eigenvectors of center ofmass operators
 % 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
 Our approach is similar to~\cite{coifman2008graphprojections}.
-While the authors are concerned with the reconstruction of 2D images from 1D projections, they use the same two-step approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
+While the authors are there concerned with the reconstruction of 2D images from 1D projections, they rely on the same two-step approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
 % The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
 The Euclidean distance is however not robust to perturbations:
-For example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
-They noted that issue and we observed it too (\apxref{results:distance-estimation:euclidean}), hence we propose to \textit{learn} $\widehat{d_p}$ from examples (\secref{method:distance-learning}).
+for example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
+They noted that issue and we observed it too (\apxref{results:distance-estimation:euclidean}). To circumvent this, we propose to \textit{learn} $\widehat{d_p}$ from examples (\secref{method:distance-learning}).
 % optimization vs eigenvectors (sensibility to outliers?)
 
 %We propose to learn a function---parametrized as a neural network---to predict the relative orientation between two projections based on their similarity.
@@ -93,7 +93,7 @@ Hence, the distance between two orientations, \ie, the length of the geodesic be
     \label{eqn:distance:orientations}
     \end{aligned}
 \end{equation}
-where $\langle \cdot, \cdot \rangle$ is the inner product and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
+where $\langle \cdot, \cdot \rangle$ is the inner product, and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
 The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle $\theta$) of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
@@ -182,7 +182,7 @@ The architecture of $\G_w$ is described in \apxref{siamese-architecture}.
 % with $n_f=512$.
 % \mdeff{Architecture of $G_w$ doesn't seem to matter much. Surprising, because we don't overfit $\rightarrow$ future research needed.}
 %\todo{Jelena: could we say some words on how you selected the NN architecture? And hyperparameters selection and tuning of the neural network layers,}
-When designing an architecture, we constrain the functional space from which the trained $\G_w$ is drawn from and express our prior expert knowledge.
+When designing an architecture, we constrain the functional space from which the trained $\G_w$ is drawn and express our prior expert knowledge.
 % which then gives us a generalization guarantee.
 For example, we realize shift invariance, \ie, a guarantee that a shift $\mathbf{S_t}$ does not change our estimated distances and orientations, with a fully convolutional architecture.
 Size invariance, \ie, taking projections $\p$ of varying sizes $n_p$ while yielding a representation $\f$ of a fixed size $n_f$, is realized by a final average pooling layer.
@@ -223,7 +223,7 @@ Indeed, despite the non-convexity and the lack of theoretical guarantees, we are
 
 We recover the orientations of a set of projections $\big\{ \mathbf{p}_k \big\}_{k=1}^P$ through
 \begin{equation}
-    \big\{ \widehat{q_k} \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} L_\text{OR}
+    \big\{ \widehat{q_k} \big\}_{k=1}^P = \argmin_{\{q_k \in \mathbb{S}^3\}} L_\text{OR},
     \quad \text{where} \quad
     L_\text{OR} = \sum_{i,j} \left| \widehat{d_p} \left( \p_i, \p_j \right) - d_q\left(q_i,q_j\right) \right|^2
     \label{eqn:orientation-recovery}
