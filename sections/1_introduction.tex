@@ -115,15 +115,16 @@ Exploiting this principle, \textit{common-lines} methods aim at uniquely determi
 Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem~\cite{sigworth1998maximum}---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
 This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability.
 More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward.
-Finally, one could try to estimate the orientation by learning to embed projections in an appropriate latent space~\cite{miolane2019estimation}, but they only estimate the in-plane rotation once the direction had been estimated through three rounds of 2D classification in RELION\@.
+Finally, \cite{miolane2019estimation} proposed to recover the in-plane rotations by learning to embed projections in an appropriate latent space, but only after directions had been estimated through three rounds of 2D classification in RELION\@.
 
-Hence, despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
+Despite the many aforementioned advances, the task of providing a robust initial volume remains a notoriously arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
 %\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.}
-On the other hand, machine-learning techniques have had a profound influence in imaging in reason of their remarkable ability to autonomously capture data representations~\cite{lecun2015deep}.
+On the other hand, deep learning has had a profound influence in imaging in reason of the remarkable ability of convolutional neural networks to capture relevant representations of images~\cite{lecun2015deep}.
 
-In this work, we present a new learning-based approach to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset of projections, hence bypassing some of the aforementioned limitations.
+In this work, we present a new learning-based approach to recover the unknown orientations directly from the acquired set of projections.
+%, hence bypassing some of the aforementioned limitations.
 % \mdeff{That's method:} The novelty consists in first estimating the relative distances between pairs of projections (by using a Siamese neural network previously trained on a synthetic dataset), and then recovering the absolute orientation of each projections from these relative distances.
-By doing so, the recovery of the orientations can be achieved without the need for any intermediate reconstruction procedure or initial volume estimate. %, which has useful implications for SPA\@.
+By doing so, orientations are recovered without the need for any intermediate reconstruction procedure or initial volume estimate. %, which has useful implications for SPA\@.
 %\mdeff{``bypassing some limitations'' and ``has useful implications'' are too vague IMO\@. Could we be more specific? Not on the how (that's the method) but on the why. Think about an ML audience.}
 %\mdeff{Idea: Our method is direct (as opposed to iterative refinement schemes) and does not require any prior model of the reconstructed protein.}
 %Our two-step method  learns to estimate the unknown orientation $\bth_i$ (represented by a unit quaternion $q_i$) associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.
