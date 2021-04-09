@@ -353,24 +353,30 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
 
 \subsection{Orientation recovery and reconstruction of density maps}\label{sec:results:orientation-recovery:reconstruction}
 
-As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \textit{i.e.}, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed pipeline.
-It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct. In addition, reconstruction was performed with a direct reconstruction algorithm rather than with a robuster iterative method. This is obviously a very specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in Section~\ref{sec:discussion}.
+As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \ie, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed method.
+It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct.
+In addition, reconstruction was performed with a direct reconstruction algorithm (ASTRA's GPU implementation of the CGLS algorithm) rather than with a robuster iterative method.
+This is obviously a specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in \secref{discussion}.
 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances that were estimated from noiseless projections of \texttt{5j0n}.
-A mean error of $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to the reconstruction from ground-truth orientations shown in \figref{5j0n-noise0-reconstruction-true}.
+A mean error of $E_\text{OR} \approx 0.20$ radians ($\approx 11\degree$) in the recovered orientations led to a reconstruction with a resolution of 12.2\AA\ at a Fourier shell coefficient (FSC) of $0.5$, shown in \figref{5j0n-noise0-reconstruction-recovered}.
+% to be compared to the reconstruction from ground-truth orientations shown in \figref{5j0n-noise0-reconstruction-true}.
 
-As predicted by our other experiments, corrupting the projections with a higher level of noise ($\sigma^2=16$) negatively impacts the quality of the orientation recovery (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$).
-Unsurprisingly, this leads to a reconstruction with lower resolution, as shown in \figref{5j0n-noise16-reconstruction-recovered}. (Note that reconstruction was here obtained from the noiseless projections, the goal being to evaluate only the impact of orientation mis-estimation on the quality of the reconstruction.)
+As predicted by our other experiments, corrupting the projections with noise ($\sigma^2=16$) negatively impacts the quality of the recovered orientations (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.25$ radians ($\approx 14\degree$).
+Unsurprisingly, this leads to a reconstruction with a lower resolution of 15.2\AA, shown in \figref{5j0n-noise16-reconstruction-recovered}.
+(Note that reconstruction was here obtained from the noiseless projections, the goal being to evaluate only the impact of orientation mis-estimation.)
 
-Finally, \figref{5a1a-noise0-orientation-recovery} shows the recovery of orientations from the noiseless projections of \texttt{5a1a}.
-A mean error of $E_\text{OR} \approx 0.19$ radians ($\approx 11\degree$) in the recovered orientations led to the reconstruction shown in \figref{5j0n-noise0-reconstruction-recovered}, to be compared to \figref{5j0n-noise0-reconstruction-true}.
-Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
+Finally, \figref{5a1a-noise0-orientation-recovery} and~\ref{fig:5a1a-noise16-orientation-recovery} show the recovery of orientations from noiseless and noisy projections of \texttt{5a1a}.
+A mean error of $E_\text{OR} \approx 0.13$ radians ($\approx 7\degree$) in both cases led to reconstructions with resolutions of 8.0\AA\ and 9.6\AA, shown in \figref{5a1a-noise0-reconstruction-recovered} and~\ref{fig:5a1a-noise16-reconstruction-recovered}.
+%to be compared to \figref{5a1a-noise0-reconstruction-true}.
+%Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
+Distance estimation, orientation recovery, and reconstruction performed better on \texttt{5a1a} than \texttt{5j0n} because its ground-truth density is of higher resolution.
 
-To further illustrate the impact of errors in the recovered orientations, we compared the density maps reconstructed from the recovered orientations $\{ \widehat{q_i} \}$ to that reconstructed from the ground-truth orientations $\{ q_i \}$. All density maps were reconstructed using the ASTRA toolbox using GPU implementation of the CGLS algorithm for 3D data sets.
-The results are displayed in~\figref{reconstructions}, and tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method.
 %\lau{\textit{We don't need to keep what follows anymore, right?} The rationale behind not comparing directly with the original ground-truth (\figref{pdb-proteins}) is that the robustness of the reconstruction method can impact the quality of the reconstruction when only few projections are considered, which was the case here (only $1,650$ projections).}
 
-In conclusion, the more accurate the estimation of the pairwise distances, the higher the quality of the orientation recovery, which leads to reconstructions with a higher resolution. %This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
+The results tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method.
+In conclusion, the more accurate the estimated distances, the more accurate the recovered orientations---leading to reconstructions of higher resolution.
+%This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
 
 \begin{figure}[t]
     \centering
@@ -504,11 +510,11 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
     }\label{fig:reconstructions}
 \end{figure}
 
+%For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
 %\todo{HERE AND NOT IN THE DISCUSSION. More details. What happened otherwise? We want to say it's an ASTRA issue not something with our method.}\banjac{I think ASTRA tools for reconstruction have one coordinate system and our protein is reconstructed in another. The alignment that we do as a last step of the pipeline is actually the alignment to ASTRA coordinate system. I am not sure if modifying}\lau{Yeah but I wouldn't blame ASTRA at all, it's dangerous territory. There is just an engineering problem we haven't been able to solve, let's not blame well-know, widely-used existing packages out there if possible.}\mdeff{Put it as you think is best. ;)}\banjac{I will take one more look at it.}\mdeff{Great! Thanks for the investigation. Even if you can't exactly confirm, it's a good hypothesis. Leaving it at ``unknown reason'' is suspicious from a reader's POV.}
 
 
 %we  were used for reconstruction. just direct hence less robust. I think it's a good idea to write this, \ie that the quality of reconstruction is likely to improve with a more robust algorithm,A state-of-the-art attempt would do it with more than $10^5$ projections and a more robust iterative reconstruction algorithm, such as those discussed in \secref{introduction}. \todo{But it's ok to compare reconstructions from true and recovered orientations.}\mdeff{Laurène, could you write something about how ASTRA is a naive reconstruction method (compared to the SOTA discussed in the intro), and that we did it only to get a crude idea? Or something along those lines. ;)}\lau{Not naïve actually,  but I'm wondering if we should not put that in the discussion/conclusion.}\mdeff{I think it's important here for people to interpret those reconstructions. They are are just here to evaluate how good orientation recovery is. And will we even discuss reconstruction in the discussion/conclusion?}
-%For an unknown reason, we had to align the recovered orientations with \eqnref{orientation-recovery-error} before feeding them to ASTRA.
 
 
 %\banjac{Using the ASTRA toolbox, we first create a 3D parallel beam geometry specified by 3D vectors.
@@ -527,71 +533,6 @@ In conclusion, the more accurate the estimation of the pairwise distances, the h
 %\mdeff{Why is $L_\text{OR} = 0.05$ while it is $0.01$ in \figref{results:distance-estimation:noise}?
 %\banjac{Thanks for notice! I didn't see that. I am rerunning this pipeline for this plot. Update: I reran the 5j0n pipeline with 0 and 16 noise variance and both are shifted by ~0.25 from the results we have in the noise tests... I am not sure why, however, my thinking is that it might be due to working with a different set of generated projections from the same protein (different train-val-test split). What do you think I should do? Should I write about it or rerun the noisy experiments }
 
-
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_apr.pdf}
-%         \caption{%
-%             \texttt{5j0n} with noiseless projections.
-%     }\label{fig:results:fsc-5j0n-noise0}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_noisy_apr}
-%         \caption{%
-%         \texttt{5j0n} with noisy projections.\todo{Run the pipeline, now I miss noisy projections}
-%         }\label{fig:results:fsc-5j0n-noise16}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5a1a_gt_5a1a_apr.pdf}
-%         \caption{%
-%         \texttt{5a1a} with noiseless projections.
-%         }\label{fig:results:fsc-5a1a-noise0}
-%     \end{subfigure}
-%     \caption{%
-%      Fourier Shell Correlation (FSC) for every reconstruction.\footnote{FSC validation server: https://www.ebi.ac.uk/pdbe/emdb/validation/fsc/}
-%     }
-% \end{figure}
-
-% We observe that while distance estimation was $~25\%$ more difficult for this protein (\secref{results:distance-estimation:learned}), orientation recovery is only $~15\%$ worse; attesting to the robustness of our method.
-% L_DE: 0.21/0.17=1.235
-% E_OR: 0.187/0.163=1.147
-% L_OR: 0.0381/0.0332=1.147
-
-%We observe that the recovery of more accurate orientations lead to the reconstruction of more accurate density maps.
-%Hence, the estimation of more accurate distances lead to more accurate reconstructions.
-
-
-
-
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_apr.pdf}
-%         \caption{%
-%             \texttt{5j0n} with noiseless projections.
-%     }\label{fig:results:fsc-5j0n-noise0}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5j0n_gt_5j0n_noisy_apr}
-%         \caption{%
-%         \texttt{5j0n} with noisy projections.\todo{Run the pipeline, now I miss noisy projections}
-%         }\label{fig:results:fsc-5j0n-noise16}
-%     \end{subfigure}
-%     \hfill
-%     \begin{subfigure}[t]{0.3\linewidth}
-%         \includegraphics[width=\linewidth]{figures/FSC_5a1a_gt_5a1a_apr.pdf}
-%         \caption{%
-%         \texttt{5a1a} with noiseless projections.
-%         }\label{fig:results:fsc-5a1a-noise0}
-%     \end{subfigure}
-%     \caption{%
-%      Fourier Shell Correlation (FSC) for every reconstruction.\footnote{FSC validation server: https://www.ebi.ac.uk/pdbe/emdb/validation/fsc/}
-%     }
-% \end{figure}
 
 % We observe that while distance estimation was $~25\%$ more difficult for this protein (\secref{results:distance-estimation:learned}), orientation recovery is only $~15\%$ worse; attesting to the robustness of our method.
 % L_DE: 0.21/0.17=1.235
