@@ -153,11 +153,11 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
             \caption{Orientations after alignment.}
         \end{subfigure}
         \caption{%
-            Example of perfect alignment~\eqnref{orientation-recovery-error} after a perfect orientation recovery~\eqnref{orientation-recovery}.
-            The red histogram shows the errors in the recovered orientations  (a) $\{d_q(q_i, \widehat{q_i})\}$ and (b) $\{d_q(q_i, \T \widehat{q_i})\}$, with the mean $E_\text{OR}$ highlighted.
+            Example of perfect alignment~\eqnref{orientation-recovery-error} after a perfect recovery~\eqnref{orientation-recovery}.
+            The red histogram shows the errors (a) $\{d_q(q_i, \widehat{q_i})\}$ and (b) $\{d_q(q_i, \T \widehat{q_i})\}$, with the mean $E_\text{OR}$ highlighted.
             % and $\T$ as the optimum of \eqnref{orientation-recovery-error} on the right.
-            Directions $(\theta_2, \theta_1)$ are shown in the insert: green points are the ground-truth orientations $\{q_i\}$ and red points are the recovered orientations $\{\widehat{q_i}\}$.
-            While both colors are seen in (b), they are exactly superimposed.
+            True (green) and recovered (green) directions are shown in the insert.
+            While both colors are seen in (b), they are superimposed.
         }\label{fig:5j0n-aa-loss-perfect-distances}
     %    \label{fig:angle-alignment-perfect}
     \end{minipage}
@@ -171,10 +171,10 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
 We evaluate $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ (\ie, the Euclidean distance) as a baseline distance estimator.
 \figref{euclidean-not-robust} shows the relationship between $\widehat{d_p}$ and $d_q$.
 Two main observations can be made from this experiment.
-First, as suspected, $d_p$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
-In particular, the larger the orientation distance $d_q$, the poorer the predictive ability of $d_p$ (the plot plateaus).
+First, as suspected, $\widehat{d_p}$ fails to be a consistent predictor of $d_q$, even in the simple imaging conditions considered here (no noise, no shift, no PSF).
+In particular, the larger the orientation distance $d_q$, the poorer the predictive ability of $\widehat{d_p}$ (the plot plateaus).
 Second, because \texttt{5a1a} has D2 symmetries, two projections might be identical while not having been acquired from the same orientation.
-Restricting directions to a quarter capture only one of four identical projections, solving the issue.
+Restricting directions to a quarter captures only one of four identical projections, solving the issue.
 
 \begin{figure}
     \begin{minipage}[t]{0.99\linewidth}
@@ -209,10 +209,8 @@ Restricting directions to a quarter capture only one of four identical projectio
         \end{subfigure}
         \caption{%
             Euclidean distance between projections $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
-            From $P = 5,000$ possible projection, we randomly selected $5$ projections.
-            Each color represent the distances between one fixed projection and the other $P-1$ projections.
-    %        The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
-            % \todo{Make the plots flatter. Larger text. Remove the legend (we explain it and it's two small anyway).}
+            We randomly selected $5$ projections from $P = 5,000$: each color represents the distances between one of those and all the others.
+            % The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
         }\label{fig:euclidean-not-robust}
     \end{minipage}
 \end{figure}

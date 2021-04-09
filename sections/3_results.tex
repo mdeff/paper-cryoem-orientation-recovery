@@ -10,7 +10,7 @@ We first evaluated whether orientation recovery through \eqnref{orientation-reco
 We then learned to estimate the distances through \eqnref{distance-learning} and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}).
 % Real stuff (the two steps together).
 Following this, we evaluated the robustness of distance learning to perturbations in the projections (\secref{results:distance-estimation:sensitivity}).
-Finally, we ran the whole machinery on a simplified synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (\secref{results:orientation-recovery:reconstruction}).
+Finally, we ran the whole machinery on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (\secref{results:orientation-recovery:reconstruction}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -158,7 +158,7 @@ This took about 50 minutes of CPU\@.
 %\mdeff{Story: (i) orientation recovery error is strongly linked to distance estimation error, (ii) recovery loss is a good proxy of mean recovery error.}
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 
-We first evaluated the feasibility of orientation recovery assuming that the exact distances between pairs were known.
+We first evaluated the feasibility of orientation recovery assuming that the exact distances were known.
 Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
 
 We then evaluated the behavior of~\eqnref{orientation-recovery} when the true distances were increasingly perturbed.
@@ -261,7 +261,7 @@ We evaluated the ability of the SiameseNN to learn to approximate the orientatio
 % to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation:euclidean}.
 
-\figref{distance-learning:loss} shows the convergence of the $L_\text{DE}$, reached in about 50 epochs.
+\figref{distance-learning:loss} shows the convergence of $L_\text{DE}$, reached in about 50 epochs.
 %\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
 %We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
 %A large overfitting indicates that the distance trained on projections drawn from training sets fail to generalize to unseen projections drawn from validation sets.
@@ -282,7 +282,8 @@ While our learned distance function is a much better estimator than the Euclidea
 We did attenuate the phenomenon by sampling training distances uniformly (see \secref{results:data}), and the issue is much less severe than with the Euclidean distance.
 %\todo{Hypotheses: Because the true distances are upper-bounded by $\pi$? Training?}
 %While the impact on orientation recovery is unclear
-An alternative could be to discard larger distances and only rely on smaller distances for recovery.
+An alternative could be to only rely on smaller distances for recovery.
+% to discard larger distances and
 That would however require the addition of a spreading term in \eqnref{orientation-recovery} to prevent the recovered orientations to collapse.
 
 % proxy distance
@@ -300,13 +301,13 @@ The use of additional training data should help further diminish overfitting.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
-We first demonstrated that the learning of the distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the built-in shift invariance of the SiameseNN.
+We first demonstrated that the learning of distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the shift invariance built in our SiameseNN (see \secref{method:distance-learning}).
 %We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 %As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
 % indeed shows that learning distances (and hence recovering orientations)
 
 % Noise.
-As we cannot---or do not yet know how to---build noise invariance into the SiameseNN architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
+As we cannot---or do not yet know how to---build noise invariance in the SiameseNN architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$12$ dB).
 %\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
@@ -319,7 +320,7 @@ Note that we did not evaluate sensitivity to the PSF at this stage but expect a 
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
 %We know how to do it for shifts, not noise or PSF.
 
-Here again (\secref{results:orientation-recovery:sensitivity}), we observed again  that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and that (ii) an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
+Here again (\secref{results:orientation-recovery:sensitivity}), we observed that (i) the estimation of more accurate distances (a smaller $L_\text{DE}$) leads to the recovery of more accurate orientations (a smaller $L_\text{OR}$ and $E_\text{OR}$), and that (ii) an higher recovery loss $L_\text{OR}$ induces an higher error $E_\text{OR}$.
 
 \begin{figure}[ht!]
     \centering
