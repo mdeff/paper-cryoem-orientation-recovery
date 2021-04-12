@@ -2,14 +2,14 @@
 
 % Summary.
 In this work, we explored the use of distance learning between pairs of 2D cryo-EM projections from a 3D protein structure to infer the unknown orientation at which each projection was imaged from.
-Our two-step method relies on the training of a SiameseNN to estimate pairwise distances between unseen projections, followed by the recovery of the orientations from these distances through an appropriate minimization scheme.
+Our two-step method relies on the training of a SNN to estimate pairwise distances between unseen projections, followed by the recovery of the orientations from these distances through an appropriate minimization scheme.
 
 %\mdeff{Shall we repeat that? It's in the intro.}
 %The benefit of this approach is that it would permit to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset, \ie, without the need for an intermediate reconstruction procedure or an initial volume estimate; this has obvious attractive implications in the field.
 
 At the current stage of development, the method has been evaluated on synthetic datasets for two different proteins.
 The results provide key insights on the viability of the proposed scheme.
-First, they demonstrate that a SiameseNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to off-centering shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important condition in cryo-EM\@.
+First, they demonstrate that a SNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to off-centering shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important condition in cryo-EM\@.
 Second, they demonstrate that an accurate estimation of distances leads to an accurate recovery of orientations (\secref{results:orientation-recovery:sensitivity}, \secref{results:distance-estimation:sensitivity}).
 Finally, our method was able to recover orientations with an error of $0.12$ to $0.25$ radians ($7$ to $14\degree$)---leading to an initial volume
 with a resolution of $8$ to $15$\AA\ (\secref{results:orientation-recovery:reconstruction}).
@@ -21,15 +21,15 @@ In summary, the more accurate the estimated distances, the more precise the reco
 While the method is not yet at the stage where it can be deployed in practice, we believe that a series of developments could help it become a more relevant contributor for single-particle cryo-EM reconstruction.%
 \footnote{Note that the present project will not be further continued by its authors due to other professional occupations. Hence, we strongly encourage anyone interested to build on these ideas and, hopefully, make it a practical tool.}
 As previously discussed, the results underline the importance of learning an accurate distance estimator. % $\widehat{d_p}$.
-In this regard, the performance of the SiameseNN could be improved in several ways.
+In this regard, the performance of the SNN could be improved in several ways.
 % Method gains: mostly distance learning maybe recovery (not alignment).
 %A set of additional technical developments could also further improve performance.
-First, the architecture of the SiameseNN's twin convolutional neural networks should be expanded and tuned.
+First, the architecture of the SNN's twin convolutional neural networks should be expanded and tuned.
 % While it gave good performance for a reasonable runtime, it could be optimized.
 % , as well as the distance metric between the two CNN outputs.
 % For instance, one could parametrize the function $d_f$---which compares the similarity of the features outputs (see \figref{schematic:distance-learning})---as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 % \todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture. Motivation (on top of half in-plane being much easier for 5a1a) to predict the direction and in-plane angle separately.}
-Second, the training of the SiameseNN could be improved, perhaps by providing more supervision by separately predicting the differences in direction $(\theta_2,\theta_1)$ and in-plane angle $\theta_3$.
+Second, the training of the SNN could be improved, perhaps by providing more supervision by separately predicting the differences in direction $(\theta_2,\theta_1)$ and in-plane angle $\theta_3$.
 
 % \mdeff{Let's ignore improvements to recovery and concentrate the story on better distance learning -> better recovery -> better reconstruction.}
 %Among others, one shall explore whether reducing the influence of larger distances in orientation recovery could bring further gain in accuracy.
@@ -38,16 +38,16 @@ Second, the training of the SiameseNN could be improved, perhaps by providing mo
 % Why did we need to align with \eqnref{orientation-recovery-error} before reconstructing with ASTRA\@?
 
 % Data gains.
-Importantly, the SiameseNN would be better trained on a more exhaustive and diverse cryo-EM dataset.
-Indeed, the success of the SiameseNN as a faithful estimator of relative orientations eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
+Importantly, the SNN would be better trained on a more exhaustive and diverse cryo-EM dataset.
+Indeed, the success of the SNN as a faithful estimator of relative orientations eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
 Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB\@.
 % \mdeff{PDB database sounds redundant as PDB stands for protein database.}
-In particular, a necessary extension will be to include the effects of the PSF when generating training data and evaluate its impact on the SiameseNN\@. % like we did for shifts and noise
+In particular, a necessary extension will be to include the effects of the PSF when generating training data and evaluate its impact on the SNN\@. % like we did for shifts and noise
 
 % Towards practical use: unseen proteins (also data) and real measurements.
-A final phase of tests before deploying the method on real cryo-EM measurements will be to extensively test the method on ``unseen proteins'', \ie, proteins whose simulated projections have never been seen by the SiameseNN\@.
+A final phase of tests before deploying the method on real cryo-EM measurements will be to extensively test the method on ``unseen proteins'', \ie, proteins whose simulated projections have never been seen by the SNN\@.
 % Early experiments indicate the feasibility of this enterprise (see \apxref{unseen-proteins}).
-In this regard, an interesting aspect of our method is that the twin networks within the SiameseNN intrinsically predict the \textit{relationship} between projections, allowing the SiameseNN as a whole to abstract the particular volume.
+In this regard, an interesting aspect of our method is that the twin networks within the SNN intrinsically predict the \textit{relationship} between projections, allowing the SNN as a whole to abstract the particular volume.
 %Consequently, a well-trained distance estimator could be relatively robust to the ``mismatch'' of volumes within the training set.
 %In the same line of thought,
 Learning benefits from the profound structural similarity shared by proteins---after all, they are all derived from the same $21$ building blocks.
@@ -55,4 +55,4 @@ Learning benefits from the profound structural similarity shared by proteins---a
 
 % \mdeff{I propose to omit the following sentence (which is a truism and is stated in the previous paragraph) to finish on a more forceful note.}
 % Eventually, the performance of the method on real cryo-EM measurements will provide the real measure of its potential, the imaging conditions being notoriously challenging in single-particle cryo-EM\@.
-% Further down the line and still in the real of the hypothetical, new approaches for the training of the SiameseNN able to handle the handling of proteins with multiple conformational states could be explored.
+% Further down the line and still in the real of the hypothetical, new approaches for the training of the SNN able to handle the handling of proteins with multiple conformational states could be explored.
