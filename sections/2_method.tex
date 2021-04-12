@@ -173,9 +173,8 @@ We set the feature space distance $d_f$ as the cosine distance to facilitate the
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
 % $\frac{P^2-P}{2}$ is lower but we use P^2 in practice. Also, NN needs to learn d(p,p)=0 and is not necessarily symmetric depending on d_f.
-As evaluating a sum over $P^2$ pairs is computationally intractable,
-%for cryo-EM datasets with typically $P$ in the order of $10^5$ projections.
-we minimize \eqnref{distance-learning} with stochastic gradient descent (SGD) over small batches of pairs, and update the weights $w$ by back-propagation.
+As evaluating a sum over $P^2$ pairs is computationally intractable for cryo-EM datasets with typically $P$ in the order of $10^5$ projections, we sample the sum and minimize \eqnref{distance-learning} with stochastic gradient descent (SGD) over small batches of pairs.
+The weights $w$ are updated by back-propagation.
 % error / objective value
 
 The architecture of $\G_w$ is described in \apxref{siamese-architecture}.
