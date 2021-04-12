@@ -10,7 +10,7 @@ We first evaluated whether orientation recovery through \eqnref{orientation-reco
 We then learned to estimate the distances through \eqnref{distance-learning} and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}).
 % Real stuff (the two steps together).
 Following this, we evaluated the robustness of distance learning to perturbations in the projections (\secref{results:distance-estimation:sensitivity}).
-Finally, we ran the whole machinery on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SNN (\secref{results:orientation-recovery:reconstruction}).
+Finally, we ran the whole machinery on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SiameseNN (\secref{results:orientation-recovery:reconstruction}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -22,73 +22,73 @@ Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal}
 From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting the models with a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a} and one of $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
 % -sized volume
 
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{minipage}[b]{0.51\linewidth}
-%         \centering
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5a1a_pdb.png}
-%             \caption{Atomic model of \texttt{5a1a}.}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
-%             \caption{Atomic model of \texttt{5j0n}.}
-%         \end{subfigure}
-%         \\ \vspace{0.5em}
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5a1a_5A.png}
-%             \caption{1\AA\ density map $\x$ of \texttt{5a1a}.}%
-%             \label{fig:density-map:5j0n:ground-truth}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_5A.png}
-%             \caption{3.67\AA\ density map $\x$ of \texttt{5j0n}.}
-%         \end{subfigure}
-%         \caption{%
-%             %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
-%             Two proteins with different symmetries.
-%             %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
-%         }\label{fig:pdb-proteins}
-%     \end{minipage}
-%     \hfill
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise0}
-%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise16}
-%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-%     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
-%         \end{subfigure}
-%         \\ \vspace{0.5em}
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_translated}
-%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
-%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-%         \end{subfigure}
-%         \caption{%
-%             Example projections of \texttt{5j0n} ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
-%             % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
-%         }\label{fig:different-projections}
-%     \end{minipage}
-% \end{figure}
+\begin{figure}[ht!]
+    \centering
+    \begin{minipage}[b]{0.51\linewidth}
+        \centering
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5a1a_pdb.png}
+            \caption{Atomic model of \texttt{5a1a}.}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
+            \caption{Atomic model of \texttt{5j0n}.}
+        \end{subfigure}
+        \\ \vspace{0.5em}
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5a1a_5A.png}
+            \caption{1\AA\ density map $\x$ of \texttt{5a1a}.}%
+            \label{fig:density-map:5j0n:ground-truth}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_5A.png}
+            \caption{3.67\AA\ density map $\x$ of \texttt{5j0n}.}
+        \end{subfigure}
+        \caption{%
+            %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
+            Two proteins with different symmetries.
+            %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
+        }\label{fig:pdb-proteins}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_noise0}
+            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_noise16}
+            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+    %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+        \end{subfigure}
+        \\ \vspace{0.5em}
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_translated}
+            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.49\linewidth}
+            \centering
+            \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
+            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+        \end{subfigure}
+        \caption{%
+            Example projections of \texttt{5j0n} ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
+            % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
+        }\label{fig:different-projections}
+    \end{minipage}
+\end{figure}
 
 \paragraph{Protein symmetries.}
 Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles).
@@ -116,8 +116,8 @@ We then perturbed the measurements with different levels of additive Gaussian no
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Datasets.}
 For each protein, we split the projections into training, validation, and test subsets, and created \textit{disjoint} pairs of projections from each (\tabref{dataset}).
-% which are used as input to the SNN, and as output their respective quaternion distances (calculated from their orientations);
-The training and validation sets were used to train and evaluate the SNN, while the test set was used to evaluate orientation recovery given a trained SNN\@.
+% which are used as input to the SiameseNN, and as output their respective quaternion distances (calculated from their orientations);
+The training and validation sets were used to train and evaluate the SiameseNN, while the test set was used to evaluate orientation recovery given a trained SiameseNN\@.
 %\banjac{Actually, train and validation sets are used in distance learning, and test set was only used for dPdQ plot, orientation recovery (and alignment).}
 %to ensure that it did not include any projection that was previously seen during the distance learning.
 %Note that we split the $P=5,000$ projections, not the $P^2 = 25 \times 10^6$ possible pairs, to ensure we evaluate generalization to unseen projections.
@@ -166,7 +166,7 @@ More precisely, we perturbed the distances prior to the minimization with an err
 \figref{perfect-with-noise-ar-aa} shows that the recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the error in distances: from $E_\text{OR} = 0$ with perfect distances to $E_\text{OR} \approx 0.2$ radians ($\approx 11.5\degree$) for $\sigma^2 = 0.8$.
 % represented as the variance $\sigma^2$ of white noise added to the true distances.
 %More accurate distance estimation leads to more accurate orientation recovery,
-These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SNN in further stages of development.
+These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SiameseNN in further stages of development.
 
 Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real projections).
 %Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
@@ -250,14 +250,14 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
 %\subsection{Relative orientation estimation}
 
 %\mdeff{Story: $d_p$ good estimator of $d_q$.
-%SNN better than l2, but still plateaus.
+%SiameseNN better than l2, but still plateaus.
 %Robust to projection noise.}
 
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
-We evaluated the ability of the SNN to learn to approximate the orientation distance $d_q$ through \eqnref{distance-learning}.
-% ---parameterized as a SNN and trained---
+We evaluated the ability of the SiameseNN to learn to approximate the orientation distance $d_q$ through \eqnref{distance-learning}.
+% ---parameterized as a SiameseNN and trained---
 % to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $d_p(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation:euclidean}.
 
@@ -287,7 +287,7 @@ An alternative could be to only rely on smaller distances for recovery.
 That would however require the addition of a spreading term in \eqnref{orientation-recovery} to prevent the recovered orientations to collapse.
 
 % proxy distance
-These results confirm that a SNN is able to estimate differences in orientations from projections alone, even though much has yet to be gained from improving upon the rather primitive SNN architecture we are currently using.
+These results confirm that a SiameseNN is able to estimate differences in orientations from projections alone, even though much has yet to be gained from improving upon the rather primitive SiameseNN architecture we are currently using.
 The use of additional training data should help further diminish overfitting.
 % Recurring theme.
 
@@ -301,19 +301,19 @@ The use of additional training data should help further diminish overfitting.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
-We first demonstrated that the learning of distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the shift invariance built in our SNN (see \secref{method:distance-learning}).
+We first demonstrated that the learning of distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the shift invariance built in our SiameseNN (see \secref{method:distance-learning}).
 %We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
-%As discussed in \secref{method:distance-learning}, the convolutional architecture of the SNN should be shift invariant.
+%As discussed in \secref{method:distance-learning}, the convolutional architecture of the SiameseNN should be shift invariant.
 % indeed shows that learning distances (and hence recovering orientations)
 
 % Noise.
-As we cannot---or do not yet know how to---build noise invariance in the SNN architecture, we trained the SNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
+As we cannot---or do not yet know how to---build noise invariance in the SiameseNN architecture, we trained the SiameseNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
 \figref{results:distance-estimation:noise} shows $E_\text{OR} \approx 0.16$ radians ($\approx 9\degree$) for noiseless projections and $E_\text{OR} \approx 0.42$ radians ($\approx 24\degree$) for a more realistic noise variance of $\sigma^2=16$ (with signal-to-noise ratio of -$12$ dB).
 %\mdeff{Shall we characterize the noise level with a signal-to-noise ratio? What $\sigma$ or SNR should we expect with real data? To help readers put our reported performance in context.}
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
-Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SNN mostly learned to discard it.
-Moreover, the observed overfitting indicates that more training data should further decrease the sensitivity of the SNN to noise.
+Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SiameseNN mostly learned to discard it.
+Moreover, the observed overfitting indicates that more training data should further decrease the sensitivity of the SiameseNN to noise.
 
 % PSF and conclusion.
 Note that we did not evaluate sensitivity to the PSF at this stage but expect a similar behavior.
@@ -354,7 +354,7 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
 \subsection{Orientation recovery and reconstruction of density maps}\label{sec:results:orientation-recovery:reconstruction}
 
 As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \ie, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed method.
-It is worth noting that, at this stage of development, we only trained the SNN on projections originating from the protein we were attempting to reconstruct.
+It is worth noting that, at this stage of development, we only trained the SiameseNN on projections originating from the protein we were attempting to reconstruct.
 In addition, reconstruction was performed with a direct reconstruction algorithm (ASTRA's GPU implementation of the CGLS algorithm) rather than with a robuster iterative method.
 This is obviously a specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in \secref{discussion}.
 
@@ -376,7 +376,7 @@ Distance estimation, orientation recovery, and reconstruction performed better o
 
 These results tend to indicate that a reasonable first structure can be reconstructed from projections whose orientations have been recovered through our method.
 %In conclusion, the more accurate the estimated distances, the more accurate the recovered orientations---leading to reconstructions of higher resolution.
-%This indicates that the quality of the reconstruction would substantially improve should a more powerful SNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
+%This indicates that the quality of the reconstruction would substantially improve should a more powerful SiameseNN  be trained on more data for distance estimation (and a more robust method used for reconstruction).
 
 \begin{figure}[t]
     \centering
@@ -505,7 +505,7 @@ These results tend to indicate that a reasonable first structure can be reconstr
     \caption{%
         Density maps $\widehat{\x}$ reconstructed from (a,f) ground-truth orientations, (b,g) random orientations, (c,h) orientations recovered from noiseless projections, and (d,i) orientations recovered from noisy projections.
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        The FSC curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
+        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
         % \lau{Suggestions: 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field),}
     }\label{fig:reconstructions}
 \end{figure}

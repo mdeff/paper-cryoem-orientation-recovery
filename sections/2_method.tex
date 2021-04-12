@@ -148,7 +148,7 @@ We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful functi
     \caption{%
         Distance learning.
         We are looking for a distance $\widehat{d_p}$ between projections that is an accurate estimator of the distance $d_q$ between their orientations.
-        We propose to parameterize $\widehat{d_p}$ as a SNN, trained on a synthetic dataset of projections with associated orientation.
+        We propose to parameterize $\widehat{d_p}$ as a Siamese neural network (SiameseNN), trained on a synthetic dataset of projections with associated orientation.
         %\mdeff{Why the output "loss" arrow? To me, this system is closed.}
         %\mdeff{"Loss Function" could be called Optimization or Learning or Training.}
 }\label{fig:schematic:distance-learning}
@@ -162,13 +162,13 @@ From a training dataset ${\{ \p_i, q_i \}}_{i=1}^{P}$, we learn the projection d
     \label{eqn:distance-learning}
 \end{equation}
 is the loss and $d_q$ is defined in~\eqnref{distance:orientations}.
-The distance $d_p$ is parameterized as the Siamese neural network (SNN)~\cite{chopra2005learning}
+The distance $d_p$ is parameterized as the Siamese neural network (SiameseNN)~\cite{chopra2005learning}
 \begin{equation*}
     d_p(\p_i, \p_j) = d_f(\G_w(\p_i), \G_w(\p_j)),
     %\label{eqn:distance:projections}
 \end{equation*}
 where $\G_w$ is a convolutional neural network with weights $w$ that is trained to extract the most relevant features $\f_i \in \R^{n_f}$ from a projection $\p_i$.
-SNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
+SiameseNNs, also termed ``twin networks'', are commonly used in the field of deep metric learning to learn similarity functions~\cite{yi2014deep}.
 We set the feature space distance $d_f$ as the cosine distance to facilitate the learning of a $\widehat{d_p}$ that respects the elliptic geometry of $\mathbb{S}^3$ (\apxref{siamese:feature-distance-and-embedding-dimension}).
 \figref{schematic:distance-learning} illustrates the proposed learning paradigm.
 
