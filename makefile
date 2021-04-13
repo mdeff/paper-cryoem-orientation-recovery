@@ -21,10 +21,10 @@ clean:
 	# latexmk -c
 
 cleanall: clean
-	$(MAKE) cleanall -C figures
-	rm -f $(PDF) arxiv.zip
+	# $(MAKE) cleanall -C figures
+	rm -f $(PDF) arxiv.tar.gz
 
-arxiv.zip: $(TEX) $(BBL) $(STY)
-	apack arxiv.zip $(TEX) $(BBL) $(STY) figures/*.{pdf,png,jpg}
+arxiv.tar.gz: $(TEX) $(BBL) $(STY)
+	python arxiv_collector.py
 
 .PHONY: all figures clean cleanall
