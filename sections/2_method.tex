@@ -249,8 +249,8 @@ Hence, we align the sets of orientations and compute the \textit{mean orientatio
     E_\text{OR} = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
     \label{eqn:orientation-recovery-error}
 \end{equation}
-We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection:
-\begin{equation*}
+We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection defined as 
+$
     \T =
     \begin{bmatrix}
         m & \mathbf{0} \\
@@ -258,7 +258,7 @@ We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an 
     \end{bmatrix}
     \prod_{1 \leq i < j \leq 4} \mathbf{T}_{\theta_{ij}},
     \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
-\end{equation*}
+$
 where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.

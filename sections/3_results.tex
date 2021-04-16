@@ -22,73 +22,65 @@ Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal}
 From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting the models with a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a} and one of $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
 % -sized volume
 
-\begin{figure}[ht!]
-    \centering
-    \begin{minipage}[b]{0.51\linewidth}
-        \centering
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5a1a_pdb.png}
-            \caption{Atomic model of \texttt{5a1a}.}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
-            \caption{Atomic model of \texttt{5j0n}.}
-        \end{subfigure}
-        \\ \vspace{0.5em}
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5a1a_5A.png}
-            \caption{1\AA\ density map $\x$ of \texttt{5a1a}.}%
-            \label{fig:density-map:5j0n:ground-truth}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_5A.png}
-            \caption{3.67\AA\ density map $\x$ of \texttt{5j0n}.}
-        \end{subfigure}
-        \caption{%
-            %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
-            Two proteins with different symmetries.
-            %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
-        }\label{fig:pdb-proteins}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[b]{0.48\linewidth}
-        \centering
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_noise0}
-            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_noise16}
-            \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-    %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
-        \end{subfigure}
-        \\ \vspace{0.5em}
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_translated}
-            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[b]{0.49\linewidth}
-            \centering
-            \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
-            \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-        \end{subfigure}
-        \caption{%
-            Example projections of \texttt{5j0n} ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
-            % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
-        }\label{fig:different-projections}
-    \end{minipage}
-\end{figure}
+% \begin{figure}[ht!]
+%     \centering
+%     \begin{minipage}[b]{0.51\linewidth}
+%         \begin{subfigure}[b]{\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5a1a_pdb.png}
+%             \hspace{0.15\textwidth}
+%             \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
+%             \caption{Atomic model of \texttt{5a1a} (left) and \texttt{5j0n} (right).}
+%             \vspace{0.8em}
+%         \end{subfigure}
+%         \\ \vspace{0.5em}
+%         \begin{subfigure}[b]{\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5a1a_5A.png}
+%             \hspace{0.05\textwidth}
+%             \includegraphics[height=3cm]{figures/5j0n_5A.png}
+%             \caption{1\AA\ density map $\x$ of \texttt{5a1a} and 3.67\AA\ of \texttt{5j0n}.}
+%             \label{fig:density-map:5j0n:ground-truth}
+%         \end{subfigure}
+%         \caption{%
+%             %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
+%             Two proteins with different symmetries.
+%             %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
+%         }\label{fig:pdb-proteins}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[b]{0.48\linewidth}
+%         \centering
+%         \begin{subfigure}[b]{0.49\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5j0n_noise0}
+%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}[b]{0.49\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5j0n_noise16}
+%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+%     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+%         \end{subfigure}
+%         \\ \vspace{0.5em}
+%         \begin{subfigure}[b]{0.49\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5j0n_translated}
+%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}[b]{0.49\linewidth}
+%             \centering
+%             \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
+%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
+%         \end{subfigure}
+%         \caption{%
+%             \texttt{5j0n} example projections ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
+%             % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
+%         }\label{fig:different-projections}
+%     \end{minipage}
+% \end{figure}
 
 \paragraph{Protein symmetries.}
 Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles).
@@ -175,6 +167,7 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
 \begin{figure}
     \begin{minipage}[b]{0.48\linewidth}
         \begin{minipage}{\linewidth}
+            \resizebox{\columnwidth}{!}{%
             \begin{tabular}{lrrr}
                 \toprule
                 %Dataset & Number of projections $P$ & Maximum number of pairs $P^2$ & Used number of pairs \\
@@ -185,23 +178,21 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
                 Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
                 \bottomrule
             \end{tabular}
+            }
             \captionof{table}{%
                 Split of $P=5,000$ projections in training, validation, and test subsets.
-                %\mdeff{The number of pairs is given by $(P^2-P)/2$, not $P^2$ or $P^2-P$. Because pairs are made of distinct projections and order doesn't matter. Did we sample with those constraints?}
-                %\banjac{thanks for remark, and I totally agree we need to use combinations of 2, however, I checked (and didn't notice before) that we use $P^2$ :(}
-                %\mdeff{It's actually good to train on identity to force zero distance. And order doesn't matter, so no problem.}
             \vspace{2.5em}
             }\label{tab:dataset}
         \end{minipage}
         \begin{subfigure}[b]{0.49\linewidth}
             \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
-            \caption{Recovering from \texttt{5j0n}.}
+            \caption{\texttt{5j0n}.}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
         \centering
             \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
-            \caption{Recovering from \texttt{5a1a}.}
+            \caption{\texttt{5a1a}.}
         \end{subfigure}
         \caption{%
             Orientation recovery from perturbed distances.
@@ -232,7 +223,7 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             %\includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_1.pdf}
             %\includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_2.pdf}
             \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0.pdf}
-            \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).
+            \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled on \texttt{5j0n} (left) and \texttt{5a1a} (right) test sets.
             }\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.}
@@ -380,16 +371,16 @@ These results tend to indicate that a reasonable first structure can be reconstr
     \begin{subfigure}[b]{0.251\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_ar_aa_fullcvg_uniform2}
-        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
-        \caption{Noiseless projections of \texttt{5j0n}.}%
+        \includegraphics[height=2.2cm]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
+        \caption{Noiseless $\mathbf{p}$ of \texttt{5j0n}.}%
         \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.232\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_fullcov_noise16_ar_aa}
-        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
-        \caption{Noisy projections of \texttt{5j0n}.}%
+        \includegraphics[height=2.2cm]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
+        \caption{Noisy $\mathbf{p}$ of \texttt{5j0n}.}%
         \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
@@ -397,16 +388,16 @@ These results tend to indicate that a reasonable first structure can be reconstr
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         % \includegraphics[width=\linewidth]{figures/5a1a_noise0_ar_aa.pdf}
-        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_LAST_ar_aa.pdf}
-        \caption{Noiseless projections of \texttt{5a1a}.
+        \includegraphics[height=2.2cm]{figures/5a1a_quartercov_uniformS2_noise0_LAST_ar_aa.pdf}
+        \caption{Noiseless $\mathbf{p}$ of \texttt{5a1a}.
         }%
         \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
     \begin{subfigure}[b]{0.232\linewidth}
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
-        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise16_LAST_ar_aa.pdf}
-        \caption{Noisy projections of \texttt{5a1a}.
+        \includegraphics[height=2.2cm]{figures/5a1a_quartercov_uniformS2_noise16_LAST_ar_aa.pdf}
+        \caption{Noisy $\mathbf{p}$ of \texttt{5a1a}.
         }%
         \label{fig:5a1a-noise16-orientation-recovery}
     \end{subfigure}
@@ -432,77 +423,77 @@ These results tend to indicate that a reasonable first structure can be reconstr
 \end{figure}
 
 \begin{figure}[t]
-    \begin{subfigure}[b]{0.17\linewidth}
+    \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
+        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
         \caption{}\label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.16\linewidth}
+    \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}
+        \includegraphics[height=2.3cm]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
+        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
         \caption{}\label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
+        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
         \caption{}\label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.30\linewidth}
+    \begin{subfigure}[b]{0.33\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/FSC_5j0n_fullcvg_uniformS2_noise0_fin_vs_init.pdf}
         %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init.pdf}
         %\includegraphics[height=3cm]{figures/5j0n_fullcvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
-        \includegraphics[height=2.5cm]{figures/5j0n_fullcvg_uniformS2_FSC_apr_init_customFSC2.pdf}
+        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_FSC_apr_init_customFSC2.pdf}
         \caption{}\label{fig:5j0n-reconstruction-fsc}
     \end{subfigure}
 
     \vspace{1em}
-    \begin{subfigure}[b]{0.17\linewidth}
+    \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5a1a_quartercov_uniformS2_noise0_gt_.png}
+        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_gt_.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.16\linewidth}
+    \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5a1a_quartercov_uniformS2_noise0_rand.png}
+        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_rand.png}
         \caption{}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_apr.png}
-        \includegraphics[height=2.5cm]{figures/5a1a_quartercov_uniformS2_noise0_apr_.png}
+        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_apr_.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.5cm]{figures/5a1a_quartercov_uniformS2_noise16_apr_.png}
+        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise16_apr_.png}
         \caption{}\label{fig:5a1a-noise16-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.30\linewidth}
+    \begin{subfigure}[b]{0.33\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/FSC_5a1a_fin_vs_init.pdf}
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_FSC_apr_init.pdf}
         % \includegraphics[height=2cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC.pdf}
-        \includegraphics[height=2.5cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC2.pdf}
+        \includegraphics[height=2.4cm]{figures/5a1a_quartercvg_uniformS2_noise0_FSC_apr_init_customFSC2.pdf}
         \caption{}\label{fig:5a1a-reconstruction-fsc}
     \end{subfigure}
     \caption{%
         Density maps $\widehat{\x}$ reconstructed from (a,f) ground-truth orientations, (b,g) random orientations, (c,h) orientations recovered from noiseless projections, and (d,i) orientations recovered from noisy projections.
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities, shown in \figref{density-map:5j0n:ground-truth},d).
+        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities,  \figref{density-map:5j0n:ground-truth},d).
         % \lau{Suggestions: 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field),}
     }\label{fig:reconstructions}
 \end{figure}
