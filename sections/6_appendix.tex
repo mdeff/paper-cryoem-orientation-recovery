@@ -283,11 +283,11 @@ Restricting directions to a quarter captures only one of four identical projecti
 % \section{Estimating distances on unseen proteins}\label{apx:unseen-proteins}
 % %\section{Non-determinism of the Orientation Recovery}\label{apx:non-determinism}
 
-% As the SiameseNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
+% As the SNN will ultimately be trained on known proteins and used to estimate distances on unknown proteins to be imaged,
 % %we also desire our learned distance function to generalize/transfer across density maps $\x$.
 % we also desire our learned distance function to generalize to unseen proteins.
 % The distance function $\widehat{d_p}$ must abstract the protein---in the same way it must abstract shifts, noise, or PSFs to generalize to unseen projections.
-% We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SiameseNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
+% We attempted to recover the orientations of noiseless projections from \texttt{5j0n} while we had trained the SNN on $4,000$ noiseless projections from four other proteins (\texttt{5nvu}~\cite{ZHANG20171303}, \texttt{5nvs}~\cite{ZHANG20171303}, \texttt{6mem}~\cite{iwai2018unique}, \texttt{6o1o}~\cite{liu2019target}, which have the same type of symmetry as \texttt{5j0n}).
 % \mdeff{The type of symmetry shouldn't play a role.}
 % \mdeff{But the resolution might. Do all the density maps have a resolution of 3.67\AA\@? What are the projection's size? $116 \times 116$?}
 % %In this experiment, we generated $1,000$ projections per protein.
@@ -295,7 +295,7 @@ Restricting directions to a quarter captures only one of four identical projecti
 % %Four proteins were used in the training and validation set to ensure the robustness to the unseen protein \texttt{5j0n} used in the testing set.
 % % %The number of projections in every set is the same as in \tabref{dataset}.
 % We obtained a recovery loss of \todo{$L_\text{OR} = 0.014$},
-% to be compared with \todo{$L_\text{OR} \approx 0.066$} when the SiameseNN was trained on \texttt{5j0n} alone.
+% to be compared with \todo{$L_\text{OR} \approx 0.066$} when the SNN was trained on \texttt{5j0n} alone.
 % \mdeff{Weird that $L_\text{OR}$ is lower. Maybe OR finds a set of orientations that satisfy well the distances, though I can't understand how (it's not degenerated right?). Then bad distances -> bad orientations -> AA fails. If that's the case we should be careful about how we report it in \secref{discussion}.}
 % \mdeff{What happens if we train with \texttt{5j0n} too? E.g., \texttt{5j0n} + 1/2/4 others. That should work.}
 % \todo{While performance is somewhat degraded, we conclude that it is possible to train and use a distance function on different proteins.}
@@ -341,7 +341,7 @@ Restricting directions to a quarter captures only one of four identical projecti
 %     }\label{fig:robustness-to-unseen-pipeline}
 % \end{figure}
 
-\section{SiameseNN: feature distance and embedding dimension}\label{apx:siamese:feature-distance-and-embedding-dimension}
+\section{SNN: feature distance and embedding dimension}\label{apx:siamese:feature-distance-and-embedding-dimension}
 
 %\mdeff{Story: $d_f = d_q$ better than Euclidean and MLP $d_f$. }
 
