@@ -57,11 +57,11 @@ They noted that issue and we observed it too (\apxref{results:distance-estimatio
 The orientation of a 3D particle with respect to the microscope's detector plane is a rotation relative to a reference orientation (\figref{imaging-geometry}).
 The group of all 3D rotations under composition is identified with $\SO(3)$, the group of $3 \times 3$ orthogonal matrices with determinant~1 under matrix multiplication.
 % non-commutative/non-Abelian\footnote{order of rotations matter}
-A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (a commonly-used parameterization in cryo-EM)~\cite{sorzano2014interchanging}.
+A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (commonly used in cryo-EM)~\cite{sorzano2014interchanging}.
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
-While Euler angles are a concise representation of orientation ($3$ numbers for $3$ degrees of freedom), they suffer from a topological constraint---there is no covering map from the $3$-torus to $\SO(3)$---which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
+While Euler angles are a concise representation of orientation ($3$ numbers), they suffer from a topological constraint---there is no covering map from the $3$-torus to $\SO(3)$---which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
 This makes their optimization by gradient descent (\secref{method:orientation-recovery}) problematic.
 On the other hand, the optimization of rotation matrices (made of $9$ numbers) would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
@@ -94,7 +94,7 @@ Hence, the distance between two orientations, \ie, the length of the geodesic be
     \end{aligned}
 \end{equation}
 where $\langle \cdot, \cdot \rangle$ is the inner product, and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
-The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle $\theta$) of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
+The distance $d_q(q_i, q_j)$ corresponds to the magnitude of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
 
@@ -140,7 +140,7 @@ The distance $d_q(q_i, q_j)$ corresponds to the magnitude (angle $\theta$) of th
 
 We aim to estimate a function $\widehat{d_p}$ such that $\widehat{d_p}(\p_i, \p_j) \approx d_q(q_i, q_j)$.
 While we could in principle design $\widehat{d_p}$, that would be intricate---if not impossible---partly because the invariants are difficult to specify.
-We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful function approximation capabilities of neural networks, and (ii) the possibility to generate realistic cryo-EM projection datasets supported by the availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and our ability to model the imaging procedure.
+We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful function approximation capabilities of neural networks, and (ii) the possibility to generate realistic cryo-EM datasets supported by the availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and our ability to model the imaging procedure.
 
 \begin{figure}
     \centering
@@ -187,7 +187,7 @@ For example, we realize shift invariance, \ie, a guarantee that a shift $\mathbf
 Size invariance, \ie, taking projections $\p$ of varying sizes $n_p$ while yielding a representation $\f$ of a fixed size $n_f$, is realized by a final average pooling layer.
 As we do not (yet) know how to realize an invariance to noise or PSF, we resort to data augmentation, \ie, training on perturbed projections.
 In \secref{results:distance-estimation:sensitivity}, we show that a built-in invariance (shift) is far preferable to one learned through augmentation (noise).
-Finally, as projections are made by integrating through the 3D volume, projections from opposed directions $(\theta_2,\theta_1)$ are mirrors of each other.%
+Finally, as projections are made by integrating through the 3D volume, projections from opposed directions are mirrors of each other.%
 \footnote{That fact prevents cryo-EM reconstruction to resolve chirality, \ie, it cannot distinguish a protein from its mirrored version.}
 %cannot tell whether the protein was mirrored.
 % chirality/handedness
@@ -212,7 +212,8 @@ The task of recovering points based on their relative distances has been extensi
 Many methods aim at mapping high-dimensional data onto a lower-dimensional space while preserving distances, primarily for dimensionality reduction and data visualization.
 %A set of distances is often built as an intermediate step.
 %More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that accurately match the inter-vector distances.
-Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, Isomap~\cite{tenenbaum2000isomap}, locally linear embedding (LLE)~\cite{roweis2000lle}, Laplacian eigenmaps~\cite{belkin2003laplacian}, t-distributed stochastic neighbor embedding (t-SNE)~\cite{maaten2008tsne}, and uniform manifold approximation and projection (UMAP)~\cite{mcinnes2018umap}.
+% locally linear embedding (LLE)~\cite{roweis2000lle},
+Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, Isomap~\cite{tenenbaum2000isomap},  Laplacian eigenmaps~\cite{belkin2003laplacian}, t-distributed stochastic neighbor embedding (t-SNE)~\cite{maaten2008tsne}, and uniform manifold approximation and projection (UMAP)~\cite{mcinnes2018umap}.
 The embedding of distance matrices in Euclidean space (given by their eigenvectors) is especially well-described.
 In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmanic2015edm} provides theoretical guarantees on the recovery of points from distances.
 

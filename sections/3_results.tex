@@ -10,7 +10,7 @@ We first evaluated whether orientation recovery through \eqnref{orientation-reco
 We then learned to estimate the distances through \eqnref{distance-learning} and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}).
 % Real stuff (the two steps together).
 Following this, we evaluated the robustness of distance learning to perturbations in the projections (\secref{results:distance-estimation:sensitivity}).
-Finally, we ran the whole machinery on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the trained SNN (\secref{results:orientation-recovery:reconstruction}).
+Finally, we ran the whole pipeline on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the SNN model (\secref{results:orientation-recovery:reconstruction}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -83,9 +83,9 @@ From these atomic models, we generated the density maps in Chimera~\cite{petters
 % \end{figure}
 
 \paragraph{Protein symmetries.}
-Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles).
-\figref{euclidean-not-robust:5a1a-full} illustrates this problem.
-To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}) for that protein.
+Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles), see \figref{euclidean-not-robust:5a1a-full}.
+%\figref{euclidean-not-robust:5a1a-full} illustrates this problem.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}).
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
 %Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
@@ -99,11 +99,11 @@ This treatment of symmetries is incomplete%
 but sufficient for a proof-of-concept.
 
 \paragraph{Projections.}
-Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (then interpolated to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
+Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic projections of $275 \times 275$ pixels (downsampled to $116 \times 116$) for \texttt{5a1a} and $116 \times 116$ pixels for \texttt{5j0n}, taken from uniformly sampled orientations.%
 \footnote{Orientations used in \secref{results:orientation-recovery:sensitivity} (\figref{perfect-with-noise-ar-aa}) and \secref{results:distance-estimation:sensitivity} (\figref{results:distance-estimation}) were actually obtained by uniformly sampling the Euler angles $\bth$, constrained to $(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$ for \texttt{5j0n}. Our conclusions would be identical if orientations were uniformly sampled from $\SO(3)$ instead.}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
-\figref{different-projections} displays samples of the simulated projections.
+\figref{different-projections} displays samples of projections.
 
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Datasets.}
@@ -123,24 +123,24 @@ As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1
 %We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 %\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 (see \apxref{orientation-sampling} for further illustrations).
-While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch.
+While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch. Optimization settings are described in \apxref{optimization-settings}.
 
-\paragraph{Optimization.}
-%\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
-We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
-Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
-It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c.
-Our code supports training on multiple GPUs.
-% 2.6 to 9.3 hours depending on available resources.
-% \mdeff{We just want a ball-park (\eg, not a day or a week).}
-We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
-It took about $3.75$ hours of a single Tesla K40c (without early stopping).
-%Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
-We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
-We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
-This took about 50 minutes of CPU\@.
-% 8 minutes per run => 6*8 = 48 minutes
-% ($\sim$ 50 minutes in the best resource availability setting)
+% \paragraph{Optimization.}
+% %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
+% We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
+% Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
+% It took about $3.3$ hours of a single Tesla T4 or $8.75$ hours of a single Tesla K40c.
+% Our code supports training on multiple GPUs.
+% % 2.6 to 9.3 hours depending on available resources.
+% % \mdeff{We just want a ball-park (\eg, not a day or a week).}
+% We optimized \eqnref{orientation-recovery} with the Adam optimizer~\cite{kingma2014adam} and a learning rate of $0.5$ until convergence on batches of $256$ pairs sampled from the test sets (\tabref{dataset}).
+% It took about $3.75$ hours of a single Tesla K40c (without early stopping).
+% %Unlike distance learning algorithm, the orientation recovery optimization does not support multi-GPU execution.
+% We optimized \eqnref{orientation-recovery-error} with the FTRL optimizer~\cite{mcmahan2013ftrl}, a learning rate of $2$, and a learning rate power of $-2$ on batches of $256$ orientations sampled from the test sets (\tabref{dataset}).
+% We reported the lowest of 6 runs (3 per value of $m$) of 300 steps each.
+% This took about 50 minutes of CPU\@.
+% % 8 minutes per run => 6*8 = 48 minutes
+% % ($\sim$ 50 minutes in the best resource availability setting)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -152,21 +152,27 @@ This took about 50 minutes of CPU\@.
 
 We first evaluated the feasibility of orientation recovery assuming that the exact distances were known.
 Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
-
+%%%
 We then evaluated the behavior of~\eqnref{orientation-recovery} when the true distances were increasingly perturbed.
 More precisely, we perturbed the distances prior to the minimization with an error sampled from a Gaussian distribution with mean $0$ and variances $\sigma^2 \in [0.0, 0.8]$.
 \figref{perfect-with-noise-ar-aa} shows that the recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the error in distances: from $E_\text{OR} = 0$ with perfect distances to $E_\text{OR} \approx 0.2$ radians ($\approx 11.5\degree$) for $\sigma^2 = 0.8$.
 % represented as the variance $\sigma^2$ of white noise added to the true distances.
 %More accurate distance estimation leads to more accurate orientation recovery,
-These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SNN in further stages of development.
 
-Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real projections).
+These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SNN in further stages of development.
+%%%
+Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations. 
+%(\ie, when recovering the orientations of real projections).
 %Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
 %Hence, it has practical implications for our future works on real data.
 
 \begin{figure}
     \begin{minipage}[b]{0.48\linewidth}
+    
         \begin{minipage}{\linewidth}
+            \captionof{table}{%
+                Split of $P=5,000$ projections in training, validation, and test subsets.
+            }
             \resizebox{\columnwidth}{!}{%
             \begin{tabular}{lrrr}
                 \toprule
@@ -177,13 +183,11 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
                 Validation & 838 (17\%) & 702,244 & 7,022 \\ % (1\%) \\
                 Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
                 \bottomrule
+                \vspace{2em}  % TODO: check if this is allowed 
             \end{tabular}
-            }
-            \captionof{table}{%
-                Split of $P=5,000$ projections in training, validation, and test subsets.
-            \vspace{2.5em}
             }\label{tab:dataset}
         \end{minipage}
+        
         \begin{subfigure}[b]{0.49\linewidth}
             \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
             \caption{\texttt{5j0n}.}
@@ -248,7 +252,7 @@ We evaluated the ability of the SNN to learn to approximate the orientation dist
 % ---parameterized as a SNN and trained---
 % to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $\widehat{d_p}(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation:euclidean}.
-
+%%%
 \figref{distance-learning:loss} shows the convergence of $L_\text{DE}$, reached in about 50 epochs.
 %\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
 %We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
@@ -293,7 +297,7 @@ We first demonstrated that the learning of distances is insensible to off-center
 %We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 %As discussed in \secref{method:distance-learning}, the convolutional architecture of the SNN should be shift invariant.
 % indeed shows that learning distances (and hence recovering orientations)
-
+%%%
 % Noise.
 As we cannot---or do not yet know how to---build noise invariance in the SNN architecture, we trained the SNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
@@ -302,7 +306,6 @@ As we cannot---or do not yet know how to---build noise invariance in the SNN arc
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SNN mostly learned to discard it.
 Moreover, the observed overfitting indicates that more training data should further decrease the sensitivity of the SNN to noise.
-
 % PSF and conclusion.
 Note that we did not evaluate sensitivity to the PSF at this stage but expect a similar behavior.
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
@@ -315,16 +318,16 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
     \begin{subfigure}[t]{0.47\linewidth}
         \includegraphics[width=\linewidth]{figures/de_translation_nums}
         \caption{%
-            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with shifts $t_{i_1}$ and $t_{i_2}$ sampled from a triangular distribution with mean 0 and of increasing limits.
-            Learning is not harder as projections get shifted farther, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$.
+            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with triangular distribution shift $(t_{i_1}, t_{i_2}, 0)$.
+            %Learning is not harder with the projection shift, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$.
     }\label{fig:results:distance-estimation:shift}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.47\linewidth}
         \includegraphics[width=\linewidth]{figures/de_noises_nums}
         \caption{%
-            Learning from noisy projections $\{ \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n} \}$, with white noise $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I})$ of increasing variance $\sigma^2$.
-            Learning is harder as projections get noisier, because noise invariance is not built into the architecture of $\mathcal{G}_w$.
+            Learning from noisy projections $\{ \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n} \}$, with white noise $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I})$ of increasing $\sigma^2$.
+            %Learning is harder as projections get noisier, because noise invariance is not built into the architecture of $\mathcal{G}_w$.
         }\label{fig:results:distance-estimation:noise}
     \end{subfigure}
     \caption{%
@@ -333,6 +336,7 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
         % per epoch on the training and validation sets.
         %\mdeff{Numbers are per pair or per batch of 256 pairs?}
         Boxes show the orientation recovery loss $L_\text{OR}$~\eqnref{orientation-recovery} and error $E_\text{OR}$~\eqnref{orientation-recovery-error}.
+        Learning is not harder as projections get shifted farther whereas the learning is harder as they become noisier, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$ and noise invariance is not.
     }\label{fig:results:distance-estimation}
 \end{figure}
 
@@ -349,11 +353,11 @@ This is obviously a specific experimental case that only partially shines light 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances that were estimated from noiseless projections of \texttt{5j0n}.
 A mean error of $E_\text{OR} \approx 0.20$ radians ($\approx 11\degree$) in the recovered orientations led to a reconstruction with a resolution of 12.2\AA\ at a Fourier shell coefficient (FSC) of $0.5$, see \figref{5j0n-noise0-reconstruction-recovered}.
 % to be compared to the reconstruction from ground-truth orientations shown in \figref{5j0n-noise0-reconstruction-true}.
-
+%%%
 As predicted by our other experiments, corrupting the projections with noise ($\sigma^2=16$) negatively impacts the quality of the recovered orientations (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.25$ radians ($\approx 14\degree$).
 Unsurprisingly, this leads to a reconstruction with a lower resolution of 15.2\AA, shown in \figref{5j0n-noise16-reconstruction-recovered}.
 (Note that reconstruction was here obtained from the noiseless projections, the goal being to evaluate only the impact of orientation mis-estimation.)
-
+%%%
 Finally, \figref{5a1a-noise0-orientation-recovery},d show the recovery of orientations from noiseless and noisy projections of \texttt{5a1a}.
 A mean error of $E_\text{OR} \approx 0.13$ radians ($\approx 7\degree$) in both cases led to reconstructions with resolutions of 8.0\AA\ and 9.6\AA, see \figref{5a1a-noise0-reconstruction-recovered},i.
 %to be compared to \figref{5a1a-noise0-reconstruction-true}.
