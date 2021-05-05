@@ -29,10 +29,10 @@
 % declare nonatbib option, which does not load natbib in case of
 % package clash (users can pass options to natbib via
 % \PassOptionsToPackage)
-% \newif\if@natbib\@natbibtrue
-% \DeclareOption{nonatbib}{
-%   \@natbibfalse
-% }
+\newif\if@natbib\@natbibtrue
+\DeclareOption{nonatbib}{
+  \@natbibfalse
+}
 
 % declare preprint option, which creates a preprint version ready for
 % upload to, e.g., arXiv
@@ -119,9 +119,9 @@
 \fi
 
 % load natbib unless told otherwise
-% \if@natbib
-%   \RequirePackage{natbib}
-% \fi
+\if@natbib
+  \RequirePackage{natbib}
+\fi
 
 % set page geometry
 \usepackage[verbose=true,letterpaper]{geometry}
