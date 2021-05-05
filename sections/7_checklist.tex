@@ -1,21 +1,21 @@
 \section*{Checklist}
 
 %%% BEGIN INSTRUCTIONS %%%
-The checklist follows the references.  Please
-read the checklist guidelines carefully for information on how to answer these
-questions.  For each question, change the default \answerTODO{} to \answerYes{},
-\answerNo{}, or \answerNA{}.  You are strongly encouraged to include a {\bf
-justification to your answer}, either by referencing the appropriate section of
-your paper or providing a brief inline description.  For example:
-\begin{itemize}
-  \item Did you include the license to the code and datasets? \answerYes{See Section~\ref{gen_inst}.}
-  \item Did you include the license to the code and datasets? \answerNo{The code and the data are proprietary.}
-  \item Did you include the license to the code and datasets? \answerNA{}
-\end{itemize}
-Please do not modify the questions and only use the provided macros for your
-answers.  Note that the Checklist section does not count towards the page
-limit.  In your paper, please delete this instructions block and only keep the
-Checklist section heading above along with the questions/answers below.
+% The checklist follows the references.  Please
+% read the checklist guidelines carefully for information on how to answer these
+% questions.  For each question, change the default \answerTODO{} to \answerYes{},
+% \answerNo{}, or \answerNA{}.  You are strongly encouraged to include a {\bf
+% justification to your answer}, either by referencing the appropriate section of
+% your paper or providing a brief inline description.  For example:
+% \begin{itemize}
+%   \item Did you include the license to the code and datasets? \answerYes{See Section~\ref{gen_inst}.}
+%   \item Did you include the license to the code and datasets? \answerNo{The code and the data are proprietary.}
+%   \item Did you include the license to the code and datasets? \answerNA{}
+% \end{itemize}
+% Please do not modify the questions and only use the provided macros for your
+% answers.  Note that the Checklist section does not count towards the page
+% limit.  In your paper, please delete this instructions block and only keep the
+% Checklist section heading above along with the questions/answers below.
 %%% END INSTRUCTIONS %%%
 
 \begin{enumerate}
@@ -23,13 +23,13 @@ Checklist section heading above along with the questions/answers below.
 \item For all authors...
 \begin{enumerate}
   \item Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
-    \answerYes{We accent on the novelty of method developed and its potential to generalize the orientation recovery in SPA, as well as that it is not yet the state-of-the-art.}
+    \answerYes{}
   \item Did you describe the limitations of your work?
-    \answerYes{See Section \ref{sec:discussion}.}
+    \answerYes{See \secref{discussion}.}
   \item Did you discuss any potential negative societal impacts of your work?
-    \answerTODO{Don't think we have any?}
+    \answerNo{We didn't identify any potential risk for improving protein imaging. Moreover, our work only addresses a small step in a huge pipeline.}
   \item Have you read the ethics review guidelines and ensured that your paper conforms to them?
-    \answerTODO{Not yet available https://neurips.cc/Conferences/2021/PaperInformation/EthicsReview}
+    \answerYes{}
 \end{enumerate}
 
 \item If you are including theoretical results...
@@ -43,11 +43,13 @@ Checklist section heading above along with the questions/answers below.
 \item If you ran experiments...
 \begin{enumerate}
   \item Did you include the code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL)?
-    \answerYes{We include the link to the code that includes data, notebooks and website with instructions to reproduce the results.}
+    \answerYes{We include a URL in the Abstract to a git repository that includes code, data, and instructions to reproduce our results. Moreover, notebooks and an interactive website are provided to further play with the method.}
   \item Did you specify all the training details (e.g., data splits, hyperparameters, how they were chosen)?
-    \answerYes{See \apxref{optimization-settings} with hyperparameters, see Section \ref{sec:results:data} and Table \ref{tab:dataset} for the data split and the reason it was chosen.}
-	\item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
-    \answerTODO{The error bar plots we have are distribution over epochs, see \figref{results:distance-estimation} and \figref{4d-vs-256d-de}.}
+    \answerYes{See \secref{results:data} (including \tabref{dataset}) for the preparation of data and how they were split. See \apxref{optimization-settings} for the hyperparameters.}
+  \item Did you report error bars (e.g., with respect to the random seed after running experiments multiple times)?
+%    \answerNo{Our results are mostly qualitative and were robust to re-running. We aren't trying to beat the state-of-the-art on a standardized benchmark.}
+    \answerYes{When there was variance, e.g., on \figref{results:distance-estimation} and \figref{4d-vs-256d-de}.}
+%    \answerTODO{The error bar plots we have are distribution over epochs, see \figref{results:distance-estimation} and \figref{4d-vs-256d-de}.}
 	\item Did you include the total amount of compute and the type of resources used (e.g., type of GPUs, internal cluster, or cloud provider)?
     \answerYes{See \apxref{optimization-settings}.}
 \end{enumerate}
@@ -55,15 +57,15 @@ Checklist section heading above along with the questions/answers below.
 \item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets...
 \begin{enumerate}
   \item If your work uses existing assets, did you cite the creators?
-    \answerYes{We used proteins from publicly available RCSB Protein Data Bank. We cited every used protein, see Section  \ref{sec:results:data}. We also used and cited ASTRA toolbox in the same section.}
+    \answerYes{We used proteins from the publicly available Protein Data Bank (PDB) and cited the ones we used, see \secref{results:data}. We also used and cited the ASTRA toolbox in the same section.}
   \item Did you mention the license of the assets?
-    \answerNo{There is no licence on the data used, see https://www.rcsb.org/pages/policies.}
+    \answerYes{The license of our code is mentioned in the \texttt{README.md} and included in a \texttt{LICENSE.txt} file in our git repository. PDB data are free of all copyright restrictions and made fully and freely available for both non-commercial and commercial use.}
   \item Did you include any new assets either in the supplemental material or as a URL?
-    \answerYes{URL to the code and models in the Abstract.}
+    \answerYes{As a URL in the Abstract.}
   \item Did you discuss whether and how consent was obtained from people whose data you're using/curating?
-    \answerNo{Data used from RCSB Protein Databak is free of all copyright restrictions and made fully and freely available for both non-commercial and commercial use.}
+    \answerNA{Our data are proteins.}
   \item Did you discuss whether the data you are using/curating contains personally identifiable information or offensive content?
-    \answerNo{Data we are using does not contain any personally identifiable information nor offensive content.}
+    \answerNA{Our data are proteins.}
 \end{enumerate}
 
 \item If you used crowdsourcing or conducted research with human subjects...
