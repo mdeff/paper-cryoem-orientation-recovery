@@ -100,7 +100,7 @@ The challenge is then to reconstruct $\x$ from a set of projections $\{\p_i\}_{i
 % RELATED WORKS
 
 A popular approach is to alternatively refine the 3D structure and an estimation of the orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}.
-Yet, the outcome of these iterative-refinement procedures is still often predicated on the quality of the initial reconstruction, \ie, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
+Yet, the outcome of these iterative-refinement procedures is still often predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
 %%%
 Several methods have been designed to produce a first rough \textit{ab initio} structure for the refinement procedure~\cite{singer2020computational}.
 An early approach~\cite{kam1980reconstruction} proposed to reconstruct an initial structure such that the first few moments of the distribution of its theoretical measurements match the ones of its experimental projections.
@@ -108,8 +108,8 @@ Since then, \textit{moment-matching} techniques have been refined and extended~\
 However, they typically remain sensitive to error in data and can require relatively high computational complexity.
 
 Another popular approach relies on the central-slice theorem, which relates the Fourier transform of a projection to a plane (orthogonal to the projection direction) in the Fourier transform of the 3D object~\cite{Natterer2001mathematics}.
-Hence, every two projections share a common 1D intersection in the 3D Fourier domain, and three projections theoretically suffice to define a coordinate system from which their orientations can be deduced~\cite{van1987angular}.
-Exploiting this principle, \textit{common-lines} methods aim at uniquely determining the orientations of each projection by identifying the common-lines between triplets of projections~\cite{penczek1994ribosome,mallick2006structure,singer2010detecting,wang2013orientation,greenberg2017common,pragier2019common}---a real challenge given the massive amount of noise in data.
+Hence, every two projections \textit{de facto} share a common 1D intersection in the 3D Fourier domain, and three projections theoretically suffice to define a coordinate system from which their orientations can be deduced~\cite{van1987angular}.
+Exploiting this principle, \textit{common-lines} methods aim at uniquely determining the orientations of each projection by identifying the common-lines between triplets of projections~\cite{penczek1994ribosome,mallick2006structure,singer2010detecting,wang2013orientation,greenberg2017common,pragier2019common}---a real challenge given the massive amount of noise.
 %If needs be for downside: sensitivity to high-noise levels, small particles, etc.
 
 % TODO: DISCUSS THIS (JB)

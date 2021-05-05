@@ -16,41 +16,41 @@
 % \end{itemize}
 
 \newpage
-\section{Example of 3D proteins and 2D projections}\label{apx:protein-atomic-model-density-map-projections}
+\section{Examples of proteins and projections}\label{apx:protein-atomic-model-density-map-projections}
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}[b]{0.51\linewidth}
+    \begin{minipage}[b]{0.46\linewidth}
         \begin{subfigure}[b]{\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5a1a_pdb.png}
-            \hspace{0.15\textwidth}
+            \hspace{0.05\linewidth}
             \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
             \caption{Atomic model of \texttt{5a1a} (left) and \texttt{5j0n} (right).}
-            \vspace{0.8em}
+            \vspace{0.5em}
         \end{subfigure}
-        \\ \vspace{0.5em}
         \begin{subfigure}[b]{\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5a1a_5A.png}
-            \hspace{0.05\textwidth}
+            \hspace{0.05\linewidth}
             \includegraphics[height=3cm]{figures/5j0n_5A.png}
-            \caption{1\AA\ density map $\x$ of \texttt{5a1a} and 3.67\AA\ of \texttt{5j0n}.}
+            \caption{Density map $\x$ of \texttt{5a1a} (1\AA) and \texttt{5j0n} (3.67\AA).}%
             \label{fig:density-map:5j0n:ground-truth}
         \end{subfigure}
         \caption{%
             %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
-            Two proteins with different symmetries.
+            Proteins with different symmetries.
             %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
         }\label{fig:pdb-proteins}
     \end{minipage}
     \hfill
-    \begin{minipage}[b]{0.48\linewidth}
+    \begin{minipage}[b]{0.50\linewidth}
         \centering
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_noise0}
             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
+            \vspace{0.5em}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
@@ -58,8 +58,8 @@
             \includegraphics[height=3cm]{figures/5j0n_noise16}
             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
+            \vspace{0.5em}
         \end{subfigure}
-        \\ \vspace{0.5em}
         \begin{subfigure}[b]{0.49\linewidth}
             \centering
             \includegraphics[height=3cm]{figures/5j0n_translated}
@@ -72,12 +72,11 @@
             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
         \end{subfigure}
         \caption{%
-            \texttt{5j0n} example projections ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
+            Example projections ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
             % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
         }\label{fig:different-projections}
     \end{minipage}
 \end{figure}
-
 
 \section{Sampling of orientations}\label{apx:orientation-sampling}
 
@@ -94,13 +93,13 @@ Comparing Figure~\ref{fig:nonuniform:recovery} with~\ref{fig:5j0n-noise0-orienta
 
 \begin{figure}[ht!]
     \centering
-    \begin{minipage}{.33\linewidth}
+    \begin{minipage}{.35\linewidth}
         \begin{subfigure}[b]{\linewidth}
             \centering
             \includegraphics[height=2.2cm]{figures/uniform_quaternion.png}%
             \hfill
             \includegraphics[height=2.2cm]{figures/uniform_angles.png}
-            \\ \vspace{0.2cm}
+            \\ \vspace{0.4cm}
             \includegraphics[height=2.2cm]{figures/5j0n-cvg2.pdf}
             \hfill
             \includegraphics[height=2.2cm]{figures/5a1a-cvg2.pdf}
@@ -109,8 +108,8 @@ Comparing Figure~\ref{fig:nonuniform:recovery} with~\ref{fig:5j0n-noise0-orienta
         \end{subfigure}
     \end{minipage}
     \hfill
-    \begin{minipage}{.65\linewidth}
-        \begin{subfigure}[b]{0.37\linewidth}
+    \begin{minipage}{.62\linewidth}
+        \begin{subfigure}[b]{0.35\linewidth}
             \centering
             % \includegraphics[height=8em]{figures/dQ_5j0n_uniform_quaternions_vs_angles.pdf}
             \includegraphics[height=2.1cm]{figures/dQ_distribution_coverage.pdf}
@@ -119,7 +118,7 @@ Comparing Figure~\ref{fig:nonuniform:recovery} with~\ref{fig:5j0n-noise0-orienta
             \vspace{0.2cm}
         \end{subfigure}
         \hfill
-        \begin{subfigure}[b]{0.6\linewidth}
+        \begin{subfigure}[b]{0.63\linewidth}
             \centering
             \includegraphics[height=2.1cm]{figures/uniform_quaternions_vs_angles_ang.pdf}
             \caption{Distribution of $\bth = (\theta_3,\theta_2,\theta_1)$.}%
@@ -159,12 +158,13 @@ Comparing Figure~\ref{fig:nonuniform:recovery} with~\ref{fig:5j0n-noise0-orienta
         \label{fig:nonuniform:reconstruction}
     \end{subfigure}
     \caption{%
-        Orientation recovery and density reconstruction from noiseless projections of \texttt{5j0n} acquired from non-uniformly sampled orientations (uniformly sampled Euler angles, \figref{orientation-sampling} (orange)).
+        Orientation recovery and density reconstruction from noiseless projections of \texttt{5j0n} acquired from non-uniformly sampled orientations (Euler uniform, \figref{orientation-sampling} (orange)).
         %Full pipeline on the orientations with uniform sampling of Euler angles from full 2-sphere coverage.
     }
 \end{figure}
 
 \section{Optimization settings}\label{apx:optimization-settings}
+
 %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
 We optimized \eqnref{distance-learning} with the RMSProp optimizer~\cite{tieleman2012rmsprop} and a learning rate of $10^{-3}$ for $150$ epochs.
 Batches of $256$ pairs resulted in $247$ steps per epoch for the training sets and $28$ for the validation sets (\tabref{dataset}).
@@ -192,11 +192,11 @@ Orientations were perfectly recovered;
 It illustrates how alignment is necessary to evaluate the performance of orientation recovery.
 
 \begin{figure}[ht!]
-    \begin{minipage}[t]{0.29\linewidth}
+    \begin{minipage}[t]{0.33\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_perfect_angle_recovery}
         % \includegraphics[height=3cm]{figures/5a1a_quartercov_uniformS2_halfInplane_ar_aa}
-        \includegraphics[height=2.7cm]{figures/5a1a_quartercov_uniformS2_perfect_ar_aa}
+        \includegraphics[height=2.8cm]{figures/5a1a_quartercov_uniformS2_perfect_ar_aa}
         \caption{%
             Example of perfect orientation recovery (for \texttt{5a1a}).
             The loss $L_\text{OR}$ \eqnref{orientation-recovery} converges to zero when the distance estimation is perfect, \ie, $\widehat{d_p}(\p_i, \p_j) = d_q(q_i, q_j)$.
@@ -204,7 +204,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
         }\label{fig:5j0n-orientation-recovery-loss}
     \end{minipage}
     \hfill
-    \begin{minipage}[t]{0.66\linewidth}
+    \begin{minipage}[t]{0.64\linewidth}
 %        \begin{subfigure}[b]{0.19\linewidth}
 %            \centering
 %            \includegraphics[height=3cm]{figures/5j0n_perfect_angle_ralignment_after}
@@ -222,7 +222,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_before.png}
             %\includegraphics[height=3cm]{figures/before_aa.png}
-            \includegraphics[height=2.7cm]{figures/BeforeAA.pdf}
+            \includegraphics[height=2.8cm]{figures/BeforeAA.pdf}
             \caption{Orientations before alignment.}
         \end{subfigure}
         \hfill
@@ -230,7 +230,7 @@ It illustrates how alignment is necessary to evaluate the performance of orienta
             \centering
             % \includegraphics[height=3cm]{figures/coverage_alignment_after.png}
             %\includegraphics[height=3cm]{figures/after_aa.png}
-            \includegraphics[height=2.7cm]{figures/AfterAA.pdf}
+            \includegraphics[height=2.8cm]{figures/AfterAA.pdf}
             \caption{Orientations after alignment.}
         \end{subfigure}
         \caption{%
@@ -258,42 +258,40 @@ Second, because \texttt{5a1a} has D2 symmetries, two projections might be identi
 Restricting directions to a quarter captures only one of four identical projections, solving the issue.
 
 \begin{figure}
-    \begin{minipage}[t]{0.99\linewidth}
-        \begin{subfigure}[t]{0.31\textwidth}
-            \centering
-            %\includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}   % on half-sphere
-            %\includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
-            % \includegraphics[height=3cm]{figures/dPdQ_5j0n_euclidean2.pdf}
-            \includegraphics[height=3cm]{figures/dPdQ_5j0n_euclidean3.png}
-            \caption{Full coverage on \texttt{5j0n}.}%
-            \label{fig:euclidean-not-robust:5j0n-full}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.31\textwidth}
-            \centering
-            % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
-            % \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
-            % \includegraphics[height=3cm]{figures/dPdQ_5a1a_full_euclidean2.pdf}
-            \includegraphics[height=3cm]{figures/dPdQ_5a1a_full_euclidean3.png}
-            \caption{Full coverage on \texttt{5a1a}.}%
-            \label{fig:euclidean-not-robust:5a1a-full}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.31\textwidth}
-            \centering
-            %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
-            %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
-            % \includegraphics[height=3cm]{figures/dPdQ_5a1a_euclidean2.pdf}
-            \includegraphics[height=3cm]{figures/dPdQ_5a1a_euclidean3.png}
-            \caption{Quarter coverage on \texttt{5a1a}.}%
-            \label{fig:euclidean-not-robust:5a1a-quarter}
-        \end{subfigure}
-        \caption{%
-            Euclidean distance between projections $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
-            We randomly selected $5$ projections from $P = 5,000$: each color represents the distances between one of those and all the others.
-            % The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
-        }\label{fig:euclidean-not-robust}
-    \end{minipage}
+    \begin{subfigure}[t]{0.31\textwidth}
+        \centering
+        %\includegraphics[height=4cm]{figures/eucl_notrobust_5j0n}   % on half-sphere
+        %\includegraphics[height=4cm]{figures/dPdQ_5j0n_euclidean}
+        % \includegraphics[height=3cm]{figures/dPdQ_5j0n_euclidean2.pdf}
+        \includegraphics[height=3cm]{figures/dPdQ_5j0n_euclidean3.png}
+        \caption{Full coverage on \texttt{5j0n}.}%
+        \label{fig:euclidean-not-robust:5j0n-full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.31\textwidth}
+        \centering
+        % \includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}
+        % \includegraphics[height=4cm]{figures/dPdQ_5a1a_full_euclidean}
+        % \includegraphics[height=3cm]{figures/dPdQ_5a1a_full_euclidean2.pdf}
+        \includegraphics[height=3cm]{figures/dPdQ_5a1a_full_euclidean3.png}
+        \caption{Full coverage on \texttt{5a1a}.}%
+        \label{fig:euclidean-not-robust:5a1a-full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.31\textwidth}
+        \centering
+        %\includegraphics[height=4cm]{figures/eucl_notrobust_5a1a}  % on half-sphere
+        %\includegraphics[height=4cm]{figures/dPdQ_5a1a_euclidean}
+        % \includegraphics[height=3cm]{figures/dPdQ_5a1a_euclidean2.pdf}
+        \includegraphics[height=3cm]{figures/dPdQ_5a1a_euclidean3.png}
+        \caption{Quarter coverage on \texttt{5a1a}.}%
+        \label{fig:euclidean-not-robust:5a1a-quarter}
+    \end{subfigure}
+    \caption{%
+        Euclidean distance between projections $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ versus their actual relative orientation $d_q(q_i, q_j)$.
+        We randomly selected $5$ projections from $P = 5,000$: each color represents the distances between one of those and all the others.
+        % The color corresponds to projection pairs that share one projection, \ie, distance between one projection with all other projections.
+    }\label{fig:euclidean-not-robust}
 \end{figure}
 
 
@@ -384,7 +382,7 @@ This superiority of the cosine distance is likely due to its capacity to model t
         }\label{fig:geo-eucl-mlp}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[t]{0.51\linewidth}
+    \begin{subfigure}[t]{0.53\linewidth}
         \centering
         \includegraphics[height=3.3cm]{figures/de_nf.pdf}
         % \begin{subfigure}[t]{0.48\linewidth}

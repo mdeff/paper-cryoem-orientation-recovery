@@ -2,26 +2,27 @@
 
 % Summary.
 In this work, we explored the use of distance learning between pairs of 2D cryo-EM projections from a 3D protein structure to infer the unknown orientation at which each projection was imaged from.
-Our two-step method relies on the SNN model to estimate pairwise distances between unseen projections, followed by the recovery of the orientations from these distances through an appropriate minimization scheme.
+Our two-step method relies on the estimation of pairwise distances between unseen projections, followed by the recovery of the orientations from these distances.
 %%%
 %\mdeff{Shall we repeat that? It's in the intro.}
 %The benefit of this approach is that it would permit to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset, \ie, without the need for an intermediate reconstruction procedure or an initial volume estimate; this has obvious attractive implications in the field.
-%%%
-At the current stage of development, the method has been evaluated on synthetic datasets for two different proteins.
+
+%At the current stage of development, 
+The method has been evaluated on synthetic datasets for two different proteins.
 The results provide key insights on the viability of the proposed scheme.
-First, they demonstrate that the SNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important condition in cryo-EM\@.
+First, they demonstrate that a SNN can learn a distance function between projections that estimates the difference in their orientation (\secref{results:distance-estimation:learned}) and that is invariant to shifts and robust to increasing levels of noise (\secref{results:distance-estimation:sensitivity})---an important condition in cryo-EM\@.
 Second, they demonstrate that an accurate estimation of distances leads to an accurate recovery of orientations (\secref{results:orientation-recovery:sensitivity}, \secref{results:distance-estimation:sensitivity}).
 Finally, our method was able to recover orientations with an error of $0.12$ to $0.25$ radians ($7$ to $14\degree$)---leading to an initial volume
 with a resolution of $8$ to $15$\AA\ (\secref{results:orientation-recovery:reconstruction}).
 %(from a ground-truth of 1 to $3.67$\AA, respectively)
 %with a resolution of \banjac{$8.0$ to $9.6$\AA\ for the symmetric protein, and $12.2$ to $15.2$\AA\ for the asymmetric protein when the FSC is $0.5$}
-In summary, the more accurate the estimated distances, the more precise the recovered orientations, and the resolution of the reconstruction is higher.
+In summary, the more accurate the estimated distances, the more precise the recovered orientations, and, ultimately, the higher-resolution the reconstructed volume.
 
 % Future work.
-While the method is not yet at the stage where it can be deployed in practice, we believe that a series of developments could help it become a more relevant contributor for single-particle cryo-EM reconstruction.%
+While the method is not yet ready to be deployed in practice, we believe that a series of developments could make it relevant for single-particle cryo-EM reconstruction.%
 \footnote{Note that the present project will not be further continued by its authors due to other professional occupations. Hence, we strongly encourage anyone interested to build on these ideas and, hopefully, make it a practical tool.}
 As previously discussed, the results underline the importance of learning an accurate distance estimator. % $\widehat{d_p}$.
-In this regard, the performance of the SNN model could be improved in several ways.
+In this regard, the performance of the SNN could be improved.
 % Method gains: mostly distance learning maybe recovery (not alignment).
 %A set of additional technical developments could also further improve performance.
 First, the architecture of the twin convolutional neural networks should be expanded and tuned.
@@ -29,20 +30,20 @@ First, the architecture of the twin convolutional neural networks should be expa
 % , as well as the distance metric between the two CNN outputs.
 % For instance, one could parametrize the function $d_f$---which compares the similarity of the features outputs (see \figref{schematic:distance-learning})---as a feed-forward neural network instead of the current Euclidean distance, and learn its weights as well.
 % \todo{It can definitely learn mirroring / full coverage, albeit not as well as half (because it doesn't exploit that symmetry). Motivation to incorporate this physical knowledge into the NN architecture. Motivation (on top of half in-plane being much easier for 5a1a) to predict the direction and in-plane angle separately.}
-Second, the training could be improved, perhaps by providing more supervision by separately predicting the differences in direction $(\theta_2,\theta_1)$ and in-plane angle $\theta_3$.
-%%%
+Second, training could be improved, perhaps by providing more supervision by separately predicting the differences in direction $(\theta_2,\theta_1)$ and in-plane angle $\theta_3$.
+
 % \mdeff{Let's ignore improvements to recovery and concentrate the story on better distance learning -> better recovery -> better reconstruction.}
 %Among others, one shall explore whether reducing the influence of larger distances in orientation recovery could bring further gain in accuracy.
 % \mdeff{The following are issues with alignment---not directly related to our method---that we mentioned elsewhere.}
 % Angle alignment didn't always work, even when $L_\text{OR}$ was low (examples?): We might miss a transformation in \eqnref{orientation-recovery-error}.
 % Why did we need to align with \eqnref{orientation-recovery-error} before reconstructing with ASTRA\@?
-%%%
+
 % Data gains.
-Importantly, the SNN would be better trained on a more exhaustive and diverse cryo-EM dataset.
-Indeed, the success of the SNN as a faithful estimator of relative orientations eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
+Importantly, the SNN would be better trained on a more diverse cryo-EM dataset.
+Indeed, its success as a faithful estimator eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets.
 Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB\@.
 % \mdeff{PDB database sounds redundant as PDB stands for protein database.}
-In particular, a necessary extension will be to include the effects of the PSF when generating training data and evaluate its impact on the SNN\@. % like we did for shifts and noise
+In particular, a necessary extension will be to include the effects of the PSF and to evaluate its impact.
 
 % Towards practical use: unseen proteins (also data) and real measurements.
 A final phase of tests before deploying the method on real cryo-EM measurements will be to extensively test the method on ``unseen proteins'', \ie, proteins whose simulated projections have never been seen by the SNN\@.
@@ -50,7 +51,7 @@ A final phase of tests before deploying the method on real cryo-EM measurements 
 In this regard, an interesting aspect of our method is that the twin networks within the SNN intrinsically predict the \textit{relationship} between projections, allowing the SNN as a whole to abstract the particular volume.
 %Consequently, a well-trained distance estimator could be relatively robust to the ``mismatch'' of volumes within the training set.
 %In the same line of thought,
-Learning benefits from the profound structural similarity shared by proteins---after all, they are all derived from the same $21$ building blocks.
+Learning should benefit from the profound structural similarity shared by proteins---after all, they are all derived from the same $21$ building blocks.
 % Learning exploits statistical effects, given here by biological building block.
 
 % \mdeff{I propose to omit the following sentence (which is a truism and is stated in the previous paragraph) to finish on a more forceful note.}

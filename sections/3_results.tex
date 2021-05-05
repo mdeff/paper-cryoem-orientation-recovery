@@ -7,10 +7,9 @@
 
 % Feasibility (one component).
 We first evaluated whether orientation recovery through \eqnref{orientation-recovery} was feasible assuming perfect distances, and how it was affected by errors in the distances (\secref{results:orientation-recovery:sensitivity}).
-We then learned to estimate the distances through \eqnref{distance-learning} and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}).
+We then learned to estimate the distances through \eqnref{distance-learning}, and evaluated the accuracy of this procedure (\secref{results:distance-estimation:learned}) and its robustness to perturbations of the projections (\secref{results:distance-estimation:sensitivity}).
 % Real stuff (the two steps together).
-Following this, we evaluated the robustness of distance learning to perturbations in the projections (\secref{results:distance-estimation:sensitivity}).
-Finally, we ran the whole pipeline on a synthetic dataset to assess how well orientations could be recovered from distances estimated by the SNN model (\secref{results:orientation-recovery:reconstruction}).
+Finally, we ran the whole machinery on a synthetic dataset to assess how well orientations could be recovered from estimated distances  (\secref{results:orientation-recovery:reconstruction}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -22,70 +21,10 @@ Their deposited PDB atomic models are \texttt{5a1a}~\cite{bartesaghi2015betagal}
 From these atomic models, we generated the density maps in Chimera~\cite{pettersen2004ucsf} by fitting the models with a 1\AA\ map for \texttt{5a1a} and a 3.67\AA\ map for \texttt{5j0n}; this gave us a volume of $110 \times 155 \times 199$ voxels for \texttt{5a1a} and one of $69 \times 57 \times 75$ voxels for \texttt{5j0n}.
 % -sized volume
 
-% \begin{figure}[ht!]
-%     \centering
-%     \begin{minipage}[b]{0.51\linewidth}
-%         \begin{subfigure}[b]{\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5a1a_pdb.png}
-%             \hspace{0.15\textwidth}
-%             \includegraphics[height=3cm]{figures/5j0n_pdb_.png}
-%             \caption{Atomic model of \texttt{5a1a} (left) and \texttt{5j0n} (right).}
-%             \vspace{0.8em}
-%         \end{subfigure}
-%         \\ \vspace{0.5em}
-%         \begin{subfigure}[b]{\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5a1a_5A.png}
-%             \hspace{0.05\textwidth}
-%             \includegraphics[height=3cm]{figures/5j0n_5A.png}
-%             \caption{1\AA\ density map $\x$ of \texttt{5a1a} and 3.67\AA\ of \texttt{5j0n}.}
-%             \label{fig:density-map:5j0n:ground-truth}
-%         \end{subfigure}
-%         \caption{%
-%             %A D2 symmetric (\texttt{5a1a}) and an asymmetric (\texttt{5j0n}) protein.
-%             Two proteins with different symmetries.
-%             %The $\beta$-galactosidase (\texttt{5a1a}) and the lambda excision HJ intermediate (\texttt{5j0n}).
-%         }\label{fig:pdb-proteins}
-%     \end{minipage}
-%     \hfill
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise0}
-%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x}$}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise16}
-%             \caption{$\p = \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-%     %, \; \mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$}
-%         \end{subfigure}
-%         \\ \vspace{0.5em}
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_translated}
-%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x}$}
-%         \end{subfigure}
-%         \hfill
-%         \begin{subfigure}[b]{0.49\linewidth}
-%             \centering
-%             \includegraphics[height=3cm]{figures/5j0n_noise16_translated}
-%             \caption{$\p = \mathbf{S}_{\mathbf{t}} \mathbf{P}_{\bth} \mathbf{x} + \mathbf{n}$}
-%         \end{subfigure}
-%         \caption{%
-%             \texttt{5j0n} example projections ($\mathbf{n} \sim \mathcal{N}(0, 16\mathbf{I})$).
-%             % (a)~unperturbed, (b)~noisy, (c)~shifted, (d)~noisy and shifted.
-%         }\label{fig:different-projections}
-%     \end{minipage}
-% \end{figure}
-
 \paragraph{Protein symmetries.}
-Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of proper distance functions (identity of indiscernibles), see \figref{euclidean-not-robust:5a1a-full}.
-%\figref{euclidean-not-robust:5a1a-full} illustrates this problem.
-To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}).
+Symmetries are problematic when learning distances: two projections can be identical while not originating from the same orientation, which breaks an axiom of distance functions (identity of indiscernibles).
+\figref{euclidean-not-robust:5a1a-full} illustrates this problem.
+To capture only one of four identical projections of \texttt{5a1a}, we restricted directions to $(\theta_2, \theta_1) \in [0, \pi[ \, \times \, [0, \frac{\pi}{2}[$ (a quarter of the sphere, illustrated in \figref{orientation-sampling:directions}) for that protein.
 % Symmetry group of order 4: 4 identical subunits, 4 orientations that yield the same projection.
 % (a quarter of the sphere, We would restrict directions to an half (of the sphere) for a protein with C2 symmetry.)
 %Symmetries aren't an issue beyond distance learning: orientations will be recovered over one of the four identical subunits of \texttt{5a1a}.
@@ -103,7 +42,7 @@ Using the ASTRA projector~\cite{van2015astra}, we generated $P=5,000$ synthetic 
 \footnote{Orientations used in \secref{results:orientation-recovery:sensitivity} (\figref{perfect-with-noise-ar-aa}) and \secref{results:distance-estimation:sensitivity} (\figref{results:distance-estimation}) were actually obtained by uniformly sampling the Euler angles $\bth$, constrained to $(\theta_3,\theta_2,\theta_1) \in [0, 2\pi[ \, \times \, [0, \frac{\pi}{2}[ \, \times \, [0, 2\pi[$ for \texttt{5j0n}. Our conclusions would be identical if orientations were uniformly sampled from $\SO(3)$ instead.}
 We then perturbed the measurements with different levels of additive Gaussian noise~\cite{sorzano2004normalizing,shigematsu2013noise} and off-centering shifts. %, (iii) inclusion of the effects of the point-spread functions (PSF).
 %The mathematical formulation of these three components is given in \eqnref{imaging-model}.
-\figref{different-projections} displays samples of projections.
+\figref{different-projections} displays some samples.
 
 % From projections to pairs and subsets (which are used for distance learning and orientation recovery).
 \paragraph{Datasets.}
@@ -123,7 +62,8 @@ As this would skew $L_\text{DE}$ and bias $\widehat{d_p}$, we further sampled $1
 %We restricted the size of our training and validation datasets due to Google Colaboratory\footnote{A hosted Jupyter notebook service from Google Research with resources that are not guaranteed and not unlimited.} training time limit of 12 hours.
 %\mdeff{No. 100 epochs over 1% takes the same time as 1 epoch over 100%.}
 (see \apxref{orientation-sampling} for further illustrations).
-While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch. Optimization settings are described in \apxref{optimization-settings}.
+While $1,650$ projections were enough to perfectly reconstruct the density maps (as shown in Figures~\ref{fig:5j0n-reconstruction-fsc} and~\ref{fig:5a1a-reconstruction-fsc}), our method is not limited by the number of projections as optimization is done per batch.
+Optimization settings are described in \apxref{optimization-settings}.
 
 % \paragraph{Optimization.}
 % %\todo{Jelena: check the settings, make sure they are used for all experiments, and add anything missing?} \banjac{Checked, yes, parameters are the same.}
@@ -151,18 +91,16 @@ While $1,650$ projections were enough to perfectly reconstruct the density maps 
 %\mdeff{Story: good distance estimation = good orientation recovery.}
 
 We first evaluated the feasibility of orientation recovery assuming that the exact distances were known.
-Experiments confirmed that the method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
-%%%
-We then evaluated the behavior of~\eqnref{orientation-recovery} when the true distances were increasingly perturbed.
-More precisely, we perturbed the distances prior to the minimization with an error sampled from a Gaussian distribution with mean $0$ and variances $\sigma^2 \in [0.0, 0.8]$.
-\figref{perfect-with-noise-ar-aa} shows that the recovery error $E_\text{OR}$ from \eqnref{orientation-recovery-error} is a monotonic function of the error in distances: from $E_\text{OR} = 0$ with perfect distances to $E_\text{OR} \approx 0.2$ radians ($\approx 11.5\degree$) for $\sigma^2 = 0.8$.
+The method successfully recovers the orientation of every projection in this case (see \apxref{results:orientation-recovery:exact}).
+
+To evaluate the robustness of~\eqnref{orientation-recovery}, we perturbed the distances prior to recovery with an error sampled from a Gaussian distribution with mean $0$ and variances $\sigma^2 \in [0.0, 0.8]$.
+\figref{perfect-with-noise-ar-aa} shows that the recovery error $E_\text{OR}$ is a monotonic function of the error in distances: from $E_\text{OR} = 0$ with exact distances to $E_\text{OR} \approx 0.2$ radians ($\approx 11.5\degree$) for $\sigma^2 = 0.8$.
 % represented as the variance $\sigma^2$ of white noise added to the true distances.
 %More accurate distance estimation leads to more accurate orientation recovery,
 
-These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SNN in further stages of development.
+These results demonstrate that the performance of orientation recovery~\eqnref{orientation-recovery} depends on the quality of the estimated distances, which advocates for a proper and extensive training of the SNN. % in further stages of development.
 %%%
-Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recovery} is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations. 
-%(\ie, when recovering the orientations of real projections).
+Moreover, we observe that $L_\text{OR}$ is a reliable proxy for $E_\text{OR}$, allowing us to assess recovery performance in the absence of ground-truth orientations (\ie, when recovering the orientations of real projections).
 %Hence, it suggests that the loss can be used as a good indicator of its performance, as it shows how well the proposed method works even if the true distances are not available.
 %Hence, it has practical implications for our future works on real data.
 
@@ -183,23 +121,23 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
                 Validation & 838 (17\%) & 702,244 & 7,022 \\ % (1\%) \\
                 Test & 1,650 (33\%) & 2,722,500 & 2,722,500 \\ % (100\%) \\
                 \bottomrule
-                \vspace{2em}  % TODO: check if this is allowed 
+                \vspace{3em}
             \end{tabular}
             }\label{tab:dataset}
         \end{minipage}
         
         \begin{subfigure}[b]{0.49\linewidth}
             \includegraphics[width=\linewidth]{figures/5j0n_perfect_noisy_ar_aa}
-            \caption{\texttt{5j0n}.}
+            %\caption{\texttt{5j0n}}
         \end{subfigure}
         \hfill
         \begin{subfigure}[b]{0.49\linewidth}
         \centering
             \includegraphics[width=\linewidth]{figures/5a1a_perfect_noisy_ar_aa}
-            \caption{\texttt{5a1a}.}
+            %\caption{\texttt{5a1a}}
         \end{subfigure}
         \caption{%
-            Orientation recovery from perturbed distances.
+            Orientation recovery from perturbed distances on \texttt{5j0n} (left) and \texttt{5a1a} (right).
         }\label{fig:perfect-with-noise-ar-aa}
     \end{minipage}
     \hfill
@@ -227,7 +165,7 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
             %\includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_1.pdf}
             %\includegraphics[width=0.20\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0_2.pdf}
             \includegraphics[width=0.40\linewidth]{figures/dPdQ_5a1a_quartercvg_uniformS2_noise0.pdf}
-            \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs sampled on \texttt{5j0n} (left) and \texttt{5a1a} (right) test sets.
+            \caption{Relationship between $\widehat{d_p}$ and $d_q$ on $1,000$ pairs from the test sets of \texttt{5j0n} (left) and \texttt{5a1a} (right).
             }\label{fig:distance-learning:dpdq}
         \end{subfigure}
         \caption{Distance learning.}
@@ -248,11 +186,11 @@ Moreover, we observe that the loss $L_\text{OR}$ from \eqnref{orientation-recove
 %\mdeff{Story: learned distance $d_{ps}$ estimates $d_q$ with some variance but still underestimates larger distances.
 %Again symmetric vs asymmetric.}
 
-We evaluated the ability of the SNN to learn to approximate the orientation distance $d_q$ through \eqnref{distance-learning}.
+We evaluated the ability of the SNN to learn to approximate the orientation distance $d_q$.
 % ---parameterized as a SNN and trained---
 % to learn a distance between projections $\widehat{d_p}(\p_i,\p_j)$
 For comparison, we evaluated a baseline, the Euclidean distance $\widehat{d_p}(\p_i,\p_j) = \|\p_i, \p_j\|_2$, in \apxref{results:distance-estimation:euclidean}.
-%%%
+
 \figref{distance-learning:loss} shows the convergence of $L_\text{DE}$, reached in about 50 epochs.
 %\todo{Values: $L_\text{DE} = ?$ for training/validation and \texttt{5j0n}/\texttt{5a1a}.}
 %We observe that overfitting---the difference between training and validation losses---is larger for \texttt{5a1a} than \texttt{5j0n}.
@@ -293,11 +231,11 @@ The use of additional training data should help further diminish overfitting.
 %Thanks again to good model of cryo-EM imaging.}
 
 % Intro and shift.
-We first demonstrated that the learning of distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given the shift invariance built in our SNN (see \secref{method:distance-learning}).
+We first demonstrated that the learning of distances is insensible to off-centering shifts (\figref{results:distance-estimation:shift}), which is expected given that shift invariance is built in our SNN (see \secref{method:distance-learning}).
 %We desire to estimate distances that are invariant to perturbations in the projections---specified in~\eqnref{imaging-model}.
 %As discussed in \secref{method:distance-learning}, the convolutional architecture of the SNN should be shift invariant.
 % indeed shows that learning distances (and hence recovering orientations)
-%%%
+
 % Noise.
 As we cannot---or do not yet know how to---build noise invariance in the SNN architecture, we trained the SNN on noisy projections and evaluated whether it could learn to treat noise as an irrelevant information.
 % brute force vs principled engineering
@@ -306,6 +244,7 @@ As we cannot---or do not yet know how to---build noise invariance in the SNN arc
 %\mdeff{How good is that?}\banjac{To be discussed tomorrow}\lau{Reasonable first guess, room for improvement.}
 Whereas a naive distance function (\textit{e.g.}, an Euclidean distance) would be extremely sensitive to noise, the SNN mostly learned to discard it.
 Moreover, the observed overfitting indicates that more training data should further decrease the sensitivity of the SNN to noise.
+
 % PSF and conclusion.
 Note that we did not evaluate sensitivity to the PSF at this stage but expect a similar behavior.
 %While we would ideally want the NN architecture to be engineered to ignore irrelevant information, that is not always possible.
@@ -318,25 +257,24 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
     \begin{subfigure}[t]{0.47\linewidth}
         \includegraphics[width=\linewidth]{figures/de_translation_nums}
         \caption{%
-            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with triangular distribution shift $(t_{i_1}, t_{i_2}, 0)$.
-            %Learning is not harder with the projection shift, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$.
+            Learning from shifted projections $\{ \mathbf{S}_{\mathbf{t}_i} \mathbf{P}_{\bth_i} \mathbf{x} \}$, with shifts $t_{i_1}$ and $t_{i_2}$ sampled from a triangular distribution with mean 0 and of increasing limits.
+            %Learning is not harder as projections get shifted farther, because shift invariance is built-in. % into the convolutional architecture of $\mathcal{G}_w$.
     }\label{fig:results:distance-estimation:shift}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.47\linewidth}
         \includegraphics[width=\linewidth]{figures/de_noises_nums}
         \caption{%
-            Learning from noisy projections $\{ \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n} \}$, with white noise $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I})$ of increasing $\sigma^2$.
+            Learning from noisy projections $\{ \mathbf{P}_{\bth_i} \mathbf{x} + \mathbf{n} \}$, with white noise $\mathbf{n} \sim \mathcal{N}(0, \sigma^2\mathbf{I})$ of increasing variance $\sigma^2$.
             %Learning is harder as projections get noisier, because noise invariance is not built into the architecture of $\mathcal{G}_w$.
         }\label{fig:results:distance-estimation:noise}
     \end{subfigure}
     \caption{%
         Sensitivity of distance learning to perturbations in the projections of \texttt{5j0n}.
-        The box plots show the distance learning loss $L_\text{DE}$~\eqnref{distance-learning} (the distribution is taken over epochs).
+        The box plots show the distance learning loss $L_\text{DE}$ (the distribution is taken over epochs).
         % per epoch on the training and validation sets.
         %\mdeff{Numbers are per pair or per batch of 256 pairs?}
-        Boxes show the orientation recovery loss $L_\text{OR}$~\eqnref{orientation-recovery} and error $E_\text{OR}$~\eqnref{orientation-recovery-error}.
-        Learning is not harder as projections get shifted farther whereas the learning is harder as they become noisier, because shift invariance is built into the convolutional architecture of $\mathcal{G}_w$ and noise invariance is not.
+        Boxes show the orientation recovery loss $L_\text{OR}$ and error $E_\text{OR}$.
     }\label{fig:results:distance-estimation}
 \end{figure}
 
@@ -348,18 +286,18 @@ Here again (\secref{results:orientation-recovery:sensitivity}), we observed that
 As a proof-of-concept, we attempted to solve the full inverse problem posed by \eqnref{imaging-model}, \ie, to reconstruct the density maps $\widehat{\x}$ from sets of projections $\{ \p_i \}$ and their orientations $\{ \widehat{q_i} \}$ recovered through the proposed method.
 It is worth noting that, at this stage of development, we only trained the SNN on projections originating from the protein we were attempting to reconstruct.
 In addition, reconstruction was performed with a direct reconstruction algorithm (ASTRA's GPU implementation of the CGLS algorithm) rather than with a robuster iterative method.
-This is obviously a specific experimental case that only partially shines light on the applicability of the method in real situations; discussed in \secref{discussion}.
+This is a specific experimental case that only partially shines light on the applicability of the method in real situations; this is discussed in \secref{discussion}.
 
 \figref{5j0n-noise0-orientation-recovery} shows the recovery of orientations from distances that were estimated from noiseless projections of \texttt{5j0n}.
-A mean error of $E_\text{OR} \approx 0.20$ radians ($\approx 11\degree$) in the recovered orientations led to a reconstruction with a resolution of 12.2\AA\ at a Fourier shell coefficient (FSC) of $0.5$, see \figref{5j0n-noise0-reconstruction-recovered}.
+A mean error of $E_\text{OR} \approx 0.20$ radians ($\approx 11\degree$) in the recovered orientations led to a reconstruction with a resolution of 12.2\AA\ at a Fourier shell coefficient (FSC) of $0.5$, shown in \figref{5j0n-noise0-reconstruction-recovered}.
 % to be compared to the reconstruction from ground-truth orientations shown in \figref{5j0n-noise0-reconstruction-true}.
 %%%
 As predicted by our other experiments, corrupting the projections with noise ($\sigma^2=16$) negatively impacts the quality of the recovered orientations (\figref{5j0n-noise16-orientation-recovery}); the obtained mean error is then $E_\text{OR} \approx 0.25$ radians ($\approx 14\degree$).
 Unsurprisingly, this leads to a reconstruction with a lower resolution of 15.2\AA, shown in \figref{5j0n-noise16-reconstruction-recovered}.
 (Note that reconstruction was here obtained from the noiseless projections, the goal being to evaluate only the impact of orientation mis-estimation.)
-%%%
-Finally, \figref{5a1a-noise0-orientation-recovery},d show the recovery of orientations from noiseless and noisy projections of \texttt{5a1a}.
-A mean error of $E_\text{OR} \approx 0.13$ radians ($\approx 7\degree$) in both cases led to reconstructions with resolutions of 8.0\AA\ and 9.6\AA, see \figref{5a1a-noise0-reconstruction-recovered},i.
+
+Finally, Figures~\ref{fig:5a1a-noise0-orientation-recovery},d show the recovery of orientations from noiseless and noisy projections of \texttt{5a1a}.
+A mean error of $E_\text{OR} \approx 0.13$ radians ($\approx 7\degree$) in both cases led to reconstructions with resolutions of 8.0\AA\ and 9.6\AA, shown in Figures~\ref{fig:5a1a-noise0-reconstruction-recovered},i.
 %to be compared to \figref{5a1a-noise0-reconstruction-true}.
 %Orientation recovery is slightly more difficult for this protein as distance estimation is more difficult (\secref{results:distance-estimation:learned}).
 Distance estimation, orientation recovery, and reconstruction performed better on \texttt{5a1a} than \texttt{5j0n} because its ground-truth density is of higher resolution.
@@ -372,47 +310,40 @@ These results tend to indicate that a reasonable first structure can be reconstr
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}[b]{0.251\linewidth}
+    \begin{subfigure}[b]{0.245\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_ar_aa_fullcvg_uniform2}
-        \includegraphics[height=2.2cm]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
-        \caption{Noiseless $\mathbf{p}$ of \texttt{5j0n}.}%
+        \includegraphics[width=\linewidth]{figures/5j0n_fullcvg_uniformS2_noise0_ar_aa.pdf}
+        \caption{\texttt{5j0n}, noiseless.}%
         \label{fig:5j0n-noise0-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.232\linewidth}
+    \begin{subfigure}[b]{0.245\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/5j0n_fullcov_noise16_ar_aa}
-        \includegraphics[height=2.2cm]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
-        \caption{Noisy $\mathbf{p}$ of \texttt{5j0n}.}%
+        \includegraphics[width=\linewidth]{figures/5j0n_fullcvg_uniformS2_noise16_ar_aa.pdf}
+        \caption{\texttt{5j0n}, noisy.}%
         \label{fig:5j0n-noise16-orientation-recovery}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.251\linewidth}
+    \begin{subfigure}[b]{0.245\linewidth}
         \centering
-        %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
+        % \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
         % \includegraphics[width=\linewidth]{figures/5a1a_noise0_ar_aa.pdf}
-        \includegraphics[height=2.2cm]{figures/5a1a_quartercov_uniformS2_noise0_LAST_ar_aa.pdf}
-        \caption{Noiseless $\mathbf{p}$ of \texttt{5a1a}.
-        }%
+        % \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
+        % \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_ar_aa.pdf}
+        \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_LAST_ar_aa.pdf}
+        \caption{\texttt{5a1a}, noiseless.}%
         \label{fig:5a1a-noise0-orientation-recovery}
     \end{subfigure}
-    \begin{subfigure}[b]{0.232\linewidth}
+    \hfill
+    \begin{subfigure}[b]{0.245\linewidth}
         \centering
         %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
-        \includegraphics[height=2.2cm]{figures/5a1a_quartercov_uniformS2_noise16_LAST_ar_aa.pdf}
-        \caption{Noisy $\mathbf{p}$ of \texttt{5a1a}.
-        }%
+        \includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise16_LAST_ar_aa.pdf}
+        \caption{\texttt{5a1a}, noisy.}%
         \label{fig:5a1a-noise16-orientation-recovery}
     \end{subfigure}
-    \hfill
-    % \begin{subfigure}[b]{0.22\linewidth}
-    %     \centering
-    %     %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_halfInplane_ar_aa.pdf}
-    %     %\includegraphics[width=\linewidth]{figures/5a1a_quartercov_uniformS2_noise0_ar_aa.pdf}
-    %     %\caption{Noiseless projections of \texttt{5a1a}.}%
-    %     \label{fig:5a1a-noise0-orientation-recovery-quarter-full}
-    % \end{subfigure}
     \caption{%
         % Our pipeline.
         Distance learning and orientation recovery from estimated distances.
@@ -427,27 +358,28 @@ These results tend to indicate that a reasonable first structure can be reconstr
 \end{figure}
 
 \begin{figure}[t]
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
-        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
+        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise0_gt.png}
         \caption{}\label{fig:5j0n-noise0-reconstruction-true}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.3cm]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}
+        \includegraphics[height=2.0cm]{figures/5j0n_fullcvg_uniformS2_noise0_rand.png}%
+        \vspace{0.2cm}
         \caption{}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
-        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
+        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise0_apr.png}
         \caption{}\label{fig:5j0n-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
-        \includegraphics[height=2.35cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
+        \includegraphics[height=2.4cm]{figures/5j0n_fullcvg_uniformS2_noise16_apr.png}
         \caption{}\label{fig:5j0n-noise16-reconstruction-recovered}
     \end{subfigure}
     \hfill
@@ -461,7 +393,7 @@ These results tend to indicate that a reasonable first structure can be reconstr
     \end{subfigure}
 
     \vspace{1em}
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
         \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_gt_.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-true}
@@ -469,18 +401,19 @@ These results tend to indicate that a reasonable first structure can be reconstr
     \hfill
     \begin{subfigure}[b]{0.15\linewidth}
         \centering
-        \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_rand.png}
+        \includegraphics[height=2.0cm]{figures/5a1a_quartercov_uniformS2_noise0_rand.png}%
+        \vspace{0.2cm}
         \caption{}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
         %\includegraphics[height=3cm]{figures/r5a1a_quartercov_uniformS2_noise0_halfInplane_apr.png}
         \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise0_apr_.png}
         \caption{}\label{fig:5a1a-noise0-reconstruction-recovered}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.15\linewidth}
+    \begin{subfigure}[b]{0.16\linewidth}
         \centering
         \includegraphics[height=2.4cm]{figures/5a1a_quartercov_uniformS2_noise16_apr_.png}
         \caption{}\label{fig:5a1a-noise16-reconstruction-recovered}
@@ -497,7 +430,7 @@ These results tend to indicate that a reasonable first structure can be reconstr
     \caption{%
         Density maps $\widehat{\x}$ reconstructed from (a,f) ground-truth orientations, (b,g) random orientations, (c,h) orientations recovered from noiseless projections, and (d,i) orientations recovered from noisy projections.
         %While orientations were recovered from noisy projections, (e) was reconstructed from noiseless projections.
-        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities reconstructed from recovered orientations (w.r.t.\ ground-truth densities,  \figref{density-map:5j0n:ground-truth},d).
+        The Fourier shell correlation (FSC) curves in (e,j) indicate the resolutions of the densities (w.r.t.\ ground-truth densities, shown in Figures \ref{fig:density-map:5j0n:ground-truth},d).
         % \lau{Suggestions: 3. filter volumes at the resolution indicated by the FSC at 0.5 (commonly done in the field),}
     }\label{fig:reconstructions}
 \end{figure}

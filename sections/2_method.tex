@@ -57,13 +57,13 @@ They noted that issue and we observed it too (\apxref{results:distance-estimatio
 The orientation of a 3D particle with respect to the microscope's detector plane is a rotation relative to a reference orientation (\figref{imaging-geometry}).
 The group of all 3D rotations under composition is identified with $\SO(3)$, the group of $3 \times 3$ orthogonal matrices with determinant~1 under matrix multiplication.
 % non-commutative/non-Abelian\footnote{order of rotations matter}
-A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (commonly used in cryo-EM)~\cite{sorzano2014interchanging}.
+A rotation matrix $\mathbf{R}_{\bth} \in \SO(3)$ can be decomposed as a product of $\binom{3}{2}=3$ independent rotations, for example as $\mathbf{R}_{\bth} = \mathbf{R}_{\theta_3} \mathbf{R}_{\theta_2} \mathbf{R}_{\theta_1}$, where $\bth = (\theta_3,\theta_2,\theta_1) \in [0,2\pi[ \, \times \, [0,\pi] \times [0,2\pi[$ are the (extrinsic and proper) Euler angles in the $ZYZ$ convention (a common parameterization in cryo-EM)~\cite{sorzano2014interchanging}.
 %As illustrated in \figref{imaging-geometry}, $\mathbf{R}_{\theta_1}$ is a rotation about the $Z$-axis by the angle $\theta_1$, $\mathbf{R}_{\theta_2}$ is a rotation about the $Y$-axis by the azimuthal (or tilt) angle $\theta_2$, and $\mathbf{R}_{\theta_3}$ is a second rotation about the $Z$-axis by the in-plane angle $\theta_3$.
 %The Euler angles $\bth$ and the rotation matrix $\mathbf{R}_\bth$ are equivalent representations of the orientation of a projection.
 
-While Euler angles are a concise representation of orientation ($3$ numbers), they suffer from a topological constraint---there is no covering map from the $3$-torus to $\SO(3)$---which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
+While Euler angles are a concise representation of orientation ($3$ numbers for $3$ degrees of freedom), they suffer from a topological constraint---there is no covering map from the $3$-torus to $\SO(3)$---which manifests itself in the \textit{gimbal lock}, the loss of one degree of freedom when $\theta_2=0$. %~\cite{koks2006explorations}
 This makes their optimization by gradient descent (\secref{method:orientation-recovery}) problematic.
-On the other hand, the optimization of rotation matrices (made of $9$ numbers) would require computationally costly constraints (orthogonality and determinant~1) to reduce the number of degrees of freedom to $3$.
+On the other hand, optimizing rotation matrices (made of $9$ numbers) would require computationally costly constraints (orthogonality and determinant~1) to reduce the degrees of freedom to $3$.
 Moreover, the distance between orientations cannot be directly computed from Euler angles and is costly (30 multiplications) to compute from rotation matrices~\cite{huynh2009metrics}.
 We solve both problems by representing orientations with unit quaternions.
 
@@ -140,7 +140,7 @@ The distance $d_q(q_i, q_j)$ corresponds to the magnitude of the rotation $\math
 
 We aim to estimate a function $\widehat{d_p}$ such that $\widehat{d_p}(\p_i, \p_j) \approx d_q(q_i, q_j)$.
 While we could in principle design $\widehat{d_p}$, that would be intricate---if not impossible---partly because the invariants are difficult to specify.
-We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful function approximation capabilities of neural networks, and (ii) the possibility to generate realistic cryo-EM datasets supported by the availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and our ability to model the imaging procedure.
+We instead opt to learn $\widehat{d_p}$, capitalizing on (i) the powerful function approximation capabilities of neural networks, and (ii) the possibility to generate realistic datasets supported by the availability of numerous 3D atomic models\footnote{\url{https://www.ebi.ac.uk/pdbe/emdb}} and our ability to model the cryo-EM imaging procedure.
 
 \begin{figure}
     \centering
@@ -188,7 +188,7 @@ Size invariance, \ie, taking projections $\p$ of varying sizes $n_p$ while yield
 As we do not (yet) know how to realize an invariance to noise or PSF, we resort to data augmentation, \ie, training on perturbed projections.
 In \secref{results:distance-estimation:sensitivity}, we show that a built-in invariance (shift) is far preferable to one learned through augmentation (noise).
 Finally, as projections are made by integrating through the 3D volume, projections from opposed directions are mirrors of each other.%
-\footnote{That fact prevents cryo-EM reconstruction to resolve chirality, \ie, it cannot distinguish a protein from its mirrored version.}
+\footnote{That fact prevents the resolution of chirality, \ie, we cannot distinguish a protein from its mirrored form.}
 %cannot tell whether the protein was mirrored.
 % chirality/handedness
 %A protein is chiral if it cannot be superposed on its mirror image by any combination of shifts or rotations.
@@ -213,7 +213,7 @@ Many methods aim at mapping high-dimensional data onto a lower-dimensional space
 %A set of distances is often built as an intermediate step.
 %More specifically, these algorithms take a matrix of distances and find vectors in a lower dimensional space that accurately match the inter-vector distances.
 % locally linear embedding (LLE)~\cite{roweis2000lle},
-Well-known examples include multi-dimensional scaling (MDS)~\cite{cox2008mds}, Isomap~\cite{tenenbaum2000isomap},  Laplacian eigenmaps~\cite{belkin2003laplacian}, t-distributed stochastic neighbor embedding (t-SNE)~\cite{maaten2008tsne}, and uniform manifold approximation and projection (UMAP)~\cite{mcinnes2018umap}.
+Well-known examples include MDS~\cite{cox2008mds}, Isomap~\cite{tenenbaum2000isomap}, LLE~\cite{roweis2000lle}, Laplacian eigenmaps~\cite{belkin2003laplacian}, t-SNE~\cite{maaten2008tsne}, and UMAP~\cite{mcinnes2018umap}.
 The embedding of distance matrices in Euclidean space (given by their eigenvectors) is especially well-described.
 In particular, the framework of Euclidean distance matrices (EDMs)~\cite{dokmanic2015edm} provides theoretical guarantees on the recovery of points from distances.
 
@@ -240,7 +240,7 @@ Sampling the sum amounts to building a sparse (instead of complete) distance gra
 %\todo{Introduce the mean recovery error as a good and intuitive performance metric.}
 %\todo{Figure that shows a typical convergence and mean orientation recovery error before and after alignment. We'll subsequently only report $E$ (the error after alignment).}
 
-While not a part of the method \textit{per se}, the evaluation of the orientations recovered by~\eqnref{orientation-recovery} is essential for assessing the quality of the obtained results.
+While not a part of the method \textit{per se}, we must evaluate the quality of the recovered orientations.
 % (without reconstructing the protein)
 %Before discussing the results, we remark that one cannot directly quantify the performance of~\eqnref{orientation-recovery} through its loss nor visual judgment of the protein reconstruction.
 Unfortunately, we cannot directly take the difference between the recovered orientations $\{\widehat{q_k}\}_{k=1}^P$ and the true orientations $\{q_k\}_{k=1}^P$ as orientations are rotations up to an arbitrary reference orientation.
@@ -250,8 +250,8 @@ Hence, we align the sets of orientations and compute the \textit{mean orientatio
     E_\text{OR} = \min_{\T \in \Or(4)} \frac{1}{P} \sum_{i=1}^P \big| d_q\left( q_i, \T \widehat{q_i} \right) \big|.
     \label{eqn:orientation-recovery-error}
 \end{equation}
-We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection defined as 
-$
+We implement $\T$ as a product of $\binom{4}{2}=6$ independent rotations and an optional reflection:
+\begin{equation}
     \T =
     \begin{bmatrix}
         m & \mathbf{0} \\
@@ -259,8 +259,8 @@ $
     \end{bmatrix}
     \prod_{1 \leq i < j \leq 4} \mathbf{T}_{\theta_{ij}},
     \quad m \in \{-1,1\}, \; \theta_{ij} \in [0, 2\pi[,
-$
-where $m = \det(\T) = -1$ if $\T$ includes a reflection, and $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
+\end{equation}
+where $\mathbf{T}_{\theta_{ij}} \in \SO(4)$ is a rotation by angle $\theta_{ij}$ on the $(x_i, x_j)$ plane.
 
 In practice, we again minimize \eqnref{orientation-recovery-error} with mini-batch SGD.
 Because $\Or(4)$ is disconnected, we optimize the 6 angles separately for $m = 1$ (proper rotations) and $m = -1$ (improper rotations).
