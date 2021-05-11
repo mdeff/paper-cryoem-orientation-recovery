@@ -4,7 +4,7 @@ Single-particle cryo-electron microscopy (cryo-EM) has revolutionized the field 
 The use of electron beams to image ice-embedded samples has permitted the recovery of 3D bio-structures at unprecedented resolution.
 This ``resolution revolution'' has had a tremendous impact in biomedical research, providing invaluable insights into the biological processes that underlie many current diseases.
 
-In single-particle cryo-EM, every 3D particle adopts a random orientation $\bth_i$ in the ice layer before being imaged with parallel beams of electrons.
+In single-particle cryo-EM, every 3D particle adopts a random orientation $\bth_i$ in the ice layer before being imaged.
 Hence, the projection geometry associated to each acquired 2D projection (\figref{imaging-geometry}) is unknown.
 Yet, this knowledge is essential for the tomographic reconstruction of bio-structures~\cite{Natterer2001mathematics}.
 We consider that a cryo-EM measurement (\ie, a projection) $\p_i \in \R^{n_p}$ is acquired through
@@ -99,9 +99,9 @@ The challenge is then to reconstruct $\x$ from a set of projections $\{\p_i\}_{i
 
 % RELATED WORKS
 
-A popular approach is to alternatively refine the 3D structure and an estimation of the orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}.
-Yet, the outcome of these iterative-refinement procedures is still often predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
-%%%
+A popular approach is to alternatively refine the 3D structure and estimated orientations~\cite{penczek1994ribosome,Baker1996,Dempster1977,sigworth1998maximum,scheres2012bayesian,zehni2020joint}.
+Yet, the outcome of these iterative-refinement procedures is often predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations~\cite{sorzano2006optimization,henderson2012outcome}.
+
 Several methods have been designed to produce a first rough \textit{ab initio} structure for the refinement procedure~\cite{singer2020computational}.
 An early approach~\cite{kam1980reconstruction} proposed to reconstruct an initial structure such that the first few moments of the distribution of its theoretical measurements match the ones of its experimental projections.
 Since then, \textit{moment-matching} techniques have been refined and extended~\cite{salzman1990method,goncharov1988integral,sharon2019method}, \eg, to accommodate for non-uniform orientation configurations.
@@ -116,16 +116,17 @@ Exploiting this principle, \textit{common-lines} methods aim at uniquely determi
 % Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem~\cite{sigworth1998maximum}---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
 % This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability.
 % More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward.
-% Finally, \cite{miolane2019estimation} proposed to recover the in-plane rotations by learning to embed projections in an appropriate latent space, but only after directions had been estimated through three rounds of 2D classification in RELION\@.
+% Finally,~\cite{miolane2019estimation} proposed to recover the in-plane rotations by learning to embed projections in an appropriate latent space, but only after directions had been estimated through three rounds of 2D classification in RELION\@.
 
-Despite the many aforementioned advances, the task of providing a robust initial volume remains an arduous challenge in single-particle cryo-EM due to the high-dimensionality and strong ill-posedness of the underlying optimization problem.
+Despite the aforementioned advances, providing a robust initial volume remains a challenge due to the high-dimensionality and ill-posedness of the underlying optimization problem.
 %\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.}
-On the other hand, deep learning has had a profound influence in imaging in reason of the remarkable ability of convolutional neural networks to capture relevant representations of images~\cite{lecun2015deep}.
-
-In this work, we present a new learning-based approach to recover the unknown orientations directly from the acquired set of projections.
+On the other hand, the remarkable ability of convolutional neural networks to capture relevant representations of images has had a profound influence in imaging~\cite{lecun2015deep}.
+% and our ability to model the imaging / forward model / simulate training data.
+%%%
+In this work, we present a learning-based approach to recover the unknown orientations directly from the acquired set of projections---without the need for an intermediate reconstruction procedure or an initial volume estimate.
 %, hence bypassing some of the aforementioned limitations.
 % \mdeff{That's method:} The novelty consists in first estimating the relative distances between pairs of projections (by using a Siamese neural network previously trained on a synthetic dataset), and then recovering the absolute orientation of each projections from these relative distances.
-By doing so, orientations are recovered without the need for an intermediate reconstruction procedure or an initial volume estimate. %, which has useful implications for SPA\@.
+% By doing so, orientations are recovered without the need for an intermediate reconstruction procedure or an initial volume estimate, which has useful implications for SPA\@.
 %\mdeff{``bypassing some limitations'' and ``has useful implications'' are too vague IMO\@. Could we be more specific? Not on the how (that's the method) but on the why. Think about an ML audience.}
 %\mdeff{Idea: Our method is direct (as opposed to iterative refinement schemes) and does not require any prior model of the reconstructed protein.}
 %Our two-step method  learns to estimate the unknown orientation $\bth_i$ (represented by a unit quaternion $q_i$) associated to each projection $\p_i$ in a single-particle cryo-EM dataset without relying on any intermediate reconstruction procedure.

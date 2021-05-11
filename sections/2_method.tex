@@ -17,9 +17,9 @@
 \end{figure}
 
 Our approach relies on two observations (\figref{intuition-method}), yielding two steps (\figref{schematic:method-overview}).
-First, the greater the similarity between two 2D projections $(\p_i, \p_j)$, the more likely they originated from two 3D particles that adopted close orientations $(q_i, q_j)$ in the ice layer prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this observation guides a number of applications in the field~\cite{frank2006three}.
+First, the more similar two projections $(\p_i, \p_j)$, the more likely they originated from two particles that adopted close orientations $(q_i, q_j)$ in the ice prior to imaging;\footnote{Up to protein symmetries, which we discuss later.} this observation guides a number of applications in the field~\cite{frank2006three}.
 % TODO: differences in orientation / distances
-Hence, we aim to \textit{estimate distances} between orientations $d_q(q_i, q_j)$ from the projections themselves as $\widehat{d_p}(\p_i, \p_j)$, which we discuss in \secref{method:distance-learning}.
+Hence, we aim to \textit{estimate distances} between orientations $d_q(q_i, q_j)$ from the projections as $\widehat{d_p}(\p_i, \p_j)$, which we discuss in \secref{method:distance-learning}.
 % where $\widehat{d_p}$ is learned from training data
 % Sparse set of distances to a global assignment of orientations.
 Second, an orientation $q$ is constrained by the distances between itself and the other orientations $\{ d(q, q_j) \}$.
@@ -34,7 +34,7 @@ All in all, from a set of projections $\{\p_k\}$, we aim to recover their orient
 % 2. Reference free structure determination through eigenvectors of center ofmass operators
 % 3. Three-Dimensional Structure Determination from Common Lines in Cryo-EM by Eigenvectors and Semidefinite Programming
 Our approach is similar to~\cite{coifman2008graphprojections}.
-While the authors are there concerned with the reconstruction of 2D images from 1D projections, they rely on the same two-step approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
+While the authors reconstruct 2D images from 1D projections, they rely on the same two-step approach: they (i) estimate distances as $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ then (ii) recover the orientations by spectrally embedding that distance graph.
 % The authors built a graph with $\{\p_k\}$ as the vertex set and $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ as the edge distance, then recovered the orientations by spectrally embedding that graph.
 The Euclidean distance is however not robust to perturbations:
 for example, two projections that only differ by a shift $\mathbf{S_t}$ of one pixel would be considered far apart while their orientations are the same.
