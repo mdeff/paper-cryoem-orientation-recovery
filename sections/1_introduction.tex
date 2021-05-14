@@ -113,10 +113,10 @@ Exploiting this principle, \textit{common-lines} methods aim at uniquely determi
 %If needs be for downside: sensitivity to high-noise levels, small particles, etc.
 
 % TODO: DISCUSS THIS (JB)
-% Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem~\cite{sigworth1998maximum}---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
-% This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability.
-% More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward.
-% Finally,~\cite{miolane2019estimation} proposed to recover the in-plane rotations by learning to embed projections in an appropriate latent space, but only after directions had been estimated through three rounds of 2D classification in RELION\@.
+Alternatively, the marginalized maximum likelihood (ML) formulation of the reconstruction problem~\cite{sigworth1998maximum}---classically used for the iterative-refinement procedures themselves---can be minimized using stochastic gradient descent~\cite{punjani2017cryosparc}.
+This permits to avoid the need for an initial volume estimate, at the possible cost of greater convergence instability.
+More recently, the recovery of geometrical information from unknown view tomography of 2D point sources has been proposed~\cite{zehni2019distance}, but the extension to 3D cryo-EM tomography is not straightforward.
+Finally,~\cite{miolane2019estimation} proposed to recover the in-plane rotations by learning to embed projections in an appropriate latent space, but only after directions had been estimated through three rounds of 2D classification in RELION\@.
 
 Despite the aforementioned advances, providing a robust initial volume remains a challenge due to the high-dimensionality and ill-posedness of the underlying optimization problem.
 %\mdeff{How is our method different from previous work? What's its singularity? Why do we expect it to solve the aforementioned issues? This isn't a survey: The related work is here to build a stage for our work to stand on.}
