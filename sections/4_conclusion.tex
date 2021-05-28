@@ -3,9 +3,7 @@
 % Summary.
 In this work, we explored the use of distance learning between pairs of 2D cryo-EM projections from a 3D protein structure to infer the unknown orientation at which each projection was imaged from.
 Our two-step method relies on the estimation of pairwise distances between unseen projections, followed by the recovery of the orientations from these distances.
-% negative societal effects
-In regards to the negative societal effects, there is an environmental impact from training the 4.5M parameter model---the calculated energy consumption is $13$ kWh and the average $\text{CO}_{2}$ emissions produced is $6.36$ lbs ((1)(2)~\cite{Strubell_Ganesh_McCallum_2020}). 
-%%%
+
 %\mdeff{Shall we repeat that? It's in the intro.}
 %The benefit of this approach is that it would permit to estimate the unknown orientations in single-particle cryo-EM directly from the acquired dataset, \ie, without the need for an intermediate reconstruction procedure or an initial volume estimate; this has obvious attractive implications in the field.
 
@@ -55,6 +53,8 @@ In this regard, an interesting aspect of our method is that the twin networks wi
 %In the same line of thought,
 Learning should benefit from the profound structural similarity shared by proteins---after all, they are all derived from the same $21$ building blocks.
 % Learning exploits statistical effects, given here by biological building block.
+
+Training our 4.5M parameter model (see Appendices~\ref{apx:siamese-architecture} and~\ref{apx:optimization-settings}) has the following negative environmental impact: it consumes $13$ kWh of energy, which produces $6.36$ lbs of $\text{CO}_2$ on average~\cite{Strubell_Ganesh_McCallum_2020}.
 
 % \mdeff{I propose to omit the following sentence (which is a truism and is stated in the previous paragraph) to finish on a more forceful note.}
 % Eventually, the performance of the method on real cryo-EM measurements will provide the real measure of its potential, the imaging conditions being notoriously challenging in single-particle cryo-EM\@.
