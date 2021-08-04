@@ -33,6 +33,16 @@ Rating: 4: Ok but not good enough - rejection
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
+### Rebuttal
+
+Thank you for your time and (thoughtful) comments.
+
+We do think the paper is suitable for publication at NeurIPS, as the call for papers stat "..." application
+
+TODO baselines / benchmark to SOTA: either done, either why not.
+
+Preliminary results about transfer to unseen proteins.
+
 ## Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
@@ -70,6 +80,21 @@ Rating: 6: Marginally above the acceptance threshold
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
+### Rebuttal
+
+Thank you for your time and (thoughtful) comments.
+
+Preliminary results about transfer to unseen proteins.
+
+Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
+
+Related work: we'll add the suggested reference to [A] in the revised manuscript.
+
+> How would non-uniformly distributed angles effect the proposed method?
+
+We tried it in Appendix X (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected.
+We discussed it in lines xxx-xxx (referencing the Appendix). Should that be better / more clearly written?
+
 ## Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
@@ -94,6 +119,18 @@ Time Spent Reviewing: 3
 Rating: 6: Marginally above the acceptance threshold
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
+
+### Rebuttal
+
+Thank you for your time and (thoughtful) comments.
+
+1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
+Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
+2. TODO
+3. They are randomly initialized, drawn from a uniform distribution over TODO Euler angles / SO(3). The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), who might not be able to accommodate / represent the data/samples.
+The minimization converges in 8 minutes (reported in Appendix C).
+4. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
+TODO baselines / benchmark to SOTA: either done, either why not.
 
 ## Official Review of Paper4764 by Reviewer RNam
 16 Jul 2021 (modified: 16 Jul 2021)
@@ -144,3 +181,48 @@ Time Spent Reviewing: 2
 Rating: 5: Marginally below the acceptance threshold
 Confidence: 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math/other details carefully.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
+
+### Rebuttal
+
+Thank you for your time and (thoughtful) comments.
+
+We have preliminary results about transfer to unseen proteins. Could include, but decided against because they were not as robust as the other experiments. Would you see it as an improvement if we included them? In the Appendix?
+TODO baselines / benchmark to SOTA: either done, either why not.
+No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
+
+> When are projections expected to be of different sizes?
+
+Not the case in the current experiments, but could happen in practice.
+
+> A similarly confusing statement is on line 127, where the authors claim that “a space of n_f = 4 dimensions does not have room for G_w to represent other factors of variation”. What does this mean? Why are we constrained to have n_f = 4?
+
+The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations and avoid making a detour through distances before embedding.
+We wrote it as motivation for our two-step method, instead of the single step way of letting q_i = G_w(p_i).
+The problem is that an embedding space of 4 dimensions is too small to capture other factors of variations, by which we mean variations which should be abstracted like the protein type.
+
+> Why do we expect that constructing small subsets of the embedding at a time will result in a globally consistent embedding?
+
+TODO: read Zhao and Singer, 2014 (Section 2.1).
+
+How is the error measure in 2.4 non-deterministic?
+We chose the mean orientation recovery error as it is simple to interpret what an average error of say 1° means.
+TODO: we agree that we could also use a Frobenius norm on the rotation matrices. In this case, the optimal rotational alignment between the sets can be calculated by an SVD.
+TODO: either add this error or motivate our choice in the manuscript.
+
+We did evaluate our method on non-uniformly distributed viewing angles in Appendix B. Performance was barely affected.
+
+To what extent can we train on one noise level and test on another?
+
+TODO: SNR formula.
+We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
+TODO: is σ²=16 moderate?
+Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
+
+TODO baselines / benchmark to SOTA: either done, either why not.
+
+Thanks for your minor comments. We'll address them in the revised manuscript. We answer the questions below.
+* line 100: the angle of the rotation
+* line 102: d_p is a function that could in principle be designed by a human (e.g., the Euclidean distance we tried), instead of learned from data. That function should ideally be invariant to noise. The problem being that we don't know how to design such a function, so we resort to learn it brute-force from examples.
+* footnote 6: Agreed. And that's the raison d'être of the footnote. Some experiments have been done with a uniform distribution over SO(3), others (§3.2 and §3.4) with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) didn't make a difference in Appendix C.
+* lines 228–229: The SNN is overfitting the data, a sign that it wasn't trained on enough data. More data will make it generalize better.
+* line 253: Because the projections/images are more detailed, leading both to an easier estimation of their viewing angles, and a more detailed 3D reconstruction.
