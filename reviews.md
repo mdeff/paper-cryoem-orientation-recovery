@@ -1,5 +1,26 @@
 # Reviews at NeurIPS'21
 
+## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
+
+Most reviewers rightly highlighted the two main limitations of the work, which most recognized we didn't try to hide (but wrote plainly? about in §4 Discussion).
+(Both are about experiments, none criticized the ideas or presentation. Experiments take time and we cannot include everything => future work / separate contributions.)
+
+1. (4/4 reviewers) The lack of a transfer experiment (i.e., training and testing on different proteins).
+
+TODO: explain our preliminary results about transfer to unseen proteins. Hopefully they are promising / show potential for zero-shot prediction on unseen proteins.
+TODO: add them to the supplementary clearly stated as preliminary, or don't add them and confidently explain why.
+TODO: Ask whether we should include them in the revised manuscript? (Appendix?) As we believe they are of lesser quality.
+(Work on them a little more if accepted and included?)
+
+2. (3/4 reviewers) The lack of comparison to established methods to put our results in context.
+
+TODO: either compare, either argument why not.
+Why we didn’t do these comparisons yet: new paradigm, proof of concept of the feasibility rather than pure performance, not deployable yet in practice, etc.
+General argument (also for working with real data): A true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. We see that as a separate contribution. Why: amount of work, different expertise?, what else?
+(As discussed in §4?)
+TODO: Compare with the CryoSparc ab initio pipeline?
+TODO: How can we otherwise put our results in context?
+
 ## 2021-08-04 Preliminary reviews
 
 * Reviewer RNam: Rating: 5 / Confidence: 5
@@ -37,7 +58,10 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-We do think the paper is suitable for publication at NeurIPS, as the call for papers stat "..." application
+We do think the paper is suitable for publication at NeurIPS as the call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], computational biology, and other fields" and specifically lists "Applications (e.g., speech processing, computational biology, computer vision, NLP)" as a topic of interest. The novelty is in tackling a specific and important problem in biology with a combination of (indeed existing) ML techniques. By doing so, we hope to spearhead / advance / start ML research on this problem, which might well lead to novel ML techniques.
+TODO: write to AC that we find it unfair if the rating was lowered because of that?
+
+You rightly highlighted the two main limitations of the work (which as you recognized we didn't try to hide).
 
 TODO baselines / benchmark to SOTA: either done, either why not.
 
@@ -87,6 +111,7 @@ Thank you for your time and (thoughtful) comments.
 Preliminary results about transfer to unseen proteins.
 
 Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
+TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
 
 Related work: we'll add the suggested reference to [A] in the revised manuscript.
 
@@ -126,11 +151,12 @@ Thank you for your time and (thoughtful) comments.
 
 1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
 Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
-2. TODO
+2. TODO(Laurène)
 3. They are randomly initialized, drawn from a uniform distribution over TODO Euler angles / SO(3). The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), who might not be able to accommodate / represent the data/samples.
 The minimization converges in 8 minutes (reported in Appendix C).
 4. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
 TODO baselines / benchmark to SOTA: either done, either why not.
+Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
 
 ## Official Review of Paper4764 by Reviewer RNam
 16 Jul 2021 (modified: 16 Jul 2021)
@@ -212,6 +238,10 @@ TODO: either add this error or motivate our choice in the manuscript.
 We did evaluate our method on non-uniformly distributed viewing angles in Appendix B. Performance was barely affected.
 
 To what extent can we train on one noise level and test on another?
+As we don't know (yet) how to build NNs that are invariant to (specified) noise (and PSF), we need to resort to the brute-force trick of data augmentation.
+To generalize / best test on any noise level, the NN should be trained on a variety of noise models (and PSFs).
+Unlike transfer between proteins,
+We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
 
 TODO: SNR formula.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
@@ -219,6 +249,9 @@ TODO: is σ²=16 moderate?
 Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
 
 TODO baselines / benchmark to SOTA: either done, either why not.
+We don't have experience with Cryosparc, Relion, and Aspire.
+CryoSparc, as the most automated pipeline of all, might be an option / we'll try to do it, etc.
+The other packages unfortunately require too much tuning and previous experience to properly use.
 
 Thanks for your minor comments. We'll address them in the revised manuscript. We answer the questions below.
 * line 100: the angle of the rotation
