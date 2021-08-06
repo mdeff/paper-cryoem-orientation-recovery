@@ -75,7 +75,7 @@ We do think the paper is suitable for publication at NeurIPS as the call for pap
 
 TODO: write to AC that we find it unfair if the rating was lowered because of that? (Least comments and lower rate).
 
-** PUT GENERAL COMMENT HERE.
+**PUT GENERAL COMMENT HERE**
 
 ## 2- Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
@@ -118,7 +118,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-** PUT GENERAL COMMENT HERE.
+**PUT GENERAL COMMENT HERE**
 
 Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
 TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
@@ -159,16 +159,16 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-** PUT GENERAL COMMENT HERE.
+**PUT GENERAL COMMENT HERE**
 
 1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
 Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
+See general comment.
 2. TODO(Laurène)
 3. They are randomly initialized, drawn from a uniform distribution over TODO Euler angles / SO(3). The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), who might not be able to accommodate / represent the data/samples.
 The minimization converges in 8 minutes (reported in Appendix C).
 TODO @jelena, time of convergence
-4. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
-TODO baselines / benchmark to SOTA: either done, either why not.
+4. See general comment. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
 Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
 
 ## 4 - Official Review of Paper4764 by Reviewer RNam
@@ -225,6 +225,8 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
+**PUT GENERAL COMMENT HERE**
+
 We have preliminary results about transfer to unseen proteins. Could include, but decided against because they were not as robust as the other experiments. Would you see it as an improvement if we included them? In the Appendix?
 TODO baselines / benchmark to SOTA: either done, either why not.
 No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
@@ -270,7 +272,7 @@ The other packages unfortunately require too much tuning and previous experience
 
 Thanks for your minor comments. We'll address them in the revised manuscript. We answer the questions below.
 * line 100: the angle of the rotation
-* line 102: d_p is a function that could in principle be designed by a human (e.g., the Euclidean distance we tried), instead of learned from data. That function should ideally be invariant to noise. The problem being that we don't know how to design such a function, so we resort to learn it brute-force from examples.
+* line 102: d_p is a function that could in principle be designed by a human (e.g., the Euclidean distance d_p(p_i, p_j) = || p_i - p_j || shown in Appendix E) instead of learned from data. We want that function to be invariant to noise. The problem being that we don't know how to design such a function, so we resort to learn it from examples.
 * footnote 6: Agreed. And that's the raison d'être of the footnote. Some experiments have been done with a uniform distribution over SO(3), others (§3.2 and §3.4) with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) didn't make a difference in Appendix C.
 * lines 228–229: The SNN is overfitting the data, a sign that it wasn't trained on enough data. More data will make it generalize better.
 * line 253: Because the projections/images are more detailed, leading both to an easier estimation of their viewing angles, and a more detailed 3D reconstruction.
