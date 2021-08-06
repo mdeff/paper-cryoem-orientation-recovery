@@ -1,11 +1,17 @@
 # Reviews at NeurIPS'21
 
+Lau : General + R3 + mine todos
+Jelena: R2 + relevant todos 
+Mdeff : R4 + relevant todos 
+
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
 Most reviewers rightly highlighted the two main limitations of the work, which most recognized we didn't try to hide (but wrote plainly? about in §4 Discussion).
 (Both are about experiments, none criticized the ideas or presentation. Experiments take time and we cannot include everything => future work / separate contributions.)
 
 1. (4/4 reviewers) The lack of a transfer experiment (i.e., training and testing on different proteins).
+
+Lau: As the reviewers have rightly pointed ..., the applicability of the proposed method in real practical situations is still conditioned on demonstrating its performance on unseen proteins (transfer learning) and in comparison to commonly established pipelines. This is planned ... At this stage, we have focused on demonstrating the feasibility of this new paradigm. The new insights are ...   
 
 TODO: explain our preliminary results about transfer to unseen proteins. Hopefully they are promising / show potential for zero-shot prediction on unseen proteins.
 TODO: add them to the supplementary clearly stated as preliminary, or don't add them and confidently explain why.
@@ -31,7 +37,7 @@ TODO: How can we otherwise put our results in context?
 Average Rating: 5.25 (Min: 4, Max: 6)
 Average Confidence: 4.25 (Min: 4, Max: 5)
 
-## Official Review of Paper4764 by Reviewer zuH5
+## 1 - Official Review of Paper4764 by Reviewer zuH5
 22 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -58,16 +64,13 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-We do think the paper is suitable for publication at NeurIPS as the call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], computational biology, and other fields" and specifically lists "Applications (e.g., speech processing, computational biology, computer vision, NLP)" as a topic of interest. The novelty is in tackling a specific and important problem in biology with a combination of (indeed existing) ML techniques. By doing so, we hope to spearhead / advance / start ML research on this problem, which might well lead to novel ML techniques.
-TODO: write to AC that we find it unfair if the rating was lowered because of that?
+We do think the paper is suitable for publication at NeurIPS as the call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], computational biology, and other fields" and specifically lists "Applications (e.g., speech processing, computational biology, computer vision, NLP)" as a topic of interest. The novelty is in tackling a specific and important problem in biology with a combination of (indeed existing) ML techniques. By doing so, we hope to spearhead / advance / start ML research on this problem, which might well lead to novel ML techniques for cryo-EM.
 
-You rightly highlighted the two main limitations of the work (which as you recognized we didn't try to hide).
+TODO: write to AC that we find it unfair if the rating was lowered because of that? (Least comments and lower rate).
 
-TODO baselines / benchmark to SOTA: either done, either why not.
+** PUT GENERAL COMMENT HERE. 
 
-Preliminary results about transfer to unseen proteins.
-
-## Official Review of Paper4764 by Reviewer 9yDH
+## 2- Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -108,7 +111,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-Preliminary results about transfer to unseen proteins.
+** PUT GENERAL COMMENT HERE. 
 
 Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
 TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
@@ -120,7 +123,7 @@ Related work: we'll add the suggested reference to [A] in the revised manuscript
 We tried it in Appendix X (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected.
 We discussed it in lines xxx-xxx (referencing the Appendix). Should that be better / more clearly written?
 
-## Official Review of Paper4764 by Reviewer Z4BJ
+## 3- Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -149,16 +152,19 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
+** PUT GENERAL COMMENT HERE. 
+
 1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
 Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
 2. TODO(Laurène)
 3. They are randomly initialized, drawn from a uniform distribution over TODO Euler angles / SO(3). The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), who might not be able to accommodate / represent the data/samples.
 The minimization converges in 8 minutes (reported in Appendix C).
+TODO @jelena, time of convergence
 4. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
 TODO baselines / benchmark to SOTA: either done, either why not.
 Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
 
-## Official Review of Paper4764 by Reviewer RNam
+## 4 - Official Review of Paper4764 by Reviewer RNam
 16 Jul 2021 (modified: 16 Jul 2021)
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -244,11 +250,12 @@ Unlike transfer between proteins,
 We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
 
 TODO: SNR formula.
-We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
+We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance. @jelena: check equation used
 TODO: is σ²=16 moderate?
 Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
 
 TODO baselines / benchmark to SOTA: either done, either why not.
+We are not at the stage where our method can be usefully compared to existing pipelines because we haven't ... transfer learning.
 We don't have experience with Cryosparc, Relion, and Aspire.
 CryoSparc, as the most automated pipeline of all, might be an option / we'll try to do it, etc.
 The other packages unfortunately require too much tuning and previous experience to properly use.
