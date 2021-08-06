@@ -1,8 +1,8 @@
 # Reviews at NeurIPS'21
 
 Lau : General + R3 + mine todos
-Jelena: R2 + relevant todos 
-Mdeff : R4 + relevant todos 
+Jelena: R2 + relevant todos
+Mdeff : R4 + relevant todos
 
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
@@ -11,21 +11,28 @@ Most reviewers rightly highlighted the two main limitations of the work, which m
 
 1. (4/4 reviewers) The lack of a transfer experiment (i.e., training and testing on different proteins).
 
-Lau: As the reviewers have rightly pointed ..., the applicability of the proposed method in real practical situations is still conditioned on demonstrating its performance on unseen proteins (transfer learning) and in comparison to commonly established pipelines. This is planned ... At this stage, we have focused on demonstrating the feasibility of this new paradigm. The new insights are ...   
+Lau: As the reviewers have rightly pointed ..., the applicability of the proposed method in real practical situations is still conditioned on demonstrating its performance on unseen proteins (transfer learning) and in comparison to commonly established pipelines. This is planned ... At this stage, we have focused on demonstrating the feasibility of this new paradigm. The new insights are ...
 
+A. Not in the scope of the paper.
+B. We have some preliminary results, but decided against including them.
 TODO: explain our preliminary results about transfer to unseen proteins. Hopefully they are promising / show potential for zero-shot prediction on unseen proteins.
 TODO: add them to the supplementary clearly stated as preliminary, or don't add them and confidently explain why.
 TODO: Ask whether we should include them in the revised manuscript? (Appendix?) As we believe they are of lesser quality.
 (Work on them a little more if accepted and included?)
+Work required to put together a dataset of many proteins.
 
 2. (3/4 reviewers) The lack of comparison to established methods to put our results in context.
 
+We don't claim that it's better than everything else, we show that it's feasible.
 TODO: either compare, either argument why not.
 Why we didn’t do these comparisons yet: new paradigm, proof of concept of the feasibility rather than pure performance, not deployable yet in practice, etc.
 General argument (also for working with real data): A true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. We see that as a separate contribution. Why: amount of work, different expertise?, what else?
 (As discussed in §4?)
 TODO: Compare with the CryoSparc ab initio pipeline?
 TODO: How can we otherwise put our results in context?
+
+**Addressing both together:**
+At this stage, we focused on demonstrating feasibility. Developing the method further to practical deployment of course would require to evaluate how learning distances from a set of proteins transfer to an unseen one, and to evaluate the method to fully developed existing methods. We see that as an other / different contribution, where the focus would be more on collecting and processing a large dataset of proteins, and evaluate different pipelines.
 
 ## 2021-08-04 Preliminary reviews
 
@@ -68,7 +75,7 @@ We do think the paper is suitable for publication at NeurIPS as the call for pap
 
 TODO: write to AC that we find it unfair if the rating was lowered because of that? (Least comments and lower rate).
 
-** PUT GENERAL COMMENT HERE. 
+** PUT GENERAL COMMENT HERE.
 
 ## 2- Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
@@ -111,7 +118,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-** PUT GENERAL COMMENT HERE. 
+** PUT GENERAL COMMENT HERE.
 
 Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
 TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
@@ -152,7 +159,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and (thoughtful) comments.
 
-** PUT GENERAL COMMENT HERE. 
+** PUT GENERAL COMMENT HERE.
 
 1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
 Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
@@ -249,9 +256,10 @@ To generalize / best test on any noise level, the NN should be trained on a vari
 Unlike transfer between proteins,
 We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
 
-TODO: SNR formula.
+TODO(Jelena): SNR formula.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance. @jelena: check equation used
-TODO: is σ²=16 moderate?
+We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
+TODO(Laurène): is σ²=16 moderate?
 Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
 
 TODO baselines / benchmark to SOTA: either done, either why not.
