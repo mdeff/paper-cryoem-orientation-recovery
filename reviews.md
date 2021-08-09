@@ -6,17 +6,18 @@ Mdeff : R4 + relevant todos
 
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
-As the reviewers have rightly pointed out (and as we discuss in the Section 4), the applicability of the proposed method to real practical situations is still conditioned upon 1) demonstrating its accuracy on "unseen" proteins (transfer learning), and 2) comparing its performance to that of commonly established pipelines (CryoSparc, Relion, etc.). 
+As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned upon demonstrating its accuracy on "unseen" proteins (transfer learning), and comparing its performance to that of the most established pipelines (cryoSPARC, Relion, etc.). 
 
-Both objectives are ... planned and are the natural follow-up of this work. At the present stage, we have focused on demonstrating feasibility. Although, ... complexity of cryo-EM pipelines, problems with the highest complexity and some of the (if not the most) noisiest data in biomedical imaging.  Key insights. 
+While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic task hence equates to a high-dimensional nonconvex optimization problem with numerous local minima. As a consequence, most of the current well-known cryo-EM refinement packages are themselves the result of years of iterative refinement.  
 
-Developing the method further to practical deployment of course would require to evaluate how learning distances from a set of proteins transfer to an unseen one, and to evaluate the method to fully developed existing methods. We see that as an other / different contribution, where the focus would be more on collecting and processing a large dataset of proteins, and evaluate different pipelines. 
+At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We thus see the applicability of the method to a wider XXX and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution. 
+ 
+A few hints on how this could be addressed?  
+$ transfer learning: evaluate how learning distances from a set of proteins transfer to an unseen one, requires first collecting and processing a large dataset of proteins
+$ a true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. 
 
-Separate contribution. Current contribution: proposal of a new paradigm, proof of concept of the feasibility rather than pure performance, not deployable yet in practice, etc. 
-
-Not in the scope of the paper. On transfer learning: some very early preliminary results, but decided against including them. Work required to put together a dataset of many proteins. In a second phase, comparison to existing methods ... We do not claim any superiorty of our method to existing packages. A true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. We see that as a separate contribution. Why: amount of work, different expertise?, what else? (As discussed in §4?)
-
-Q: Suggest to modify the title? Exploration of a novel learning-based method to recover ... 
+******* 
+Q@US: Suggest to modify the title? Exploration of a novel learning-based method to recover ... 
 
 ## 2021-08-04 Preliminary reviews
 
@@ -107,12 +108,15 @@ Thank you for your time and thoughtful comments.
 Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
 TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
 
-Related work: we'll add the suggested reference to [A] in the revised manuscript.
+> Related work [A]
 
-> How would non-uniformly distributed angles effect the proposed method?
+We will add the suggested reference to [A] in the revised manuscript.
+
+> How would non-uniformly distributed angles affect the proposed method?
 
 We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected. 
-We discussed it in lines 485-492 (referencing the Appendix). Figure 12 shows different samplings and Figure 13 shows the performance results from distance estimation and orientation recovery for non-uniform case. Should that be better / more clearly written?
+We discussed it in lines 485-492 (referencing the Appendix). Figure 12 shows different samplings and Figure 13 shows the performance results from distance estimation and orientation recovery for non-uniform case.
+Could you please tell us whether it should be better / more clearly written?
 
 ## 3- Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
@@ -219,7 +223,7 @@ Not the case in the current experiments, but could happen in practice.
 
 > A similarly confusing statement is on line 127, where the authors claim that “a space of n_f = 4 dimensions does not have room for G_w to represent other factors of variation”. What does this mean? Why are we constrained to have n_f = 4?
 
-The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations and avoid making a detour through distances before embedding.
+The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations (since a quaternion is represented with 4 numbers) and avoid making a detour through distances before embedding.
 We wrote it as motivation for our two-step method, instead of the single step way of letting q_i = G_w(p_i).
 The problem is that an embedding space of 4 dimensions is too small to capture other factors of variations, by which we mean variations which should be abstracted like the protein type.
 
@@ -240,10 +244,10 @@ To generalize / best test on any noise level, the NN should be trained on a vari
 Unlike transfer between proteins,
 We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
 
-The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
+The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma^2=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
 TODO(Laurène): is σ²=16 moderate?
-Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
+Figure 7b shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x, i.e., SNR_{dB} of -inf and log10(x).
 
 TODO baselines / benchmark to SOTA: either done, either why not.
 We are not at the stage where our method can be usefully compared to existing pipelines because we haven't ... transfer learning.
