@@ -1,23 +1,24 @@
 # Reviews at NeurIPS'21
 
-Lau : General + R3 
+Lau : polish R1 + write R3 + my todo R4 
 Jelena: R2 + relevant todos
 Mdeff : R4 + relevant todos
 
+TO-DOs?
+Write to AC that we find it unfair if the rating was lowered because of that? (Least comments and lower rate):  
+
+That reviewer attributed the lowest score to our submission, which we find would be unfair if the reason for this low score is due to the reviewer's vision that this paper does not fall within scope of NeurIPS publications. As we argue in our rebuttal to Reviewer 1.
+The other comments / feedback / criticism is (however) good / on point / justified.
+
+Replace "General Rebuttal" with the appropriate name. 
+
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
-As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned upon demonstrating its accuracy on "unseen" proteins (transfer learning), and comparing its performance to that of the most established pipelines (cryoSPARC, Relion, etc.). 
+As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, etc.) is definitely required.
 
-While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic task hence equates to a high-dimensional nonconvex optimization problem with numerous local minima. As a consequence, most of the current well-known cryo-EM refinement packages are themselves the result of years of iterative refinement.  
+While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, this task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a very-high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
 
-At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We thus see the applicability of the method to a wider XXX and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution. 
- 
-Put here a few hints on how this could be addressed?  
-$ transfer learning: Collect and process a large dataset of proteins, then evaluate how learning distances from a set of proteins transfer to an unseen one
-$ run a true / fair / complete evaluation by comparing multiple pipelines (from projections to reconstructions) on real data. 
-
-******* 
-Q@US: Suggest to modify the title? Exploration of a novel learning-based method to recover ... 
+At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We see the applicability of the method to a wider range of data and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
 ## 2021-08-04 Preliminary reviews
 
@@ -56,11 +57,11 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-We do think the paper is suitable for publication at NeurIPS as the call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], computational biology, and other fields" and specifically lists "Applications (e.g., speech processing, computational biology, computer vision, NLP)" as a topic of interest. The novelty is in tackling a specific and important problem in biology with a combination of (indeed existing) ML techniques. By doing so, we hope to spearhead / advance / start ML research on this problem, which might well lead to novel ML techniques for cryo-EM.
+We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. 
 
-TODO: write to AC that we find it unfair if the rating was lowered because of that? (Least comments and lower rate).
+Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the scope of our paper perfectly fits within the publication xxx for NeurIPS. 
 
-**PUT GENERAL COMMENT HERE**
+Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
 ## 2- Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
@@ -103,20 +104,15 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-**PUT GENERAL COMMENT HERE**
+Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
-Why/how much improving the initial angle estimation translates to improvement in the reconstruction?
-TODO(Laurène): The why is not a problem (optimisation stuff), the how much will be a bit more tricky but we can find a way.
-
-> Related work [A]
+On how an improvement of the initial angle estimation translates into an improvement of the reconstruction: It has been shown in various works [R1, R2] that the outcome of iterative refinement procedures in cryo-EM is predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations.
+[R1] Carlos Oscar Sanchez Sorzano et al., "Optimization problems in electron microscopy of single particles", Annals of Operations Research, vol. 148,no. 1, pp. 133–165, 2006
+[R2] Richard Henderson et al., "Outcome of the first electron microscopy validation task force meeting", Structure, vol. 20, no. 2, pp. 205–214, 2012
 
 We will add the suggested reference to [A] in the revised manuscript.
 
-> How would non-uniformly distributed angles affect the proposed method?
-
-We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected. 
-We discussed it in lines 485-492 (referencing the Appendix). Figure 12 shows different samplings and Figure 13 shows the performance results from distance estimation and orientation recovery for non-uniform case.
-Could you please tell us whether it should be better / more clearly written?
+On how non-uniformly distributed angles would affect the proposed method: We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3), see Figure 12) and performance was not affected (see Figure 13).
 
 ## 3- Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
@@ -147,13 +143,13 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-**PUT GENERAL COMMENT HERE**
+Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
 1. That's indeed the critical question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
 Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section. See general comment. There is hope ... 
 2. TODO(Laurène)
 3. They are randomly initialized, drawn from a uniform distribution over Euler angles. The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), which might not be able to accommodate / represent the data/samples.
-The orientation recovery minimization (4) convergence plots are shown in Figure 8 with blue color. The convergence time is reported in Appendix C and is ~3.75 hours. However, from Figure 8 we observe that it reaches the plateau of convergence one to two hours ealier.
+The orientation recovery minimization (4) convergence plots are shown in Figure 8 with blue color. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
 4. See general comment. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
 Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
 
