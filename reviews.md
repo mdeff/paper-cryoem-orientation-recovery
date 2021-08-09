@@ -12,9 +12,9 @@ While it would have been ideal to deliver a new angle-refinement software for cr
 
 At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We thus see the applicability of the method to a wider XXX and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution. 
  
-A few hints on how this could be addressed?  
-$ transfer learning: evaluate how learning distances from a set of proteins transfer to an unseen one, requires first collecting and processing a large dataset of proteins
-$ a true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. 
+Put here a few hints on how this could be addressed?  
+$ transfer learning: Collect and process a large dataset of proteins, then evaluate how learning distances from a set of proteins transfer to an unseen one
+$ run a true / fair / complete evaluation by comparing multiple pipelines (from projections to reconstructions) on real data. 
 
 ******* 
 Q@US: Suggest to modify the title? Exploration of a novel learning-based method to recover ... 
