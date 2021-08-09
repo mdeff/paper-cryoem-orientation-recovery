@@ -20,6 +20,12 @@ While it would have been ideal to deliver a new angle-refinement software for cr
 
 At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We see the applicability of the method to a wider range of data and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
+### Working notes
+
+We have preliminary results about transfer to unseen proteins. Could include, but decided against because they were not as robust as the other experiments. Would you see it as an improvement if we included them? In the Appendix?
+TODO baselines / benchmark to SOTA: either done, either why not.
+No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
+
 ## 2021-08-04 Preliminary reviews
 
 * Reviewer RNam: Rating: 5 / Confidence: 5
@@ -209,17 +215,24 @@ Thank you for your time and thoughtful comments.
 
 **PUT GENERAL COMMENT HERE**
 
-We have preliminary results about transfer to unseen proteins. Could include, but decided against because they were not as robust as the other experiments. Would you see it as an improvement if we included them? In the Appendix?
-TODO baselines / benchmark to SOTA: either done, either why not.
-No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
+Thanks for pointing out minor presentation issues.
+We switch back and forth between Euler angles θ_i and quaternions q_i as they are equivalent representations of the same information.
+We'll try to remedy? TODO: What can we do?
+
+The fact that the mapping from S³ to SO(3) is a double cover isn't a problem. It was meant as an explanation for equation 2.
+We agree the writing could have been better and updated line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
 
 > When are projections expected to be of different sizes?
 
-Not the case in the current experiments, but could happen in practice.
+That is indeed not the case with the current experiments but is expected to happen with real data.
 
 > A similarly confusing statement is on line 127, where the authors claim that “a space of n_f = 4 dimensions does not have room for G_w to represent other factors of variation”. What does this mean? Why are we constrained to have n_f = 4?
 
-The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations (since a quaternion is represented with 4 numbers) and avoid making a detour through distances before embedding.
+The goal of that paragraph is to motivate our two-step approach (distance estimation then orientation recovery) over a simpler one-step approach of predicting the orientations directly from the projections.
+In that case, the number of features n_f would be the size of a quaternion, i.e., 4 scalars.
+We verified in Appendix F that such a space was too small for a good embedding.
+We hypothesize that this is because the space is too small to capture all factors of variation: only the orientation is a factor of interest, the others ...
+The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations and avoid making a detour through distances before embedding.
 We wrote it as motivation for our two-step method, instead of the single step way of letting q_i = G_w(p_i).
 The problem is that an embedding space of 4 dimensions is too small to capture other factors of variations, by which we mean variations which should be abstracted like the protein type.
 

@@ -80,9 +80,6 @@ They parameterize rotation matrices as
     \end{pmatrix}.
 \end{equation*}
 %Composition of rotations is given by multiplications of quaternions.
-Note that $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover) as $q$ and $-q$ represent the same orientation.
-%, \ie, antipodal points of $\mathbb{S}^3$ are equivalent.
-% q=-q is like rotation by the negated angle in the opposed direction
 %\paragraph{Distances.}
 Unlike Euler angles, $\mathbb{S}^3$ is isomorphic to the universal cover of $\SO(3)$.
 Hence, the distance between two orientations, \ie, the length of the geodesic between them on $\SO(3)$, is
@@ -93,7 +90,10 @@ Hence, the distance between two orientations, \ie, the length of the geodesic be
     \label{eqn:distance:orientations}
     \end{aligned}
 \end{equation}
-where $\langle \cdot, \cdot \rangle$ is the inner product, and the absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$.
+where $\langle \cdot, \cdot \rangle$ is the inner product.
+The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover).
+%, \ie, antipodal points of $\mathbb{S}^3$ are equivalent.
+% q=-q is like rotation by the negated angle in the opposed direction
 The distance $d_q(q_i, q_j)$ corresponds to the magnitude of the rotation $\mathbf{R}_*$ such that $\mathbf{R}_{q_i} = \mathbf{R}_* \mathbf{R}_{q_j}$~\cite{huynh2009metrics}.
 
 %For the sake of conciseness, we shall use the term ``with orientation~$q$'' to refer to 2D/3D objects considered in an imaging geometry parametrized by $q$.
