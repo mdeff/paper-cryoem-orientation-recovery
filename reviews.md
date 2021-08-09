@@ -1,16 +1,6 @@
-# Reviews at NeurIPS'21
+# NeurIPS'21 reviews
 
-Jelena: R2 + relevant todos
-Mdeff : R4 + relevant todos
-
-MESSAGE TO AC:
-Dear AC,
-We are reaching out for a brief discussion on the score attributed to our submission by Reviewer zuH5, which is the lowest score we received for our manuscript. While the score in itself is not a problem, we think it could potentially be unfair if the reason behind the reviewer's grading was their opinion that our paper does not fall within the scope of NeurIPS publications (see their first comment). As we argue in our rebuttal, we strongly believe that our paper perfectly fits within the scope of NeurIPS. That being said, all the other comments from Reviewer zuH5 are constructive and have been properly addressed.
-Kind regards, the Authors
-
-TO-DO BEFORE SUBMISSION: Replace "General Rebuttal" with the appropriate name.
-
-## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
+## 2021-08-10 General Rebuttal (reviewer-specific rebuttals below)
 
 As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, etc.) is definitely required.
 
@@ -67,11 +57,17 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that our paper perfectly fits within the scope of NeurIPS.
+We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], *computational biology*, and other fields" and specifically lists "Applications (e.g., speech processing, *computational biology*, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that our paper perfectly fits within the scope of NeurIPS.
 
-Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to our top-level "General Rebuttal" comment, where those questions are addressed.
 
-## 2- Official Review of Paper4764 by Reviewer 9yDH
+### Comment to Area Chair
+
+Dear Area Chair,
+We are reaching out for a brief discussion on the score attributed to our submission by Reviewer zuH5, which is the lowest score we received for our manuscript. While the score in itself is not a problem, we think it could potentially be unfair if the reason behind the reviewer's grading was their opinion that our paper does not fall within the scope of NeurIPS (see their first comment). As we argue in our rebuttal, we strongly believe that our paper perfectly fits within the scope of NeurIPS. That being said, all the other comments from Reviewer zuH5 are constructive and have been properly addressed.
+Kind regards, the Authors
+
+## 2 - Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -112,7 +108,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to our top-level "General Rebuttal" comment, where those questions are addressed.
 
 On how an improvement of the initial angle estimation translates into an improvement of the reconstruction: It has been shown in various works [R1, R2] that the outcome of iterative refinement procedures in cryo-EM is predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations.
 [R1] Carlos Oscar Sanchez Sorzano et al., "Optimization problems in electron microscopy of single particles", Annals of Operations Research, vol. 148,no. 1, pp. 133–165, 2006
@@ -122,7 +118,7 @@ We will add the suggested reference to [A] in the revised manuscript.
 
 On how non-uniformly distributed angles would affect the proposed method: We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3), see Figure 12) and performance was barely affected (see Figure 13).
 
-## 3- Official Review of Paper4764 by Reviewer Z4BJ
+## 3 - Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
 
@@ -152,10 +148,10 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 Thank you for your time and thoughtful comments.
 
 Regarding your questions:
-1. The extension of the method to handle real cryo-EM datasets with unknown orientations is discussed in Section 4: "The success [of the method] as a faithful estimator eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets. Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB." In other words, our hope is that by simulating a large and diverse training dataset whose statistics sufficiently approach that of real cryo-EM datasets, the SNN will generalize to real proteins. We also refer the reviewer to the General Rebuttal, where this question is addressed from a higher-level perspective.
+1. The extension of the method to handle real cryo-EM datasets with unknown orientations is discussed in Section 4: "The success [of the method] as a faithful estimator eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets. Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB." In other words, our hope is that by simulating a large and diverse training dataset whose statistics sufficiently approach that of real cryo-EM datasets, the SNN will generalize to real proteins. We also refer the reviewer to our top-level "General Rebuttal" comment, where this question is addressed from a higher-level perspective.
 2. This is indeed a critical point, which would deserve to be further discussed in a revised version of this paper. A pragmatic solution at this stage would be to rely on the 2D classification methods of existing cryo-EM packages, which try to untangle the different configurations within a cryo-EM projection dataset by classifying the 2D projections based on certain similarity criteria. Once the various configurations have been "separated", our method could then be run independently on each data sub-set.
 3. The orientations are randomly initialized, drawn from a uniform distribution over Euler angles. The objective function is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization is not much of a problem here, as the embedding space is the "proper space", i.e., the space of 3D rotations SO(3). On the other hand, methods like t-SNE embed in a low-dimensional Euclidean space that cannot faithfully represent the data. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
-4. Here as well, we refer the reviewer to the General Rebuttal, where the general question of the comparison with existing methods (which could indeed include a common-lines approach) is discussed.
+4. Here as well, we refer the reviewer to our top-level "General Rebuttal" comment, where the general question of the comparison with existing methods (which could indeed include a common-lines approach) is discussed.
 
 ## 4 - Official Review of Paper4764 by Reviewer RNam
 16 Jul 2021 (modified: 16 Jul 2021)
@@ -211,7 +207,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to our top-level "General Rebuttal" comment, where those questions are addressed.
 
 We switch back and forth between Euler angles θ_i and quaternions q_i as they are equivalent representations of the same information. We do however understand this may sometimes be confusing to readers; this could be addressed in a revised version of the manuscript.
 
@@ -227,7 +223,7 @@ We chose the mean orientation recovery error because it is intuitive and simple 
 
 We did evaluate our method on non-uniformly distributed viewing angles in Appendix B. Performance was barely affected.
 
-As we do not know (yet) how to build NNs that are invariant to noise, we need to resort to data augmentation. To generalize to any noise level, the NN should thus be trained on a variety of noise levels. We are confident that the NN would generalize well as our experiments show it was mostly indifferent to noise. That said, transfer between noise levels, PSFs, and proteins should be part of a comparison with established pipelines, which we argue in the General Rebuttal should be addressed in a separate contribution.
+As we do not know (yet) how to build NNs that are invariant to noise, we need to resort to data augmentation. To generalize to any noise level, the NN should thus be trained on a variety of noise levels. We are confident that the NN would generalize well as our experiments show it was mostly indifferent to noise. That said, transfer between noise levels, PSFs, and proteins should be part of a comparison with established pipelines, which we argue in our top-level "General Rebuttal" comment should be addressed in a separate contribution.
 
 The clean images have variance 1 and the SNR formula you assumed is correct; we will add this information to the manuscript.
 
