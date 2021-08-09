@@ -14,7 +14,7 @@ TO-DO BEFORE SUBMISSION: Replace "General Rebuttal" with the appropriate name.
 
 As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, etc.) is definitely required.
 
-While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a very-high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
+While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
 
 At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in an (admittedly) simplified cryo-EM setting. We see the extension of the applicability of the method to a wider range of data and the comparison to other existing packages as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
@@ -67,9 +67,9 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the our paper perfectly fits within the publication scope of NeurIPS.
+We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that our paper perfectly fits within the scope of NeurIPS.
 
-Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
 ## 2- Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
@@ -112,7 +112,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
 On how an improvement of the initial angle estimation translates into an improvement of the reconstruction: It has been shown in various works [R1, R2] that the outcome of iterative refinement procedures in cryo-EM is predicated on the quality of the initial reconstruction, or, equivalently, on the initial estimation of the orientations.
 [R1] Carlos Oscar Sanchez Sorzano et al., "Optimization problems in electron microscopy of single particles", Annals of Operations Research, vol. 148,no. 1, pp. 133–165, 2006
@@ -120,7 +120,7 @@ On how an improvement of the initial angle estimation translates into an improve
 
 We will add the suggested reference to [A] in the revised manuscript.
 
-On how non-uniformly distributed angles would affect the proposed method: We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3), see Figure 12) and performance was not affected (see Figure 13).
+On how non-uniformly distributed angles would affect the proposed method: We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3), see Figure 12) and performance was barely affected (see Figure 13).
 
 ## 3- Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
@@ -211,24 +211,17 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
+Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
-The fact that we switch back and forth between Euler angles θ_i and quaternions q_i is not a problem as they are equivalent representations of the same information. We do however understand this may sometimes be confusing to readers; this could be addressed in a revised version of the manuscript.
+We switch back and forth between Euler angles θ_i and quaternions q_i as they are equivalent representations of the same information. We do however understand this may sometimes be confusing to readers; this could be addressed in a revised version of the manuscript.
 
-The fact that the mapping from S³ to SO(3) is a double cover is not a problem as well. It was meant as an explanation for equation 2. We agree it could have been better conveyed and will update line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
+The fact that the mapping from S³ to SO(3) is a double cover was meant as an explanation for equation 2. We agree it could have been better conveyed and will update line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
 
-> When are projections expected to be of different sizes?
+"When are projections expected to be of different sizes?" This could happen with real data, though that is indeed not the case with the current experiments.
 
-That is indeed not the case with the current experiments, but this could happen with real data.
+The number of features $n_f$ can be freely chosen, and was set to $n_f = 512$ in our experiments. On line 127, we meant that a feature space made of only $n_f = 4$ dimensions (necessary if one would hope to predict the orientations directly) is too constraining (demonstrated in Appendix F). We agree that this paragraph might confuse readers and will only be pointing to Appendix F for experiments on the number of features $n_f$ and move the discussion there.
 
-> A similarly confusing statement is on line 127, where the authors claim that “a space of n_f = 4 dimensions does not have room for G_w to represent other factors of variation”. What does this mean? Why are we constrained to have n_f = 4?
-
-The number of features $n_f$ can be freely chosen, and was set to $n_f = 512$ in our experiments. We meant that a feature space made of only $n_f = 4$ dimensions (necessary if one would hope to predict the orientations directly) is too constraining (demonstrated in Appendix F). We agree that this paragraph might confuse readers and will only be pointing to Appendix F for experiments on the number of features $n_f$ and move the discussion there.
-
-Zhao and Singer, 2014 is interested in a distance between viewing directions (θ_2, θ_1) that requires images to be optimally aligned with respect to in-plane rotations θ_3. The hairy ball theorem however prevents a globally consistent alignment of in-plane rotations.
-TODO: think more. (We are however interested in a distance between orientations (θ_3, θ_2, θ_1).)
-We however have to admit that we don't see the relation of the above with the question "Why do we expect that constructing small subsets of the embedding at a time will result in a globally consistent embedding?". Could you elaborate?
-TODO: local distances => we also estimate the large distances
+Zhao and Singer, 2014 are interested in estimating a distance between viewing directions (θ_2, θ_1). In Section 2.1, they argue that any method that requires images to be aligned with respect to in-plane rotations θ_3 is bound to fail because the hairy ball theorem prevents such an alignment to be globally consistent. We agree with the argument but fail to see how that relates to our method: We don't try to align on θ_3 then estimate a distance between viewing directions (θ_2, θ_1). We estimate a distance between whole orientations (θ_3, θ_2, θ_1).
 
 We chose the mean orientation recovery error because it is intuitive and simple to interpret. Despite that error being non-deterministic, the evaluation of (5) was easily reproduced in practice. But we do agree that using the Frobenius norm on the rotation matrices could be an interesting alternative choice.
 
@@ -238,16 +231,17 @@ As we do not know (yet) how to build NNs that are invariant to noise, we need to
 
 The clean images have variance 1 and the SNR formula you assumed is correct; we will add this information to the manuscript.
 
-We do agree that the level of noise currently used in our experiments, although already significant, does not fully cover the most severe cases of degradation observed in cryo-EM. That being said, we believe that testing our method on synthetic measurements with a SNR of -12 dB is a legit first step in demonstrating its potential in real situations. Note that Figure 7b shows the performance for a σ² varying between [0, 25], where the upper limit corresponds to a maximal SNR of about -14 dB.
+We do agree that the level of noise currently used in our experiments, although already significant, does not fully cover the most severe cases of degradation observed in cryo-EM. That being said, we believe that testing our method on synthetic measurements with a SNR of -12 dB is a legit first step in demonstrating its potential in real situations. Note that Figure 7b shows the performance for a σ² varying between 0 and 25, where the upper limit corresponds to a SNR of -14 dB.
 
 We will address the minor comments in the revised manuscript and answer the questions below.
-* Line 102: the estimator $\widehat{d_p}$ is a function that could in principle be "designed by hand" or chosen among known functions (e.g., the Euclidean distance $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we do not know how to design such a function by hand (we only know how to design shift-invariant functions), we resort to learn it from examples.
-* Footnote 6: some experiments were done with a uniform distribution over SO(3), while others (§3.2 and §3.4) were done with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) did not make a difference in Appendix B.
-* Lines 228–229: the SNN is overfitting, a sign that it was not trained on enough data. More data should undoubtedly help it generalize better.
-* Line 253: The reason is that the more detailed the projections, the easier to distinguish between their orientations.  which leads both to an easier estimation of their viewing angles, and to a more detailed 3D reconstruction.
+* Line 102: The estimator $\widehat{d_p}$ is a function that could in principle be "designed by hand" or chosen among known functions (e.g., the Euclidean distance $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we do not know how to design such a function by hand, we resort to learn it from examples.
+* Footnote 6: Some experiments were done with a uniform distribution over SO(3), while others (§3.2 and §3.4) were done with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) barely makes a difference in Appendix B.
+* Lines 228–229: The SNN is overfitting, a sign that it was not trained on enough data. More data should undoubtedly help it generalize better.
+* Line 253: The more detailed the projections, the easier it can become to distinguish between two closely-related projections (i.e., with close orientations) for an identical level of noise. From a more general standpoint, the higher the resolution of the projections, the higher the resolution of the reconstruction for a same accuracy of orientation recovery.
 
 ------
 
 Add to manuscript:
 * The formula used to calculate SNR in dB is: $\text{SNR}_\text{dB} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P(I)}{P(N)}$, where $I$ is a noiseless image, and $N$ the (additive) noise. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ with $M$ being the projection image width or height. $P(S) = 1$ and $P(N) = \sigma^2$.
 * Add SNR to the x-axis label of Figure 7b.
+* Report as "SNR = 1/16"?
