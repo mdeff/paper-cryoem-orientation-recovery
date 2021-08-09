@@ -1,6 +1,5 @@
 # Reviews at NeurIPS'21
 
-Lau : polish R1 + write R3 + my todo R4 
 Jelena: R2 + relevant todos
 Mdeff : R4 + relevant todos
 
@@ -16,9 +15,9 @@ Replace "General Rebuttal" with the appropriate name.
 
 As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, etc.) is definitely required.
 
-While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, this task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a very-high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
+While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a very-high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
 
-At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in a simplified cryo-EM setting. We see the applicability of the method to a wider range of data and the comparison to other existing resources as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
+At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in an (admittedly) simplified cryo-EM setting. We see the extension of the applicability of the method to a wider range of data and the comparison to other existing packages as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
 ### Working notes
 
@@ -63,9 +62,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. 
-
-Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the scope of our paper perfectly fits within the publication xxx for NeurIPS. 
+We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the our paper perfectly fits within the publication scope of NeurIPS. 
 
 Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
@@ -149,15 +146,11 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
-
-1. That's indeed the critical question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
-Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section. See general comment. There is hope ... 
-2. TODO(Laurène)
-3. They are randomly initialized, drawn from a uniform distribution over Euler angles. The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), which might not be able to accommodate / represent the data/samples.
-The orientation recovery minimization (4) convergence plots are shown in Figure 8 with blue color. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
-4. See general comment. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
-Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
+We have answered to your questions: 
+1. The extension of the method to handle real cryo-EM datasets with unknown orientations is discussed in Section 4: "The success [of the method] as a faithful estimator eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets. Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB." We also refer the reviewer to the General Rebuttal, where this question is addressed from a higher-level perspective. 
+2. This is indeed a critical point, which would deserve to be further discussed in a revised version of this paper. A pragmatic solution at this stage would be to rely on the 2D classification methods of existing cryo-EM packages, which try to untangle the different configurations within a cryo-EM projection dataset by classifying the 2D projections based on certain similarity criteria. Once the various configurations have been "separated", our method could then be run independently on each data sub-set. 
+3. The orientations are randomly initialized, drawn from a uniform distribution over Euler angles. The objective function is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization is not much of a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), which might not be able to accommodate / represent the data/samples. The orientation recovery minimization (4) convergence plots are shown in Figure 8 with blue color. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
+4. Here as well, we refer the reviewer to the General Rebuttal, where the question of the comparison with existing packages is discussed. 
 
 ## 4 - Official Review of Paper4764 by Reviewer RNam
 16 Jul 2021 (modified: 16 Jul 2021)
@@ -255,7 +248,8 @@ We are confident the NN would be good at that, as it was able to abstract noise 
 
 The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma^2=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
-TODO(Laurène): is σ²=16 moderate?
+
+We do agree that the level of noise currently used in our experiments, although already very significant, does not cover the most severe cases of degradation observed in cryo-EM datasets. That being said, we believe that testing our method on synthetic cryo-EM measurements with a SNR of $-12$dB is a legit first step in demonstrating its potential for challenging real situations. Moreover, we have indications that ... // QUESTION@MDEFF, JELENA: Do we have some insights on the robustness of our method at higher noise levels?? 
 Figure 7b shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x, i.e., SNR_{dB} of -inf and log10(x).
 
 TODO baselines / benchmark to SOTA: either done, either why not.
