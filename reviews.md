@@ -229,8 +229,8 @@ The number of features $n_f$ can be freely chosen, and was set to $n_f = 512$ in
 
 > Why do we expect that constructing small subsets of the embedding at a time will result in a globally consistent embedding?
 
-TODO: read Zhao and Singer, 2014 (Section 2.1).
-local distances => we also estimate the large distances
+Zhao and Singer, 2014 is interested in a distance between viewing directions (θ_2, θ_1) that requires images to be optimally aligned with respect to in-plane rotations θ_3. The hairy ball theorem however prevents a globally consistent alignment of in-plane rotations. We are however interested in a distance between orientations (θ_3, θ_2, θ_1).
+TODO: local distances => we also estimate the large distances
 
 We chose the mean orientation recovery error because it is intuitive and simple to interpret.
 TODO(Laurène): also standard in the croy-EM literature?
@@ -246,7 +246,7 @@ The images have variance 1 (TODO: projections are normalized such that P_S = 1?)
 We do agree that the level of noise currently used in our experiments, although already very significant, does not cover the most severe cases of degradation observed in cryo-EM datasets. That being said, we believe that testing our method on synthetic cryo-EM measurements with a SNR of -12 dB is a legit first step in demonstrating its potential for challenging real situations. Moreover, we have indications that ... // QUESTION@MDEFF, JELENA: Do we have some insights on the robustness of our method at higher noise levels??
 Figure 7b shows performance for σ² in [0, 25], corresponding to a SNR of up to -14 dB.
 
-We will address your minor comments in the revised manuscript and answer the questions below.
+We will address the minor comments in the revised manuscript and answer the questions below.
 * Line 102: the estimator $\widehat{d_p}$ is a function that could in principle be designed by a human (e.g., the Euclidean distance $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we don't know how to design such a function (we only know how to design shift invariant functions), we resort to learn it from examples.
 * Footnote 6: some experiments have been done with a uniform distribution over SO(3), others (§3.2 and §3.4) with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) didn't make a difference in Appendix B.
 * Lines 228–229: the SNN is overfitting, a sign that it wasn't trained on enough data. More data will make it generalize better.
