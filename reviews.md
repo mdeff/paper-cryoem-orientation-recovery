@@ -206,14 +206,12 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-**PUT GENERAL COMMENT HERE**
+Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
-Thanks for pointing out minor presentation issues.
 We switch back and forth between Euler angles θ_i and quaternions q_i as they are equivalent representations of the same information.
-We'll try to remedy? TODO: What can we do?
+TODO: We'll try to remedy? What can we do?
 
-The fact that the mapping from S³ to SO(3) is a double cover isn't a problem. It was meant as an explanation for equation 2.
-We agree the writing could have been better and updated line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
+The fact that the mapping from S³ to SO(3) is a double cover isn't a problem. It was meant as an explanation for equation 2. We agree it could have been better conveyed and will update line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
 
 > When are projections expected to be of different sizes?
 
@@ -221,30 +219,27 @@ That is indeed not the case with the current experiments but is expected to happ
 
 > A similarly confusing statement is on line 127, where the authors claim that “a space of n_f = 4 dimensions does not have room for G_w to represent other factors of variation”. What does this mean? Why are we constrained to have n_f = 4?
 
-The goal of that paragraph is to motivate our two-step approach (distance estimation then orientation recovery) over a simpler one-step approach of predicting the orientations directly from the projections.
-In that case, the number of features n_f would be the size of a quaternion, i.e., 4 scalars.
-We verified in Appendix F that such a space was too small for a good embedding.
-We hypothesize that this is because the space is too small to capture all factors of variation: only the orientation is a factor of interest, the others ...
-The number of features n_f can be chosen freely. One could hope to directly embed in the space of orientations and avoid making a detour through distances before embedding.
-We wrote it as motivation for our two-step method, instead of the single step way of letting q_i = G_w(p_i).
-The problem is that an embedding space of 4 dimensions is too small to capture other factors of variations, by which we mean variations which should be abstracted like the protein type.
+The number of features $n_f$ can be freely chosen, and was set to $n_f = 512$ in our experiments. We meant that a feature space made of only $n_f = 4$ dimensions (necessary if one would hope to directly predict the orientations) is too constraining (demonstrated in Appendix F). We agree that this paragraph might confuse readers and will only be pointing to Appendix F for experiments on the size of $n_f$ and move the discussion there.
 
 > Why do we expect that constructing small subsets of the embedding at a time will result in a globally consistent embedding?
 
 TODO: read Zhao and Singer, 2014 (Section 2.1).
+local distances => we also estimate the large distances
 
-How is the error measure in 2.4 non-deterministic?
-We chose the mean orientation recovery error as it is simple to interpret what an average error of say 1° means.
-TODO: we agree that we could also use a Frobenius norm on the rotation matrices. In this case, the optimal rotational alignment between the sets can be calculated by an SVD.
-TODO: either add this error or motivate our choice in the manuscript.
+We chose the mean orientation recovery error because it is intuitive and simple to interpret.
+TODO(Laurène): also standard in the croy-EM literature?
+Despite being non-derterministic, we found the evaluation of (5) to be easily reproducible in practice.
+TODO(Jelena): correct?
+We will update the manuscript to reflect the above.
 
 We did evaluate our method on non-uniformly distributed viewing angles in Appendix B. Performance was barely affected.
 
 To what extent can we train on one noise level and test on another?
-As we don't know (yet) how to build NNs that are invariant to (specified) noise (and PSF), we need to resort to the brute-force trick of data augmentation.
-To generalize / best test on any noise level, the NN should be trained on a variety of noise models (and PSFs).
+As we do not know (yet) how to build NNs that are invariant to (specified) noise (and PSF), we need to resort to the brute-force trick of data augmentation.
+To generalize to any noise level, the NN should be trained on a variety of noise models (and PSFs).
 Unlike transfer between proteins,
 We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
+As argued in Section 4 and the General Rebuttal, we be addressed in a separate contribution
 
 The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma^2=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
