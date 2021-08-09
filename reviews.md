@@ -25,6 +25,12 @@ We have preliminary results about transfer to unseen proteins. Could include, bu
 TODO baselines / benchmark to SOTA: either done, either why not.
 No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
 
+TODO baselines / benchmark to SOTA: either done, either why not.
+We are not at the stage where our method can be usefully compared to existing pipelines because we haven't ... transfer learning.
+We don't have experience with Cryosparc, Relion, and Aspire.
+CryoSparc, as the most automated pipeline of all, might be an option / we'll try to do it, etc.
+The other packages unfortunately require too much tuning and previous experience to properly use.
+
 ## 2021-08-04 Preliminary reviews
 
 * Reviewer RNam: Rating: 5 / Confidence: 5
@@ -234,28 +240,20 @@ We will update the manuscript to reflect the above.
 
 We did evaluate our method on non-uniformly distributed viewing angles in Appendix B. Performance was barely affected.
 
-To what extent can we train on one noise level and test on another?
-As we do not know (yet) how to build NNs that are invariant to (specified) noise (and PSF), we need to resort to the brute-force trick of data augmentation.
-To generalize to any noise level, the NN should be trained on a variety of noise models (and PSFs).
-Unlike transfer between proteins,
-We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
-As argued in Section 4 and the General Rebuttal, we be addressed in a separate contribution
+As we do not know (yet) how to build NNs that are invariant to (specified) noise, we need to resort to the brute-force trick of data augmentation. To generalize to any noise level, the NN should be trained on a variety of noise models. We are confident the NN would generalize as our experiments show it was able to abstract noise. That said, transfer between noise levels, PSFs, and proteins should be part of a comparison with established pipelines, which we argue in the General Rebuttal should be addressed in a separate contribution.
 
-The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma^2=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
-We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
+The images have variance 1 (TODO: projections are normalized such that P_S = 1?) and the SNR formula you assumed is correct; we will add this information to the manuscript.
+We do agree that the level of noise currently used in our experiments, although already very significant, does not cover the most severe cases of degradation observed in cryo-EM datasets. That being said, we believe that testing our method on synthetic cryo-EM measurements with a SNR of -12 dB is a legit first step in demonstrating its potential for challenging real situations. Moreover, we have indications that ... // QUESTION@MDEFF, JELENA: Do we have some insights on the robustness of our method at higher noise levels??
+Figure 7b shows performance for σ² in [0, 25], corresponding to a SNR of up to -14 dB.
 
-We do agree that the level of noise currently used in our experiments, although already very significant, does not cover the most severe cases of degradation observed in cryo-EM datasets. That being said, we believe that testing our method on synthetic cryo-EM measurements with a SNR of $-12$dB is a legit first step in demonstrating its potential for challenging real situations. Moreover, we have indications that ... // QUESTION@MDEFF, JELENA: Do we have some insights on the robustness of our method at higher noise levels?? 
-Figure 7b shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x, i.e., SNR_{dB} of -inf and log10(x).
+We will address your minor comments in the revised manuscript and answer the questions below.
+* Line 102: the estimator $\widehat{d_p}$ is a function that could in principle be designed by a human (e.g., the Euclidean distance $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we don't know how to design such a function (we only know how to design shift invariant functions), we resort to learn it from examples.
+* Footnote 6: some experiments have been done with a uniform distribution over SO(3), others (§3.2 and §3.4) with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) didn't make a difference in Appendix B.
+* Lines 228–229: the SNN is overfitting, a sign that it wasn't trained on enough data. More data will make it generalize better.
+* Line 253: because the projections/images are more detailed, leading both to an easier estimation of their viewing angles, and a more detailed 3D reconstruction.
 
-TODO baselines / benchmark to SOTA: either done, either why not.
-We are not at the stage where our method can be usefully compared to existing pipelines because we haven't ... transfer learning.
-We don't have experience with Cryosparc, Relion, and Aspire.
-CryoSparc, as the most automated pipeline of all, might be an option / we'll try to do it, etc.
-The other packages unfortunately require too much tuning and previous experience to properly use.
+------
 
-Thanks for your minor comments. We'll address them in the revised manuscript. We answer the questions below.
-* line 100: the angle of the rotation
-* line 102: d_p is a function that could in principle be designed by a human (e.g., the Euclidean distance d_p(p_i, p_j) = || p_i - p_j || shown in Appendix E) instead of learned from data. We want that function to be invariant to noise. The problem being that we don't know how to design such a function, so we resort to learn it from examples.
-* footnote 6: Agreed. And that's the raison d'être of the footnote. Some experiments have been done with a uniform distribution over SO(3), others (§3.2 and §3.4) with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) didn't make a difference in Appendix C.
-* lines 228–229: The SNN is overfitting the data, a sign that it wasn't trained on enough data. More data will make it generalize better.
-* line 253: Because the projections/images are more detailed, leading both to an easier estimation of their viewing angles, and a more detailed 3D reconstruction.
+Add to manuscript:
+* The formula used to calculate SNR in dB is: $\text{SNR}_\text{dB} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma^2=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2) = 1$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height. Simpler: $P_N$ is the variance of the additive noise.
+* SNR to Figure 7b.
