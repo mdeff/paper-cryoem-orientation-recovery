@@ -1,38 +1,22 @@
 # Reviews at NeurIPS'21
 
-Lau : General + R3 + mine todos
+Lau : General + R3 
 Jelena: R2 + relevant todos
 Mdeff : R4 + relevant todos
 
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
-Most reviewers rightly highlighted the two main limitations of the work, which most recognized we didn't try to hide (but wrote plainly? about in §4 Discussion).
-(Both are about experiments, none criticized the ideas or presentation. Experiments take time and we cannot include everything => future work / separate contributions.)
+As the reviewers have rightly pointed out (and as we discuss in the Section 4), the applicability of the proposed method to real practical situations is still conditioned upon 1) demonstrating its accuracy on "unseen" proteins (transfer learning), and 2) comparing its performance to that of commonly established pipelines (CryoSparc, Relion, etc.). 
 
-1. (4/4 reviewers) The lack of a transfer experiment (i.e., training and testing on different proteins).
+Both objectives are ... planned and are the natural follow-up of this work. At the present stage, we have focused on demonstrating feasibility. Although, ... complexity of cryo-EM pipelines, problems with the highest complexity and some of the (if not the most) noisiest data in biomedical imaging.  Key insights. 
 
-Lau: As the reviewers have rightly pointed ..., the applicability of the proposed method in real practical situations is still conditioned on demonstrating its performance on unseen proteins (transfer learning) and in comparison to commonly established pipelines. This is planned ... At this stage, we have focused on demonstrating the feasibility of this new paradigm. The new insights are ...
+Developing the method further to practical deployment of course would require to evaluate how learning distances from a set of proteins transfer to an unseen one, and to evaluate the method to fully developed existing methods. We see that as an other / different contribution, where the focus would be more on collecting and processing a large dataset of proteins, and evaluate different pipelines. 
 
-A. Not in the scope of the paper.
-B. We have some preliminary results, but decided against including them.
-TODO: explain our preliminary results about transfer to unseen proteins. Hopefully they are promising / show potential for zero-shot prediction on unseen proteins.
-TODO: add them to the supplementary clearly stated as preliminary, or don't add them and confidently explain why.
-TODO: Ask whether we should include them in the revised manuscript? (Appendix?) As we believe they are of lesser quality.
-(Work on them a little more if accepted and included?)
-Work required to put together a dataset of many proteins.
+Separate contribution. Current contribution: proposal of a new paradigm, proof of concept of the feasibility rather than pure performance, not deployable yet in practice, etc. 
 
-2. (3/4 reviewers) The lack of comparison to established methods to put our results in context.
+Not in the scope of the paper. On transfer learning: some very early preliminary results, but decided against including them. Work required to put together a dataset of many proteins. In a second phase, comparison to existing methods ... We do not claim any superiorty of our method to existing packages. A true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. We see that as a separate contribution. Why: amount of work, different expertise?, what else? (As discussed in §4?)
 
-We don't claim that it's better than everything else, we show that it's feasible.
-TODO: either compare, either argument why not.
-Why we didn’t do these comparisons yet: new paradigm, proof of concept of the feasibility rather than pure performance, not deployable yet in practice, etc.
-General argument (also for working with real data): A true / fair / complete evaluation would compare multiple pipelines (from projections to reconstructions) on real data. We see that as a separate contribution. Why: amount of work, different expertise?, what else?
-(As discussed in §4?)
-TODO: Compare with the CryoSparc ab initio pipeline?
-TODO: How can we otherwise put our results in context?
-
-**Addressing both together:**
-At this stage, we focused on demonstrating feasibility. Developing the method further to practical deployment of course would require to evaluate how learning distances from a set of proteins transfer to an unseen one, and to evaluate the method to fully developed existing methods. We see that as an other / different contribution, where the focus would be more on collecting and processing a large dataset of proteins, and evaluate different pipelines.
+Q: Suggest to modify the title? Exploration of a novel learning-based method to recover ... 
 
 ## 2021-08-04 Preliminary reviews
 
@@ -69,7 +53,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 ### Rebuttal
 
-Thank you for your time and (thoughtful) comments.
+Thank you for your time and thoughtful comments.
 
 We do think the paper is suitable for publication at NeurIPS as the call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], computational biology, and other fields" and specifically lists "Applications (e.g., speech processing, computational biology, computer vision, NLP)" as a topic of interest. The novelty is in tackling a specific and important problem in biology with a combination of (indeed existing) ML techniques. By doing so, we hope to spearhead / advance / start ML research on this problem, which might well lead to novel ML techniques for cryo-EM.
 
@@ -116,7 +100,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 ### Rebuttal
 
-Thank you for your time and (thoughtful) comments.
+Thank you for your time and thoughtful comments.
 
 **PUT GENERAL COMMENT HERE**
 
@@ -127,8 +111,8 @@ Related work: we'll add the suggested reference to [A] in the revised manuscript
 
 > How would non-uniformly distributed angles effect the proposed method?
 
-We tried it in Appendix X (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected.
-We discussed it in lines xxx-xxx (referencing the Appendix). Should that be better / more clearly written?
+We tried it in Appendix B (with a uniform sampling of Euler angles, which is non-uniform on SO(3)) and performance wasn't affected. 
+We discussed it in lines 485-492 (referencing the Appendix). Figure 12 shows different samplings and Figure 13 shows the performance results from distance estimation and orientation recovery for non-uniform case. Should that be better / more clearly written?
 
 ## 3- Official Review of Paper4764 by Reviewer Z4BJ
 16 Jul 2021
@@ -157,17 +141,15 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 ### Rebuttal
 
-Thank you for your time and (thoughtful) comments.
+Thank you for your time and thoughtful comments.
 
 **PUT GENERAL COMMENT HERE**
 
-1. That's indeed a big question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
-Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section.
-See general comment.
+1. That's indeed the critical question. The method is to be trained on synthetic data, as we obviously don't know the orientations in real cryoEM datasets.
+Preliminary results about transfer to unseen proteins. Though that's still synthetic. Working on real data is another big step ahead, which we highlight in the Discussion section. See general comment. There is hope ... 
 2. TODO(Laurène)
-3. They are randomly initialized, drawn from a uniform distribution over TODO Euler angles / SO(3). The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), who might not be able to accommodate / represent the data/samples.
-The minimization converges in 8 minutes (reported in Appendix C).
-TODO @jelena, time of convergence
+3. They are randomly initialized, drawn from a uniform distribution over Euler angles. The objective is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization isn't much a problem here, as the space in which the embedding is optimized is the "true space", i.e., the space of 3D rotations SO(3), while methods like t-SNE embed in an Euclidean space of low dimension (for the purpose of visualization), which might not be able to accommodate / represent the data/samples.
+The orientation recovery minimization (4) convergence plots are shown in Figure 8 with blue color. The convergence time is reported in Appendix C and is ~3.75 hours. However, from Figure 8 we observe that it reaches the plateau of convergence one to two hours ealier.
 4. See general comment. We agree with the two weaknesses you highlight (as we wrote in the Discussion).
 Comparing with "orientations estimated by an iterative reconstruction procedure" is out of scope, as we focus on ab-initio.
 
@@ -223,7 +205,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 ### Rebuttal
 
-Thank you for your time and (thoughtful) comments.
+Thank you for your time and thoughtful comments.
 
 **PUT GENERAL COMMENT HERE**
 
@@ -258,8 +240,7 @@ To generalize / best test on any noise level, the NN should be trained on a vari
 Unlike transfer between proteins,
 We are confident the NN would be good at that, as it was able to abstract noise well in our experiments.
 
-TODO(Jelena): SNR formula.
-We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance. @jelena: check equation used
+The formula used to calculate SNR in dB is: $\text{SNR}_{\text{dB}} = 10 \text{log}_{10}(\text{SNR}), \text{SNR} = \frac{P_S}{P_N}$, where $S$ is a noiseless image, and $N$ is a noisy image with variance $\sigma=16$. We calculate $P_{S} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j}^2)$ and $P_{N} = \sum_{i=0}^{M} \sum_{j=0}^{M} (s_{i,j} - p_{i,j})^2$ with $M$ being the projection image width or height.
 We agree the current formulation can be confusing. We'll add the SNR formula and give the image variance at the start or SNR instead of noise variance.
 TODO(Laurène): is σ²=16 moderate?
 Either way, figure 7 shows performance for σ² from 0 to 25, corresponding to SNR of 0 and x.
