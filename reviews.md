@@ -5,10 +5,10 @@ Mdeff : R4 + relevant todos
 
 MESSAGE TO AC:
 Dear AC,
-We are reaching out for a brief discussion on the score attributed to our submission by Reviewer zuH5, which is the lowest score we received for our manuscript. While the score in itself is not a problem, we think it could potentially be unfair if the reason behind the reviewer's grading was their opinion that our paper does not fall within the scope of NeurIPS publications (see their first comment). As we argue in our rebuttal, we strongly believe that our paper perfectly fits within the scope of NeurIPS. That being said, all the other comments from Reviewer zuH5 are constructive and have been properly addressed. 
+We are reaching out for a brief discussion on the score attributed to our submission by Reviewer zuH5, which is the lowest score we received for our manuscript. While the score in itself is not a problem, we think it could potentially be unfair if the reason behind the reviewer's grading was their opinion that our paper does not fall within the scope of NeurIPS publications (see their first comment). As we argue in our rebuttal, we strongly believe that our paper perfectly fits within the scope of NeurIPS. That being said, all the other comments from Reviewer zuH5 are constructive and have been properly addressed.
 Kind regards, the Authors
 
-TO-DO BEFORE SUBMISSION: Replace "General Rebuttal" with the appropriate name. 
+TO-DO BEFORE SUBMISSION: Replace "General Rebuttal" with the appropriate name.
 
 ## 2021-08-06 General rebuttal (reviewer-specific rebuttals below)
 
@@ -67,7 +67,7 @@ Code Of Conduct: While performing my duties as a reviewer (including writing rev
 
 Thank you for your time and thoughtful comments.
 
-We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the our paper perfectly fits within the publication scope of NeurIPS. 
+We do think the paper is suitable for publication at NeurIPS. The novelty of our work lies in the tackling of a specific and important problem in computational biology with an innovative combination of (indeed existing) ML techniques; we believe this could open the door to new developments in ML for cryo-EM. Regarding the "contrivance for the application domain": The call for papers states that "NeurIPS 2021 is an interdisciplinary conference that brings together researchers in machine learning, [...], **computational biology**, and other fields" and specifically lists "Applications (e.g., speech processing, **computational biology**, computer vision, NLP)" as a topic of interest. Cryo-EM is one of the leading problems in computational biology nowadays, and its complexity obviously requires solutions that are tailored to the application domain. Hence, we do believe that the our paper perfectly fits within the publication scope of NeurIPS.
 
 Regarding the request to further extend the method to unseen proteins and compare it to existing pipelines: We refer the reviewer to the General Rebuttal, where those questions are addressed.
 
