@@ -8,18 +8,6 @@ While it would have been ideal to deliver a new angle-refinement software for cr
 
 At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in an (admittedly) simplified cryo-EM setting. We see the extension of the applicability of the method to a wider range of data and the comparison to other existing packages as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
-### Working notes
-
-We have preliminary results about transfer to unseen proteins. Could include, but decided against because they were not as robust as the other experiments. Would you see it as an improvement if we included them? In the Appendix?
-TODO baselines / benchmark to SOTA: either done, either why not.
-No experimental or real data because there wouldn't be true orientations to compare to. Such a comparison would require an entirely different evaluation pipeline, which we see as a separate contribution left for future work.
-
-TODO baselines / benchmark to SOTA: either done, either why not.
-We are not at the stage where our method can be usefully compared to existing pipelines because we haven't ... transfer learning.
-We don't have experience with Cryosparc, Relion, and Aspire.
-CryoSparc, as the most automated pipeline of all, might be an option / we'll try to do it, etc.
-The other packages unfortunately require too much tuning and previous experience to properly use.
-
 ## 2021-08-04 Preliminary reviews
 
 * Reviewer RNam: Rating: 5 / Confidence: 5
