@@ -2,9 +2,9 @@
 
 ## 2021-08-10 General Rebuttal (reviewer-specific rebuttals below)
 
-As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, etc.) is definitely required.
+As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, Aspire, etc.) is definitely required.
 
-While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of (if not the most) noisiest data in biomedical imaging, and the global algorithmic process equates to a high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
+While it would have been ideal to deliver a new angle-refinement software for cryo-EM that is fully deployable in practice and competitive with the state-of-the-art, the task is a notoriously-challenging one: Cryo-EM measurements are some of the noisiest data in biomedical imaging, and the global algorithmic process equates to a high-dimensional non-convex optimization problem. As a consequence, most of the current well-known cryo-EM processing packages are themselves the result of years of iterative refinement (no pun intended).
 
 At the present, we have focused on proposing a new paradigm for estimating the orientations in cryo-EM, and have provided a first demonstration of the feasibility of this method in an (admittedly) simplified cryo-EM setting. We see the extension of the applicability of the method to a wider range of data and the comparison to other existing packages as a natural follow-up of this work, which we hope will soon be addressed in a separate contribution; we provide some pointers for this in Section 4.
 
@@ -41,7 +41,7 @@ Rating: 4: Ok but not good enough - rejection
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
-### Rebuttal
+### Rebuttal to Review by Reviewer zuH5
 
 Thank you for your time and thoughtful comments.
 
@@ -49,10 +49,12 @@ We do think the paper is suitable for publication at NeurIPS. The novelty of our
 
 Regarding the request to further evaluate the method on unseen proteins and to compare it to existing pipelines: We refer the reviewer to our top-level "General Rebuttal" comment, where those questions are addressed.
 
-### Comment to Area Chair
+### Comment to Area Chair about Review by Reviewer zuH5
 
 Dear Area Chair,
+
 We are reaching out for a brief discussion on the score attributed to our submission by Reviewer zuH5, which is the lowest score we received for our manuscript. While the score in itself is not a problem, we think it could potentially be unfair if the reason behind the reviewer's grading was their opinion that our paper does not fall within the scope of NeurIPS (see their first comment). As we argue in our rebuttal, we strongly believe that our paper perfectly fits within the scope of NeurIPS. That being said, all the other comments from Reviewer zuH5 are constructive and have been properly addressed.
+
 Kind regards, the Authors
 
 ## 2 - Official Review of Paper4764 by Reviewer 9yDH
@@ -92,7 +94,7 @@ Rating: 6: Marginally above the acceptance threshold
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
-### Rebuttal
+### Rebuttal to Review by Reviewer 9yDH
 
 Thank you for your time and thoughtful comments.
 
@@ -131,14 +133,14 @@ Rating: 6: Marginally above the acceptance threshold
 Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
-### Rebuttal
+### Rebuttal to Review by Reviewer Z4BJ
 
 Thank you for your time and thoughtful comments.
 
 Regarding your questions:
 1. The extension of the method to handle real cryo-EM datasets with unknown orientations is discussed in Section 4: "The success [of the method] as a faithful estimator eventually relies on our capacity to generate a synthetic training dataset whose data distribution is diverse enough to cover that of unseen projection datasets. Such realistic cryo-EM projections could be generated by relying on a more expressive formulation of the cryo-EM physics and taking advantage of the thousands of atomic models available in the PDB." In other words, our hope is that by simulating a large and diverse training dataset whose statistics sufficiently approach that of real cryo-EM datasets, the SNN will generalize to real proteins. We also refer the reviewer to our top-level "General Rebuttal" comment, where this question is addressed from a higher-level perspective.
-2. This is indeed a critical point, which would deserve to be further discussed in a revised version of this paper. A pragmatic solution at this stage would be to rely on the 2D classification methods of existing cryo-EM packages, which try to untangle the different configurations within a cryo-EM projection dataset by classifying the 2D projections based on certain similarity criteria. Once the various configurations have been "separated", our method could then be run independently on each data sub-set.
-3. The orientations are randomly initialized, drawn from a uniform distribution over Euler angles. The objective function is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization is not much of a problem here, as the embedding space is the "proper space", i.e., the space of 3D rotations SO(3). On the other hand, methods like t-SNE embed in a low-dimensional Euclidean space that cannot faithfully represent the data. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
+2. This is indeed a critical point, which would deserve to be further discussed in a revised version of this paper. A pragmatic solution at this stage would be to rely on the 2D classification methods of existing cryo-EM packages, which try to untangle the different configurations within a cryo-EM projection dataset by classifying the 2D projections based on certain similarity criteria. Once the various configurations have been "separated", our method could then be run independently on each data subset.
+3. The orientations are randomly initialized, drawn from a uniform distribution over Euler angles. The objective function is indeed non-convex, though we found it to almost always converge to the same solution (up to a global rotation). We believe that initialization is not much of a problem here, as the embedding space is the "proper" space of 3D rotations. On the other hand, methods like t-SNE embed in a low-dimensional Euclidean space that cannot faithfully represent the data. The convergence time is reported in Appendix C and is ~3.75 hours (though Figure 8 shows it reaches a plateau 1-2 hours earlier).
 4. Here as well, we refer the reviewer to our top-level "General Rebuttal" comment, where the general question of the comparison with existing methods (which could indeed include a common-lines approach) is discussed.
 
 ## 4 - Official Review of Paper4764 by Reviewer RNam
@@ -191,7 +193,7 @@ Rating: 5: Marginally below the acceptance threshold
 Confidence: 5: You are absolutely certain about your assessment. You are very familiar with the related work and checked the math/other details carefully.
 Code Of Conduct: While performing my duties as a reviewer (including writing reviews and participating in discussions), I have and will continue to abide by the NeurIPS code of conduct.
 
-### Rebuttal
+### Rebuttal to Review by Reviewer RNam
 
 Thank you for your time and thoughtful comments.
 
@@ -199,7 +201,7 @@ Regarding the request to further evaluate the method on unseen proteins and to c
 
 We switch back and forth between Euler angles θ_i and quaternions q_i as they are equivalent representations of the same information. We do however understand this may sometimes be confusing to readers; this could be addressed in a revised version of the manuscript.
 
-The fact that the mapping from S³ to SO(3) is a double cover was meant as an explanation for equation 2. We agree it could have been better conveyed and will update line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \SO(3)$ is a two-to-one mapping (a double cover)."
+The fact that the mapping from S³ to SO(3) is a double cover was meant as an explanation for equation (2). We agree it could have been better conveyed and will update line 99 to read "The absolute value $\left| \cdot \right|$ ensures that $d_q(q_i, q_j) = d_q(q_i, -q_j)$ as $q$ and $-q$ represent the same orientation because $\mathbb{S}^3 \rightarrow \mathrm{\mathbf{SO}}(3)$ is a two-to-one mapping (a double cover)."
 
 "When are projections expected to be of different sizes?" This could happen with real data, though that is indeed not the case with the current experiments.
 
@@ -218,7 +220,8 @@ The clean images have variance 1 and the SNR formula you assumed is correct; we 
 We do agree that the level of noise currently used in our experiments, although already significant, does not fully cover the most severe cases of degradation observed in cryo-EM. That being said, we believe that testing our method on synthetic measurements with a SNR of -12 dB is a legit first step in demonstrating its potential in real situations. Note that Figure 7b shows the performance for a σ² varying between 0 and 25, where the upper limit corresponds to a SNR of -14 dB.
 
 We will address the minor comments in the revised manuscript and answer the questions below.
-* Line 102: The estimator $\widehat{d_p}$ is a function that could in principle be "designed by hand" or chosen among known functions (e.g., the Euclidean distance $\widehat{d_p}(\p_i, \p_j) = \| \p_i - \p_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we do not know how to design such a function by hand, we resort to learn it from examples.
+* Line 102: The estimator $\widehat{d_p}$ is a function that could in principle be "designed by hand" or chosen among known functions (e.g., the Euclidean distance $\widehat{d_p}(\mathbf{p}_i, \mathbf{p}_j) = \| \mathbf{p}_i - \mathbf{p}_j \|_2$ shown in Appendix E) instead of learned from data. We want that function to be invariant to irrelevant transformations (e.g., shift, noise, PSF). As we do not know how to design such a function by hand, we resort to learn it from examples.
+
 * Footnote 6: Some experiments were done with a uniform distribution over SO(3), while others (§3.2 and §3.4) were done with a uniform distribution over Euler angles. We empirically verified that sampling uniformly or non-uniformly over SO(3) barely makes a difference in Appendix B.
 * Lines 228–229: The SNN is overfitting, a sign that it was not trained on enough data. More data should undoubtedly help it generalize better.
 * Line 253: The more detailed the projections, the easier it can become to distinguish between two closely-related projections (i.e., with close orientations) for an identical level of noise. From a more general standpoint, the higher the resolution of the projections, the higher the resolution of the reconstruction for a same accuracy of orientation recovery.
