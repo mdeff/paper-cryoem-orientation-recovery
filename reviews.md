@@ -57,6 +57,18 @@ We are reaching out for a brief discussion on the score attributed to our submis
 
 Kind regards, the Authors
 
+--------
+
+Dear Authors,
+
+Thanks for your comment.  As with all aspects of the submission, I/we will take it into account during and after the discussion period with the reviewers.  I see that you have responded to the reviewer about this point.  If possible, you might consider modifying your reply to include specific examples of papers that have been previously accepted to NeurIPS that are similar to yours.
+
+-- Area Chair
+
+--------
+
+Thanks for your comment and suggestion. We will look for papers and update our reply accordingly.
+
 ## 2 - Official Review of Paper4764 by Reviewer 9yDH
 16 Jul 2021
 NeurIPS 2021 Conference Paper4764 Official ReviewReaders: Program Chairs, Paper4764 Senior Area Chairs, Paper4764 Area Chairs, Paper4764 Reviewers Submitted, Paper4764 Authors
