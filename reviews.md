@@ -1,5 +1,15 @@
 # NeurIPS'21 reviews
 
+<https://openreview.net/forum?id=gwPPcc_M0lv>
+
+## 2021-09-27 Paper Decision
+
+NeurIPS 2021 Conference Program Chairs
+Decision by Program Chairs
+Decision: Reject
+
+The Cryo-EM problem is of significant importance and ML techniques for it are in scope for the NeurIPS conference. As the submission did not provide a novel machine learning algorithm, the paper was evaluated primarily on its potential impact in application. There was a consensus among the reviewers that the paper suffers from methodological concerns, including a lack of comparison to appropriate baselines given the same setup, the generalizability of the method toward proteins not seen in training data, and unclear performance improvement as part of a full cryo-EM pipeline. Consequently, it is difficult to know how significant the result is in application. The authors are encouraged to address these concerns in a future submission.
+
 ## 2021-08-10 General Rebuttal (reviewer-specific rebuttals below)
 
 As the reviewers have rightly pointed out (and as we discuss in Section 4), the applicability of the proposed method to real practical situations is still conditioned on demonstrating its accuracy on "unseen" proteins (transfer learning). Once this is achieved, an extensive comparison with the most commonly-established pipelines in the field (cryoSPARC, Relion, Aspire, etc.) is definitely required.
